@@ -1444,3 +1444,9 @@ footer .brand span {
 .admin-console .status.blocked{background:#fbe8e4;color:#9c4032}
 .admin-console .status.active{background:#e7f6d4;color:#456c1c}
 @media(max-width:600px){.admin-console{padding:15px}.admin-tabs{gap:5px}.admin-tabs button{padding:8px;font-size:9px}.admin-record-head{flex-direction:column}}
+
+.counter-offer{flex-basis:100%;margin-top:8px;min-width:0}
+.counter-offer form{padding:14px;margin-top:10px;border:1px solid #e7e9e3;border-radius:8px;background:#fafbf8}
+.counter-offer form label{display:block;margin:10px 0}
+.counter-offer textarea{min-height:85px}
+.verification-admin-controls{margin-top:12px}
