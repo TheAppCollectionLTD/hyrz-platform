@@ -29,6 +29,7 @@ jobs:
       DB_USER: root
       DB_PASSWORD: test-root-password
       JWT_SECRET: integration-test-secret-not-for-production
+      IDENTIFIER_HASH_SECRET: integration-identifier-hash-secret
       PORT: 4000
     defaults:
       run:
