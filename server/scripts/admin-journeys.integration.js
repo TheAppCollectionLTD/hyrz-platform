@@ -71,6 +71,15 @@ async function main() {
     assert.equal(denied.status,403);
     await api('/admin/verification/worker/'+workerId,{token:tier2Token,method:'PATCH',body:{check:'identity',status:'verified',reason:'Restore verified state for the test.'}});
   });
+  await check('Tier 2 can request client/worker deletion but cannot delete administrators',async()=>{
+    const deleteWorkerId=await addUser({email:'delete-worker@test.hyrz.invalid',ni:'QQ654321D'});
+    const deleted=await api('/admin/users/'+deleteWorkerId,{token:tier2Token,method:'DELETE'});
+    assert.equal(deleted.status,200,JSON.stringify(deleted.data));
+    const [statusRows]=await db.execute('SELECT status FROM users WHERE id=?',[deleteWorkerId]);
+    assert.equal(statusRows[0].status,'pending_deletion');
+    const adminDelete=await api('/admin/admins/'+tier3Id,{token:tier2Token,method:'DELETE'});
+    assert.equal(adminDelete.status,403);
+  });
   await check('Tier 1 financial reports are restricted to Tier 1',async()=>{
     assert.equal((await api('/admin/financial-reports',{token:ownerToken})).status,200);
     assert.equal((await api('/admin/financial-reports',{token:tier2Token})).status,403);
