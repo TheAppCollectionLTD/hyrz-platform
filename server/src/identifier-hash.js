@@ -7,7 +7,7 @@ function normalizeIdentifier(value) {
 function hashIdentifier(value) {
   const normalized = normalizeIdentifier(value);
   if (!normalized) return null;
-  const secret = process.env.IDENTIFIER_HASH_SECRET || process.env.JWT_SECRET;
+  const secret = process.env.IDENTIFIER_HASH_SECRET;
   if (!secret || String(secret).length < 16) {
     throw new Error('IDENTIFIER_HASH_SECRET or a sufficiently strong JWT_SECRET is required for identifier hashing');
   }
