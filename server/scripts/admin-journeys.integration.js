@@ -52,6 +52,17 @@ async function main() {
     const r=await api('/admin/users/'+workerId+'/status',{token:tier3Token,method:'PATCH',body:{status:'blocked'}});
     assert.equal(r.status,403);
   });
+  await check('Tier 2 can create Tier 3 administrators',async()=>{
+    const r=await api('/admin/admins',{token:tier2Token,method:'POST',body:{email:'tier3b@test.hyrz.invalid',username:'testTier3b',password:'Test-Only-Password-2026!',tier:3}});
+    assert.equal(r.status,201,JSON.stringify(r.data));
+  });
+  await check('Tier 2 can review verification while Tier 3 cannot',async()=>{
+    const r=await api('/admin/verification/worker/'+workerId,{token:tier2Token,method:'PATCH',body:{check:'identity',status:'manual_review',reason:'Integration verification review.'}});
+    assert.equal(r.status,200,JSON.stringify(r.data));
+    const denied=await api('/admin/verification/worker/'+workerId,{token:tier3Token,method:'PATCH',body:{check:'identity',status:'verified',reason:'Should be forbidden.'}});
+    assert.equal(denied.status,403);
+    await api('/admin/verification/worker/'+workerId,{token:tier2Token,method:'PATCH',body:{check:'identity',status:'verified',reason:'Restore verified state for the test.'}});
+  });
   await check('Tier 1 financial reports are restricted to Tier 1',async()=>{
     assert.equal((await api('/admin/financial-reports',{token:ownerToken})).status,200);
     assert.equal((await api('/admin/financial-reports',{token:tier2Token})).status,403);
@@ -65,6 +76,8 @@ async function main() {
     assert.ok(inbox.data.messages.some(m=>Number(m.id)===Number(sent.data.id)&&m.category==='complaints'));
     const claimed=await api('/admin/messages/'+sent.data.id+'/claim',{token:ownerToken,method:'PATCH',body:{}});
     assert.equal(claimed.status,200);
+    const collision=await api('/admin/messages/'+sent.data.id+'/claim',{token:tier2Token,method:'PATCH',body:{}});
+    assert.equal(collision.status,409);
     const read=await api('/admin/messages/'+sent.data.id+'/read',{token:ownerToken,method:'PATCH',body:{}});
     assert.equal(read.status,200);
   });
