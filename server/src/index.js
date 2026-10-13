@@ -93,6 +93,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     });
   }
 
+  if (role === 'worker' && !String(nationalInsuranceNumber||'').trim() && !String(workerPermitNumber||'').trim()) return res.status(400).json({error:'A National Insurance number or worker permit number is required for account security checks.'});
+
   const normalizedEmail = email.toLowerCase().trim();
   if (role === 'worker') {
     await ensureBlockedIdentifiers;
