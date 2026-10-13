@@ -337,6 +337,7 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
  const [disputes,setDisputes]=useState([]);
  const [messages,setMessages]=useState([]);
  const [loading,setLoading]=useState(false);
+ const [overview,setOverview]=useState(null);
  const [messageBody,setMessageBody]=useState('');
  const [messageSubject,setMessageSubject]=useState('');
  const [recipientId,setRecipientId]=useState('');
@@ -349,6 +350,7 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
  async function refresh() {
   setLoading(true);setError('');
   try {
+   const summary=await request('/admin/overview');setOverview(summary);
    if(section==='USERS') {const r=await request('/admin/users');setUsers(r.users||[]);if(Number(user.admin_tier)<=2){const q=await request('/admin/verification-queue');setVerificationAccounts(q.accounts||[]);}}
    if(section==='INVOICES') {const r=await request('/admin/invoices');setInvoices(r.invoices||[]);}
    if(section==='FINANCIAL REPORTS') {const r=await request('/admin/financial-reports');setFinancialReport(r);}
@@ -384,6 +386,7 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
  const userList=users.filter(u=>sub==='ADMINS'?u.role==='admin':sub==='CLIENTS'?u.role==='employer':u.role==='worker');
  return <section className="panel admin-console">
   <div className="panel-head"><div><span className="eyebrow">ADMINISTRATION · TIER {user.admin_tier||'—'}</span><h2>{section}</h2></div><button className="secondary" onClick={refresh} disabled={loading}>{loading?'Loading…':'Refresh'}</button></div>
+  {overview&&<div className="stats admin-overview-stats"><div className="stat"><small>USERS</small><strong>{overview.users||0}</strong></div><div className="stat"><small>SHIFTS</small><strong>{overview.shifts||0}</strong></div><div className="stat"><small>OPEN DISPUTES</small><strong>{overview.openDisputes||0}</strong></div><div className="stat"><small>PENDING CHECKOUTS</small><strong>{overview.pendingCheckouts||0}</strong></div></div>}
   <nav className="admin-tabs">{sections.map(s=><button key={s} className={section===s?'selected':''} onClick={()=>setSection(s)}>{s}</button>)}</nav>
   {section==='USERS'&&<><nav className="admin-tabs">{['ADMINS','CLIENTS','WORKERS',...(Number(user.admin_tier)<=2?['VERIFICATION']:[])].map(s=><button key={s} className={sub===s?'selected':''} onClick={()=>setSub(s)}>{s}</button>)}<button onClick={()=>setSub('BLOCKED CLIENTS')}>BLOCKED CLIENTS</button><button onClick={()=>setSub('BLOCKED WORKERS')}>BLOCKED WORKERS</button></nav>
    {sub==='VERIFICATION'&&Number(user.admin_tier)<=2&&<DataList items={verificationAccounts} empty="No accounts waiting for manual verification." render={a=><article className="admin-record" key={a.role+'-'+a.userId}><strong>{a.firstName||''} {a.lastName||''} · {a.email}</strong><small>{a.role} · Email verified: {a.emailVerified?'Yes':'No'} · Registered {a.createdAt?new Date(a.createdAt).toLocaleString('en-GB'):'—'}</small>{a.businessName&&<small>{a.businessName} · Company number {a.companyNumber||'not supplied'}</small>}<div className="verification-admin-controls">{(a.role==='worker'?[['identity','Identity',a.identityStatus],['right_to_work','Right to work',a.rightToWorkStatus]]:[['identity','Identity',a.identityStatus],['company','Company',a.companyStatus]]).map(([check,title,status])=><ReviewControl key={check} title={title+' · '+(status||'not_started')} status={status} onChoose={next=>{const reason=window.prompt('Required audit reason for setting '+title+' to '+next+':');if(reason===null)return;if(reason.trim().length<3){setError('Please enter a review reason of at least 3 characters.');return;}action(async()=>{await request('/admin/verification/'+a.role+'/'+a.userId,{method:'PATCH',body:JSON.stringify({check,status:next,reason})});setNotice(title+' verification updated.');await refresh();});}}/> )}</div></article>}/>}
