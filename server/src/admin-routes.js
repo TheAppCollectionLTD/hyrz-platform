@@ -273,7 +273,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   app.post('/api/admin/admins', ...admin, asyncRoute(async(req,res) => {
     const tier=Number(req.body.tier), email=String(req.body.email||'').trim().toLowerCase(), username=String(req.body.username||'').trim(), password=req.body.password;
     if (Number(req.user.admin_tier)>2) return res.status(403).json({error:'Tier 3 administrators cannot create administrators'});
-    if (![2,3].includes(tier) || (Number(req.user.admin_tier)===2 && tier!==3)) return res.status(403).json({error:'You cannot create an administrator at that tier'});
+    if (![1,2,3].includes(tier) || (Number(req.user.admin_tier)===2 && tier!==3)) return res.status(403).json({error:'You cannot create an administrator at that tier'});
     if (!/^\S+@\S+\.\S+$/.test(email) || !/^[A-Za-z][A-Za-z0-9._-]{2,79}$/.test(username) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Enter a valid email, username (3-80 characters) and password of at least 12 characters'});
     const hash=await bcrypt.hash(password,12);
     const conn=await db.getConnection();
@@ -296,7 +296,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   app.patch('/api/admin/admins/:id/tier', ...admin, asyncRoute(async(req,res) => {
     const targetId=Number(req.params.id), tier=Number(req.body.tier);
     if (Number(req.user.admin_tier)!==1) return res.status(403).json({error:'Only Tier 1 can change administrator tiers'});
-    if (!Number.isSafeInteger(targetId) || ![2,3].includes(tier)) return res.status(400).json({error:'Choose Tier 2 or Tier 3'});
+    if (!Number.isSafeInteger(targetId) || ![1,2,3].includes(tier)) return res.status(400).json({error:'Choose Tier 1, Tier 2 or Tier 3'});
     if (targetId===Number(req.user.id)) return res.status(400).json({error:'You cannot change your own tier'});
     const [targets]=await db.execute("SELECT id,email,role,admin_tier FROM users WHERE id=? AND role='admin'",[targetId]);
     if (!targets.length) return res.status(404).json({error:'Administrator not found'});
