@@ -38,7 +38,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
       const identifiers=[];
       if (target.role==='employer') {
         const [businesses]=await db.execute('SELECT company_number FROM businesses WHERE owner_user_id=?',[targetId]);
-        for (const b of businesses) if (b.company_number) identifiers.push(['company_number',String(b.company_number).replace(/\\s+/g,'').toUpperCase()]);
+        for (const b of businesses) if (b.company_number) identifiers.push(['company_number',String(b.company_number).replace(/\s+/g,'').toUpperCase()]);
       }
       for (const [type,value] of identifiers) {
         const hash=require('crypto').createHash('sha256').update(value).digest('hex');
@@ -47,7 +47,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     } else {
       const [businesses]=await db.execute('SELECT company_number FROM businesses WHERE owner_user_id=?',[targetId]);
       for (const b of businesses) if (b.company_number) {
-        const hash=require('crypto').createHash('sha256').update(String(b.company_number).replace(/\\s+/g,'').toUpperCase()).digest('hex');
+        const hash=require('crypto').createHash('sha256').update(String(b.company_number).replace(/\s+/g,'').toUpperCase()).digest('hex');
         await db.execute("DELETE FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? AND blocked_user_id=?",[hash,targetId]);
       }
     }
