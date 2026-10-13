@@ -22,6 +22,8 @@ jobs:
       - run: npm ci
       - run: node --check src/index.js
       - run: node --check src/admin-routes.js
+      - run: node --check src/user-message-routes.js
+      - run: node --check src/bootstrap-owner.js
       - run: node --check src/middleware.js
       - run: npm test
 
