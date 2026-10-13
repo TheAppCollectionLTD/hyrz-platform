@@ -25,6 +25,7 @@ app.use(express.json({ limit: '1mb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
 const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
+const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
 const ensureWorkerIdentifierColumns = Promise.all([
   db.query('ALTER TABLE worker_profiles ADD COLUMN national_insurance_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
   db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
@@ -87,6 +88,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
 
   const normalizedEmail = email.toLowerCase().trim();
   if (role === 'worker') {
+    await ensureBlockedIdentifiers;
     await ensureWorkerIdentifierColumns;
     for (const [type,raw] of [['national_insurance',nationalInsuranceNumber],['worker_permit',workerPermitNumber]]) {
       const normalized=String(raw||'').replace(/\\s+/g,'').toUpperCase();
@@ -97,6 +99,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     }
   }
   if (role === 'employer' && companyNumber) {
+    await ensureBlockedIdentifiers;
     const normalizedCompanyNumber=String(companyNumber).replace(/\s+/g,'').toUpperCase();
     const [blocked]=await db.execute("SELECT id FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? LIMIT 1",[crypto.createHash('sha256').update(normalizedCompanyNumber).digest('hex')]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
     if (blocked.length) return res.status(403).json({error:'This company registration number cannot be used to create a hyrz account. Please contact support if you believe this is an error.'});
