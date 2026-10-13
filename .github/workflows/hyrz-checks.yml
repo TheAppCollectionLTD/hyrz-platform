@@ -9,6 +9,27 @@ on:
 jobs:
   server:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test-root-password
+          MYSQL_DATABASE: hyrz_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -ptest-root-password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: hyrz_test
+      DB_USER: root
+      DB_PASSWORD: test-root-password
+      JWT_SECRET: integration-test-secret-not-for-production
+      PORT: 4000
     defaults:
       run:
         working-directory: server
@@ -26,6 +47,27 @@ jobs:
       - run: node --check src/bootstrap-owner.js
       - run: node --check src/middleware.js
       - run: npm test
+      - name: Initialise integration database
+        run: mysql --host=127.0.0.1 --user=root --password=test-root-password hyrz_test < db/schema.sql
+      - name: Bootstrap test owner
+        env:
+          OWNER_USERNAME: SimsonH
+          OWNER_EMAIL: owner@test.hyrz.invalid
+          OWNER_PASSWORD: Test-Only-Owner-Password-2026!
+        run: npm run bootstrap:owner
+      - name: Start API
+        run: |
+          npm start > /tmp/hyrz-api.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4000/api/health; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/hyrz-api.log
+          exit 1
+      - name: Run admin journey integration tests
+        env:
+          OWNER_EMAIL: owner@test.hyrz.invalid
+        run: npm run test:integration
 
   client:
     runs-on: ubuntu-latest
