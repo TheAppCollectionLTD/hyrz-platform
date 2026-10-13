@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "test": "node --test"
+    "test": "node --test",
+    "bootstrap:owner": "node src/bootstrap-owner.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
