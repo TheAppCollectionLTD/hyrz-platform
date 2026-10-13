@@ -154,14 +154,26 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   }));
 
   app.post('/api/admin/admins', ...admin, asyncRoute(async(req,res) => {
-    const tier=Number(req.body.tier), email=String(req.body.email||'').trim().toLowerCase(), password=req.body.password;
+    const tier=Number(req.body.tier), email=String(req.body.email||'').trim().toLowerCase(), username=String(req.body.username||'').trim(), password=req.body.password;
     if (Number(req.user.admin_tier)>2) return res.status(403).json({error:'Tier 3 administrators cannot create administrators'});
     if (![2,3].includes(tier) || (Number(req.user.admin_tier)===2 && tier!==3)) return res.status(403).json({error:'You cannot create an administrator at that tier'});
-    if (!/^\S+@\S+\.\S+$/.test(email) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Valid email and password of at least 12 characters required'});
+    if (!/^\\S+@\\S+\\.\\S+$/.test(email) || !/^[A-Za-z][A-Za-z0-9._-]{2,79}$/.test(username) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Enter a valid email, username (3-80 characters) and password of at least 12 characters'});
     const hash=await bcrypt.hash(password,12);
-    const [result]=await db.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at) VALUES(?,?,'admin',?,'active',UTC_TIMESTAMP())",[email,hash,tier]);
-    await audit(req,'admin.created','user',result.insertId,{email,tier});
-    res.status(201).json({id:result.insertId,email,tier});
+    const conn=await db.getConnection();
+    let userId;
+    try {
+      await conn.beginTransaction();
+      const [result]=await conn.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at) VALUES(?,?,'admin',?,'active',UTC_TIMESTAMP())",[email,hash,tier]);
+      userId=result.insertId;
+      await conn.execute('INSERT INTO admin_login_names(user_id,username) VALUES(?,?)',[userId,username]);
+      await conn.commit();
+    } catch(error) {
+      try { await conn.rollback(); } catch (_) {}
+      if(error.code==='ER_DUP_ENTRY') return res.status(409).json({error:'That email or username is already in use'});
+      throw error;
+    } finally { conn.release(); }
+    await audit(req,'admin.created','user',userId,{email,username,tier});
+    res.status(201).json({id:userId,email,username,tier});
   }));
 
   app.post('/api/admin/change-password', ...admin, asyncRoute(async(req,res) => {
