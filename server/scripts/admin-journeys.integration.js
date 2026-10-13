@@ -80,6 +80,11 @@ async function main() {
     assert.equal(collision.status,409);
     const read=await api('/admin/messages/'+sent.data.id+'/read',{token:ownerToken,method:'PATCH',body:{}});
     assert.equal(read.status,200);
+    const reply=await api('/admin/messages',{token:ownerToken,method:'POST',body:{recipientId:workerId,category:'complaints',subject:'Re: Integration test complaint',body:'Support has received your complaint.'}});
+    assert.equal(reply.status,201,JSON.stringify(reply.data));
+    const history=await api('/messages/mine',{token:workerToken});
+    assert.equal(history.status,200);
+    assert.ok(history.data.messages.some(m=>Number(m.id)===Number(reply.data.id)&&m.body==='Support has received your complaint.'));
   });
   await check('Blocking a worker prevents re-registration with the same identifier',async()=>{
     const blocked=await api('/admin/users/'+workerId+'/status',{token:tier2Token,method:'PATCH',body:{status:'blocked'}});
