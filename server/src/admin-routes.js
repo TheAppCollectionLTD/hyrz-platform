@@ -166,12 +166,12 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   }));
 
   app.post('/api/admin/invoices/:id/send-reminder', ...admin, asyncRoute(async(req,res) => {
-    const [rows]=await db.execute(`SELECT i.id,i.total,i.due_at,b.name AS business_name,
+    const [rows]=await db.execute(`SELECT i.id,i.total,i.due_at,i.status,b.name AS business_name,
       s.title AS shift_title,u.email AS client_email,u.first_name AS client_first_name
       FROM invoices i JOIN businesses b ON b.id=i.business_id JOIN users u ON u.id=b.owner_user_id
       JOIN checkouts c ON c.id=i.checkout_id JOIN shifts s ON s.id=c.shift_id WHERE i.id=?`,[req.params.id]);
     if(!rows.length)return res.status(404).json({error:'Invoice not found'});
-    if(['paid','void'].includes(String(req.body?.status||''))||false)return res.status(400).json({error:'Cannot remind for a paid or void invoice'});
+    if(['paid','void'].includes(rows[0].status))return res.status(400).json({error:'Cannot remind for a paid or void invoice'});
     if(!sendInvoiceReminder)return res.status(503).json({error:'Invoice email service is not configured'});
     try { await sendInvoiceReminder(rows[0]); }
     catch(error) { console.error('Invoice reminder failed:',error.message); return res.status(503).json({error:'Could not send invoice reminder. Check the email service configuration.'}); }
