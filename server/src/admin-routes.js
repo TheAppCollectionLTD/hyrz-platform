@@ -139,8 +139,10 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
 
   app.patch('/api/admin/messages/:id/claim', ...admin, asyncRoute(async(req,res) => {
     await ensureMessageMeta;
-    const [result]=await db.execute('UPDATE admin_message_meta SET opened_by=? WHERE message_id=? AND (opened_by IS NULL OR opened_by=?)',[req.user.id,req.params.id,req.user.id]);
-    if (!result.affectedRows) return res.status(409).json({error:'This issue is already being handled by another administrator'});
+    const [current]=await db.execute('SELECT opened_by FROM admin_message_meta WHERE message_id=?',[req.params.id]);
+    if (!current.length) return res.status(404).json({error:'Message not found'});
+    if (current[0].opened_by && Number(current[0].opened_by)!==Number(req.user.id)) return res.status(409).json({error:'This issue is already being handled by another administrator'});
+    await db.execute('UPDATE admin_message_meta SET opened_by=? WHERE message_id=?',[req.user.id,req.params.id]);
     await audit(req,'message.claimed','message',req.params.id);
     res.json({ok:true});
   }));
