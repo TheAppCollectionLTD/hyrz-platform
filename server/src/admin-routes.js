@@ -184,6 +184,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   }));
 
   app.patch('/api/admin/disputes/:id/resolve', ...admin, asyncRoute(async(req,res) => {
+    await ensureCheckoutCounterColumns;
     const { outcome, resolution, actualStart, actualEnd, breakMinutes }=req.body||{};
     if (!['worker','employer','reject'].includes(outcome) || typeof resolution!=='string' || resolution.trim().length<5) return res.status(400).json({error:'Choose an outcome and provide a resolution of at least 5 characters'});
     const [rows]=await db.execute('SELECT checkout_id FROM disputes WHERE id=? AND status IN (\'open\',\'assigned\')',[req.params.id]);
@@ -197,8 +198,10 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
         if (actualStart) {fields.push('actual_start=?');args.push(actualStart);}
         if (actualEnd) {fields.push('actual_end=?');args.push(actualEnd);}
         if (breakMinutes!==undefined && Number.isInteger(Number(breakMinutes)) && Number(breakMinutes)>=0) {fields.push('break_minutes=?');args.push(Number(breakMinutes));}
+        if (outcome==='employer') fields.push('gross_pay=COALESCE(counter_gross_pay,gross_pay)');
         fields.push("status='approved'","reviewed_by=?","reviewed_at=UTC_TIMESTAMP()");args.push(req.user.id,checkoutId);
         await conn.execute('UPDATE checkouts SET '+fields.join(',')+' WHERE id=?',args);
+        await conn.execute("INSERT IGNORE INTO invoices(business_id,checkout_id,subtotal,platform_fee,total,due_at,status) SELECT s.business_id,c.id,c.gross_pay,c.platform_fee,c.gross_pay+c.platform_fee,DATE_ADD(CURRENT_DATE,INTERVAL 14 DAY),'issued' FROM checkouts c JOIN shifts s ON s.id=c.shift_id WHERE c.id=?",[checkoutId]);
       } else {
         await conn.execute("UPDATE checkouts SET status='rejected',reviewed_by=?,reviewed_at=UTC_TIMESTAMP() WHERE id=?",[req.user.id,checkoutId]);
       }
