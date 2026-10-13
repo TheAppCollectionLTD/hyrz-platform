@@ -138,6 +138,8 @@ async function main() {
     const resolved=await api('/admin/disputes/'+disputeId+'/resolve',{token:tier3Token,method:'PATCH',body:{outcome:'worker',resolution:'Integration test resolution accepted.'}});
     assert.equal(resolved.status,200,JSON.stringify(resolved.data));
     const [invoices]=await db.execute('SELECT id FROM invoices WHERE checkout_id=?',[checkoutId]);assert.equal(invoices.length,1);
+    const reminder=await api('/admin/invoices/'+invoices[0].id+'/send-reminder',{token:ownerToken,method:'POST',body:{}});
+    assert.equal(reminder.status,503,'Without Resend credentials the reminder should fail clearly rather than claim delivery.');
   });
   await check('Tier 1 can record and approve referral commissions',async()=>{
     const r=await api('/admin/referral-commissions',{token:ownerToken,method:'POST',body:{referrerUserId:workerId,referredUserId:employerId,amount:25}});
