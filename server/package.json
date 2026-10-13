@@ -7,7 +7,8 @@
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
     "test": "node --test",
-    "bootstrap:owner": "node src/bootstrap-owner.js"
+    "bootstrap:owner": "node src/bootstrap-owner.js",
+    "test:integration": "node scripts/admin-journeys.integration.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
