@@ -1421,3 +1421,26 @@ footer .brand span {
 .review-actions button.selected-review{background:#222;color:#fff;border-color:#222}
 .review-actions button:disabled{opacity:.7;cursor:default}
 @media(max-width:720px){.review-checks{grid-template-columns:1fr}.review-account-head{display:block}}
+
+
+/* Administrator console */
+.admin-console{padding:22px;overflow:hidden}
+.admin-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid #eceee8}
+.admin-tabs button{border:1px solid #e1e4dc;background:#fff;color:#555b50;border-radius:7px;padding:9px 11px;font:700 10px 'DM Sans',sans-serif;letter-spacing:.35px;cursor:pointer}
+.admin-tabs button.selected{background:#171916;color:#fff;border-color:#171916}
+.admin-record{padding:17px 0;border-bottom:1px solid #eceee8}
+.admin-record:last-child{border-bottom:0}
+.admin-record-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.admin-record-head>div{min-width:0;flex:1}
+.admin-record strong{font-size:13px}
+.admin-record small{display:block;margin-top:5px;color:#777d72;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+.admin-record p{font-size:12px;line-height:1.65;margin:10px 0;color:#44493f;overflow-wrap:anywhere}
+.admin-record pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f6f3;border-radius:7px;padding:10px;font-size:11px;max-width:100%}
+.admin-record-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px;align-items:center}
+.admin-link{font-size:12px;color:#496d20;text-decoration:underline;padding:8px}
+.admin-message-form{border-top:1px solid #eceee8;margin-top:20px;padding-top:20px;max-width:600px}
+.admin-message-form h3{font:700 16px Manrope,sans-serif}
+.admin-note{font-size:12px;line-height:1.7;color:#666d60;background:#f4f6f0;padding:13px;border-radius:8px;margin-bottom:15px}
+.admin-console .status.blocked{background:#fbe8e4;color:#9c4032}
+.admin-console .status.active{background:#e7f6d4;color:#456c1c}
+@media(max-width:600px){.admin-console{padding:15px}.admin-tabs{gap:5px}.admin-tabs button{padding:8px;font-size:9px}.admin-record-head{flex-direction:column}}
