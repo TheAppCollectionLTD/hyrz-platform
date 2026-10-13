@@ -296,7 +296,8 @@ async function authenticate(register) {
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='applications'&&<section className="panel"><h2>Applications</h2><DataList items={applications} empty="No applications yet." render={a=><div className="row" key={a.id}><div><b>{a.title}</b><small>{a.business_name||`${a.first_name||''} ${a.last_name||''}`} · {a.starts_at}</small></div><span className={`status ${a.status}`}>{a.status}</span>{user.role==='employer'&&a.status==='pending'&&<div className="actions"><button onClick={()=>updateApplication(a.id,'approved')}>Approve</button><button onClick={()=>updateApplication(a.id,'rejected')}>Reject</button></div>}</div>}/></section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='checkouts'&&<section className="panel"><h2>Timesheets & checkouts</h2><DataList items={checkouts} empty="No checkouts yet." render={c=><div className="row" key={c.id}><div><b>{c.title||`Checkout #${c.id}`}</b><small>{c.actual_start} – {c.actual_end} · Gross {money(c.gross_pay)} · Fee {money(c.platform_fee)}</small></div><span className={`status ${c.status}`}>{c.status}</span>{['employer','admin'].includes(user.role)&&c.status==='submitted'&&<button onClick={()=>action(async()=>{await request(`/checkouts/${c.id}/review`,{method:'PATCH',body:JSON.stringify({status:'approved'})});await load()})}>Approve</button>}</div>}/></section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='invoices'&&<section className="panel"><h2>Invoices</h2><DataList items={invoices} empty="No invoices yet." render={i=><div className="row" key={i.id}><div><b>Invoice #{i.id} · {i.title}</b><small>Due {i.due_at} · Platform fee {money(i.platform_fee)}</small></div><strong>{money(i.total)}</strong><span className={`status ${i.status}`}>{i.status}</span></div>}/></section>}
- {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='admin'&&user.role==='admin'&&<><section className="stats">{Object.entries(overview||{}).map(([k,v])=><div className="stat" key={k}><small>{k.replace(/([A-Z])/g,' $1').toUpperCase()}</small><strong>{v}</strong></div>)}</section><section className="panel"><div className="panel-head"><div><span className="eyebrow">MANUAL REVIEW</span><h2>Verification queue</h2></div><button className="secondary" onClick={()=>action(load)}>Refresh queue</button></div><p>For controlled testing only. Review evidence using your approved process; do not approve a real person's identity or right to work based on unverified claims or test data.</p><DataList items={verificationAccounts} empty="No accounts found." render={account=><article className="review-account" key={`${account.role}-${account.userId}`}><div className="review-account-head"><div><strong>{account.firstName||''} {account.lastName||''}</strong><small>{account.email} · {account.role} · Email {account.emailVerified?'verified':'not verified'}</small>{account.role==='employer'&&<small>{account.businessName||'Business name unavailable'}{account.companyNumber?` · Company no. ${account.companyNumber}`:''}</small>}</div><small>Created {account.createdAt?new Date(account.createdAt).toLocaleDateString('en-GB'):'—'}</small></div><div className="review-checks"><ReviewControl title="Identity" status={account.identityStatus} onChoose={status=>reviewVerification(account,'identity',status)}/>{account.role==='worker'?<ReviewControl title="Right to work" status={account.rightToWorkStatus} onChoose={status=>reviewVerification(account,'right_to_work',status)}/>:<ReviewControl title="Company" status={account.companyStatus} onChoose={status=>reviewVerification(account,'company',status)}/>}</div></article>}/></section></>}
+ {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='admin'&&user.role==='admin'&&<AdminConsole user={user} action={action} setNotice={setNotice} setError={setError} busy={busy}/>}
+
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&user.role==='employer'&&<section className="panel"><div className="panel-head"><h2>Employer quick actions</h2><button className="primary" onClick={()=>setPage('post')}>+ Publish a shift</button></div><p>Publish shifts, review applicants, and approve completed checkouts from your dashboard.</p></section>}
  <footer><span>hyrz</span><span>Flexible Work. Reliable Staffing.</span><span>@TheAppCollectionLTD</span></footer>
  </main></div>
@@ -321,3 +322,70 @@ function VerificationRow({title,status,detail}) {
 }
 
 function ReviewControl({title,status,onChoose}){const current=status||'not_started';return <div className="review-control"><div><strong>{title}</strong><span className={`verification-status ${current}`}>{current.replace('_',' ')}</span></div><div className="review-actions">{['pending','manual_review','verified','rejected'].map(next=><button key={next} type="button" className={next===current?'selected-review':''} onClick={()=>onChoose(next)} disabled={next===current}>{next.replace('_',' ')}</button>)}</div></div>}
+
+function AdminConsole({user,action,setNotice,setError,busy}) {
+ const [section,setSection]=useState('INBOX');
+ const [sub,setSub]=useState('CLIENTS');
+ const [users,setUsers]=useState([]);
+ const [invoices,setInvoices]=useState([]);
+ const [logs,setLogs]=useState([]);
+ const [disputes,setDisputes]=useState([]);
+ const [messages,setMessages]=useState([]);
+ const [loading,setLoading]=useState(false);
+ const [messageBody,setMessageBody]=useState('');
+ const [recipientId,setRecipientId]=useState('');
+ const [category,setCategory]=useState('enquiries');
+ const [invoiceFilter,setInvoiceFilter]=useState('all');
+ const [disputeResolution,setDisputeResolution]=useState({});
+ const sections=user.admin_tier===1?['INBOX','USERS','FINANCIAL REPORTS','INVOICES','ADMIN ACTIONS','CHECKOUT DISPUTES']:['INBOX','USERS','INVOICES','ADMIN ACTIONS','CHECKOUT DISPUTES'];
+ async function refresh() {
+  setLoading(true);setError('');
+  try {
+   if(section==='USERS') {const r=await request('/admin/users');setUsers(r.users||[]);}
+   if(section==='INVOICES') {const r=await request('/admin/invoices');setInvoices(r.invoices||[]);}
+   if(section==='ADMIN ACTIONS') {const r=await request('/admin/audit-logs');setLogs(r.logs||[]);}
+   if(section==='CHECKOUT DISPUTES') {const r=await request('/admin/disputes');setDisputes(r.disputes||[]);}
+   if(section==='INBOX') {const r=await request('/admin/inbox');setMessages(r.messages||[]);}
+  } catch(e) {setError(e.message);}
+  finally {setLoading(false);}
+ }
+ useEffect(()=>{refresh();},[section]);
+ const fmtDate=v=>v?new Date(v).toLocaleString('en-GB'):'—';
+ async function setStatus(u,status) {
+  const verb=status==='blocked'?'block':'unblock';
+  if(!window.confirm('Are you sure you want to '+verb+' '+u.email+'? This action will be recorded.'))return;
+  await action(async()=>{await request('/admin/users/'+u.id+'/status',{method:'PATCH',body:JSON.stringify({status})});setNotice('User '+(status==='blocked'?'blocked':'unblocked')+'.');await refresh();});
+ }
+ async function updateInvoice(i,status) {
+  if(!window.confirm('Confirm changing invoice #'+i.id+' to '+status+'?'))return;
+  await action(async()=>{await request('/admin/invoices/'+i.id+'/status',{method:'PATCH',body:JSON.stringify({status})});setNotice('Invoice updated.');await refresh();});
+ }
+ async function resolve(d,outcome) {
+  const resolution=window.prompt('Enter the full reason for this checkout decision (at least 5 characters):');
+  if(resolution===null)return;
+  if(resolution.trim().length<5){setError('Please provide a fuller resolution reason.');return;}
+  await action(async()=>{await request('/admin/disputes/'+d.id+'/resolve',{method:'PATCH',body:JSON.stringify({outcome,resolution:resolution.trim(),...(disputeResolution[d.id]||{})})});setNotice('Dispute decision saved and audit logged.');await refresh();});
+ }
+ async function sendMessage(e) {
+  e.preventDefault();
+  await action(async()=>{await request('/admin/messages',{method:'POST',body:JSON.stringify({recipientId:Number(recipientId),category,body:messageBody})});setMessageBody('');setNotice('Message sent.');await refresh();});
+ }
+ const userList=users.filter(u=>sub==='ADMINS'?u.role==='admin':sub==='CLIENTS'?u.role==='employer':u.role==='worker');
+ return <section className="panel admin-console">
+  <div className="panel-head"><div><span className="eyebrow">ADMINISTRATION · TIER {user.admin_tier||'—'}</span><h2>{section}</h2></div><button className="secondary" onClick={refresh} disabled={loading}>{loading?'Loading…':'Refresh'}</button></div>
+  <nav className="admin-tabs">{sections.map(s=><button key={s} className={section===s?'selected':''} onClick={()=>setSection(s)}>{s}</button>)}</nav>
+  {section==='USERS'&&<><nav className="admin-tabs">{['ADMINS','CLIENTS','WORKERS'].map(s=><button key={s} className={sub===s?'selected':''} onClick={()=>setSub(s)}>{s}</button>)}<button onClick={()=>setSub('BLOCKED CLIENTS')}>BLOCKED CLIENTS</button><button onClick={()=>setSub('BLOCKED WORKERS')}>BLOCKED WORKERS</button></nav>
+   <DataList items={users.filter(u=>sub==='BLOCKED CLIENTS'?u.role==='employer'&&u.status==='blocked':sub==='BLOCKED WORKERS'?u.role==='worker'&&u.status==='blocked':userList.includes(u))} empty="No matching users." render={u=><article className="admin-record" key={u.id}><div className="admin-record-head"><div><strong>{u.first_name||''} {u.last_name||''}</strong><small>{u.email} · {u.role}{u.admin_tier?' · Tier '+u.admin_tier:''} · {u.status}</small><small>{u.phone||'No phone recorded'}{u.business_name?' · '+u.business_name:''}{u.company_number?' · Company '+u.company_number:''}{u.worker_postcode||u.business_postcode?' · '+(u.worker_postcode||u.business_postcode):''}</small></div><span className={'status '+u.status}>{u.status}</span></div>
+   {u.role!=='admin'&&Number(user.admin_tier)!==3&&<button className="secondary" onClick={()=>setStatus(u,u.status==='blocked'?'active':'blocked')}>{u.status==='blocked'?'Unblock user':'Block user'}</button>}
+   </article>}/></>}
+  {section==='INVOICES'&&<><div className="admin-tabs">{['all','overdue','issued','paid','void'].map(f=><button key={f} className={invoiceFilter===f?'selected':''} onClick={()=>setInvoiceFilter(f)}>{f.toUpperCase()}</button>)}</div>
+   <DataList items={invoices.filter(i=>invoiceFilter==='all'||(invoiceFilter==='overdue'&&(i.status==='overdue'||new Date(i.due_at)<new Date(new Date().toISOString().slice(0,10))))||i.status===invoiceFilter)} empty="No invoices in this category." render={i=><article className="admin-record" key={i.id}><div className="admin-record-head"><div><strong>Invoice #{i.id} · {i.business_name}</strong><small>{i.shift_title} · Due {String(i.due_at).slice(0,10)} · {i.status}</small><small>Client: {i.client_first_name||''} {i.client_last_name||''} · {i.client_email} · {i.client_phone||'No phone recorded'}</small><small>Address/postcode: {i.business_postcode||'Not recorded'} · Company no: {i.company_number||'Not recorded'}</small></div><strong>{money(i.total)}</strong></div><div className="admin-record-actions">{i.status!=='paid'&&<button className="secondary" onClick={()=>updateInvoice(i,'paid')}>Mark paid</button>}{i.status!=='void'&&<button className="secondary" onClick={()=>updateInvoice(i,'void')}>Void invoice</button>}<a href={'mailto:'+i.client_email+'?subject='+encodeURIComponent('hyrz invoice #'+i.id)} className="admin-link">Email client</a></div></article>}/></>}
+  {section==='ADMIN ACTIONS'&&<DataList items={logs} empty="No administrative actions recorded yet." render={l=><article className="admin-record" key={l.id}><div className="admin-record-head"><div><strong>{l.action}</strong><small>{l.admin_email||'Former administrator'}{l.admin_tier?' · Tier '+l.admin_tier:''} · {fmtDate(l.created_at)}</small><small>{l.entity_type} #{l.entity_id||'—'} · IP {l.ip_address||'—'}</small><pre>{typeof l.details==='string'?l.details:JSON.stringify(l.details||{},null,2)}</pre></div></div></article>}/>}
+  {section==='CHECKOUT DISPUTES'&&<DataList items={disputes} empty="No checkout disputes found." render={d=><article className="admin-record" key={d.id}><div className="admin-record-head"><div><strong>Dispute #{d.id} · Checkout #{d.checkout_id} · {d.status}</strong><small>{d.shift_title} · {d.business_name} · {d.shift_location}</small><small>Employer: {d.employer_first_name||''} {d.employer_last_name||''} · {d.employer_email}</small><small>Worker: {d.worker_first_name||''} {d.worker_last_name||''} · {d.worker_email}</small><small>Opened by {d.opened_by_email} · {fmtDate(d.created_at)} · Assigned to {d.assigned_admin_email||'No one'}</small><p><b>Employer/complaint reason:</b> {d.reason}</p>{d.evidence_url&&<p><a className="admin-link" href={d.evidence_url} target="_blank" rel="noreferrer">Open submitted evidence</a></p>}<p><b>Worker comment:</b> {d.worker_comment||'No worker comment recorded.'}</p><p><b>Checkout times:</b> {fmtDate(d.actual_start)} – {fmtDate(d.actual_end)} · Break {d.break_minutes} min · Gross {money(d.gross_pay)} · Fee {money(d.platform_fee)}</p>{d.resolution&&<p><b>Resolution:</b> {d.resolution}</p>}</div></div>{['open','assigned'].includes(d.status)&&<><label>Corrected work/break timings (optional)<input placeholder="Actual start (YYYY-MM-DD HH:MM:SS)" onChange={e=>setDisputeResolution(p=>({...p,[d.id]:{...p[d.id],actualStart:e.target.value||undefined}}))}/><input placeholder="Actual end (YYYY-MM-DD HH:MM:SS)" onChange={e=>setDisputeResolution(p=>({...p,[d.id]:{...p[d.id],actualEnd:e.target.value||undefined}}))}/><input type="number" min="0" placeholder="Correct break minutes" onChange={e=>setDisputeResolution(p=>({...p,[d.id]:{...p[d.id],breakMinutes:e.target.value===''?undefined:Number(e.target.value)}}))}/></label><div className="admin-record-actions"><button className="secondary" onClick={()=>action(async()=>{await request('/admin/disputes/'+d.id+'/assign',{method:'PATCH',body:'{}'});setNotice('Dispute assigned to you.');await refresh();})}>Assign to me</button><button className="primary" onClick={()=>resolve(d,'worker')}>Uphold worker checkout</button><button className="secondary" onClick={()=>resolve(d,'employer')}>Uphold employer counter-offer</button><button className="secondary" onClick={()=>resolve(d,'reject')}>Reject checkout</button></div></>}</article>}/>}
+  {section==='INBOX'&&<><div className="admin-tabs">{['checkout_disputes','complaints','enquiries','admins'].map(c=><button key={c} className={category===c?'selected':''} onClick={()=>setCategory(c)}>{c.replace('_',' ').toUpperCase()}</button>)}</div><p className="admin-note">Messages currently use the existing conversation store. Subject categorisation, issue claiming, and read receipts require the messaging schema to be extended before those states can be reliable.</p>
+   <DataList items={messages.filter(m=>category==='admins'?m.sender_role==='admin':m.sender_role!=='admin')} empty="No messages found." render={m=><article className="admin-record" key={m.id}><div className="admin-record-head"><div><strong>Message #{m.id} · {m.sender_email} ({m.sender_role})</strong><small>{fmtDate(m.created_at)} · Conversation {m.conversation_key}</small><p>{m.body}</p></div></div></article>}/>
+   <form onSubmit={sendMessage} className="admin-message-form"><h3>Send a message</h3><label>Recipient user ID<input type="number" min="1" required value={recipientId} onChange={e=>setRecipientId(e.target.value)}/></label><label>Message<textarea required maxLength="5000" value={messageBody} onChange={e=>setMessageBody(e.target.value)}/></label><button className="primary" disabled={busy}>Send message</button></form>
+  </>}
+  {section==='FINANCIAL REPORTS'&&<div className="admin-note">Financial reporting will be added after invoice, payment and referral commission records are defined. This repository currently has invoice totals but no verified payment-provider or referral commission ledger.</div>}
+ </section>;
+}
