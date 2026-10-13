@@ -35,7 +35,7 @@ async function main() {
   const ownerEmail=process.env.OWNER_EMAIL;
   assert.ok(ownerEmail,'OWNER_EMAIL must be set for integration tests');
   const ownerToken=await login('SimsonH');
-  let tier2Id,tier3Id,workerId,employerId,checkoutId,disputeId;
+  let tier2Id,tier3Id,tier3bId,workerId,employerId,checkoutId,disputeId;
   await check('Tier 1 creates Tier 2 administrator',async()=>{
     const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier2@test.hyrz.invalid',username:'testTier2',password:'Test-Only-Password-2026!',tier:2}});
     assert.equal(r.status,201,JSON.stringify(r.data));tier2Id=r.data.id;
@@ -62,7 +62,12 @@ async function main() {
   });
   await check('Tier 2 can create Tier 3 administrators',async()=>{
     const r=await api('/admin/admins',{token:tier2Token,method:'POST',body:{email:'tier3b@test.hyrz.invalid',username:'testTier3b',password:'Test-Only-Password-2026!',tier:3}});
-    assert.equal(r.status,201,JSON.stringify(r.data));
+    assert.equal(r.status,201,JSON.stringify(r.data));tier3bId=r.data.id;
+  });
+  await check('Tier 1 can deactivate a Tier 3 administrator',async()=>{
+    const r=await api('/admin/admins/'+tier3bId,{token:ownerToken,method:'DELETE'});
+    assert.equal(r.status,200,JSON.stringify(r.data));
+    const [rows]=await db.execute('SELECT status FROM users WHERE id=?',[tier3bId]);assert.equal(rows[0].status,'pending_deletion');
   });
   await check('Tier 2 can review verification while Tier 3 cannot',async()=>{
     const r=await api('/admin/verification/worker/'+workerId,{token:tier2Token,method:'PATCH',body:{check:'identity',status:'manual_review',reason:'Integration verification review.'}});
