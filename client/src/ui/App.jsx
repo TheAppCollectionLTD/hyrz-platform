@@ -300,7 +300,7 @@ async function authenticate(register) {
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='admin'&&user.role==='admin'&&<AdminConsole user={user} action={action} setNotice={setNotice} setError={setError} busy={busy}/>}
 
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&user.role==='employer'&&<section className="panel"><div className="panel-head"><h2>Employer quick actions</h2><button className="primary" onClick={()=>setPage('post')}>+ Publish a shift</button></div><p>Publish shifts, review applicants, and approve completed checkouts from your dashboard.</p></section>}
- {user&&page==='dashboard'&&['worker','employer'].includes(user.role)&&<SupportContact action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
+ {user&&page==='dashboard'&&['worker','employer'].includes(user.role)&&<SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
  <footer><span>hyrz</span><span>Flexible Work. Reliable Staffing.</span><span>@TheAppCollectionLTD</span></footer>
  </main></div>
 }
@@ -405,13 +405,18 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
  </section>;
 }
 
-function SupportContact({action,busy,setNotice,setError}) {
+function SupportContact({user,action,busy,setNotice,setError}) {
  const [category,setCategory]=useState('enquiries');
  const [subject,setSubject]=useState('');
  const [body,setBody]=useState('');
+ const [recipientId,setRecipientId]=useState('');
+ const [messages,setMessages]=useState([]);
  const [sent,setSent]=useState(false);
- async function submit(e){e.preventDefault();setSent(false);await action(async()=>{await request('/messages',{method:'POST',body:JSON.stringify({category,subject,body})});setBody('');setSubject('');setSent(true);setNotice('Your message has been sent to hyrz support.');});}
- return <section className="panel admin-message-form"><h2>Contact hyrz support</h2><p>Send an enquiry, complaint or checkout dispute for the support team to review.</p><form onSubmit={submit}><label>Message type<select value={category} onChange={e=>setCategory(e.target.value)}><option value="enquiries">Enquiry</option><option value="complaints">Complaint</option><option value="checkout_disputes">Checkout dispute</option></select></label><label>Subject<input required minLength="2" maxLength="200" value={subject} onChange={e=>setSubject(e.target.value)}/></label><label>Message<textarea required maxLength="5000" value={body} onChange={e=>setBody(e.target.value)}/></label><button className="primary" disabled={busy}>Send to support</button>{sent&&<p role="status">Message sent successfully.</p>}</form></section>;
+ async function refreshMessages(){try{const r=await request('/messages/mine');setMessages(r.messages||[]);}catch(e){setError(e.message);}}
+ useEffect(()=>{refreshMessages();},[]);
+ async function submit(e){e.preventDefault();setSent(false);await action(async()=>{await request('/messages',{method:'POST',body:JSON.stringify({category,subject,body,...(recipientId?{recipientId:Number(recipientId)}:{})})});setBody('');setSubject('');setRecipientId('');setSent(true);setNotice('Your message has been sent to hyrz support.');await refreshMessages();});}
+ function reply(m){setRecipientId(String(m.sender_id===user.id?m.recipient_id:m.sender_id));setCategory(m.category||'enquiries');setSubject('Re: '+(m.subject||'your message').replace(/^Re:\s*/i,''));window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});}
+ return <section className="panel admin-message-form"><h2>Contact hyrz support</h2><p>Send an enquiry, complaint or checkout dispute for the support team to review.</p><form onSubmit={submit}><label>Message type<select value={category} onChange={e=>setCategory(e.target.value)}><option value="enquiries">Enquiry</option><option value="complaints">Complaint</option><option value="checkout_disputes">Checkout dispute</option></select></label><label>Subject<input required minLength="2" maxLength="200" value={subject} onChange={e=>setSubject(e.target.value)}/></label><label>Message<textarea required maxLength="5000" value={body} onChange={e=>setBody(e.target.value)}/></label><button className="primary" disabled={busy}>Send to support</button>{sent&&<p role="status">Message sent successfully.</p>}</form><h3>Your support messages</h3><DataList items={messages} empty="No support messages yet." render={m=><article className="admin-record" key={m.id}><strong>{m.subject||'Support message'} · {(m.category||'enquiries').replace('_',' ')}</strong><small>{new Date(m.created_at).toLocaleString('en-GB')} · {Number(m.sender_id)===Number(user.id)?'You sent this':'hyrz support replied'} · {m.read_at?'Read':'Unread'}</small><p>{m.body}</p>{Number(m.sender_id)!==Number(user.id)&&<button type="button" className="secondary" onClick={()=>reply(m)}>Reply</button>}</article>}/></section>;
 }
 
 function CounterOfferForm({checkout,action,busy,onDone,setNotice}) {
