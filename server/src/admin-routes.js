@@ -14,8 +14,8 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     if (status && ['active','blocked','pending_deletion'].includes(status)) { where.push('u.status=?'); args.push(status); }
     const [users] = await db.execute(
       `SELECT u.id,u.email,u.role,u.admin_tier,u.first_name,u.last_name,u.phone,u.status,u.created_at,
-        wp.postcode AS worker_postcode, wp.bio AS worker_bio,
-        b.name AS business_name,b.company_number,b.postcode AS business_postcode,b.role_at_company
+        wp.postcode AS worker_postcode, wp.bio AS worker_bio,wp.skills AS worker_skills,wp.availability AS worker_availability,wp.hourly_rate AS worker_hourly_rate,wp.identity_verification_status AS worker_identity_status,wp.right_to_work_status AS worker_right_to_work_status,
+        b.name AS business_name,b.company_number,b.postcode AS business_postcode,b.role_at_company,b.verification_status AS business_verification_status,b.identity_verification_status AS business_identity_status
        FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id
        LEFT JOIN businesses b ON b.owner_user_id=u.id
        ${where.length ? 'WHERE '+where.join(' AND ') : ''}
