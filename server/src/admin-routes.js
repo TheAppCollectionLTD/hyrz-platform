@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 
 module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   const admin = [auth, allow('admin')];
+  const ensureMessageMeta = db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err => { console.error('Could not initialise admin message metadata:', err.message); throw err; });
 
   app.get('/api/admin/users', ...admin, asyncRoute(async (req, res) => {
     const { role, status } = req.query;
@@ -114,8 +115,9 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   }));
 
   app.get('/api/admin/inbox', ...admin, asyncRoute(async(req,res) => {
-    const [rows]=await db.execute(`SELECT m.*,u.email AS sender_email,u.role AS sender_role,u.first_name,u.last_name
-      FROM messages m JOIN users u ON u.id=m.sender_id ORDER BY m.created_at DESC LIMIT 500`);
+    await ensureMessageMeta;
+    const [rows]=await db.execute(`SELECT m.*,u.email AS sender_email,u.role AS sender_role,u.first_name,u.last_name,meta.recipient_id,meta.category,meta.opened_by,meta.read_at,opener.email AS opened_by_email
+      FROM messages m JOIN users u ON u.id=m.sender_id LEFT JOIN admin_message_meta meta ON meta.message_id=m.id LEFT JOIN users opener ON opener.id=meta.opened_by ORDER BY m.created_at DESC LIMIT 500`);
     res.json({messages:rows});
   }));
 
@@ -128,9 +130,27 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     if (category==='admins' && recipients[0].role!=='admin') return res.status(400).json({error:'Admin messages must be sent to an administrator'});
     if (category!=='admins' && recipients[0].role==='admin') return res.status(400).json({error:'Choose the admin message category for administrator messages'});
     const conversationKey=[Number(req.user.id),Number(recipientId)].sort((a,b)=>a-b).join(':');
+    await ensureMessageMeta;
     const [result]=await db.execute('INSERT INTO messages(conversation_key,sender_id,body) VALUES(?,?,?)',[conversationKey,req.user.id,body.trim()]);
+    await db.execute('INSERT INTO admin_message_meta(message_id,recipient_id,category) VALUES(?,?,?)',[result.insertId,Number(recipientId),category]);
     await audit(req,'message.sent','message',result.insertId,{recipientId:Number(recipientId),category});
     res.status(201).json({ok:true,id:result.insertId});
+  }));
+
+  app.patch('/api/admin/messages/:id/claim', ...admin, asyncRoute(async(req,res) => {
+    await ensureMessageMeta;
+    const [result]=await db.execute('UPDATE admin_message_meta SET opened_by=? WHERE message_id=? AND (opened_by IS NULL OR opened_by=?)',[req.user.id,req.params.id,req.user.id]);
+    if (!result.affectedRows) return res.status(409).json({error:'This issue is already being handled by another administrator'});
+    await audit(req,'message.claimed','message',req.params.id);
+    res.json({ok:true});
+  }));
+
+  app.patch('/api/admin/messages/:id/read', ...admin, asyncRoute(async(req,res) => {
+    await ensureMessageMeta;
+    const [result]=await db.execute('UPDATE admin_message_meta SET read_at=UTC_TIMESTAMP() WHERE message_id=? AND recipient_id=?',[req.params.id,req.user.id]);
+    if (!result.affectedRows) return res.status(404).json({error:'Message not found for this administrator'});
+    await audit(req,'message.read','message',req.params.id);
+    res.json({ok:true});
   }));
 
   app.post('/api/admin/admins', ...admin, asyncRoute(async(req,res) => {
