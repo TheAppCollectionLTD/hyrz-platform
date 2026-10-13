@@ -372,7 +372,9 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
   const resolution=window.prompt('Enter the full reason for this checkout decision (at least 5 characters):');
   if(resolution===null)return;
   if(resolution.trim().length<5){setError('Please provide a fuller resolution reason.');return;}
-  await action(async()=>{await request('/admin/disputes/'+d.id+'/resolve',{method:'PATCH',body:JSON.stringify({outcome,resolution:resolution.trim(),...(disputeResolution[d.id]||{})})});setNotice('Dispute decision saved and audit logged.');await refresh();});
+  const corrections=disputeResolution[d.id]||{};
+  const proposed=outcome==='employer'?{actualStart:corrections.actualStart||d.counter_start||undefined,actualEnd:corrections.actualEnd||d.counter_end||undefined,breakMinutes:corrections.breakMinutes??d.counter_break_minutes??undefined}:corrections;
+  await action(async()=>{await request('/admin/disputes/'+d.id+'/resolve',{method:'PATCH',body:JSON.stringify({outcome,resolution:resolution.trim(),...proposed})});setNotice('Dispute decision saved and audit logged.');await refresh();});
  }
  async function sendMessage(e) {
   e.preventDefault();
