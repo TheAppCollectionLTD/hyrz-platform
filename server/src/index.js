@@ -25,6 +25,10 @@ app.use(express.json({ limit: '1mb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
 const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
+const ensureWorkerIdentifierColumns = Promise.all([
+  db.query('ALTER TABLE worker_profiles ADD COLUMN national_insurance_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+  db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
+]).catch(err=>{console.error('Could not initialise worker identifier hashes:',err.message);throw err;});
 const audit = async (req, action, entityType, entityId, details={}) => {
   await db.execute('INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,details,ip_address) VALUES(?,?,?,?,?,?)',
     [req.user?.id || null, action, entityType, entityId || null, JSON.stringify(details), req.ip]);
@@ -57,7 +61,7 @@ async function sendVerificationEmail(email, rawToken) {
 app.post('/api/auth/register', asyncRoute(async (req, res) => {
   const {
     email, password, role = 'worker', firstName = '', lastName = '',
-    businessName, companyNumber, companyRole, postcode, confirmPassword
+    businessName, companyNumber, companyRole, postcode, nationalInsuranceNumber, workerPermitNumber, confirmPassword
   } = req.body;
 
   if (!email || !/^\S+@\S+\.\S+$/.test(email) ||
@@ -82,6 +86,16 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
   }
 
   const normalizedEmail = email.toLowerCase().trim();
+  if (role === 'worker') {
+    await ensureWorkerIdentifierColumns;
+    for (const [type,raw] of [['national_insurance',nationalInsuranceNumber],['worker_permit',workerPermitNumber]]) {
+      const normalized=String(raw||'').replace(/\\s+/g,'').toUpperCase();
+      if (!normalized) continue;
+      const hash=crypto.createHash('sha256').update(normalized).digest('hex');
+      const [blocked]=await db.execute('SELECT id FROM blocked_identifiers WHERE identifier_type=? AND identifier_hash=? LIMIT 1',[type,hash]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
+      if (blocked.length) return res.status(403).json({error:'These worker identity details cannot be used to create a hyrz account. Please contact support if you believe this is an error.'});
+    }
+  }
   if (role === 'employer' && companyNumber) {
     const normalizedCompanyNumber=String(companyNumber).replace(/\s+/g,'').toUpperCase();
     const [blocked]=await db.execute("SELECT id FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? LIMIT 1",[crypto.createHash('sha256').update(normalizedCompanyNumber).digest('hex')]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
@@ -109,8 +123,10 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
 
     if (role === 'worker') {
       await conn.execute(
-        'INSERT INTO worker_profiles (user_id) VALUES (?)',
-        [result.insertId]
+        'INSERT INTO worker_profiles (user_id,national_insurance_hash,worker_permit_hash) VALUES (?,?,?)',
+        [result.insertId,
+          nationalInsuranceNumber ? crypto.createHash('sha256').update(String(nationalInsuranceNumber).replace(/\\s+/g,'').toUpperCase()).digest('hex') : null,
+          workerPermitNumber ? crypto.createHash('sha256').update(String(workerPermitNumber).replace(/\\s+/g,'').toUpperCase()).digest('hex') : null]
       );
     } else {
       await conn.execute(
