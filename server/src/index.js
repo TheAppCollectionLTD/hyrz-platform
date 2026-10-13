@@ -26,6 +26,13 @@ app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
 const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
 const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
+const ensureCheckoutCounterColumns = Promise.all([
+  db.query('ALTER TABLE checkouts ADD COLUMN employer_comment TEXT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+  db.query('ALTER TABLE checkouts ADD COLUMN counter_start DATETIME NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+  db.query('ALTER TABLE checkouts ADD COLUMN counter_end DATETIME NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+  db.query('ALTER TABLE checkouts ADD COLUMN counter_break_minutes INT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+  db.query('ALTER TABLE checkouts ADD COLUMN counter_gross_pay DECIMAL(10,2) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
+]).catch(err=>{console.error('Could not initialise checkout counter-offer fields:',err.message);throw err;});
 const ensureWorkerIdentifierColumns = Promise.all([
   db.query('ALTER TABLE worker_profiles ADD COLUMN national_insurance_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
   db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
@@ -397,6 +404,25 @@ app.get('/api/checkouts/mine',auth,asyncRoute(async(req,res)=>{
  : `SELECT c.*,s.title,u.first_name,u.last_name FROM checkouts c JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=c.worker_id WHERE b.owner_user_id=? ORDER BY c.created_at DESC`;
  const [rows]=await db.execute(sql,[req.user.id]);res.json({checkouts:rows});
 }));
+app.post('/api/checkouts/:id/counter-offer',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
+ await ensureCheckoutCounterColumns;
+ const {comment='',actualStart,actualEnd,breakMinutes}=req.body||{};
+ if(typeof comment!=='string'||comment.trim().length<3||comment.length>3000)return res.status(400).json({error:'Please provide a counter-offer comment of 3-3000 characters'});
+ const [rows]=await db.execute(`SELECT c.id,c.shift_id,c.worker_id,s.hourly_pay,b.id AS business_id FROM checkouts c JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id WHERE c.id=? AND b.owner_user_id=?`,[req.params.id,req.user.id]);
+ if(!rows.length)return res.status(404).json({error:'Checkout not found'});
+ let gross=null;
+ if(actualStart||actualEnd||breakMinutes!==undefined){
+  if(!actualStart||!actualEnd||!Number.isInteger(Number(breakMinutes))||Number(breakMinutes)<0)return res.status(400).json({error:'Provide start, end and a non-negative break duration together'});
+  try { gross=calculatePay({hourlyPay:rows[0].hourly_pay,startsAt:actualStart,endsAt:actualEnd,breakMinutes:Number(breakMinutes)}).grossPay; }
+  catch(e){return res.status(400).json({error:e.message});}
+ }
+ await db.execute('UPDATE checkouts SET employer_comment=?,counter_start=?,counter_end=?,counter_break_minutes=?,counter_gross_pay=?,status=\'disputed\' WHERE id=?',[comment.trim(),actualStart||null,actualEnd||null,breakMinutes===undefined?null:Number(breakMinutes),gross,req.params.id]);
+ const [existing]=await db.execute("SELECT id FROM disputes WHERE checkout_id=? AND status IN ('open','assigned') LIMIT 1",[req.params.id]);
+ if(!existing.length) await db.execute('INSERT INTO disputes(checkout_id,opened_by,reason) VALUES(?,?,?)',[req.params.id,req.user.id,'Employer counter-offer: '+comment.trim()]);
+ await audit(req,'checkout.counter_offer_submitted','checkout',req.params.id,{comment:comment.trim(),actualStart:actualStart||null,actualEnd:actualEnd||null,breakMinutes:breakMinutes??null,counterGrossPay:gross});
+ res.status(201).json({ok:true,status:'disputed',counterGrossPay:gross});
+}));
+
 app.patch('/api/checkouts/:id/review',auth,requireVerification,asyncRoute(async(req,res)=>{
  if(!['employer','admin'].includes(req.user.role))return res.status(403).json({error:'Insufficient permissions'});
  const status=req.body.status;if(!['approved','rejected','disputed'].includes(status))return res.status(400).json({error:'Invalid status'});
