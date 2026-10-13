@@ -52,6 +52,14 @@ async function main() {
     const r=await api('/admin/users/'+workerId+'/status',{token:tier3Token,method:'PATCH',body:{status:'blocked'}});
     assert.equal(r.status,403);
   });
+  await check('Tier 1 can change administrator tiers but not its own tier',async()=>{
+    const changed=await api('/admin/admins/'+tier3Id+'/tier',{token:ownerToken,method:'PATCH',body:{tier:2}});
+    assert.equal(changed.status,200,JSON.stringify(changed.data));
+    const self=await api('/admin/admins/'+(await api('/auth/me',{token:ownerToken})).data.user.id+'/tier',{token:ownerToken,method:'PATCH',body:{tier:2}});
+    assert.equal(self.status,400);
+    const restored=await api('/admin/admins/'+tier3Id+'/tier',{token:ownerToken,method:'PATCH',body:{tier:3}});
+    assert.equal(restored.status,200);
+  });
   await check('Tier 2 can create Tier 3 administrators',async()=>{
     const r=await api('/admin/admins',{token:tier2Token,method:'POST',body:{email:'tier3b@test.hyrz.invalid',username:'testTier3b',password:'Test-Only-Password-2026!',tier:3}});
     assert.equal(r.status,201,JSON.stringify(r.data));
@@ -136,6 +144,12 @@ async function main() {
     assert.equal(r.status,201,JSON.stringify(r.data));
     const update=await api('/admin/referral-commissions/'+r.data.id+'/status',{token:ownerToken,method:'PATCH',body:{status:'paid'}});
     assert.equal(update.status,200,JSON.stringify(update.data));
+  });
+  await check('Administrator password can be changed and used to sign in',async()=>{
+    const changed=await api('/admin/change-password',{token:tier3Token,method:'POST',body:{currentPassword:'Test-Only-Password-2026!',newPassword:'Changed-Only-Password-2026!'}});
+    assert.equal(changed.status,200,JSON.stringify(changed.data));
+    const loginChanged=await api('/auth/login',{method:'POST',body:{email:'testTier3',password:'Changed-Only-Password-2026!'}});
+    assert.equal(loginChanged.status,200,JSON.stringify(loginChanged.data));
   });
   await db.end();
   if(checks.some(c=>!c.ok)){console.error(JSON.stringify(checks,null,2));process.exitCode=1;}
