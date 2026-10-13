@@ -91,6 +91,18 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     res.json({ok:true,status});
   }));
 
+  app.delete('/api/admin/users/:id', ...admin, asyncRoute(async(req,res) => {
+    const targetId=Number(req.params.id);
+    if (Number(req.user.admin_tier)===3) return res.status(403).json({error:'Tier 3 administrators cannot delete users'});
+    if (!Number.isSafeInteger(targetId) || targetId===Number(req.user.id)) return res.status(400).json({error:'Invalid user id'});
+    const [targets]=await db.execute('SELECT id,email,role,status FROM users WHERE id=?',[targetId]);
+    if (!targets.length) return res.status(404).json({error:'User not found'});
+    if (targets[0].role==='admin') return res.status(403).json({error:'Use Tier 1 administrator management to delete administrators'});
+    await db.execute("UPDATE users SET status='pending_deletion' WHERE id=?",[targetId]);
+    await audit(req,'user.deletion_requested','user',targetId,{email:targets[0].email,role:targets[0].role,previousStatus:targets[0].status});
+    res.json({ok:true,status:'pending_deletion',message:'Account access disabled and deletion recorded. Related financial and audit records are retained.'});
+  }));
+
   app.get('/api/admin/invoices', ...admin, asyncRoute(async (req,res) => {
     const [rows] = await db.execute(`
       SELECT i.*, b.name AS business_name,b.company_number,b.postcode AS business_postcode,
