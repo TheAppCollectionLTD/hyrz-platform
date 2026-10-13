@@ -24,6 +24,7 @@ app.use(cors({
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
+const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
 const audit = async (req, action, entityType, entityId, details={}) => {
   await db.execute('INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,details,ip_address) VALUES(?,?,?,?,?,?)',
     [req.user?.id || null, action, entityType, entityId || null, JSON.stringify(details), req.ip]);
@@ -207,9 +208,13 @@ app.post('/api/auth/resend-verification', asyncRoute(async (req, res) => {
 }));
 
 app.post('/api/auth/login', asyncRoute(async (req, res) => {
+  await adminLoginNamesReady;
+  const identifier = String(req.body.email || req.body.username || '').trim();
   const [rows] = await db.execute(
-    'SELECT id,email,password_hash,role,admin_tier,status,first_name,last_name,email_verified_at FROM users WHERE email=?',
-    [String(req.body.email || '').toLowerCase().trim()]
+    `SELECT u.id,u.email,u.password_hash,u.role,u.admin_tier,u.status,u.first_name,u.last_name,u.email_verified_at
+     FROM users u LEFT JOIN admin_login_names n ON n.user_id=u.id
+     WHERE u.email=? OR (u.role='admin' AND n.username=?) LIMIT 1`,
+    [identifier.toLowerCase(), identifier]
   );
 
   if (!rows.length ||
