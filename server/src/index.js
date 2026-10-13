@@ -9,6 +9,7 @@ const { calculatePay } = require('./pricing');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const { hashIdentifier } = require('./identifier-hash');
 const { Resend } = require('resend');
 
 const resend = process.env.RESEND_API_KEY
@@ -102,7 +103,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     for (const [type,raw] of [['national_insurance',nationalInsuranceNumber],['worker_permit',workerPermitNumber]]) {
       const normalized=String(raw||'').replace(/\\s+/g,'').toUpperCase();
       if (!normalized) continue;
-      const hash=crypto.createHash('sha256').update(normalized).digest('hex');
+      const hash=hashIdentifier(normalized);
       const [blocked]=await db.execute('SELECT id FROM blocked_identifiers WHERE identifier_type=? AND identifier_hash=? LIMIT 1',[type,hash]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
       if (blocked.length) return res.status(403).json({error:'These worker identity details cannot be used to create a hyrz account. Please contact support if you believe this is an error.'});
     }
@@ -110,7 +111,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
   if (role === 'employer' && companyNumber) {
     await ensureBlockedIdentifiers;
     const normalizedCompanyNumber=String(companyNumber).replace(/\s+/g,'').toUpperCase();
-    const [blocked]=await db.execute("SELECT id FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? LIMIT 1",[crypto.createHash('sha256').update(normalizedCompanyNumber).digest('hex')]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
+    const [blocked]=await db.execute("SELECT id FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? LIMIT 1",[hashIdentifier(normalizedCompanyNumber)]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
     if (blocked.length) return res.status(403).json({error:'This company registration number cannot be used to create a hyrz account. Please contact support if you believe this is an error.'});
   }
   const rawToken = crypto.randomBytes(32).toString('hex');
@@ -137,8 +138,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
       await conn.execute(
         'INSERT INTO worker_profiles (user_id,national_insurance_hash,worker_permit_hash) VALUES (?,?,?)',
         [result.insertId,
-          nationalInsuranceNumber ? crypto.createHash('sha256').update(String(nationalInsuranceNumber).replace(/\s+/g,'').toUpperCase()).digest('hex') : null,
-          workerPermitNumber ? crypto.createHash('sha256').update(String(workerPermitNumber).replace(/\s+/g,'').toUpperCase()).digest('hex') : null]
+          nationalInsuranceNumber ? hashIdentifier(nationalInsuranceNumber) : null,
+          workerPermitNumber ? hashIdentifier(workerPermitNumber) : null]
       );
     } else {
       await conn.execute(
