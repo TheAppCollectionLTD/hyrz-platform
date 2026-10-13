@@ -152,6 +152,10 @@ async function main() {
     const resolved=await api('/admin/disputes/'+disputeId+'/resolve',{token:tier3Token,method:'PATCH',body:{outcome:'worker',resolution:'Integration test resolution accepted.'}});
     assert.equal(resolved.status,200,JSON.stringify(resolved.data));
     const [invoices]=await db.execute('SELECT id FROM invoices WHERE checkout_id=?',[checkoutId]);assert.equal(invoices.length,1);
+    const report=await api('/admin/financial-reports',{token:ownerToken});
+    assert.equal(report.status,200);
+    assert.ok(Number(report.data.invoices.invoicedRevenue)>=3,'Platform-fee revenue should include invoice fees.');
+    assert.ok(Number(report.data.invoices.grossInvoiceValue)>=33,'Gross invoice value should include worker pay plus fees.');
     const reminder=await api('/admin/invoices/'+invoices[0].id+'/send-reminder',{token:ownerToken,method:'POST',body:{}});
     assert.equal(reminder.status,503,'Without Resend credentials the reminder should fail clearly rather than claim delivery.');
   });
