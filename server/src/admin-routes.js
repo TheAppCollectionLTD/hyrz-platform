@@ -176,6 +176,29 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     res.status(201).json({id:userId,email,username,tier});
   }));
 
+  app.patch('/api/admin/admins/:id/tier', ...admin, asyncRoute(async(req,res) => {
+    const targetId=Number(req.params.id), tier=Number(req.body.tier);
+    if (Number(req.user.admin_tier)!==1) return res.status(403).json({error:'Only Tier 1 can change administrator tiers'});
+    if (!Number.isSafeInteger(targetId) || ![2,3].includes(tier)) return res.status(400).json({error:'Choose Tier 2 or Tier 3'});
+    if (targetId===Number(req.user.id)) return res.status(400).json({error:'You cannot change your own tier'});
+    const [targets]=await db.execute("SELECT id,email,role,admin_tier FROM users WHERE id=? AND role='admin'",[targetId]);
+    if (!targets.length) return res.status(404).json({error:'Administrator not found'});
+    await db.execute('UPDATE users SET admin_tier=? WHERE id=?',[tier,targetId]);
+    await audit(req,'admin.tier_changed','user',targetId,{email:targets[0].email,previousTier:targets[0].admin_tier,tier});
+    res.json({ok:true,tier});
+  }));
+
+  app.delete('/api/admin/admins/:id', ...admin, asyncRoute(async(req,res) => {
+    const targetId=Number(req.params.id);
+    if (Number(req.user.admin_tier)!==1) return res.status(403).json({error:'Only Tier 1 can delete administrators'});
+    if (!Number.isSafeInteger(targetId) || targetId===Number(req.user.id)) return res.status(400).json({error:'Invalid administrator id'});
+    const [targets]=await db.execute("SELECT id,email,admin_tier FROM users WHERE id=? AND role='admin'",[targetId]);
+    if (!targets.length) return res.status(404).json({error:'Administrator not found'});
+    await db.execute('DELETE FROM users WHERE id=?',[targetId]);
+    await audit(req,'admin.deleted','user',targetId,{email:targets[0].email,tier:targets[0].admin_tier});
+    res.json({ok:true});
+  }));
+
   app.post('/api/admin/change-password', ...admin, asyncRoute(async(req,res) => {
     const {currentPassword,newPassword}=req.body||{};
     if (typeof newPassword!=='string'||newPassword.length<12) return res.status(400).json({error:'New password must be at least 12 characters'});
