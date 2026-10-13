@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS worker_profiles (
  skills JSON NULL,
  postcode VARCHAR(20) NULL,
  hourly_rate DECIMAL(8,2) NULL,
+ national_insurance_hash CHAR(64) NULL,
+ worker_permit_hash CHAR(64) NULL,
  right_to_work_status ENUM('not_started','pending','verified','rejected','manual_review') NOT NULL DEFAULT 'not_started',
 identity_verification_status ENUM('not_started','pending','verified','rejected','manual_review') NOT NULL DEFAULT 'not_started',
  availability JSON NULL,
@@ -146,4 +148,46 @@ CREATE TABLE IF NOT EXISTS messages (
  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  FOREIGN KEY (sender_id) REFERENCES users(id),
  INDEX idx_messages_conversation(conversation_key, created_at)
+);
+
+CREATE TABLE IF NOT EXISTS admin_login_names (
+ user_id BIGINT UNSIGNED PRIMARY KEY,
+ username VARCHAR(80) NOT NULL UNIQUE,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS blocked_identifiers (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL,
+ identifier_hash CHAR(64) NOT NULL,
+ blocked_user_id BIGINT UNSIGNED NULL,
+ created_by BIGINT UNSIGNED NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash),
+ FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL,
+ FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+);
+CREATE TABLE IF NOT EXISTS admin_message_meta (
+ message_id BIGINT UNSIGNED PRIMARY KEY,
+ recipient_id BIGINT UNSIGNED NOT NULL,
+ category VARCHAR(40) NOT NULL DEFAULT 'enquiries',
+ subject VARCHAR(200) NULL,
+ opened_by BIGINT UNSIGNED NULL,
+ read_at DATETIME NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE,
+ FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE,
+ FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL
+);
+CREATE TABLE IF NOT EXISTS referral_commissions (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ referrer_user_id BIGINT UNSIGNED NOT NULL,
+ referred_user_id BIGINT UNSIGNED NOT NULL,
+ amount DECIMAL(10,2) NOT NULL,
+ status ENUM('pending','approved','paid','cancelled') NOT NULL DEFAULT 'pending',
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ paid_at DATETIME NULL,
+ UNIQUE KEY uq_referral_pair(referrer_user_id,referred_user_id),
+ FOREIGN KEY (referrer_user_id) REFERENCES users(id) ON DELETE CASCADE,
+ FOREIGN KEY (referred_user_id) REFERENCES users(id) ON DELETE CASCADE
 );
