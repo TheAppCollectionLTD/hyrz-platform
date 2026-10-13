@@ -157,7 +157,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     const tier=Number(req.body.tier), email=String(req.body.email||'').trim().toLowerCase(), username=String(req.body.username||'').trim(), password=req.body.password;
     if (Number(req.user.admin_tier)>2) return res.status(403).json({error:'Tier 3 administrators cannot create administrators'});
     if (![2,3].includes(tier) || (Number(req.user.admin_tier)===2 && tier!==3)) return res.status(403).json({error:'You cannot create an administrator at that tier'});
-    if (!/^\\S+@\\S+\\.\\S+$/.test(email) || !/^[A-Za-z][A-Za-z0-9._-]{2,79}$/.test(username) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Enter a valid email, username (3-80 characters) and password of at least 12 characters'});
+    if (!/^\S+@\S+\.\S+$/.test(email) || !/^[A-Za-z][A-Za-z0-9._-]{2,79}$/.test(username) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Enter a valid email, username (3-80 characters) and password of at least 12 characters'});
     const hash=await bcrypt.hash(password,12);
     const conn=await db.getConnection();
     let userId;
