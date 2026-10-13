@@ -4,6 +4,13 @@ const bcrypt = require('bcryptjs');
 module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   const admin = [auth, allow('admin')];
   const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
+  const ensureCheckoutCounterColumns = Promise.all([
+    db.query('ALTER TABLE checkouts ADD COLUMN employer_comment TEXT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+    db.query('ALTER TABLE checkouts ADD COLUMN counter_start DATETIME NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+    db.query('ALTER TABLE checkouts ADD COLUMN counter_end DATETIME NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+    db.query('ALTER TABLE checkouts ADD COLUMN counter_break_minutes INT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+    db.query('ALTER TABLE checkouts ADD COLUMN counter_gross_pay DECIMAL(10,2) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
+  ]).catch(err=>{console.error('Could not initialise checkout counter-offer fields:',err.message);throw err;});
   const ensureWorkerIdentifierColumns = Promise.all([
     db.query('ALTER TABLE worker_profiles ADD COLUMN national_insurance_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
     db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
@@ -156,7 +163,8 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   }));
 
   app.get('/api/admin/disputes', ...admin, asyncRoute(async(req,res) => {
-    const [disputes]=await db.execute(`SELECT d.*, c.actual_start,c.actual_end,c.break_minutes,c.gross_pay,c.platform_fee,c.worker_comment,
+    await ensureCheckoutCounterColumns;
+    const [disputes]=await db.execute(`SELECT d.*, c.actual_start,c.actual_end,c.break_minutes,c.gross_pay,c.platform_fee,c.worker_comment,c.employer_comment,c.counter_start,c.counter_end,c.counter_break_minutes,c.counter_gross_pay,
       c.status AS checkout_status,c.worker_id,w.email AS worker_email,w.first_name AS worker_first_name,w.last_name AS worker_last_name,
       s.title AS shift_title,s.location AS shift_location,b.name AS business_name,eu.email AS employer_email,
       eu.first_name AS employer_first_name,eu.last_name AS employer_last_name, opener.email AS opened_by_email,
