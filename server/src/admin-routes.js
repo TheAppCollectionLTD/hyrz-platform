@@ -107,6 +107,23 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     res.json({userCounts,invoices:invoiceTotals,commissions,referralCommissions:referralRows});
   }));
 
+  app.post('/api/admin/referral-commissions', ...admin, asyncRoute(async(req,res) => {
+    if (Number(req.user.admin_tier)!==1) return res.status(403).json({error:'Only Tier 1 can create referral commissions'});
+    const referrerId=Number(req.body.referrerUserId), referredId=Number(req.body.referredUserId), amount=Number(req.body.amount);
+    if (!Number.isSafeInteger(referrerId)||!Number.isSafeInteger(referredId)||referrerId===referredId||!Number.isFinite(amount)||amount<=0||amount>1000000) return res.status(400).json({error:'Choose two different users and a commission amount greater than zero'});
+    await ensureReferralCommissions;
+    const [users]=await db.execute('SELECT id FROM users WHERE id IN (?,?)',[referrerId,referredId]);
+    if(users.length!==2)return res.status(404).json({error:'Referrer or referred user not found'});
+    try {
+      const [result]=await db.execute("INSERT INTO referral_commissions(referrer_user_id,referred_user_id,amount,status) VALUES(?,?,?,'pending')",[referrerId,referredId,amount.toFixed(2)]);
+      await audit(req,'referral_commission.created','referral_commission',result.insertId,{referrerId,referredId,amount:Number(amount.toFixed(2))});
+      res.status(201).json({id:result.insertId,status:'pending'});
+    } catch(error) {
+      if(error.code==='ER_DUP_ENTRY')return res.status(409).json({error:'A commission already exists for this referral pair'});
+      throw error;
+    }
+  }));
+
   app.patch('/api/admin/referral-commissions/:id/status', ...admin, asyncRoute(async(req,res) => {
     if (Number(req.user.admin_tier)!==1) return res.status(403).json({error:'Only Tier 1 can update referral commissions'});
     const status=req.body.status;
