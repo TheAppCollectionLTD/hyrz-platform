@@ -2,7 +2,7 @@ const { auth, allow, adminTier } = require('./middleware');
 const bcrypt = require('bcryptjs');
 const { hashIdentifier } = require('./identifier-hash');
 
-module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
+module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder }) {
   const admin = [auth, allow('admin')];
   const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
   const ensureCheckoutCounterColumns = Promise.all([
@@ -163,6 +163,20 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
         i.due_at ASC LIMIT 500`);
     for (const invoice of rows) if (invoice.status === 'issued' && new Date(invoice.due_at) < new Date(new Date().toISOString().slice(0,10))) invoice.status = 'overdue';
     res.json({invoices:rows});
+  }));
+
+  app.post('/api/admin/invoices/:id/send-reminder', ...admin, asyncRoute(async(req,res) => {
+    const [rows]=await db.execute(`SELECT i.id,i.total,i.due_at,b.name AS business_name,
+      s.title AS shift_title,u.email AS client_email,u.first_name AS client_first_name
+      FROM invoices i JOIN businesses b ON b.id=i.business_id JOIN users u ON u.id=b.owner_user_id
+      JOIN checkouts c ON c.id=i.checkout_id JOIN shifts s ON s.id=c.shift_id WHERE i.id=?`,[req.params.id]);
+    if(!rows.length)return res.status(404).json({error:'Invoice not found'});
+    if(['paid','void'].includes(String(req.body?.status||''))||false)return res.status(400).json({error:'Cannot remind for a paid or void invoice'});
+    if(!sendInvoiceReminder)return res.status(503).json({error:'Invoice email service is not configured'});
+    try { await sendInvoiceReminder(rows[0]); }
+    catch(error) { console.error('Invoice reminder failed:',error.message); return res.status(503).json({error:'Could not send invoice reminder. Check the email service configuration.'}); }
+    await audit(req,'invoice.reminder_sent','invoice',req.params.id,{recipient:rows[0].client_email});
+    res.json({ok:true,message:'Invoice reminder sent.'});
   }));
 
   app.patch('/api/admin/invoices/:id/status', ...admin, asyncRoute(async(req,res) => {
