@@ -291,9 +291,9 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     if (!Number.isSafeInteger(targetId) || targetId===Number(req.user.id)) return res.status(400).json({error:'Invalid administrator id'});
     const [targets]=await db.execute("SELECT id,email,admin_tier FROM users WHERE id=? AND role='admin'",[targetId]);
     if (!targets.length) return res.status(404).json({error:'Administrator not found'});
-    await db.execute('DELETE FROM users WHERE id=?',[targetId]);
-    await audit(req,'admin.deleted','user',targetId,{email:targets[0].email,tier:targets[0].admin_tier});
-    res.json({ok:true});
+    await db.execute("UPDATE users SET status='pending_deletion' WHERE id=?",[targetId]);
+    await audit(req,'admin.deletion_requested','user',targetId,{email:targets[0].email,tier:targets[0].admin_tier});
+    res.json({ok:true,status:'pending_deletion',message:'Administrator access disabled; historical records retained.'});
   }));
 
   app.post('/api/admin/change-password', ...admin, asyncRoute(async(req,res) => {
