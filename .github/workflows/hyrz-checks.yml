@@ -53,7 +53,7 @@ jobs:
         env:
           OWNER_USERNAME: SimsonH
           OWNER_EMAIL: owner@test.hyrz.invalid
-          OWNER_PASSWORD: Test-Only-Owner-Password-2026!
+          OWNER_PASSWORD: Test-Only-Password-2026!
         run: npm run bootstrap:owner
       - name: Start API
         run: |
