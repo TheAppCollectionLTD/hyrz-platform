@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   const admin = [auth, allow('admin')];
-  const ensureMessageMeta = db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err => { console.error('Could not initialise admin message metadata:', err.message); throw err; });
+  const ensureMessageMeta = db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', subject VARCHAR(200) NULL, opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`).then(async()=>{await db.query('ALTER TABLE admin_message_meta ADD COLUMN IF NOT EXISTS subject VARCHAR(200) NULL');}).catch(err => { console.error('Could not initialise admin message metadata:', err.message); throw err; });
 
   app.get('/api/admin/users', ...admin, asyncRoute(async (req, res) => {
     const { role, status } = req.query;
@@ -116,15 +116,15 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
 
   app.get('/api/admin/inbox', ...admin, asyncRoute(async(req,res) => {
     await ensureMessageMeta;
-    const [rows]=await db.execute(`SELECT m.*,u.email AS sender_email,u.role AS sender_role,u.first_name,u.last_name,meta.recipient_id,meta.category,meta.opened_by,meta.read_at,opener.email AS opened_by_email
+    const [rows]=await db.execute(`SELECT m.*,u.email AS sender_email,u.role AS sender_role,u.first_name,u.last_name,meta.recipient_id,meta.category,meta.subject,meta.opened_by,meta.read_at,opener.email AS opened_by_email
       FROM messages m JOIN users u ON u.id=m.sender_id LEFT JOIN admin_message_meta meta ON meta.message_id=m.id LEFT JOIN users opener ON opener.id=meta.opened_by ORDER BY m.created_at DESC LIMIT 500`);
     res.json({messages:rows});
   }));
 
   app.post('/api/admin/messages', ...admin, asyncRoute(async(req,res) => {
-    const { recipientId, category='enquiries', body }=req.body||{};
+    const { recipientId, category='enquiries', subject='', body }=req.body||{};
     const categories=['checkout_disputes','complaints','enquiries','admins'];
-    if (!Number.isSafeInteger(Number(recipientId)) || !categories.includes(category) || typeof body!=='string' || body.trim().length<1 || body.length>5000) return res.status(400).json({error:'Recipient, category and message are required'});
+    if (!Number.isSafeInteger(Number(recipientId)) || !categories.includes(category) || typeof subject!=='string' || subject.length>200 || typeof body!=='string' || body.trim().length<1 || body.length>5000) return res.status(400).json({error:'Recipient, category and message are required'});
     const [recipients]=await db.execute('SELECT id,role FROM users WHERE id=? AND status=\'active\'',[recipientId]);
     if (!recipients.length) return res.status(404).json({error:'Recipient not found'});
     if (category==='admins' && recipients[0].role!=='admin') return res.status(400).json({error:'Admin messages must be sent to an administrator'});
@@ -132,7 +132,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     const conversationKey=[Number(req.user.id),Number(recipientId)].sort((a,b)=>a-b).join(':');
     await ensureMessageMeta;
     const [result]=await db.execute('INSERT INTO messages(conversation_key,sender_id,body) VALUES(?,?,?)',[conversationKey,req.user.id,body.trim()]);
-    await db.execute('INSERT INTO admin_message_meta(message_id,recipient_id,category) VALUES(?,?,?)',[result.insertId,Number(recipientId),category]);
+    await db.execute('INSERT INTO admin_message_meta(message_id,recipient_id,category,subject) VALUES(?,?,?,?)',[result.insertId,Number(recipientId),category,subject.trim()||null]);
     await audit(req,'message.sent','message',result.insertId,{recipientId:Number(recipientId),category});
     res.status(201).json({ok:true,id:result.insertId});
   }));
