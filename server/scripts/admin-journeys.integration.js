@@ -84,7 +84,7 @@ async function main() {
   await check('Invoice list and audit log endpoints return data',async()=>{
     const [businessRows]=await db.execute('SELECT id FROM businesses WHERE owner_user_id=?',[employerId]);
     const businessId=businessRows[0].id;
-    const [shift]=await db.execute("INSERT INTO shifts(business_id,created_by,title,location,starts_at,ends_at,hourly_pay) VALUES(?,?,'Test shift','London',DATE_ADD(UTC_TIMESTAMP(),INTERVAL 1 DAY),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 5 HOUR),15)",[businessId,employerId]);
+    const [shift]=await db.execute("INSERT INTO shifts(business_id,created_by,title,location,starts_at,ends_at,hourly_pay) VALUES(?,?,'Test shift','London',DATE_ADD(UTC_TIMESTAMP(),INTERVAL 1 DAY),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 26 HOUR),15)",[businessId,employerId]);
     const [checkout]=await db.execute("INSERT INTO checkouts(shift_id,worker_id,actual_start,actual_end,break_minutes,worker_comment,status,gross_pay,platform_fee) VALUES(?,?,UTC_TIMESTAMP(),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 2 HOUR),0,'Test checkout','disputed',30,3)",[shift.insertId,workerId]);
     checkoutId=checkout.insertId;
     const [dispute]=await db.execute("INSERT INTO disputes(checkout_id,opened_by,reason,evidence_url) VALUES(?,?,'Integration dispute','https://example.invalid/evidence')",[checkoutId,employerId]);
