@@ -300,7 +300,7 @@ async function authenticate(register) {
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='admin'&&user.role==='admin'&&<AdminConsole user={user} action={action} setNotice={setNotice} setError={setError} busy={busy}/>}
 
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&user.role==='employer'&&<section className="panel"><div className="panel-head"><h2>Employer quick actions</h2><button className="primary" onClick={()=>setPage('post')}>+ Publish a shift</button></div><p>Publish shifts, review applicants, and approve completed checkouts from your dashboard.</p></section>}
- {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&['worker','employer'].includes(user.role)&&<SupportContact action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
+ {user&&page==='dashboard'&&['worker','employer'].includes(user.role)&&<SupportContact action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
  <footer><span>hyrz</span><span>Flexible Work. Reliable Staffing.</span><span>@TheAppCollectionLTD</span></footer>
  </main></div>
 }
