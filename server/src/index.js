@@ -135,8 +135,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
       await conn.execute(
         'INSERT INTO worker_profiles (user_id,national_insurance_hash,worker_permit_hash) VALUES (?,?,?)',
         [result.insertId,
-          nationalInsuranceNumber ? crypto.createHash('sha256').update(String(nationalInsuranceNumber).replace(/\\s+/g,'').toUpperCase()).digest('hex') : null,
-          workerPermitNumber ? crypto.createHash('sha256').update(String(workerPermitNumber).replace(/\\s+/g,'').toUpperCase()).digest('hex') : null]
+          nationalInsuranceNumber ? crypto.createHash('sha256').update(String(nationalInsuranceNumber).replace(/\s+/g,'').toUpperCase()).digest('hex') : null,
+          workerPermitNumber ? crypto.createHash('sha256').update(String(workerPermitNumber).replace(/\s+/g,'').toUpperCase()).digest('hex') : null]
       );
     } else {
       await conn.execute(
