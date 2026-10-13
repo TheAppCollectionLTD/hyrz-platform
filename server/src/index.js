@@ -83,7 +83,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
 
   const normalizedEmail = email.toLowerCase().trim();
   if (role === 'employer' && companyNumber) {
-    const normalizedCompanyNumber=String(companyNumber).replace(/\\s+/g,'').toUpperCase();
+    const normalizedCompanyNumber=String(companyNumber).replace(/\s+/g,'').toUpperCase();
     const [blocked]=await db.execute("SELECT id FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? LIMIT 1",[crypto.createHash('sha256').update(normalizedCompanyNumber).digest('hex')]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
     if (blocked.length) return res.status(403).json({error:'This company registration number cannot be used to create a hyrz account. Please contact support if you believe this is an error.'});
   }
