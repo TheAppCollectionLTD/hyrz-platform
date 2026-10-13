@@ -45,6 +45,22 @@ const audit = async (req, action, entityType, entityId, details={}) => {
 app.get('/api/health', asyncRoute(async(req,res)=>{ await db.query('SELECT 1'); res.json({ok:true,service:'hyrz-api'}); }));
 
 
+async function sendInvoiceReminder(invoice) {
+  if (!resend) throw new Error('Invoice email service is not configured');
+  const result=await resend.emails.send({
+    from:process.env.EMAIL_FROM,
+    to:invoice.client_email,
+    subject:'hyrz invoice reminder #'+invoice.id,
+    html:'<p>Hello '+String(invoice.client_first_name||'there').replace(/[&<>"]/g,'')+',</p>'+
+      '<p>This is a reminder for hyrz invoice #'+invoice.id+'.</p>'+
+      '<p>Business: '+String(invoice.business_name||'').replace(/[&<>"]/g,'')+'</p>'+
+      '<p>Shift: '+String(invoice.shift_title||'').replace(/[&<>"]/g,'')+'</p>'+
+      '<p>Amount due: £'+Number(invoice.total).toFixed(2)+'</p>'+
+      '<p>Due date: '+String(invoice.due_at).slice(0,10)+'</p>'+
+      '<p>Please contact hyrz support if you believe this reminder is incorrect.</p>'
+  });
+  if(result.error) throw new Error(result.error.message||'Invoice reminder email failed');
+}
 async function sendVerificationEmail(email, rawToken) {
   if (!resend) throw new Error('Email service is not configured');
 
@@ -474,7 +490,7 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
  sql+=' ORDER BY d.created_at DESC';const [rows]=await db.execute(sql,args);res.json({disputes:rows});
 }));
 require('./user-message-routes')(app, { db, asyncRoute, audit });
-require('./admin-routes')(app, { db, asyncRoute, audit });
+require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder });
 
 app.get('/api/admin/overview',auth,allow('admin'),asyncRoute(async(req,res)=>{
  const [[users]]=await db.query('SELECT COUNT(*) count FROM users');
