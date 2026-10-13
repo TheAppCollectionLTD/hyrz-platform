@@ -2,7 +2,7 @@
 
 ## First Tier 1 owner
 
-The application does not hard-code an owner password. After creating the database from `db/schema.sql` and configuring `server/.env`, open a terminal in the `server` directory and run:
+The application does not hard-code an owner password. After creating the database from `db/schema.sql` and configuring `server/.env`, set a stable, random `IDENTIFIER_HASH_SECRET` in `server/.env` (keep it unchanged so existing block-list hashes remain comparable). Then open a terminal in the `server` directory and run:
 
 ```bash
 OWNER_USERNAME=SimsonH OWNER_EMAIL=your-admin-email@example.com OWNER_PASSWORD='use-a-unique-password-of-at-least-12-characters' npm run bootstrap:owner
