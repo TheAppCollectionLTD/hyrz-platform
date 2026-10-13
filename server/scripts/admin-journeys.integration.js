@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
-const crypto = require('node:crypto');
+const { hashIdentifier } = require('../src/identifier-hash');
 
 const base = process.env.TEST_API_URL || 'http://127.0.0.1:4000/api';
 const db = mysql.createPool({host:process.env.DB_HOST||'127.0.0.1',port:Number(process.env.DB_PORT||3306),database:process.env.DB_NAME,user:process.env.DB_USER,password:process.env.DB_PASSWORD,timezone:'Z',dateStrings:true});
@@ -20,7 +20,7 @@ async function addUser({email,role='worker',tier=null,username=null,ni=null,perm
   const [r]=await db.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at,first_name,last_name) VALUES(?,?,?,?,'active',UTC_TIMESTAMP(),'Test','Account')",[email,hash,role,tier]);
   if(username) await db.execute('INSERT INTO admin_login_names(user_id,username) VALUES(?,?)',[r.insertId,username]);
   if(role==='worker') {
-    await db.execute('INSERT INTO worker_profiles(user_id,national_insurance_hash,worker_permit_hash,identity_verification_status,right_to_work_status) VALUES(?,?,?,?,?)',[r.insertId,ni?crypto.createHash('sha256').update(ni.replace(/\s+/g,'').toUpperCase()).digest('hex'):null,permit?crypto.createHash('sha256').update(permit.replace(/\s+/g,'').toUpperCase()).digest('hex'):null,'verified','verified']);
+    await db.execute('INSERT INTO worker_profiles(user_id,national_insurance_hash,worker_permit_hash,identity_verification_status,right_to_work_status) VALUES(?,?,?,?,?)',[r.insertId,ni?hashIdentifier(ni):null,permit?hashIdentifier(permit):null,'verified','verified']);
   }
   if(role==='employer') {
     await db.execute("INSERT INTO businesses(owner_user_id,name,company_number,role_at_company,verification_status,identity_verification_status) VALUES(?,?,?,'Owner','verified','verified')",[r.insertId,'Test Business',company||null]);
