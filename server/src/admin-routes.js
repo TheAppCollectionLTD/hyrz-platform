@@ -55,6 +55,42 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
     res.json({ok:true,status});
   }));
 
+  const ensureReferralCommissions = db.query(`CREATE TABLE IF NOT EXISTS referral_commissions (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, referrer_user_id BIGINT UNSIGNED NOT NULL, referred_user_id BIGINT UNSIGNED NOT NULL, amount DECIMAL(10,2) NOT NULL, status ENUM('pending','approved','paid','cancelled') NOT NULL DEFAULT 'pending', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, paid_at DATETIME NULL, UNIQUE KEY uq_referral_pair(referrer_user_id,referred_user_id), FOREIGN KEY (referrer_user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (referred_user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err=>{console.error('Could not initialise referral commission ledger:',err.message);throw err;});
+
+  app.get('/api/admin/financial-reports', ...admin, asyncRoute(async(req,res) => {
+    if (Number(req.user.admin_tier)!==1) return res.status(403).json({error:'Financial reports are available to Tier 1 administrators only'});
+    await ensureReferralCommissions;
+    const [[userCounts]]=await db.query(`SELECT COUNT(*) AS totalUsers,
+      SUM(role='worker') AS workers,SUM(role='employer') AS clients,SUM(role='admin') AS admins,
+      SUM(status='blocked') AS blockedUsers FROM users`);
+    const [[invoiceTotals]]=await db.query(`SELECT COUNT(*) AS invoiceCount,
+      COALESCE(SUM(total),0) AS invoicedRevenue,
+      COALESCE(SUM(CASE WHEN status='paid' THEN total ELSE 0 END),0) AS paidRevenue,
+      COALESCE(SUM(CASE WHEN status IN ('issued','overdue') OR (status='issued' AND due_at<CURRENT_DATE) THEN total ELSE 0 END),0) AS outstandingRevenue,
+      SUM(status='paid') AS paidInvoices,
+      SUM(status='overdue' OR (status='issued' AND due_at<CURRENT_DATE)) AS overdueInvoices FROM invoices`);
+    const [[commissions]]=await db.query(`SELECT COUNT(*) AS commissionCount,
+      COALESCE(SUM(amount),0) AS totalCommissionLiability,
+      COALESCE(SUM(CASE WHEN status='pending' THEN amount ELSE 0 END),0) AS pendingCommissions,
+      COALESCE(SUM(CASE WHEN status='approved' THEN amount ELSE 0 END),0) AS approvedCommissions,
+      COALESCE(SUM(CASE WHEN status='paid' THEN amount ELSE 0 END),0) AS paidCommissions FROM referral_commissions`);
+    const [referralRows]=await db.execute(`SELECT rc.*,r.email AS referrer_email,rr.email AS referred_email
+      FROM referral_commissions rc JOIN users r ON r.id=rc.referrer_user_id JOIN users rr ON rr.id=rc.referred_user_id
+      ORDER BY rc.created_at DESC LIMIT 500`);
+    res.json({userCounts,invoices:invoiceTotals,commissions,referralCommissions:referralRows});
+  }));
+
+  app.patch('/api/admin/referral-commissions/:id/status', ...admin, asyncRoute(async(req,res) => {
+    if (Number(req.user.admin_tier)!==1) return res.status(403).json({error:'Only Tier 1 can update referral commissions'});
+    const status=req.body.status;
+    if (!['pending','approved','paid','cancelled'].includes(status)) return res.status(400).json({error:'Invalid commission status'});
+    await ensureReferralCommissions;
+    const [result]=await db.execute("UPDATE referral_commissions SET status=?,paid_at=IF(?='paid',UTC_TIMESTAMP(),NULL) WHERE id=?",[status,status,req.params.id]);
+    if (!result.affectedRows) return res.status(404).json({error:'Referral commission not found'});
+    await audit(req,'referral_commission.status_changed','referral_commission',req.params.id,{status});
+    res.json({ok:true,status});
+  }));
+
   app.get('/api/admin/invoices', ...admin, asyncRoute(async (req,res) => {
     const [rows] = await db.execute(`
       SELECT i.*, b.name AS business_name,b.company_number,b.postcode AS business_postcode,
