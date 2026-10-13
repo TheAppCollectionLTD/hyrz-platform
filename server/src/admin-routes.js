@@ -95,7 +95,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
       COALESCE(SUM(platform_fee),0) AS invoicedRevenue,
       COALESCE(SUM(total),0) AS grossInvoiceValue,
       COALESCE(SUM(CASE WHEN status='paid' THEN platform_fee ELSE 0 END),0) AS paidRevenue,
-      COALESCE(SUM(CASE WHEN status IN ('issued','overdue') AND due_at>=CURRENT_DATE OR (status='issued' AND due_at<CURRENT_DATE) OR status='overdue' THEN platform_fee ELSE 0 END),0) AS outstandingRevenue,
+      COALESCE(SUM(CASE WHEN status IN ('issued','overdue') THEN platform_fee ELSE 0 END),0) AS outstandingRevenue,
       SUM(status='paid') AS paidInvoices,
       SUM(status='overdue' OR (status='issued' AND due_at<CURRENT_DATE)) AS overdueInvoices FROM invoices`);
     const [[commissions]]=await db.query(`SELECT COUNT(*) AS commissionCount,
