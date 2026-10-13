@@ -4,6 +4,11 @@ const bcrypt = require('bcryptjs');
 module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   const admin = [auth, allow('admin')];
   const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
+  const ensureWorkerIdentifierColumns = Promise.all([
+    db.query('ALTER TABLE worker_profiles ADD COLUMN national_insurance_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+    db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
+  ]).catch(err=>{console.error('Could not initialise worker identifier hashes:',err.message);throw err;});
+
   const ensureMessageMeta = db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', subject VARCHAR(200) NULL, opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`).then(async()=>{try { await db.query('ALTER TABLE admin_message_meta ADD COLUMN subject VARCHAR(200) NULL'); } catch (e) { if (e.code !== 'ER_DUP_FIELDNAME') throw e; }}).catch(err => { console.error('Could not initialise admin message metadata:', err.message); throw err; });
 
   app.get('/api/admin/users', ...admin, asyncRoute(async (req, res) => {
@@ -39,6 +44,13 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
       if (target.role==='employer') {
         const [businesses]=await db.execute('SELECT company_number FROM businesses WHERE owner_user_id=?',[targetId]);
         for (const b of businesses) if (b.company_number) identifiers.push(['company_number',String(b.company_number).replace(/\s+/g,'').toUpperCase()]);
+      } else if (target.role==='worker') {
+        await ensureWorkerIdentifierColumns;
+        const [profiles]=await db.execute('SELECT national_insurance_hash,worker_permit_hash FROM worker_profiles WHERE user_id=?',[targetId]);
+        for (const p of profiles) {
+          if (p.national_insurance_hash) await db.execute("INSERT INTO blocked_identifiers(identifier_type,identifier_hash,blocked_user_id,created_by) VALUES('national_insurance',?,?,?) ON DUPLICATE KEY UPDATE blocked_user_id=VALUES(blocked_user_id),created_by=VALUES(created_by)",[p.national_insurance_hash,targetId,req.user.id]);
+          if (p.worker_permit_hash) await db.execute("INSERT INTO blocked_identifiers(identifier_type,identifier_hash,blocked_user_id,created_by) VALUES('worker_permit',?,?,?) ON DUPLICATE KEY UPDATE blocked_user_id=VALUES(blocked_user_id),created_by=VALUES(created_by)",[p.worker_permit_hash,targetId,req.user.id]);
+        }
       }
       for (const [type,value] of identifiers) {
         const hash=require('crypto').createHash('sha256').update(value).digest('hex');
@@ -49,6 +61,14 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
       for (const b of businesses) if (b.company_number) {
         const hash=require('crypto').createHash('sha256').update(String(b.company_number).replace(/\s+/g,'').toUpperCase()).digest('hex');
         await db.execute("DELETE FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? AND blocked_user_id=?",[hash,targetId]);
+      }
+      if (target.role==='worker') {
+        await ensureWorkerIdentifierColumns;
+        const [profiles]=await db.execute('SELECT national_insurance_hash,worker_permit_hash FROM worker_profiles WHERE user_id=?',[targetId]);
+        for (const p of profiles) {
+          if (p.national_insurance_hash) await db.execute("DELETE FROM blocked_identifiers WHERE identifier_type='national_insurance' AND identifier_hash=? AND blocked_user_id=?",[p.national_insurance_hash,targetId]);
+          if (p.worker_permit_hash) await db.execute("DELETE FROM blocked_identifiers WHERE identifier_type='worker_permit' AND identifier_hash=? AND blocked_user_id=?",[p.worker_permit_hash,targetId]);
+        }
       }
     }
     await audit(req, status === 'blocked' ? 'user.blocked' : 'user.unblocked', 'user', targetId, { previousStatus:target.status, status });
