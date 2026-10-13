@@ -1,5 +1,6 @@
 const { auth, allow, adminTier } = require('./middleware');
 const bcrypt = require('bcryptjs');
+const { hashIdentifier } = require('./identifier-hash');
 
 module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
   const admin = [auth, allow('admin')];
@@ -60,13 +61,13 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit }) {
         }
       }
       for (const [type,value] of identifiers) {
-        const hash=require('crypto').createHash('sha256').update(value).digest('hex');
+        const hash=hashIdentifier(value);
         await db.execute('INSERT INTO blocked_identifiers(identifier_type,identifier_hash,blocked_user_id,created_by) VALUES(?,?,?,?) ON DUPLICATE KEY UPDATE blocked_user_id=VALUES(blocked_user_id),created_by=VALUES(created_by)',[type,hash,targetId,req.user.id]);
       }
     } else {
       const [businesses]=await db.execute('SELECT company_number FROM businesses WHERE owner_user_id=?',[targetId]);
       for (const b of businesses) if (b.company_number) {
-        const hash=require('crypto').createHash('sha256').update(String(b.company_number).replace(/\s+/g,'').toUpperCase()).digest('hex');
+        const hash=hashIdentifier(b.company_number);
         await db.execute("DELETE FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? AND blocked_user_id=?",[hash,targetId]);
       }
       if (target.role==='worker') {
