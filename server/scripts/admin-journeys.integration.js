@@ -87,6 +87,20 @@ async function main() {
     const reg=await api('/auth/register',{method:'POST',body:{email:'worker-retry@test.hyrz.invalid',password:'Test-Only-Password-2026!',confirmPassword:'Test-Only-Password-2026!',role:'worker',nationalInsuranceNumber:'QQ123456C'}});
     assert.equal(reg.status,403,JSON.stringify(reg.data));
   });
+  await check('Employer can submit a counter-offer and admin can accept it',async()=>{
+    const activeEmployerId=await addUser({email:'counter-employer@test.hyrz.invalid',role:'employer',company:'COUNTER-EMPLOYER-55'});
+    const employerToken=await login('counter-employer@test.hyrz.invalid');
+    const [businessRows]=await db.execute('SELECT id FROM businesses WHERE owner_user_id=?',[activeEmployerId]);
+    const [shift]=await db.execute("INSERT INTO shifts(business_id,created_by,title,location,starts_at,ends_at,hourly_pay) VALUES(?,?,'Counter test shift','London',DATE_ADD(UTC_TIMESTAMP(),INTERVAL 1 DAY),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 26 HOUR),15)",[businessRows[0].id,activeEmployerId]);
+    const [checkout]=await db.execute("INSERT INTO checkouts(shift_id,worker_id,actual_start,actual_end,break_minutes,worker_comment,status,gross_pay,platform_fee) VALUES(?,?,DATE_ADD(UTC_TIMESTAMP(),INTERVAL 1 DAY),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 26 HOUR),0,'Worker submitted times','submitted',30,3)",[shift.insertId,workerId]);
+    const offer=await api('/checkouts/'+checkout.insertId+'/counter-offer',{token:employerToken,method:'POST',body:{comment:'Employer proposes adjusted end time.',actualStart:new Date(Date.now()+86400000).toISOString().slice(0,19).replace('T',' '),actualEnd:new Date(Date.now()+26*3600000).toISOString().slice(0,19).replace('T',' '),breakMinutes:0}});
+    assert.equal(offer.status,201,JSON.stringify(offer.data));
+    const [disputes]=await db.execute("SELECT id FROM disputes WHERE checkout_id=? AND status='open'",[checkout.insertId]);
+    assert.equal(disputes.length,1);
+    const resolved=await api('/admin/disputes/'+disputes[0].id+'/resolve',{token:tier3Token,method:'PATCH',body:{outcome:'employer',resolution:'Accepted employer counter-offer.'}});
+    assert.equal(resolved.status,200,JSON.stringify(resolved.data));
+    const [invoices]=await db.execute('SELECT id FROM invoices WHERE checkout_id=?',[checkout.insertId]);assert.equal(invoices.length,1);
+  });
   await check('Employer company block prevents repeat registration',async()=>{
     employerId=await addUser({email:'employer@test.hyrz.invalid',role:'employer',company:'TEST-COMPANY-123'});
     const blocked=await api('/admin/users/'+employerId+'/status',{token:ownerToken,method:'PATCH',body:{status:'blocked'}});
