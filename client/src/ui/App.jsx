@@ -106,8 +106,8 @@ async function authenticate(register) {
  async function reviewVerification(account,check,status){const reason=window.prompt(`Reason for setting ${check.replace('_',' ')} to ${status} for ${account.email}:`);if(reason===null)return;if(reason.trim().length<3){setError('Please enter a reason of at least 3 characters.');return;}await action(async()=>{await request(`/admin/verification/${account.role}/${account.userId}`,{method:'PATCH',body:JSON.stringify({check,status,reason:reason.trim()})});setNotice('Verification status updated and recorded.');await load();})}
  async function logout(){localStorage.removeItem('hyrz_token');setUser(null);setPage('home')}
  const visibleShifts=shifts.filter(s=>`${s.title} ${s.location} ${s.business_name}`.toLowerCase().includes(search.toLowerCase()));
- return <div className={`${user?.role==='worker'?'app worker':'app'} ${!user&&['home','register','login','chooseRole'].includes(page)?'auth-layout':''}`}><aside className="sidebar"><a className="brand" onClick={()=>setPage('home')}>hyrz</a><p className="tag">Flexible Work.<br/>Reliable Staffing.</p>{user&&(onboarding?.canAccessPlatform||user.role==='admin')&&<nav>{[['dashboard','Overview'],['jobs','Find shifts'],['applications','Applications'],['checkouts','Checkouts'],['invoices','Invoices'],...(user.role==='employer'?[['post','Post a shift']]:[]),...(user.role==='admin'?[['admin','Administration']]:[])].map(([id,label])=><button key={id} className={page===id?'selected':''} onClick={()=>setPage(id)}>{label}</button>)}</nav>}<div className="sidebottom"><small className="company-trademark">@TheAppCollectionLTD</small>{user?<><small>{user.email}</small><button onClick={logout}>Sign out</button></>:<button onClick={()=>setPage('login')}>Sign in</button>}</div></aside>
- <main><header><div><span className="eyebrow">UK FLEXIBLE STAFFING</span><h1>{!user?'Find work that works for you':page==='jobs'?'Find shifts':page==='post'?'Publish a shift':page==='admin'?'Admin overview':page[0].toUpperCase()+page.slice(1)}</h1></div>{user&&<div className="userpill">{user.first_name||user.role} · {user.role}</div>}</header>
+ return <div className={`${user?.role==='worker'?'app worker':'app'} ${!user&&['home','register','login','chooseRole'].includes(page)?'auth-layout':''}`}><aside className="sidebar"><a className="brand" onClick={()=>setPage('home')}>hyrz</a><p className="tag">Flexible Work.<br/>Reliable Staffing.</p>{user&&<nav>{[...((onboarding?.canAccessPlatform||user.role==='admin')?[['dashboard','Overview'],['jobs','Find shifts'],['applications','Applications'],['checkouts','Checkouts'],['invoices','Invoices'],...(user.role==='employer'?[['post','Post a shift']]:[]),...(user.role==='admin'?[['admin','Administration']]:[])]:[]),['account','My account']].map(([id,label])=><button key={id} className={page===id?'selected':''} onClick={()=>setPage(id)}>{label}</button>)}</nav>}<div className="sidebottom"><small className="company-trademark">@TheAppCollectionLTD</small>{user?<><small>{user.email}</small><button onClick={logout}>Sign out</button></>:<button onClick={()=>setPage('login')}>Sign in</button>}</div></aside>
+ <main><header><div><span className="eyebrow">UK FLEXIBLE STAFFING</span><h1>{!user?'Find work that works for you':page==='jobs'?'Find shifts':page==='post'?'Publish a shift':page==='admin'?'Admin overview':page==='account'?'My account':page[0].toUpperCase()+page.slice(1)}</h1></div>{user&&<div className="userpill">{user.first_name||user.role} · {user.role}</div>}</header>
  {error&&<div className="alert error">{error}</div>}{notice&&<div className="alert success">{notice}</div>}
  {user&&user.role!=='admin'&&(!onboarding||!onboarding.canAccessPlatform)&&<section className="panel onboarding-panel">
     <span className="eyebrow">ACCOUNT VERIFICATION</span>
@@ -297,6 +297,8 @@ async function authenticate(register) {
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='applications'&&<section className="panel"><h2>Applications</h2><DataList items={applications} empty="No applications yet." render={a=><div className="row" key={a.id}><div><b>{a.title}</b><small>{a.business_name||`${a.first_name||''} ${a.last_name||''}`} · {a.starts_at}</small></div><span className={`status ${a.status}`}>{a.status}</span>{user.role==='employer'&&a.status==='pending'&&<div className="actions"><button onClick={()=>updateApplication(a.id,'approved')}>Approve</button><button onClick={()=>updateApplication(a.id,'rejected')}>Reject</button></div>}</div>}/></section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='checkouts'&&<section className="panel"><h2>Timesheets & checkouts</h2><DataList items={checkouts} empty="No checkouts yet." render={c=><div className="row" key={c.id}><div><b>{c.title||`Checkout #${c.id}`}</b><small>{c.actual_start} – {c.actual_end} · Gross {money(c.gross_pay)} · Fee {money(c.platform_fee)}</small></div><span className={`status ${c.status}`}>{c.status}</span>{['employer','admin'].includes(user.role)&&c.status==='submitted'&&<button onClick={()=>action(async()=>{await request(`/checkouts/${c.id}/review`,{method:'PATCH',body:JSON.stringify({status:'approved'})});await load()})}>Approve</button>}{user.role==='employer'&&['submitted','disputed'].includes(c.status)&&<CounterOfferForm checkout={c} action={action} busy={busy} onDone={load} setNotice={setNotice}/>}</div>}/></section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='invoices'&&<section className="panel"><h2>Invoices</h2><DataList items={invoices} empty="No invoices yet." render={i=><div className="row" key={i.id}><div><b>Invoice #{i.id} · {i.title}</b><small>Due {i.due_at} · Platform fee {money(i.platform_fee)}</small></div><strong>{money(i.total)}</strong><span className={`status ${i.status}`}>{i.status}</span></div>}/></section>}
+ {user&&page==='account'&&<AccountSettings user={user} setUser={setUser} action={action} busy={busy} setNotice={setNotice}/>}
+
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='admin'&&user.role==='admin'&&<AdminConsole user={user} action={action} setNotice={setNotice} setError={setError} busy={busy}/>}
 
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&user.role==='employer'&&<section className="panel"><div className="panel-head"><h2>Employer quick actions</h2><button className="primary" onClick={()=>setPage('post')}>+ Publish a shift</button></div><p>Publish shifts, review applicants, and approve completed checkouts from your dashboard.</p></section>}
@@ -304,6 +306,55 @@ async function authenticate(register) {
  <footer><span>hyrz</span><span>Flexible Work. Reliable Staffing.</span><span>@TheAppCollectionLTD</span></footer>
  </main></div>
 }
+function AccountSettings({user,setUser,action,busy,setNotice}) {
+ const [firstName,setFirstName]=useState(user.first_name||'');
+ const [lastName,setLastName]=useState(user.last_name||'');
+ const [phone,setPhone]=useState(user.phone||'');
+ const [currentPassword,setCurrentPassword]=useState('');
+ const [newPassword,setNewPassword]=useState('');
+ const [confirmNewPassword,setConfirmNewPassword]=useState('');
+ const [profileBusy,setProfileBusy]=useState(false);
+ async function saveProfile(e) {
+  e.preventDefault();
+  await action(async()=>{
+   const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({firstName:firstName.trim(),lastName:lastName.trim(),phone:phone.trim()})});
+   setUser(result.user);
+   setNotice('Your account details have been updated.');
+  });
+ }
+ async function changePassword(e) {
+  e.preventDefault();
+  if(newPassword!==confirmNewPassword){setNotice('');throw new Error('Your new passwords do not match.');}
+  await action(async()=>{
+   await request('/auth/change-password',{method:'POST',body:JSON.stringify({currentPassword,newPassword})});
+   setCurrentPassword('');setNewPassword('');setConfirmNewPassword('');
+   setNotice('Your password has been changed successfully.');
+  });
+ }
+ return <section className="panel account-settings">
+  <span className="eyebrow">ACCOUNT SETTINGS</span>
+  <h2>Your details</h2>
+  <p>Manage the personal details connected to your hyrz account.</p>
+  <form className="admin-message-form" onSubmit={saveProfile}>
+   <label>Email address<input type="email" value={user.email||''} readOnly disabled/></label>
+   <small>Your account email is currently read-only. Contact support if you need to change it.</small>
+   <label>First name<input type="text" maxLength="100" value={firstName} onChange={e=>setFirstName(e.target.value)}/></label>
+   <label>Last name<input type="text" maxLength="100" value={lastName} onChange={e=>setLastName(e.target.value)}/></label>
+   <label>Phone number<input type="tel" maxLength="40" value={phone} onChange={e=>setPhone(e.target.value)}/></label>
+   <button className="primary" disabled={busy}>Save details</button>
+  </form>
+  <hr/>
+  <h2>Change password</h2>
+  <p>Choose a unique password of at least 12 characters. You'll need your current password to confirm the change.</p>
+  <form className="admin-message-form" onSubmit={changePassword}>
+   <label>Current password<input type="password" autoComplete="current-password" required value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)}/></label>
+   <label>New password<input type="password" autoComplete="new-password" minLength="12" required value={newPassword} onChange={e=>setNewPassword(e.target.value)}/></label>
+   <label>Confirm new password<input type="password" autoComplete="new-password" minLength="12" required value={confirmNewPassword} onChange={e=>setConfirmNewPassword(e.target.value)}/></label>
+   <button className="secondary" disabled={busy}>Change password</button>
+  </form>
+ </section>;
+}
+
 function ShiftList({shifts,role,apply}){return <DataList items={shifts} empty="No open shifts found." render={s=><div className="shiftrow" key={s.id}><div className="shiftdate">{new Date(s.starts_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}</div><div className="shiftmain"><b>{s.title}</b><small>{s.business_name} · {s.location}</small><small>{new Date(s.starts_at).toLocaleString('en-GB')} – {new Date(s.ends_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</small></div><div className="shiftpay"><strong>{money(s.hourly_pay)}<small>/hr</small></strong>{role==='worker'&&<button onClick={()=>apply(s.id)}>Apply ↗</button>}</div></div>}/>}
 function DataList({items,empty,render}){return items?.length? <div className="list">{items.map(render)}</div>:<div className="empty">{empty}</div>}
 
