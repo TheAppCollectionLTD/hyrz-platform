@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS users (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  email VARCHAR(254) NOT NULL UNIQUE,
- email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED UNIQUE,
+ email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED,
  password_hash VARCHAR(255) NOT NULL,
  role ENUM('worker','employer','admin') NOT NULL DEFAULT 'worker',
  admin_tier TINYINT NULL,
@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
  email_verification_expires_at DATETIME NULL,
  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ UNIQUE KEY uq_users_email_normalized (email_normalized),
  CHECK (admin_tier IS NULL OR admin_tier IN (1,2,3))
 );
 CREATE TABLE IF NOT EXISTS worker_profiles (
