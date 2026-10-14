@@ -305,7 +305,7 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
   });
 }));
 
-app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at FROM users WHERE id=?',[req.user.id]);res.json({user:u[0]});}));
+app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{await ensureProfilePictureColumn;const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at FROM users WHERE id=?',[req.user.id]);res.json({user:u[0]});}));
 app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
   await ensureProfilePictureColumn;
   const firstName = String(req.body.firstName || '').trim();
