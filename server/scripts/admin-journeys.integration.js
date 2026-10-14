@@ -37,16 +37,18 @@ async function main() {
   const ownerToken=await login('SimsonH');
   let tier2Id,tier3Id,tier3bId,workerId,employerId,checkoutId,disputeId;
   await check('Tier 1 creates Tier 2 administrator',async()=>{
-    const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier2@test.hyrz.invalid',username:'testTier2',password:'Test-Only-Password-2026!',tier:2}});
+    const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier2@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:2}});
     assert.equal(r.status,201,JSON.stringify(r.data));tier2Id=r.data.id;
   });
   await check('Tier 1 creates Tier 3 administrator',async()=>{
-    const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier3@test.hyrz.invalid',username:'testTier3',password:'Test-Only-Password-2026!',tier:3}});
+    const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier3@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:3}});
     assert.equal(r.status,201,JSON.stringify(r.data));tier3Id=r.data.id;
   });
-  await check('Administrator account-name login works',async()=>{const r=await api('/auth/login',{method:'POST',body:{email:'testTier3',password:'Test-Only-Password-2026!'}});assert.equal(r.status,200);});
-  const tier2Token=await login('testTier2'), tier3Token=await login('testTier3');
-  await check('Tier 2 cannot create Tier 2 administrator',async()=>{const r=await api('/admin/admins',{token:tier2Token,method:'POST',body:{email:'forbidden@test.hyrz.invalid',username:'forbiddenTier2',password:'Test-Only-Password-2026!',tier:2}});assert.equal(r.status,403);});
+  await check('Administrator email login works',async()=>{const r=await api('/auth/login',{method:'POST',body:{email:'tier3@test.hyrz.invalid',password:'Test-Only-Password-2026!'}});assert.equal(r.status,200);});
+  await check('Administrator email cannot be reused by another account type',async()=>{const r=await api('/auth/register',{method:'POST',body:{email:'TIER3@test.hyrz.invalid',password:'Test-Only-Password-2026!',confirmPassword:'Test-Only-Password-2026!',role:'worker',nationalInsuranceNumber:'QQ987654C'}});assert.equal(r.status,409,JSON.stringify(r.data));});
+  await check('Administrator email cannot be reused to create another administrator',async()=>{const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'TIER3@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:3}});assert.equal(r.status,409,JSON.stringify(r.data));});
+  const tier2Token=await login('tier2@test.hyrz.invalid'), tier3Token=await login('tier3@test.hyrz.invalid');
+  await check('Tier 2 cannot create Tier 2 administrator',async()=>{const r=await api('/admin/admins',{token:tier2Token,method:'POST',body:{email:'forbidden@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:2}});assert.equal(r.status,403);});
   await check('Tier 3 cannot block users',async()=>{
     workerId=await addUser({email:'worker@test.hyrz.invalid',ni:'QQ123456C'});
     const r=await api('/admin/users/'+workerId+'/status',{token:tier3Token,method:'PATCH',body:{status:'blocked'}});
@@ -61,7 +63,7 @@ async function main() {
     assert.equal(restored.status,200);
   });
   await check('Tier 2 can create Tier 3 administrators',async()=>{
-    const r=await api('/admin/admins',{token:tier2Token,method:'POST',body:{email:'tier3b@test.hyrz.invalid',username:'testTier3b',password:'Test-Only-Password-2026!',tier:3}});
+    const r=await api('/admin/admins',{token:tier2Token,method:'POST',body:{email:'tier3b@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:3}});
     assert.equal(r.status,201,JSON.stringify(r.data));tier3bId=r.data.id;
   });
   await check('Tier 1 can deactivate a Tier 3 administrator',async()=>{
