@@ -320,8 +320,7 @@ async function authenticate(register) {
 
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&user.role==='employer'&&<section className="panel"><div className="panel-head"><h2>Employer quick actions</h2><button className="primary" onClick={()=>navigateTo('post')}>+ Publish a shift</button></div><p>Publish shifts, review applicants, and approve completed checkouts from your dashboard.</p></section>}
  {user&&page==='dashboard'&&['worker','employer'].includes(user.role)&&<SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
- <footer><span>hyrz</span><span>Flexible Work. Reliable Staffing.</span><span>@TheAppCollectionLTD</span></footer>
- </main>{user?.role==='worker'&&<nav className="worker-bottom-nav" aria-label="Worker navigation">{[['dashboard','Dashboard','⌂'],['jobs','Jobs','⌕'],['contact','Contact','✉'],['account','Profile','◉'],['workchats','Workchats','☏']].map(([id,label,icon])=><button key={id} className={page===id?'active':''} onClick={()=>{setPageHistory([]);setPage(id);}}><span>{icon}</span><small>{label}</small></button>)}</nav>}</div>
+  </main>{user?.role==='worker'&&<nav className="worker-bottom-nav" aria-label="Worker navigation">{[['dashboard','Dashboard','⌂'],['jobs','Jobs','⌕'],['contact','Contact','✉'],['account','Profile','◉'],['workchats','Workchats','☏']].map(([id,label,icon])=><button key={id} className={page===id?'active':''} onClick={()=>{setPageHistory([]);setPage(id);}}><span>{icon}</span><small>{label}</small></button>)}</nav>}</div>
 }
 function AccountSettings({user,setUser,action,busy,setNotice}) {
  const [firstName,setFirstName]=useState(user.first_name||(user.role==='admin'?'Simson':''));
