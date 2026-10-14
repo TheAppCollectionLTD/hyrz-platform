@@ -287,10 +287,12 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   }));
 
   app.post('/api/admin/admins', ...admin, asyncRoute(async(req,res) => {
-    const tier=Number(req.body.tier), email=String(req.body.email||'').trim().toLowerCase(), username=String(req.body.username||'').trim(), password=req.body.password;
+    const tier=Number(req.body.tier), email=String(req.body.email||'').trim().toLowerCase(), password=req.body.password;
     if (Number(req.user.admin_tier)>2) return res.status(403).json({error:'Tier 3 administrators cannot create administrators'});
     if (![1,2,3].includes(tier) || (Number(req.user.admin_tier)===2 && tier!==3)) return res.status(403).json({error:'You cannot create an administrator at that tier'});
-    if (!/^\S+@\S+\.\S+$/.test(email) || !/^[A-Za-z][A-Za-z0-9._-]{2,79}$/.test(username) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Enter a valid email, username (3-80 characters) and password of at least 12 characters'});
+    if (!/^\S+@\S+\.\S+$/.test(email) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Enter a valid email and password of at least 12 characters'});
+    const [existing]=await db.execute('SELECT id FROM users WHERE LOWER(email)=? LIMIT 1',[email]);
+    if(existing.length) return res.status(409).json({error:'This email address is already linked to an account. Please use a different email address.'});
     const hash=await bcrypt.hash(password,12);
     const conn=await db.getConnection();
     let userId;
@@ -298,15 +300,14 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
       await conn.beginTransaction();
       const [result]=await conn.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at) VALUES(?,?,'admin',?,'active',UTC_TIMESTAMP())",[email,hash,tier]);
       userId=result.insertId;
-      await conn.execute('INSERT INTO admin_login_names(user_id,username) VALUES(?,?)',[userId,username]);
       await conn.commit();
     } catch(error) {
       try { await conn.rollback(); } catch (_) {}
-      if(error.code==='ER_DUP_ENTRY') return res.status(409).json({error:'That email or username is already in use'});
+      if(error.code==='ER_DUP_ENTRY') return res.status(409).json({error:'This email address is already linked to an account. Please use a different email address.'});
       throw error;
     } finally { conn.release(); }
-    await audit(req,'admin.created','user',userId,{email,username,tier});
-    res.status(201).json({id:userId,email,username,tier});
+    await audit(req,'admin.created','user',userId,{email,tier});
+    res.status(201).json({id:userId,email,tier});
   }));
 
   app.patch('/api/admin/admins/:id/tier', ...admin, asyncRoute(async(req,res) => {
