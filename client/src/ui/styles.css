@@ -1470,3 +1470,38 @@ footer .brand span {
 .account-password-heading h2{margin:0}
 .password-edit-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #d8d8d8;border-radius:7px;background:#fff;color:#171717;padding:8px 12px;font:600 12px 'DM Sans',sans-serif;cursor:pointer}
 .password-edit-button:hover{background:#f4f4f4;border-color:#aaa}
+
+/* Worker app navigation: fixed, accessible bottom bar and clear dashboard shortcuts */
+.worker{padding-bottom:86px}
+.worker .sidebar nav{display:none}
+.worker .sidebar{width:190px;padding:28px 18px}
+.worker main{margin-left:190px;padding-bottom:32px}
+.worker-bottom-nav{position:fixed;z-index:20;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:9px max(12px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));background:#10120f;border-top:1px solid #2a3024;box-shadow:0 -8px 24px #0002}
+.worker-bottom-nav button{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;min-height:56px;border:0;border-radius:10px;background:transparent;color:#b8beb0;cursor:pointer;font:inherit}
+.worker-bottom-nav button span{font-size:20px;line-height:1}
+.worker-bottom-nav button small{font-size:11px;font-weight:600}
+.worker-bottom-nav button.active,.worker-bottom-nav button:hover{background:#252a20;color:#c5ff64}
+.worker-section-nav{margin-bottom:22px}
+.worker-section-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.worker-section-links button{font-size:12px}
+.worker-section-links button.selected{background:#20251c;color:#b5f34a;border-color:#a2df43}
+.job-tabs{margin:14px 0 20px}
+.availability-preview{display:grid;gap:16px;margin-top:20px}
+.availability-preview label{display:block}
+.muted{font-size:12px;color:#777f70}
+.empty-state{margin-top:20px;padding:28px;border:1px dashed #d6dbcf;border-radius:12px;text-align:center;color:#7b8176}
+.worker .worker-bottom-nav~*{padding-bottom:0}
+@media(max-width:760px){
+ .worker{padding-bottom:86px}
+ .worker .sidebar{position:static;width:auto;height:auto;padding:12px 18px;display:flex;flex-direction:row;align-items:center}
+ .worker .sidebar .brand{font-size:27px}
+ .worker .sidebar .sidebottom{margin:0 0 0 auto;display:flex;align-items:center;gap:8px}
+ .worker .sidebar .sidebottom .company-trademark{display:none}
+ .worker .sidebar .sidebottom small{max-width:130px}
+ .worker main{margin-left:0;padding:20px 16px 24px}
+ .worker-bottom-nav{gap:2px;padding-left:8px;padding-right:8px}
+ .worker-bottom-nav button{min-height:52px}
+ .worker-bottom-nav button small{font-size:10px}
+ .worker-section-links{gap:6px}
+ .worker-section-links button{padding:9px 10px}
+}
