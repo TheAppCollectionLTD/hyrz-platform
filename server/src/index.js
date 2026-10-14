@@ -25,6 +25,7 @@ app.use(cors({
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
+const ensureProfilePictureColumn = db.query('ALTER TABLE users ADD COLUMN profile_picture LONGTEXT NULL').catch(error => { if (error.code !== 'ER_DUP_FIELDNAME') { console.error('Could not initialise profile pictures:', error.message); throw error; } });
 const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
 const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
 const ensureCheckoutCounterColumns = Promise.all([
@@ -304,20 +305,25 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
   });
 }));
 
-app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,status,created_at FROM users WHERE id=?',[req.user.id]);res.json({user:u[0]});}));
+app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at FROM users WHERE id=?',[req.user.id]);res.json({user:u[0]});}));
 app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
+  await ensureProfilePictureColumn;
   const firstName = String(req.body.firstName || '').trim();
   const lastName = String(req.body.lastName || '').trim();
   const phone = String(req.body.phone || '').trim();
+  const profilePicture = req.body.profilePicture === '' ? null : req.body.profilePicture;
+  if (profilePicture !== undefined && profilePicture !== null && (typeof profilePicture !== 'string' || !/^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(profilePicture) || profilePicture.length > 550000)) {
+    return res.status(400).json({ error: 'Choose a valid profile picture smaller than 400 KB.' });
+  }
   if (firstName.length > 100 || lastName.length > 100 || phone.length > 40) {
     return res.status(400).json({ error: 'Name or phone number is too long.' });
   }
   await db.execute(
-    'UPDATE users SET first_name=?, last_name=?, phone=? WHERE id=?',
-    [firstName || null, lastName || null, phone || null, req.user.id]
+    'UPDATE users SET first_name=?, last_name=?, phone=?, profile_picture=? WHERE id=?',
+    [firstName || null, lastName || null, phone || null, profilePicture === undefined ? null : profilePicture, req.user.id]
   );
   const [rows] = await db.execute(
-    'SELECT id,email,role,admin_tier,first_name,last_name,phone,status,created_at FROM users WHERE id=?',
+    'SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at FROM users WHERE id=?',
     [req.user.id]
   );
   return res.json({ user: rows[0] });
