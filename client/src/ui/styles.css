@@ -1463,3 +1463,10 @@ footer .brand span {
 .profile-picture-editor small{display:block;color:#777d72;font-size:11px;margin-top:7px}
 .profile-picture-editor button{margin-top:10px}
 .account-settings .admin-message-form{border-top:0;margin-top:14px;padding-top:0}
+
+
+/* Account page: remove redundant signed-in captions and keep password editing collapsed */
+.account-password-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 8px}
+.account-password-heading h2{margin:0}
+.password-edit-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #d8d8d8;border-radius:7px;background:#fff;color:#171717;padding:8px 12px;font:600 12px 'DM Sans',sans-serif;cursor:pointer}
+.password-edit-button:hover{background:#f4f4f4;border-color:#aaa}
