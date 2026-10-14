@@ -114,6 +114,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
   if (role === 'worker' && !String(nationalInsuranceNumber||'').trim() && !String(workerPermitNumber||'').trim()) return res.status(400).json({error:'A National Insurance number or worker permit number is required for account security checks.'});
 
   const normalizedEmail = email.toLowerCase().trim();
+  const [existingEmail] = await db.execute('SELECT id FROM users WHERE LOWER(email)=? LIMIT 1',[normalizedEmail]);
+  if (existingEmail.length) return res.status(409).json({error:'This email address is already linked to an account. Please sign in or use a different email address.'});
   if (role === 'worker') {
     await ensureBlockedIdentifiers;
     await ensureWorkerIdentifierColumns;
