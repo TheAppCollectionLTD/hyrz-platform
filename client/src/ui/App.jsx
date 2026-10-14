@@ -2,6 +2,10 @@ import React,{useEffect,useState}from'react';import{request,token}from'../api';
 const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n||0));
 export default function App(){
  const [user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
+ const [pageHistory,setPageHistory]=useState([]);
+ const mainWorkerPages=['dashboard','jobs','contact','account','workchats'];
+ function navigateTo(next){setPageHistory(previous=>page===next?previous:[...previous,page]);setPage(next);}
+ function goBack(){const previous=[...pageHistory];while(previous.length){const candidate=previous.pop();if(mainWorkerPages.includes(candidate)){setPageHistory(previous);setPage(candidate);return;}}setPageHistory([]);setPage('dashboard');}
  const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[confirmPassword,setConfirmPassword]=useState(''),[role,setRole]=useState('worker'),[firstName,setFirstName]=useState(''),[lastName,setLastName]=useState(''),[businessName,setBusinessName]=useState(''),[companyRole,setCompanyRole]=useState(''),[companyNumber,setCompanyNumber]=useState(''),[nationalInsuranceNumber,setNationalInsuranceNumber]=useState(''),[workerPermitNumber,setWorkerPermitNumber]=useState('');
  const [shifts,setShifts]=useState([]),[applications,setApplications]=useState([]),[checkouts,setCheckouts]=useState([]),[invoices,setInvoices]=useState([]),[overview,setOverview]=useState(null),[search,setSearch]=useState(''),[verificationAccounts,setVerificationAccounts]=useState([]),[jobFilter,setJobFilter]=useState('available');
  const [shift,setShift]=useState({title:'',description:'',location:'',startsAt:'',endsAt:'',hourlyPay:'15',breakMinutes:0,slots:1});
@@ -37,7 +41,7 @@ export default function App(){
   const verificationToken = params.get('verify-email');
 
   if (verificationToken) {
-    setPage('verifying');
+    navigateTo('verifying');
 
     request('/auth/verify-email', {
       method: 'POST',
@@ -45,11 +49,11 @@ export default function App(){
     })
       .then((data) => {
         setNotice(data.message || 'Email verified successfully. You can now log in.');
-        setPage('verified');
+        navigateTo('verified');
       })
       .catch((err) => {
         setError(err.message || 'This verification link is invalid or expired.');
-        setPage('verifyError');
+        navigateTo('verifyError');
       })
       .finally(() => {
         window.history.replaceState({}, '', window.location.pathname);
@@ -90,7 +94,7 @@ async function authenticate(register) {
 
     if (register) {
       setNotice('Your account has been created. Check your inbox to verify your email.');
-      setPage('checkEmail');
+      navigateTo('checkEmail');
       return;
     }
 
@@ -98,7 +102,7 @@ async function authenticate(register) {
     setUser(d.user);
     setNotice('Signed in');
     await load();
-    setPage(d.user?.role==='admin'?'admin':'dashboard');
+    setPageHistory([]);setPage(d.user?.role==='admin'?'admin':'dashboard');
   });
 }
 
@@ -106,10 +110,10 @@ async function authenticate(register) {
  async function apply(id){await action(async()=>{await request(`/shifts/${id}/apply`,{method:'POST',body:'{}'});setNotice('Application submitted');await load()})}
  async function updateApplication(id,status){await action(async()=>{await request(`/applications/${id}`,{method:'PATCH',body:JSON.stringify({status})});await load()})}
  async function reviewVerification(account,check,status){const reason=window.prompt(`Reason for setting ${check.replace('_',' ')} to ${status} for ${account.email}:`);if(reason===null)return;if(reason.trim().length<3){setError('Please enter a reason of at least 3 characters.');return;}await action(async()=>{await request(`/admin/verification/${account.role}/${account.userId}`,{method:'PATCH',body:JSON.stringify({check,status,reason:reason.trim()})});setNotice('Verification status updated and recorded.');await load();})}
- async function logout(){localStorage.removeItem('hyrz_token');setUser(null);setPage('home')}
+ async function logout(){localStorage.removeItem('hyrz_token');setUser(null);navigateTo('home')}
  const visibleShifts=shifts.filter(s=>`${s.title} ${s.location} ${s.business_name}`.toLowerCase().includes(search.toLowerCase()));
- return <div className={`${user?.role==='worker'?'app worker':'app'} ${!user&&['home','register','login','chooseRole'].includes(page)?'auth-layout':''}`}><aside className="sidebar"><a className="brand" onClick={()=>setPage('home')}>hyrz</a>{!user&&<p className="tag">Flexible Work.<br/>Reliable Staffing.</p>}{user&&<nav>{(user.role==='admin'?[['admin','Dashboard'],['account','My account']]:[['dashboard','Dashboard'],['account','My account']]).map(([id,label])=><button key={id} className={page===id?'selected':''} onClick={()=>setPage(id)}>{label}</button>)}</nav>}<div className="sidebottom"><small className="company-trademark">@TheAppCollectionLTD</small>{user?<><small>{user.email}</small><button onClick={logout}>Sign out</button></>:<button onClick={()=>setPage('login')}>Sign in</button>}</div></aside>
- <main><header><div>{!user&&<span className="eyebrow">UK FLEXIBLE STAFFING</span>}<h1>{!user?'Find work that works for you':page==='account'?`Hello, ${user.first_name||'Simson'}`:page==='jobs'?'Find shifts':page==='post'?'Publish a shift':page==='admin'?'Dashboard':page[0].toUpperCase()+page.slice(1)}</h1></div></header>
+ return <div className={`${user?.role==='worker'?'app worker':'app'} ${!user&&['home','register','login','chooseRole'].includes(page)?'auth-layout':''}`}><aside className="sidebar"><a className="brand" onClick={()=>navigateTo('home')}>hyrz</a>{!user&&<p className="tag">Flexible Work.<br/>Reliable Staffing.</p>}{user&&<nav>{(user.role==='admin'?[['admin','Dashboard'],['account','My account']]:[['dashboard','Dashboard'],['account','My account']]).map(([id,label])=><button key={id} className={page===id?'selected':''} onClick={()=>navigateTo(id)}>{label}</button>)}</nav>}<div className="sidebottom"><small className="company-trademark">@TheAppCollectionLTD</small>{user?<><small>{user.email}</small><button onClick={logout}>Sign out</button></>:<button onClick={()=>navigateTo('login')}>Sign in</button>}</div></aside>
+ <main><header className={user?.role==='worker'?'worker-page-header':''}><div>{user?.role==='worker'&&page==='dashboard'&&<span className="eyebrow">YOUR PERSONAL WORKSPACE</span>}{!user&&<span className="eyebrow">UK FLEXIBLE STAFFING</span>}{user?.role==='worker'&&page==='dashboard'?<h1>Hello, {user.first_name||'there'}</h1>:<h1>{!user?'Find work that works for you':page==='account'?`Hello, ${user.first_name||'there'}`:page==='jobs'?'Find shifts':page==='post'?'Publish a shift':page==='admin'?'Dashboard':page[0].toUpperCase()+page.slice(1)}</h1>}{user?.role==='worker'&&page==='dashboard'&&<p className="worker-greeting-subtitle">Your shifts, messages and work preferences — all in one place.</p>}</div>{user?.role==='worker'&&<button className="secondary worker-signout" onClick={logout}>Sign out</button>}</header>{user?.role==='worker'&&!mainWorkerPages.includes(page)&&<button className="textbutton worker-back-button" onClick={goBack}>← Back</button>}
  {error&&<div className="alert error">{error}</div>}{notice&&<div className="alert success">{notice}</div>}
  {user&&user.role!=='admin'&&(!onboarding||!onboarding.canAccessPlatform)&&<section className="panel onboarding-panel">
     <span className="eyebrow">ACCOUNT VERIFICATION</span>
@@ -172,8 +176,8 @@ async function authenticate(register) {
 <div className="welcome-panel"><div className="brand-mark">hyrz</div>
 <h2>Work around your life.<br/><em>Not vice versa.</em></h2>
 <p>Explore jobs, choose shifts that suit your availability and earn on your terms.</p>
-<button className="primary" onClick={()=>setPage('chooseRole')}>Get started</button>
-<p>Already registered? <button className="textbutton" onClick={()=>setPage('login')}>Sign in</button></p>
+<button className="primary" onClick={()=>navigateTo('chooseRole')}>Get started</button>
+<p>Already registered? <button className="textbutton" onClick={()=>navigateTo('login')}>Sign in</button></p>
 </div></section>}
 {!user&&page==='home'&&<section className="how-hyrz-works">
   <div className="how-heading">
@@ -198,17 +202,17 @@ async function authenticate(register) {
       <p>Apply for available shifts that fit your schedule and preferences.</p>
     </article>
   </div>
-  <button className="primary how-cta" onClick={()=>setPage('chooseRole')}>Get started ↗</button>
+  <button className="primary how-cta" onClick={()=>navigateTo('chooseRole')}>Get started ↗</button>
 </section>}
  {!user&&page==='chooseRole'&&<section className="role-selection">
-<button className="textbutton" onClick={()=>setPage('home')}>← Back</button>
+<button className="textbutton" onClick={()=>navigateTo('home')}>← Back</button>
 <h2>How will you use hyrz?</h2><p>Choose your account type.</p>
 <div className="role-cards">
-<button className="role-card" onClick={()=>{setRole('worker');setPage('register')}}><strong>I'm looking for work</strong><span>Find flexible shifts and manage applications.</span><b>Continue as a worker →</b></button>
-<button className="role-card" onClick={()=>{setRole('employer');setPage('register')}}><strong>I'm an employer</strong><span>Find workers and manage your staffing.</span><b>Continue as an employer →</b></button>
+<button className="role-card" onClick={()=>{setRole('worker');navigateTo('register')}}><strong>I'm looking for work</strong><span>Find flexible shifts and manage applications.</span><b>Continue as a worker →</b></button>
+<button className="role-card" onClick={()=>{setRole('employer');navigateTo('register')}}><strong>I'm an employer</strong><span>Find workers and manage your staffing.</span><b>Continue as an employer →</b></button>
 </div></section>}
 {!user&&page==='login'&&<section className="panel auth">
-<button className="textbutton" onClick={()=>setPage('home')}>← Back to home</button>
+<button className="textbutton" onClick={()=>navigateTo('home')}>← Back to home</button>
 <h2>Welcome back</h2><p>Sign in to your hyrz account.</p>
 <form onSubmit={e=>{e.preventDefault();authenticate(false)}}>
 <label>Email<input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)}/></label>
@@ -235,7 +239,7 @@ async function authenticate(register) {
     >
       Resend verification email
     </button>
-    <button className="secondary" onClick={() => setPage('login')}>
+    <button className="secondary" onClick={() => navigateTo('login')}>
       Back to sign in
     </button>
   </section>
@@ -252,7 +256,7 @@ async function authenticate(register) {
   <section className="panel auth">
     <h2>Email verified!</h2>
     <p>Your email address is confirmed. You can now sign in to hyrz.</p>
-    <button className="primary" onClick={() => setPage('login')}>
+    <button className="primary" onClick={() => navigateTo('login')}>
       Sign in
     </button>
   </section>
@@ -285,39 +289,39 @@ async function authenticate(register) {
     >
       Request another verification email
     </button>
-    <button className="secondary" onClick={() => setPage('login')}>
+    <button className="secondary" onClick={() => navigateTo('login')}>
       Back to sign in
     </button>
   </section>
 )}
 
-{!user&&page==='register'&&<section className="panel auth"><button type="button" className="textbutton" onClick={()=>setPage("chooseRole")}>← Change account type</button><h2>{role==="worker"?"Create your worker account":"Create your employer account"}</h2><p>Join hyrz and get started.</p><form onSubmit={e=>{e.preventDefault();authenticate(true)}}><label>Account type<select value={role} onChange={e=>setRole(e.target.value)}><option value="worker">Worker</option><option value="employer">Employer</option></select></label><div className="grid2"><label>First name<input value={firstName} onChange={e=>setFirstName(e.target.value)}/></label><label>Last name<input value={lastName} onChange={e=>setLastName(e.target.value)}/></label></div>{role==='employer'&&<><label>Business name<input required value={businessName} onChange={e=>setBusinessName(e.target.value)}/></label><label>Your role at the company<input required value={companyRole} onChange={e=>setCompanyRole(e.target.value)} placeholder="e.g. Owner, HR Manager, Recruiter"/></label><label>Company registration number (if applicable)<input value={companyNumber} onChange={e=>setCompanyNumber(e.target.value)} placeholder="Companies House number, if applicable"/><small>Leave blank if your organisation does not have a company registration number.</small></label></>}{role==='worker'&&<><label>National Insurance number<input value={nationalInsuranceNumber} onChange={e=>setNationalInsuranceNumber(e.target.value)} autoComplete="off"/><small>Enter this or a worker permit number. hyrz stores a one-way hash for blocked-account checks, not the original number.</small></label><label>Worker permit number (if applicable)<input value={workerPermitNumber} onChange={e=>setWorkerPermitNumber(e.target.value)} autoComplete="off"/></label></>}<label>Email<input type="email" required value={email} onChange={e=>setEmail(e.target.value)}/></label><label>Password (12+ characters)<input type="password" minLength="12" required autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)}/></label><label>Confirm password<input type="password" minLength="12" required autoComplete="new-password" value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)}/></label><button className="primary" disabled={busy}>Create account</button></form></section>}
+{!user&&page==='register'&&<section className="panel auth"><button type="button" className="textbutton" onClick={()=>navigateTo("chooseRole")}>← Change account type</button><h2>{role==="worker"?"Create your worker account":"Create your employer account"}</h2><p>Join hyrz and get started.</p><form onSubmit={e=>{e.preventDefault();authenticate(true)}}><label>Account type<select value={role} onChange={e=>setRole(e.target.value)}><option value="worker">Worker</option><option value="employer">Employer</option></select></label><div className="grid2"><label>First name<input value={firstName} onChange={e=>setFirstName(e.target.value)}/></label><label>Last name<input value={lastName} onChange={e=>setLastName(e.target.value)}/></label></div>{role==='employer'&&<><label>Business name<input required value={businessName} onChange={e=>setBusinessName(e.target.value)}/></label><label>Your role at the company<input required value={companyRole} onChange={e=>setCompanyRole(e.target.value)} placeholder="e.g. Owner, HR Manager, Recruiter"/></label><label>Company registration number (if applicable)<input value={companyNumber} onChange={e=>setCompanyNumber(e.target.value)} placeholder="Companies House number, if applicable"/><small>Leave blank if your organisation does not have a company registration number.</small></label></>}{role==='worker'&&<><label>National Insurance number<input value={nationalInsuranceNumber} onChange={e=>setNationalInsuranceNumber(e.target.value)} autoComplete="off"/><small>Enter this or a worker permit number. hyrz stores a one-way hash for blocked-account checks, not the original number.</small></label><label>Worker permit number (if applicable)<input value={workerPermitNumber} onChange={e=>setWorkerPermitNumber(e.target.value)} autoComplete="off"/></label></>}<label>Email<input type="email" required value={email} onChange={e=>setEmail(e.target.value)}/></label><label>Password (12+ characters)<input type="password" minLength="12" required autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)}/></label><label>Confirm password<input type="password" minLength="12" required autoComplete="new-password" value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)}/></label><button className="primary" disabled={busy}>Create account</button></form></section>}
  
- {user?.role==='worker'&&page==='dashboard'&&<section className="worker-section-nav panel"><div><span className="eyebrow">YOUR WORKSPACE</span><h2>Dashboard sections</h2></div><div className="worker-section-links">{[['inbox','Inbox'],['checkouts','Checkouts'],['invoices','Invoices'],['availability','Availability'],['favourites','Favourites'],['complaints','Complaints'],['timetable','Timetable'],['notifications','Notifications']].map(([id,label])=><button key={id} className="secondary" onClick={()=>setPage(id)}>{label}</button>)}</div></section>}
- {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&<><section className="stats"><div className="stat"><small>OPEN SHIFTS</small><strong>{shifts.length}</strong></div><div className="stat"><small>APPLICATIONS</small><strong>{applications.length}</strong></div><div className="stat"><small>CHECKOUTS</small><strong>{checkouts.length}</strong></div><div className="stat"><small>INVOICES</small><strong>{invoices.length}</strong></div></section><section className="panel"><div className="panel-head"><div><span className="eyebrow">LATEST OPPORTUNITIES</span><h2>Shifts you can explore</h2></div><button className="secondary" onClick={()=>setPage('jobs')}>View all ↗</button></div><ShiftList shifts={visibleShifts.slice(0,4)} role={user.role} apply={apply}/></section></>}
+ {user?.role==='worker'&&page==='dashboard'&&<section className="worker-section-nav panel"><div><span className="eyebrow">YOUR WORKSPACE</span><h2>Dashboard sections</h2></div><div className="worker-section-links">{[['inbox','Inbox'],['checkouts','Checkouts'],['invoices','Invoices'],['availability','Availability'],['favourites','Favourites'],['complaints','Complaints'],['timetable','Timetable'],['notifications','Notifications']].map(([id,label])=><button key={id} className="secondary" onClick={()=>navigateTo(id)}>{label}</button>)}</div></section>}
+ {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&<><section className="stats"><div className="stat"><small>OPEN SHIFTS</small><strong>{shifts.length}</strong></div><div className="stat"><small>APPLICATIONS</small><strong>{applications.length}</strong></div><div className="stat"><small>CHECKOUTS</small><strong>{checkouts.length}</strong></div><div className="stat"><small>INVOICES</small><strong>{invoices.length}</strong></div></section><section className="panel"><div className="panel-head"><div><span className="eyebrow">LATEST OPPORTUNITIES</span><h2>Shifts you can explore</h2></div><button className="secondary" onClick={()=>navigateTo('jobs')}>View all ↗</button></div><ShiftList shifts={visibleShifts.slice(0,4)} role={user.role} apply={apply}/></section></>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='jobs'&&<section className="panel"><div className="panel-head"><div><span className="eyebrow">OPPORTUNITIES</span><h2>Find your next shift</h2></div><input className="search" placeholder="Search role or location" value={search} onChange={e=>setSearch(e.target.value)}/></div>{user.role==='worker'&&<div className="worker-section-links job-tabs">{[['available','Available shifts'],['applied','Applied shifts'],['upcoming','Upcoming shifts'],['rejected','Rejected shifts'],['completed','Completed shifts']].map(([id,label])=><button key={id} className={jobFilter===id?'selected':''} onClick={()=>setJobFilter(id)}>{label}</button>)}</div>}{user.role==='worker'&&jobFilter!=='available'?<DataList items={applications.filter(a=>jobFilter==='applied'?a.status==='pending':jobFilter==='upcoming'?a.status==='approved':jobFilter==='rejected'?a.status==='rejected':a.status==='completed')} empty={'No '+jobFilter+' shifts yet.'} render={a=><article className="admin-record" key={a.id}><strong>{a.title}</strong><small>{a.business_name||'Employer'} · {a.starts_at||'Date to be confirmed'}</small><span className={'status '+a.status}>{a.status}</span></article>}/>:<ShiftList shifts={visibleShifts} role={user.role} apply={apply}/>}</section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='post'&&user.role==='employer'&&<section className="panel"><h2>Shift details</h2><form onSubmit={createShift} className="formgrid">{[['title','Role / title'],['location','Location'],['startsAt','Start date and time'],['endsAt','End date and time'],['hourlyPay','Hourly pay (£)'],['slots','Number of workers'],['breakMinutes','Unpaid break (minutes)']].map(([k,l])=><label key={k}>{l}<input required type={['startsAt','endsAt'].includes(k)?'datetime-local':k==='title'||k==='location'?'text':'number'} min={['hourlyPay','slots','breakMinutes'].includes(k)?'0':undefined} step={k==='hourlyPay'?'0.01':undefined} value={shift[k]} onChange={e=>setShift({...shift,[k]:e.target.value})}/></label>)}<label className="wide">Description<textarea value={shift.description} onChange={e=>setShift({...shift,description:e.target.value})}/></label><button className="primary">Publish shift</button></form></section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='applications'&&<section className="panel"><h2>Applications</h2><DataList items={applications} empty="No applications yet." render={a=><div className="row" key={a.id}><div><b>{a.title}</b><small>{a.business_name||`${a.first_name||''} ${a.last_name||''}`} · {a.starts_at}</small></div><span className={`status ${a.status}`}>{a.status}</span>{user.role==='employer'&&a.status==='pending'&&<div className="actions"><button onClick={()=>updateApplication(a.id,'approved')}>Approve</button><button onClick={()=>updateApplication(a.id,'rejected')}>Reject</button></div>}</div>}/></section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='checkouts'&&<section className="panel"><h2>Timesheets & checkouts</h2><DataList items={checkouts} empty="No checkouts yet." render={c=><div className="row" key={c.id}><div><b>{c.title||`Checkout #${c.id}`}</b><small>{c.actual_start} – {c.actual_end} · Gross {money(c.gross_pay)} · Fee {money(c.platform_fee)}</small></div><span className={`status ${c.status}`}>{c.status}</span>{['employer','admin'].includes(user.role)&&c.status==='submitted'&&<button onClick={()=>action(async()=>{await request(`/checkouts/${c.id}/review`,{method:'PATCH',body:JSON.stringify({status:'approved'})});await load()})}>Approve</button>}{user.role==='employer'&&['submitted','disputed'].includes(c.status)&&<CounterOfferForm checkout={c} action={action} busy={busy} onDone={load} setNotice={setNotice}/>}</div>}/></section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='invoices'&&<section className="panel"><h2>Invoices</h2><DataList items={invoices} empty="No invoices yet." render={i=><div className="row" key={i.id}><div><b>Invoice #{i.id} · {i.title}</b><small>Due {i.due_at} · Platform fee {money(i.platform_fee)}</small></div><strong>{money(i.total)}</strong><span className={`status ${i.status}`}>{i.status}</span></div>}/></section>}
 
- {user?.role==='worker'&&page==='inbox'&&<section className="panel"><button className="textbutton" onClick={()=>setPage('dashboard')}>← Back to Dashboard</button><h2>Inbox</h2><p>Messages are grouped by who sent them so you can find employer and admin conversations quickly.</p><SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/></section>}
- {user?.role==='worker'&&page==='availability'&&<section className="panel"><button className="textbutton" onClick={()=>setPage('dashboard')}>← Back to Dashboard</button><h2>Availability</h2><p>Set the days, times, travel distance and minimum earnings that work for you. Automatic shift approval and saved preferences still need their backend workflow connected.</p><div className="availability-preview"><label><input type="checkbox"/> Enable automatic shift matching</label><div className="grid2"><label>Minimum earnings per shift (£)<input type="number" min="0" placeholder="e.g. 80" /></label><label>Maximum travel distance (miles)<input type="number" min="1" placeholder="e.g. 10" /></label></div><p className="muted">Preference controls are a design preview and are not saved yet.</p><button className="primary" disabled>Save availability (coming next)</button></div></section>}
- {user?.role==='worker'&&page==='favourites'&&<section className="panel"><button className="textbutton" onClick={()=>setPage('dashboard')}>← Back to Dashboard</button><h2>Favourites</h2><div className="worker-section-links"><button className="secondary">Search workplaces</button><button className="secondary">Previous employers</button></div><p>Your favourite workplaces and prioritisation list will appear here when workplace favourites are connected.</p><p className="muted">Workplace search, distance filters and preference ordering are not connected yet.</p></section>}
- {user?.role==='worker'&&page==='complaints'&&<section className="panel"><button className="textbutton" onClick={()=>setPage('dashboard')}>← Back to Dashboard</button><h2>Complaints</h2><p>Report concerns about a client, a person or conditions at a work site. Your message is sent to hyrz support.</p><SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/></section>}
- {user?.role==='worker'&&page==='timetable'&&<section className="panel"><button className="textbutton" onClick={()=>setPage('dashboard')}>← Back to Dashboard</button><h2>Your next six weeks</h2><p>Your schedule will show approved shifts and update when shifts are accepted or rescinded.</p><DataList items={applications.filter(a=>a.status==='approved').sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at))} empty="No upcoming approved shifts." render={a=><article className="admin-record" key={a.id}><strong>{a.title}</strong><small>{a.business_name||'Employer'} · {a.starts_at||'Date to be confirmed'}</small></article>}/></section>}
- {user?.role==='worker'&&page==='notifications'&&<section className="panel"><button className="textbutton" onClick={()=>setPage('dashboard')}>← Back to Dashboard</button><h2>Notifications</h2><p>Shift decisions, checkout reminders and messages from hyrz will appear here once the notification feed and email reminders are connected.</p><div className="empty-state">You're all caught up.</div></section>}
- {user?.role==='worker'&&page==='workchats'&&<section className="panel"><button className="textbutton" onClick={()=>setPage('dashboard')}>← Back to Dashboard</button><h2>Workchats</h2><p>Group conversations for employers who have added you to their favourites will appear here.</p><div className="empty-state">No workchats available yet.</div></section>}
+ {user?.role==='worker'&&page==='inbox'&&<section className="panel"><button className="textbutton" onClick={goBack}>← Back</button><h2>Inbox</h2><p>Messages are grouped by who sent them so you can find employer and admin conversations quickly.</p><SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/></section>}
+ {user?.role==='worker'&&page==='availability'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Availability</h2><p>Set the days, times, travel distance and minimum earnings that work for you. Automatic shift approval and saved preferences still need their backend workflow connected.</p><div className="availability-preview"><label><input type="checkbox"/> Enable automatic shift matching</label><div className="grid2"><label>Minimum earnings per shift (£)<input type="number" min="0" placeholder="e.g. 80" /></label><label>Maximum travel distance (miles)<input type="number" min="1" placeholder="e.g. 10" /></label></div><p className="muted">Preference controls are a design preview and are not saved yet.</p><button className="primary" disabled>Save availability (coming next)</button></div></section>}
+ {user?.role==='worker'&&page==='favourites'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Favourites</h2><div className="worker-section-links"><button className="secondary">Search workplaces</button><button className="secondary">Previous employers</button></div><p>Your favourite workplaces and prioritisation list will appear here when workplace favourites are connected.</p><p className="muted">Workplace search, distance filters and preference ordering are not connected yet.</p></section>}
+ {user?.role==='worker'&&page==='complaints'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Complaints</h2><p>Report concerns about a client, a person or conditions at a work site. Your message is sent to hyrz support.</p><SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/></section>}
+ {user?.role==='worker'&&page==='timetable'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Your next six weeks</h2><p>Your schedule will show approved shifts and update when shifts are accepted or rescinded.</p><DataList items={applications.filter(a=>a.status==='approved').sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at))} empty="No upcoming approved shifts." render={a=><article className="admin-record" key={a.id}><strong>{a.title}</strong><small>{a.business_name||'Employer'} · {a.starts_at||'Date to be confirmed'}</small></article>}/></section>}
+ {user?.role==='worker'&&page==='notifications'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Notifications</h2><p>Shift decisions, checkout reminders and messages from hyrz will appear here once the notification feed and email reminders are connected.</p><div className="empty-state">You're all caught up.</div></section>}
+ {user?.role==='worker'&&page==='workchats'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Workchats</h2><p>Group conversations for employers who have added you to their favourites will appear here.</p><div className="empty-state">No workchats available yet.</div></section>}
  {user?.role==='worker'&&page==='contact'&&<SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
 
  {user&&page==='account'&&<AccountSettings user={user} setUser={setUser} action={action} busy={busy} setNotice={setNotice}/>}
 
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='admin'&&user.role==='admin'&&<AdminConsole user={user} action={action} setNotice={setNotice} setError={setError} busy={busy}/>}
 
- {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&user.role==='employer'&&<section className="panel"><div className="panel-head"><h2>Employer quick actions</h2><button className="primary" onClick={()=>setPage('post')}>+ Publish a shift</button></div><p>Publish shifts, review applicants, and approve completed checkouts from your dashboard.</p></section>}
+ {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&user.role==='employer'&&<section className="panel"><div className="panel-head"><h2>Employer quick actions</h2><button className="primary" onClick={()=>navigateTo('post')}>+ Publish a shift</button></div><p>Publish shifts, review applicants, and approve completed checkouts from your dashboard.</p></section>}
  {user&&page==='dashboard'&&['worker','employer'].includes(user.role)&&<SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
  <footer><span>hyrz</span><span>Flexible Work. Reliable Staffing.</span><span>@TheAppCollectionLTD</span></footer>
- </main>{user?.role==='worker'&&<nav className="worker-bottom-nav" aria-label="Worker navigation">{[['dashboard','Dashboard','⌂'],['jobs','Jobs','⌕'],['contact','Contact','✉'],['account','Profile','◉'],['workchats','Workchats','☏']].map(([id,label,icon])=><button key={id} className={page===id?'active':''} onClick={()=>setPage(id)}><span>{icon}</span><small>{label}</small></button>)}</nav>}</div>
+ </main>{user?.role==='worker'&&<nav className="worker-bottom-nav" aria-label="Worker navigation">{[['dashboard','Dashboard','⌂'],['jobs','Jobs','⌕'],['contact','Contact','✉'],['account','Profile','◉'],['workchats','Workchats','☏']].map(([id,label,icon])=><button key={id} className={page===id?'active':''} onClick={()=>{setPageHistory([]);setPage(id);}}><span>{icon}</span><small>{label}</small></button>)}</nav>}</div>
 }
 function AccountSettings({user,setUser,action,busy,setNotice}) {
  const [firstName,setFirstName]=useState(user.first_name||(user.role==='admin'?'Simson':''));
