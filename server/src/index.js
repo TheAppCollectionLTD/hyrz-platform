@@ -27,6 +27,24 @@ app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
 const ensureProfilePictureColumn = db.query('ALTER TABLE users ADD COLUMN profile_picture LONGTEXT NULL').catch(error => { if (error.code !== 'ER_DUP_FIELDNAME') { console.error('Could not initialise profile pictures:', error.message); throw error; } });
 const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
+const ensureUniqueEmails = (async () => {
+  const [duplicates] = await db.query("SELECT LOWER(TRIM(email)) AS normalized_email, COUNT(*) AS account_count FROM users GROUP BY LOWER(TRIM(email)) HAVING COUNT(*) > 1 LIMIT 1");
+  if (duplicates.length) {
+    console.error('Email uniqueness migration paused: existing accounts share an email address after normalization. Resolve duplicates before enabling the database constraint.');
+    return false;
+  }
+  try {
+    await db.query("ALTER TABLE users ADD COLUMN email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED");
+  } catch (error) {
+    if (error.code !== 'ER_DUP_FIELDNAME') throw error;
+  }
+  try {
+    await db.query('ALTER TABLE users ADD UNIQUE KEY uq_users_email_normalized (email_normalized)');
+  } catch (error) {
+    if (error.code !== 'ER_DUP_KEYNAME') throw error;
+  }
+  return true;
+})().catch(error => { console.error('Could not initialise case-insensitive email uniqueness:', error.message); throw error; });
 const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
 const ensureCheckoutCounterColumns = Promise.all([
   db.query('ALTER TABLE checkouts ADD COLUMN employer_comment TEXT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
@@ -114,7 +132,9 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
   if (role === 'worker' && !String(nationalInsuranceNumber||'').trim() && !String(workerPermitNumber||'').trim()) return res.status(400).json({error:'A National Insurance number or worker permit number is required for account security checks.'});
 
   const normalizedEmail = email.toLowerCase().trim();
-  const [existingEmail] = await db.execute('SELECT id FROM users WHERE LOWER(email)=? LIMIT 1',[normalizedEmail]);
+  const emailConstraintReady = await ensureUniqueEmails;
+  if (!emailConstraintReady) return res.status(503).json({error:'Account creation is temporarily unavailable while duplicate email addresses are reviewed.'});
+  const [existingEmail] = await db.execute('SELECT id FROM users WHERE LOWER(TRIM(email))=? LIMIT 1',[normalizedEmail]);
   if (existingEmail.length) return res.status(409).json({error:'This email address is already linked to an account. Please sign in or use a different email address.'});
   if (role === 'worker') {
     await ensureBlockedIdentifiers;
@@ -534,7 +554,7 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
  sql+=' ORDER BY d.created_at DESC';const [rows]=await db.execute(sql,args);res.json({disputes:rows});
 }));
 require('./user-message-routes')(app, { db, asyncRoute, audit });
-require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder });
+require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails });
 
 app.get('/api/admin/overview',auth,allow('admin'),asyncRoute(async(req,res)=>{
  const [[users]]=await db.query('SELECT COUNT(*) count FROM users');
