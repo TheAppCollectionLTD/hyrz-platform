@@ -1450,3 +1450,16 @@ footer .brand span {
 .counter-offer form label{display:block;margin:10px 0}
 .counter-offer textarea{min-height:85px}
 .verification-admin-controls{margin-top:12px}
+
+/* My account profile controls */
+.account-settings{max-width:900px}
+.account-settings hr{border:0;border-top:1px solid #eceee8;margin:28px 0}
+.profile-picture-editor{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:18px 0 24px}
+.profile-picture-preview,.profile-picture-placeholder{width:92px;height:92px;border-radius:50%;object-fit:cover;border:1px solid #e1e4dc}
+.profile-picture-placeholder{display:grid;place-items:center;background:#e9eee2;color:#334126;font:700 30px Manrope,sans-serif}
+.profile-picture-editor>div:last-child{min-width:220px;flex:1}
+.profile-picture-editor label{display:block;font-weight:600;font-size:12px}
+.profile-picture-editor input[type=file]{display:block;margin-top:8px;max-width:100%;font-size:12px}
+.profile-picture-editor small{display:block;color:#777d72;font-size:11px;margin-top:7px}
+.profile-picture-editor button{margin-top:10px}
+.account-settings .admin-message-form{border-top:0;margin-top:14px;padding-top:0}
