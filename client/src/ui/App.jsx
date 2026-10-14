@@ -82,7 +82,9 @@ async function authenticate(register) {
         lastName,
         businessName,
         companyRole,
-        companyNumber
+        companyNumber,
+        nationalInsuranceNumber: register && role==='worker' ? nationalInsuranceNumber.trim() : undefined,
+        workerPermitNumber: register && role==='worker' ? workerPermitNumber.trim() : undefined
       })
     });
 
