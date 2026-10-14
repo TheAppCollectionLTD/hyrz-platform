@@ -324,8 +324,8 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  }
  async function changePassword(e) {
   e.preventDefault();
-  if(newPassword!==confirmNewPassword){setNotice('');throw new Error('Your new passwords do not match.');}
   await action(async()=>{
+   if(newPassword!==confirmNewPassword) throw new Error('Your new passwords do not match.');
    await request('/auth/change-password',{method:'POST',body:JSON.stringify({currentPassword,newPassword})});
    setCurrentPassword('');setNewPassword('');setConfirmNewPassword('');
    setNotice('Your password has been changed successfully.');
