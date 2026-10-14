@@ -106,8 +106,8 @@ async function authenticate(register) {
  async function reviewVerification(account,check,status){const reason=window.prompt(`Reason for setting ${check.replace('_',' ')} to ${status} for ${account.email}:`);if(reason===null)return;if(reason.trim().length<3){setError('Please enter a reason of at least 3 characters.');return;}await action(async()=>{await request(`/admin/verification/${account.role}/${account.userId}`,{method:'PATCH',body:JSON.stringify({check,status,reason:reason.trim()})});setNotice('Verification status updated and recorded.');await load();})}
  async function logout(){localStorage.removeItem('hyrz_token');setUser(null);setPage('home')}
  const visibleShifts=shifts.filter(s=>`${s.title} ${s.location} ${s.business_name}`.toLowerCase().includes(search.toLowerCase()));
- return <div className={`${user?.role==='worker'?'app worker':'app'} ${!user&&['home','register','login','chooseRole'].includes(page)?'auth-layout':''}`}><aside className="sidebar"><a className="brand" onClick={()=>setPage('home')}>hyrz</a><p className="tag">Flexible Work.<br/>Reliable Staffing.</p>{user&&<nav>{[...((onboarding?.canAccessPlatform||user.role==='admin')?[['dashboard','Overview'],['jobs','Find shifts'],['applications','Applications'],['checkouts','Checkouts'],['invoices','Invoices'],...(user.role==='employer'?[['post','Post a shift']]:[]),...(user.role==='admin'?[['admin','Administration']]:[])]:[]),['account','My account']].map(([id,label])=><button key={id} className={page===id?'selected':''} onClick={()=>setPage(id)}>{label}</button>)}</nav>}<div className="sidebottom"><small className="company-trademark">@TheAppCollectionLTD</small>{user?<><small>{user.email}</small><button onClick={logout}>Sign out</button></>:<button onClick={()=>setPage('login')}>Sign in</button>}</div></aside>
- <main><header><div><span className="eyebrow">UK FLEXIBLE STAFFING</span><h1>{!user?'Find work that works for you':page==='jobs'?'Find shifts':page==='post'?'Publish a shift':page==='admin'?'Admin overview':page==='account'?'My account':page[0].toUpperCase()+page.slice(1)}</h1></div>{user&&<div className="userpill">{user.first_name||user.role} · {user.role}</div>}</header>
+ return <div className={`${user?.role==='worker'?'app worker':'app'} ${!user&&['home','register','login','chooseRole'].includes(page)?'auth-layout':''}`}><aside className="sidebar"><a className="brand" onClick={()=>setPage('home')}>hyrz</a><p className="tag">Flexible Work.<br/>Reliable Staffing.</p>{user&&<nav>{(user.role==='admin'?[['admin','Dashboard'],['account','My account']]:[['dashboard','Dashboard'],['account','My account']]).map(([id,label])=><button key={id} className={page===id?'selected':''} onClick={()=>setPage(id)}>{label}</button>)}</nav>}<div className="sidebottom"><small className="company-trademark">@TheAppCollectionLTD</small>{user?<><small>{user.email}</small><button onClick={logout}>Sign out</button></>:<button onClick={()=>setPage('login')}>Sign in</button>}</div></aside>
+ <main><header><div><span className="eyebrow">UK FLEXIBLE STAFFING</span><h1>{!user?'Find work that works for you':page==='jobs'?'Find shifts':page==='post'?'Publish a shift':page==='admin'?'Dashboard':page==='account'?'My account':page[0].toUpperCase()+page.slice(1)}</h1></div>{user&&<div className="userpill">{user.first_name||user.role} · {user.role}</div>}</header>
  {error&&<div className="alert error">{error}</div>}{notice&&<div className="alert success">{notice}</div>}
  {user&&user.role!=='admin'&&(!onboarding||!onboarding.canAccessPlatform)&&<section className="panel onboarding-panel">
     <span className="eyebrow">ACCOUNT VERIFICATION</span>
@@ -313,11 +313,11 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  const [currentPassword,setCurrentPassword]=useState('');
  const [newPassword,setNewPassword]=useState('');
  const [confirmNewPassword,setConfirmNewPassword]=useState('');
- const [profileBusy,setProfileBusy]=useState(false);
+ const [profilePicture,setProfilePicture]=useState(user.profile_picture||'');
  async function saveProfile(e) {
   e.preventDefault();
   await action(async()=>{
-   const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({firstName:firstName.trim(),lastName:lastName.trim(),phone:phone.trim()})});
+   const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({firstName:firstName.trim(),lastName:lastName.trim(),phone:phone.trim(),profilePicture})});
    setUser(result.user);
    setNotice('Your account details have been updated.');
   });
@@ -333,9 +333,20 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  }
  return <section className="panel account-settings">
   <span className="eyebrow">ACCOUNT SETTINGS</span>
-  <h2>Your details</h2>
-  <p>Manage the personal details connected to your hyrz account.</p>
+  <h2>My profile</h2>
+  <p>Manage your profile photo and the personal details connected to your hyrz account.</p>
   <form className="admin-message-form" onSubmit={saveProfile}>
+   <div className="profile-picture-editor">
+    {profilePicture?<img className="profile-picture-preview" src={profilePicture} alt="Your profile" />:<div className="profile-picture-placeholder" aria-label="No profile photo"> {(firstName||user.email||'U').slice(0,1).toUpperCase()} </div>}
+    <div><label>Profile picture<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e=>{
+      const file=e.target.files?.[0];if(!file)return;
+      if(!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)){e.target.value='';return;}
+      if(file.size>400*1024){e.target.value='';window.alert('Choose an image smaller than 400 KB.');return;}
+      const reader=new FileReader();reader.onload=()=>setProfilePicture(String(reader.result||''));reader.readAsDataURL(file);
+    }}/></label>
+    <small>PNG, JPG, WEBP or GIF. Maximum 400 KB.</small>
+    {profilePicture&&<button type="button" className="secondary" onClick={()=>setProfilePicture('')}>Remove picture</button>}</div>
+   </div>
    <label>Email address<input type="email" value={user.email||''} readOnly disabled/></label>
    <small>Your account email is currently read-only. Contact support if you need to change it.</small>
    <label>First name<input type="text" maxLength="100" value={firstName} onChange={e=>setFirstName(e.target.value)}/></label>
