@@ -309,8 +309,6 @@ async function authenticate(register) {
 function AccountSettings({user,setUser,action,busy,setNotice}) {
  const [firstName,setFirstName]=useState(user.first_name||(user.role==='admin'?'Simson':''));
  const [lastName,setLastName]=useState(user.last_name||(user.role==='admin'?'Hannawell':''));
- const [email,setEmail]=useState(user.email||'');
- const [showDetailsEditor,setShowDetailsEditor]=useState(false);
  const [showPasswordEditor,setShowPasswordEditor]=useState(false);
  const [currentPassword,setCurrentPassword]=useState('');
  const [newPassword,setNewPassword]=useState('');
@@ -322,21 +320,6 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
    setUser(result.user);
    setProfilePicture(result.user.profile_picture||'');
    setNotice(nextPicture?'Your profile photo has been saved.':'Your profile photo has been removed.');
-  });
- }
- async function requestDetailsChange(e) {
-  e.preventDefault();
-  await action(async()=>{
-   await request('/messages',{method:'POST',body:JSON.stringify({
-    category:'enquiries',
-    subject:'Request to change account details',
-    body:'I would like hyrz support to help me change my account details. Current name: '+(user.first_name||'')+' '+(user.last_name||'')+'; current email: '+(user.email||'')+'. Requested name: '+firstName.trim()+' '+lastName.trim()+'; requested email: '+email.trim()+'. Please contact me to verify and process this request.'
-   })});
-   setShowDetailsEditor(false);
-   setFirstName(user.first_name||(user.role==='admin'?'Simson':''));
-   setLastName(user.last_name||(user.role==='admin'?'Hannawell':''));
-   setEmail(user.email||'');
-   setNotice("Your request has been sent. hyrz support will contact you about changing your name or email.");
   });
  }
  async function changePassword(e) {
@@ -363,14 +346,10 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
    {profilePicture&&<button type="button" className="secondary" disabled={busy} onClick={()=>saveProfilePicture('')}>Remove picture</button>}</div>
   </div>
   <hr/>
-  <div className="account-password-heading"><h2>Name and email</h2><button type="button" className="password-edit-button" onClick={()=>{if(showDetailsEditor){setFirstName(user.first_name||(user.role==='admin'?'Simson':''));setLastName(user.last_name||(user.role==='admin'?'Hannawell':''));setEmail(user.email||'');}setShowDetailsEditor(v=>!v)}}>{showDetailsEditor?'Cancel':'✎ Edit'}</button></div>
-  <p>Need to change your name or email? Submit a request and hyrz support will contact you.</p>
-  <form className="admin-message-form" onSubmit={requestDetailsChange}>
-   <label>First name<input type="text" maxLength="100" value={firstName} readOnly={!showDetailsEditor} onChange={e=>setFirstName(e.target.value)} required/></label>
-   <label>Last name<input type="text" maxLength="100" value={lastName} readOnly={!showDetailsEditor} onChange={e=>setLastName(e.target.value)} required/></label>
-   <label>Email address<input type="email" maxLength="254" value={email} readOnly={!showDetailsEditor} onChange={e=>setEmail(e.target.value)} required/></label>
-   {showDetailsEditor&&<button className="primary" disabled={busy}>Confirm request</button>}
-  </form>
+  <div className="account-password-heading"><h2>Name and email</h2></div>
+  <label>First name<input type="text" value={user.first_name||(user.role==='admin'?'Simson':'')} readOnly aria-readonly="true"/></label>
+  <label>Last name<input type="text" value={user.last_name||(user.role==='admin'?'Hannawell':'')} readOnly aria-readonly="true"/></label>
+  <label>Email address<input type="email" value={user.email||''} readOnly aria-readonly="true"/></label>
   <hr/>
   <div className="account-password-heading"><h2>Password</h2><button type="button" className="password-edit-button" aria-label="Edit password" title="Edit password" onClick={()=>setShowPasswordEditor(v=>!v)}>{showPasswordEditor?'Cancel':'✎ Edit'}</button></div>
   {showPasswordEditor&&<>
@@ -484,7 +463,7 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
    <DataList items={messages.filter(m=>category==='admins'?(m.sender_role==='admin'||Number(m.recipient_id)>0&&m.category==='admins'):category==='enquiries'?(m.category==='enquiries'||!m.category):m.category===category)} empty="No messages in this subject yet." render={m=><article className="admin-record" key={m.id}><div className="admin-record-head"><div><strong>Message #{m.id} · {m.sender_email} ({m.sender_role})</strong><small>{fmtDate(m.created_at)} · {m.subject||'No subject'} · {m.category||'Uncategorised'} · {m.read_at?'Read':'Unread'} · {m.opened_by_email?'Handled by '+m.opened_by_email:'Not claimed'}</small><small>Conversation {m.conversation_key}</small><p>{m.body}</p><div className="admin-record-actions">{!m.opened_by&&<button className="secondary" onClick={()=>action(async()=>{await request('/admin/messages/'+m.id+'/claim',{method:'PATCH',body:'{}'});setNotice('Issue claimed by you.');await refresh();})}>Mark as handling</button>}{Number(m.recipient_id)===Number(user.id)&&!m.read_at&&<button className="secondary" onClick={()=>action(async()=>{await request('/admin/messages/'+m.id+'/read',{method:'PATCH',body:'{}'});setNotice('Message marked as read.');await refresh();})}>Mark read</button>}</div></div></div></article>}/>
    <form onSubmit={sendMessage} className="admin-message-form"><h3>Send a message</h3><label>Subject<input required maxLength="200" value={messageSubject} onChange={e=>setMessageSubject(e.target.value)}/></label><label>Recipient user ID<input type="number" min="1" required value={recipientId} onChange={e=>setRecipientId(e.target.value)}/></label><label>Message<textarea required maxLength="5000" value={messageBody} onChange={e=>setMessageBody(e.target.value)}/></label><button className="primary" disabled={busy}>Send message</button></form>
   </>}
-  <form className="admin-message-form" onSubmit={e=>{e.preventDefault();action(async()=>{await request('/admin/change-password',{method:'POST',body:JSON.stringify({currentPassword,newPassword})});setCurrentPassword('');setNewPassword('');setNotice('Password changed successfully.');});}}><h3>Change your administrator password</h3><label>Current password<input type="password" required value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)}/></label><label>New password (12+ characters)<input type="password" minLength="12" required value={newPassword} onChange={e=>setNewPassword(e.target.value)}/></label><button className="secondary" disabled={busy}>Change password</button></form>
+
   {section==='FINANCIAL REPORTS'&&<>{financialReport&&<><div className="stats"><div className="stat"><small>TOTAL USERS</small><strong>{financialReport.userCounts.totalUsers||0}</strong></div><div className="stat"><small>WORKERS</small><strong>{financialReport.userCounts.workers||0}</strong></div><div className="stat"><small>CLIENTS</small><strong>{financialReport.userCounts.clients||0}</strong></div><div className="stat"><small>ADMINS</small><strong>{financialReport.userCounts.admins||0}</strong></div></div><div className="stats"><div className="stat"><small>PLATFORM FEES INVOICED</small><strong>{money(financialReport.invoices.invoicedRevenue)}</strong></div><div className="stat"><small>PAID REVENUE</small><strong>{money(financialReport.invoices.paidRevenue)}</strong></div><div className="stat"><small>OUTSTANDING</small><strong>{money(financialReport.invoices.outstandingRevenue)}</strong></div><div className="stat"><small>OVERDUE INVOICES</small><strong>{financialReport.invoices.overdueInvoices||0}</strong></div></div><p className="admin-note">Gross value of all invoices, including worker pay and platform fees: {money(financialReport.invoices.grossInvoiceValue)}.</p><h3>Referral commissions</h3><div className="admin-note">Commission totals reflect entries in the referral ledger. No referral attribution or automatic commission calculation is configured yet.</div><div className="stats"><div className="stat"><small>PENDING</small><strong>{money(financialReport.commissions.pendingCommissions)}</strong></div><div className="stat"><small>APPROVED</small><strong>{money(financialReport.commissions.approvedCommissions)}</strong></div><div className="stat"><small>PAID</small><strong>{money(financialReport.commissions.paidCommissions)}</strong></div></div><form className="admin-message-form" onSubmit={e=>{e.preventDefault();action(async()=>{await request('/admin/referral-commissions',{method:'POST',body:JSON.stringify({referrerUserId:Number(commissionReferrer),referredUserId:Number(commissionReferred),amount:Number(commissionAmount)})});setCommissionReferrer('');setCommissionReferred('');setCommissionAmount('');setNotice('Referral commission recorded as pending.');await refresh();});}}><h3>Record referral commission</h3><p>Enter the referring and referred user IDs and the agreed amount. The system does not calculate a commission rate automatically.</p><div className="grid2"><label>Referrer user ID<input type="number" min="1" required value={commissionReferrer} onChange={e=>setCommissionReferrer(e.target.value)}/></label><label>Referred user ID<input type="number" min="1" required value={commissionReferred} onChange={e=>setCommissionReferred(e.target.value)}/></label></div><label>Commission amount (£)<input type="number" min="0.01" max="1000000" step="0.01" required value={commissionAmount} onChange={e=>setCommissionAmount(e.target.value)}/></label><button className="primary" disabled={busy}>Record commission</button></form><DataList items={financialReport.referralCommissions||[]} empty="No referral commissions recorded." render={c=><article className="admin-record" key={c.id}><strong>Commission #{c.id} · {money(c.amount)} · {c.status}</strong><small>Referrer: {c.referrer_email} · Referred account: {c.referred_email} · {fmtDate(c.created_at)}</small><div className="admin-record-actions">{['pending','approved','paid','cancelled'].filter(x=>x!==c.status).map(status=><button key={status} className="secondary" onClick={()=>{if(window.confirm('Change commission #'+c.id+' to '+status+'?'))action(async()=>{await request('/admin/referral-commissions/'+c.id+'/status',{method:'PATCH',body:JSON.stringify({status})});setNotice('Referral commission updated.');await refresh();});}}>{status}</button>)}</div></article>}/></>}</>}
  </section>;
 }
