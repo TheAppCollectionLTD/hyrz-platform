@@ -5,7 +5,7 @@ export default function App(){
  const [pageHistory,setPageHistory]=useState([]);
  const mainWorkerPages=['dashboard','jobs','contact','account','workchats'];
  function navigateTo(next){setPageHistory(previous=>page===next?previous:[...previous,page]);setPage(next);}
- function goBack(){const previous=[...pageHistory];while(previous.length){const candidate=previous.pop();if(mainWorkerPages.includes(candidate)){setPageHistory(previous);setPage(candidate);return;}}setPageHistory([]);setPage('dashboard');}
+ function goBack(){const previous=[...pageHistory];while(previous.length){const candidate=previous.pop();if(mainWorkerPages.includes(candidate)){setPageHistory(previous);setPage(candidate);return;}}setPageHistory([]);setPage('jobs');}
  const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[confirmPassword,setConfirmPassword]=useState(''),[role,setRole]=useState('worker'),[firstName,setFirstName]=useState(''),[lastName,setLastName]=useState(''),[businessName,setBusinessName]=useState(''),[companyRole,setCompanyRole]=useState(''),[companyNumber,setCompanyNumber]=useState(''),[nationalInsuranceNumber,setNationalInsuranceNumber]=useState(''),[workerPermitNumber,setWorkerPermitNumber]=useState('');
  const [shifts,setShifts]=useState([]),[applications,setApplications]=useState([]),[checkouts,setCheckouts]=useState([]),[invoices,setInvoices]=useState([]),[overview,setOverview]=useState(null),[search,setSearch]=useState(''),[verificationAccounts,setVerificationAccounts]=useState([]),[jobFilter,setJobFilter]=useState('available');
  const [shift,setShift]=useState({title:'',description:'',location:'',startsAt:'',endsAt:'',hourlyPay:'15',breakMinutes:0,slots:1});
@@ -102,7 +102,7 @@ async function authenticate(register) {
     setUser(d.user);
     setNotice('Signed in');
     await load();
-    setPageHistory([]);setPage(d.user?.role==='admin'?'admin':'dashboard');
+    setPageHistory([]);setPage(d.user?.role==='admin'?'admin':d.user?.role==='worker'?'jobs':'dashboard');
   });
 }
 
