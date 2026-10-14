@@ -334,7 +334,7 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  }
  return <section className="panel account-settings">
   <h2>My profile</h2>
-  <p>Manage your profile photo and the personal details connected to your hyrz account.</p>
+  <p>Your name and account details are fixed. You can update your profile photo or change your password below.</p>
   <form className="admin-message-form" onSubmit={saveProfile}>
    <div className="profile-picture-editor">
     {profilePicture?<img className="profile-picture-preview" src={profilePicture} alt="Your profile" />:<div className="profile-picture-placeholder" aria-label="No profile photo"> {(firstName||user.email||'U').slice(0,1).toUpperCase()} </div>}
@@ -349,10 +349,9 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
    </div>
    <label>Email address<input type="email" value={user.email||''} readOnly disabled/></label>
    <small>Your account email is currently read-only. Contact support if you need to change it.</small>
-   <label>First name<input type="text" maxLength="100" value={firstName} onChange={e=>setFirstName(e.target.value)}/></label>
-   <label>Last name<input type="text" maxLength="100" value={lastName} onChange={e=>setLastName(e.target.value)}/></label>
-   <label>Phone number<input type="tel" maxLength="40" value={phone} onChange={e=>setPhone(e.target.value)}/></label>
-   <button className="primary" disabled={busy}>Save details</button>
+   <label>First name<input type="text" value={user.first_name||(user.role==='admin'?'Simson':'')} readOnly aria-readonly="true"/></label>
+   <label>Last name<input type="text" value={user.last_name||(user.role==='admin'?'Hannawell':'')} readOnly aria-readonly="true"/></label>
+   <button className="primary" disabled={busy}>Save profile photo</button>
   </form>
   <hr/>
   <div className="account-password-heading"><h2>Password</h2><button type="button" className="password-edit-button" aria-label="Edit password" title="Edit password" onClick={()=>setShowPasswordEditor(v=>!v)}>{showPasswordEditor?'Cancel':'✎ Edit'}</button></div>
