@@ -347,7 +347,6 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
     {profilePicture&&<button type="button" className="secondary" onClick={()=>setProfilePicture('')}>Remove picture</button>}</div>
    </div>
    <label>Email address<input type="email" value={user.email||''} readOnly disabled/></label>
-   <small>Your account email is currently read-only. Contact support if you need to change it.</small>
    <label>First name<input type="text" value={user.first_name||(user.role==='admin'?'Simson':'')} readOnly aria-readonly="true"/></label>
    <label>Last name<input type="text" value={user.last_name||(user.role==='admin'?'Hannawell':'')} readOnly aria-readonly="true"/></label>
    <button className="primary" disabled={busy}>Save profile photo</button>
