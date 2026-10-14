@@ -2,7 +2,7 @@ const { auth, allow, adminTier } = require('./middleware');
 const bcrypt = require('bcryptjs');
 const { hashIdentifier } = require('./identifier-hash');
 
-module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder }) {
+module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails }) {
   const admin = [auth, allow('admin')];
   const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
   const ensureCheckoutCounterColumns = Promise.all([
@@ -291,7 +291,9 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     if (Number(req.user.admin_tier)>2) return res.status(403).json({error:'Tier 3 administrators cannot create administrators'});
     if (![1,2,3].includes(tier) || (Number(req.user.admin_tier)===2 && tier!==3)) return res.status(403).json({error:'You cannot create an administrator at that tier'});
     if (!/^\S+@\S+\.\S+$/.test(email) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Enter a valid email and password of at least 12 characters'});
-    const [existing]=await db.execute('SELECT id FROM users WHERE LOWER(email)=? LIMIT 1',[email]);
+    const emailConstraintReady = await ensureUniqueEmails;
+    if (!emailConstraintReady) return res.status(503).json({error:'Administrator creation is temporarily unavailable while duplicate email addresses are reviewed.'});
+    const [existing]=await db.execute('SELECT id FROM users WHERE LOWER(TRIM(email))=? LIMIT 1',[email]);
     if(existing.length) return res.status(409).json({error:'This email address is already linked to an account. Please use a different email address.'});
     const hash=await bcrypt.hash(password,12);
     const conn=await db.getConnection();
