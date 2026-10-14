@@ -310,7 +310,6 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  const [firstName,setFirstName]=useState(user.first_name||(user.role==='admin'?'Simson':''));
  const [lastName,setLastName]=useState(user.last_name||(user.role==='admin'?'Hannawell':''));
  const [showPasswordEditor,setShowPasswordEditor]=useState(false);
- const [phone,setPhone]=useState(user.phone||'');
  const [currentPassword,setCurrentPassword]=useState('');
  const [newPassword,setNewPassword]=useState('');
  const [confirmNewPassword,setConfirmNewPassword]=useState('');
@@ -318,7 +317,7 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  async function saveProfile(e) {
   e.preventDefault();
   await action(async()=>{
-   const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({firstName:firstName.trim(),lastName:lastName.trim(),phone:phone.trim(),profilePicture})});
+   const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({profilePicture})});
    setUser(result.user);
    setNotice('Your account details have been updated.');
   });
@@ -334,7 +333,7 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  }
  return <section className="panel account-settings">
   <h2>My profile</h2>
-  <p>Your name and account details are fixed. You can update your profile photo or change your password below.</p>
+  <p>Your name and account email are fixed. You can update your profile photo or change your password below.</p>
   <form className="admin-message-form" onSubmit={saveProfile}>
    <div className="profile-picture-editor">
     {profilePicture?<img className="profile-picture-preview" src={profilePicture} alt="Your profile" />:<div className="profile-picture-placeholder" aria-label="No profile photo"> {(firstName||user.email||'U').slice(0,1).toUpperCase()} </div>}
