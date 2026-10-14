@@ -1532,3 +1532,67 @@ footer .brand span {
 
 /* Worker app: branding footer removed at the user's request */
 .worker main>footer{display:none!important}
+
+
+/* Employer workspace: calmer business-first layout */
+.app.employer{min-height:100vh;background:#f5f6f3;color:#171916;padding-bottom:92px}
+.employer main{padding-bottom:110px}
+.employer header{align-items:flex-start;margin-bottom:28px}
+.employer .employer-welcome{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.65fr);gap:22px;align-items:stretch}
+.employer-hero{position:relative;overflow:hidden;min-height:350px;border-radius:18px;padding:clamp(28px,4vw,52px);background:#11140f;color:#f4f6f1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.employer-hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #ffffff18;border-radius:50%;right:-90px;bottom:-125px;box-shadow:0 0 0 35px #ffffff08,0 0 0 70px #ffffff05;pointer-events:none}
+.employer-hero .eyebrow{color:#c5ff64}
+.employer-hero h2{font-size:clamp(34px,4vw,54px);line-height:1.07;letter-spacing:-2px;margin:22px 0 15px}
+.employer-hero h2 em{font-style:normal;color:#c5ff64}
+.employer-hero p{max-width:490px;color:#b7bdb0;line-height:1.75;font-size:14px;margin-bottom:25px}
+.employer-workchat-card{background:#fff;border:1px solid #e5e8e0;border-radius:18px;padding:27px;display:flex;flex-direction:column;align-items:flex-start;min-height:350px}
+.employer-chat-icon,.employer-shortcut-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:12px;background:#edf6df;color:#476c20;font-size:22px;margin-bottom:25px}
+.employer-workchat-card h3{font:700 20px Manrope,sans-serif;letter-spacing:-.5px;margin:14px 0 8px}
+.employer-workchat-card p{color:#777e72;font-size:13px;line-height:1.7}
+.employer-workchat-card .empty-state{margin:12px 0 20px;padding:18px 0;border-top:1px solid #eef0eb;border-bottom:1px solid #eef0eb;width:100%;color:#777e72;font-size:12px}
+.employer-dashboard-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:22px}
+.employer-dashboard-intro h2{font-size:29px;letter-spacing:-1px;margin:8px 0}
+.employer-dashboard-intro p{color:#72786d;font-size:13px;line-height:1.6;margin:0;max-width:540px}
+.employer-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.employer-shortcut{appearance:none;text-align:left;min-height:190px;border:1px solid #e5e8e0;background:#fff;border-radius:14px;padding:22px;display:flex;flex-direction:column;align-items:flex-start;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;color:#171916}
+.employer-shortcut:hover{transform:translateY(-2px);border-color:#c6d8a8;box-shadow:0 12px 30px #1d28120c}
+.employer-shortcut-icon{margin-bottom:17px;width:38px;height:38px;font-size:18px}
+.employer-shortcut strong{font:700 17px Manrope,sans-serif;letter-spacing:-.3px}
+.employer-shortcut small{font-size:12px;color:#7c8277;line-height:1.55;margin-top:7px}
+.employer-shortcut b{font-size:11px;color:#4d7125;margin-top:auto;padding-top:16px}
+.employer-note{margin-top:18px;padding:17px 19px;background:#edf1e8;border-radius:12px;color:#3b4334}
+.employer-note strong{font-size:12px}
+.employer-note p{font-size:11px;line-height:1.7;color:#6b7363;margin:6px 0 0}
+.employer-section-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.employer .employer-funds-summary{padding:24px;border:1px solid #e8eae4;border-radius:12px;margin:20px 0;max-width:420px;background:#f8faf5}
+.employer-funds-summary small{font-size:10px;letter-spacing:1px;font-weight:700;color:#81887a}
+.employer-funds-summary strong{display:block;font:700 32px Manrope;margin:10px 0}
+.employer-funds-summary p,.employer .muted{font-size:12px;line-height:1.7;color:#7a8175}
+.employer-bottom-nav{position:fixed;z-index:25;left:245px;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:10px 18px calc(10px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #e5e8e0;box-shadow:0 -8px 28px #1a21100d}
+.employer-bottom-nav button{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;min-height:55px;border:0;border-radius:10px;background:transparent;color:#73796d;cursor:pointer;font:inherit}
+.employer-bottom-nav button span{font-size:20px;line-height:1}
+.employer-bottom-nav button small{font-size:11px;font-weight:700}
+.employer-bottom-nav button.active,.employer-bottom-nav button:hover{background:#edf6df;color:#456b20}
+.employer .worker-back-button{border-color:#dfe4d7;background:#fff;color:#4e7029}
+@media(max-width:900px){.employer .employer-welcome{grid-template-columns:1fr}.employer-workchat-card{min-height:0}.employer-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+ .app.employer{padding-bottom:80px}
+ .employer .sidebar{position:static;width:auto;height:auto;padding:12px 18px;display:flex;flex-direction:row;align-items:center;gap:15px}
+ .employer .sidebar .brand{font-size:27px}
+ .employer .sidebar nav{display:none}
+ .employer .sidebar .sidebottom{margin:0 0 0 auto}
+ .employer main{margin:0;padding:20px 16px 100px}
+ .employer header{margin-bottom:22px}
+ .employer-bottom-nav{left:0;gap:3px;padding-left:8px;padding-right:8px}
+ .employer-bottom-nav button{min-height:51px}
+ .employer-bottom-nav button small{font-size:10px}
+ .employer-hero{min-height:310px;padding:28px}
+ .employer-hero h2{font-size:39px}
+ .employer-dashboard-intro{align-items:flex-start;flex-direction:column}
+ .employer-dashboard-intro h2{font-size:25px}
+ .employer-shortcuts{gap:9px}
+ .employer-shortcut{min-height:174px;padding:16px}
+ .employer-shortcut strong{font-size:15px}
+ .employer-shortcut small{font-size:11px}
+}
+@media(max-width:380px){.employer-shortcuts{grid-template-columns:1fr}.employer-shortcut{min-height:150px}}
