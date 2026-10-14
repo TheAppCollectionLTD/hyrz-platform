@@ -1505,3 +1505,14 @@ footer .brand span {
  .worker-section-links{gap:6px}
  .worker-section-links button{padding:9px 10px}
 }
+
+.worker-page-header{align-items:flex-start;margin-bottom:24px}
+.worker-signout{flex-shrink:0;white-space:nowrap}
+.worker-greeting-subtitle{margin:9px 0 0;color:#777f70;font-size:14px}
+.worker-back-button{display:inline-flex;align-items:center;gap:6px;margin:0 0 18px;padding:9px 0;font-size:13px;font-weight:700}
+@media(max-width:760px){
+ .worker-page-header{align-items:center;gap:10px}
+ .worker-page-header h1{font-size:25px;letter-spacing:-.7px}
+ .worker-greeting-subtitle{font-size:12px;max-width:250px}
+ .worker-signout{padding:9px 11px;font-size:12px}
+}
