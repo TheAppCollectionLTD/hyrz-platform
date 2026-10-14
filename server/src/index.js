@@ -305,6 +305,42 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
 }));
 
 app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,status,created_at FROM users WHERE id=?',[req.user.id]);res.json({user:u[0]});}));
+app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
+  const firstName = String(req.body.firstName || '').trim();
+  const lastName = String(req.body.lastName || '').trim();
+  const phone = String(req.body.phone || '').trim();
+  if (firstName.length > 100 || lastName.length > 100 || phone.length > 40) {
+    return res.status(400).json({ error: 'Name or phone number is too long.' });
+  }
+  await db.execute(
+    'UPDATE users SET first_name=?, last_name=?, phone=? WHERE id=?',
+    [firstName || null, lastName || null, phone || null, req.user.id]
+  );
+  const [rows] = await db.execute(
+    'SELECT id,email,role,admin_tier,first_name,last_name,phone,status,created_at FROM users WHERE id=?',
+    [req.user.id]
+  );
+  return res.json({ user: rows[0] });
+}));
+
+app.post('/api/auth/change-password', auth, asyncRoute(async (req, res) => {
+  const currentPassword = typeof req.body.currentPassword === 'string' ? req.body.currentPassword : '';
+  const newPassword = typeof req.body.newPassword === 'string' ? req.body.newPassword : '';
+  if (newPassword.length < 12) {
+    return res.status(400).json({ error: 'Your new password must be at least 12 characters long.' });
+  }
+  if (currentPassword === newPassword) {
+    return res.status(400).json({ error: 'Your new password must be different from your current password.' });
+  }
+  const [rows] = await db.execute('SELECT password_hash FROM users WHERE id=? LIMIT 1', [req.user.id]);
+  if (!rows.length || !(await bcrypt.compare(currentPassword, rows[0].password_hash))) {
+    return res.status(400).json({ error: 'Your current password is incorrect.' });
+  }
+  const passwordHash = await bcrypt.hash(newPassword, 12);
+  await db.execute('UPDATE users SET password_hash=? WHERE id=?', [passwordHash, req.user.id]);
+  return res.json({ ok: true, message: 'Password changed successfully.' });
+}));
+
 app.get('/api/onboarding/status', auth, asyncRoute(async (req, res) => {
   const onboarding = {
     role: req.user.role,
