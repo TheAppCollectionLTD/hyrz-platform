@@ -209,7 +209,7 @@ async function authenticate(register) {
 <button className="textbutton" onClick={()=>setPage('home')}>← Back to home</button>
 <h2>Welcome back</h2><p>Sign in to your hyrz account.</p>
 <form onSubmit={e=>{e.preventDefault();authenticate(false)}}>
-<label>Email or administrator account name<input type="text" required autoComplete="username" value={email} onChange={e=>setEmail(e.target.value)}/></label>
+<label>Email<input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)}/></label>
 <label>Password<input type="password" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/></label>
 <button className="primary" disabled={busy}>Sign in</button></form>
 </section>}
