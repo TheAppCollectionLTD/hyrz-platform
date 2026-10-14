@@ -1516,3 +1516,16 @@ footer .brand span {
  .worker-greeting-subtitle{font-size:12px;max-width:250px}
  .worker-signout{padding:9px 11px;font-size:12px}
 }
+
+/* Keep the worker footer branding at the bottom of the page */
+.app.worker{min-height:100vh;display:flex;flex-direction:column}
+.worker main{min-height:100vh;display:flex;flex-direction:column;flex:1}
+.worker main>footer{margin-top:auto;padding-top:36px;padding-bottom:8px}
+.worker-subsection-toolbar{display:flex;align-items:center;margin:-18px 0 18px}
+.worker-back-button{display:inline-flex;align-items:center;justify-content:flex-start;gap:7px;margin:0;padding:9px 12px;border:1px solid #353a30;border-radius:8px;background:#171a15;color:#c5ff64;cursor:pointer;font:600 13px 'DM Sans',sans-serif}
+.worker-back-button:hover{background:#252a20}
+@media(max-width:760px){
+ .worker main{min-height:calc(100vh - 72px - 76px)}
+ .worker main>footer{padding-top:28px;padding-bottom:8px}
+ .worker-subsection-toolbar{margin:-8px 0 16px}
+}
