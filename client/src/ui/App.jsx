@@ -106,8 +106,8 @@ async function authenticate(register) {
  async function reviewVerification(account,check,status){const reason=window.prompt(`Reason for setting ${check.replace('_',' ')} to ${status} for ${account.email}:`);if(reason===null)return;if(reason.trim().length<3){setError('Please enter a reason of at least 3 characters.');return;}await action(async()=>{await request(`/admin/verification/${account.role}/${account.userId}`,{method:'PATCH',body:JSON.stringify({check,status,reason:reason.trim()})});setNotice('Verification status updated and recorded.');await load();})}
  async function logout(){localStorage.removeItem('hyrz_token');setUser(null);setPage('home')}
  const visibleShifts=shifts.filter(s=>`${s.title} ${s.location} ${s.business_name}`.toLowerCase().includes(search.toLowerCase()));
- return <div className={`${user?.role==='worker'?'app worker':'app'} ${!user&&['home','register','login','chooseRole'].includes(page)?'auth-layout':''}`}><aside className="sidebar"><a className="brand" onClick={()=>setPage('home')}>hyrz</a><p className="tag">Flexible Work.<br/>Reliable Staffing.</p>{user&&<nav>{(user.role==='admin'?[['admin','Dashboard'],['account','My account']]:[['dashboard','Dashboard'],['account','My account']]).map(([id,label])=><button key={id} className={page===id?'selected':''} onClick={()=>setPage(id)}>{label}</button>)}</nav>}<div className="sidebottom"><small className="company-trademark">@TheAppCollectionLTD</small>{user?<><small>{user.email}</small><button onClick={logout}>Sign out</button></>:<button onClick={()=>setPage('login')}>Sign in</button>}</div></aside>
- <main><header><div><span className="eyebrow">UK FLEXIBLE STAFFING</span><h1>{!user?'Find work that works for you':page==='jobs'?'Find shifts':page==='post'?'Publish a shift':page==='admin'?'Dashboard':page==='account'?'My account':page[0].toUpperCase()+page.slice(1)}</h1></div>{user&&<div className="userpill">{user.first_name||user.role} · {user.role}</div>}</header>
+ return <div className={`${user?.role==='worker'?'app worker':'app'} ${!user&&['home','register','login','chooseRole'].includes(page)?'auth-layout':''}`}><aside className="sidebar"><a className="brand" onClick={()=>setPage('home')}>hyrz</a>{!user&&<p className="tag">Flexible Work.<br/>Reliable Staffing.</p>}{user&&<nav>{(user.role==='admin'?[['admin','Dashboard'],['account','My account']]:[['dashboard','Dashboard'],['account','My account']]).map(([id,label])=><button key={id} className={page===id?'selected':''} onClick={()=>setPage(id)}>{label}</button>)}</nav>}<div className="sidebottom"><small className="company-trademark">@TheAppCollectionLTD</small>{user?<><small>{user.email}</small><button onClick={logout}>Sign out</button></>:<button onClick={()=>setPage('login')}>Sign in</button>}</div></aside>
+ <main><header><div>{!user&&<span className="eyebrow">UK FLEXIBLE STAFFING</span>}<h1>{!user?'Find work that works for you':page==='account'?`Hello, ${user.first_name||'Simson'}`:page==='jobs'?'Find shifts':page==='post'?'Publish a shift':page==='admin'?'Dashboard':page[0].toUpperCase()+page.slice(1)}</h1></div></header>
  {error&&<div className="alert error">{error}</div>}{notice&&<div className="alert success">{notice}</div>}
  {user&&user.role!=='admin'&&(!onboarding||!onboarding.canAccessPlatform)&&<section className="panel onboarding-panel">
     <span className="eyebrow">ACCOUNT VERIFICATION</span>
@@ -307,8 +307,9 @@ async function authenticate(register) {
  </main></div>
 }
 function AccountSettings({user,setUser,action,busy,setNotice}) {
- const [firstName,setFirstName]=useState(user.first_name||'');
- const [lastName,setLastName]=useState(user.last_name||'');
+ const [firstName,setFirstName]=useState(user.first_name||(user.role==='admin'?'Simson':''));
+ const [lastName,setLastName]=useState(user.last_name||(user.role==='admin'?'Hannawell':''));
+ const [showPasswordEditor,setShowPasswordEditor]=useState(false);
  const [phone,setPhone]=useState(user.phone||'');
  const [currentPassword,setCurrentPassword]=useState('');
  const [newPassword,setNewPassword]=useState('');
@@ -332,7 +333,6 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
   });
  }
  return <section className="panel account-settings">
-  <span className="eyebrow">ACCOUNT SETTINGS</span>
   <h2>My profile</h2>
   <p>Manage your profile photo and the personal details connected to your hyrz account.</p>
   <form className="admin-message-form" onSubmit={saveProfile}>
@@ -355,7 +355,8 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
    <button className="primary" disabled={busy}>Save details</button>
   </form>
   <hr/>
-  <h2>Change password</h2>
+  <div className="account-password-heading"><h2>Password</h2><button type="button" className="password-edit-button" aria-label="Edit password" title="Edit password" onClick={()=>setShowPasswordEditor(v=>!v)}>{showPasswordEditor?'Cancel':'✎ Edit'}</button></div>
+  {showPasswordEditor&&<>
   <p>Choose a unique password of at least 12 characters. You'll need your current password to confirm the change.</p>
   <form className="admin-message-form" onSubmit={changePassword}>
    <label>Current password<input type="password" autoComplete="current-password" required value={currentPassword} onChange={e=>setCurrentPassword(e.target.value)}/></label>
@@ -363,6 +364,7 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
    <label>Confirm new password<input type="password" autoComplete="new-password" minLength="12" required value={confirmNewPassword} onChange={e=>setConfirmNewPassword(e.target.value)}/></label>
    <button className="secondary" disabled={busy}>Change password</button>
   </form>
+  </>}
  </section>;
 }
 
