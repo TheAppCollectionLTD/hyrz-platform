@@ -1529,3 +1529,6 @@ footer .brand span {
  .worker main>footer{padding-top:28px;padding-bottom:8px}
  .worker-subsection-toolbar{margin:-8px 0 16px}
 }
+
+/* Worker app: branding footer removed at the user's request */
+.worker main>footer{display:none!important}
