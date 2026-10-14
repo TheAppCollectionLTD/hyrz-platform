@@ -33,6 +33,7 @@ const ensureUniqueEmails = (async () => {
     console.error('Email uniqueness migration paused: existing accounts share an email address after normalization. Resolve duplicates before enabling the database constraint.');
     return false;
   }
+  await db.query('UPDATE users SET email=LOWER(TRIM(email)) WHERE email<>LOWER(TRIM(email))');
   try {
     await db.query("ALTER TABLE users ADD COLUMN email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED");
   } catch (error) {
