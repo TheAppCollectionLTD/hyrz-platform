@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  email VARCHAR(254) NOT NULL UNIQUE,
+ email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED UNIQUE,
  password_hash VARCHAR(255) NOT NULL,
  role ENUM('worker','employer','admin') NOT NULL DEFAULT 'worker',
  admin_tier TINYINT NULL,
