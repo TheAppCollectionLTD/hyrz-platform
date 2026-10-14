@@ -309,17 +309,34 @@ async function authenticate(register) {
 function AccountSettings({user,setUser,action,busy,setNotice}) {
  const [firstName,setFirstName]=useState(user.first_name||(user.role==='admin'?'Simson':''));
  const [lastName,setLastName]=useState(user.last_name||(user.role==='admin'?'Hannawell':''));
+ const [email,setEmail]=useState(user.email||'');
+ const [showDetailsEditor,setShowDetailsEditor]=useState(false);
  const [showPasswordEditor,setShowPasswordEditor]=useState(false);
  const [currentPassword,setCurrentPassword]=useState('');
  const [newPassword,setNewPassword]=useState('');
  const [confirmNewPassword,setConfirmNewPassword]=useState('');
  const [profilePicture,setProfilePicture]=useState(user.profile_picture||'');
- async function saveProfile(e) {
+ async function saveProfilePicture(nextPicture) {
+  await action(async()=>{
+   const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({profilePicture:nextPicture})});
+   setUser(result.user);
+   setProfilePicture(result.user.profile_picture||'');
+   setNotice(nextPicture?'Your profile photo has been saved.':'Your profile photo has been removed.');
+  });
+ }
+ async function requestDetailsChange(e) {
   e.preventDefault();
   await action(async()=>{
-   const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({profilePicture})});
-   setUser(result.user);
-   setNotice('Your account details have been updated.');
+   await request('/messages',{method:'POST',body:JSON.stringify({
+    category:'enquiries',
+    subject:'Request to change account details',
+    body:'I would like hyrz support to help me change my account details. Current name: '+(user.first_name||'')+' '+(user.last_name||'')+'; current email: '+(user.email||'')+'. Requested name: '+firstName.trim()+' '+lastName.trim()+'; requested email: '+email.trim()+'. Please contact me to verify and process this request.'
+   })});
+   setShowDetailsEditor(false);
+   setFirstName(user.first_name||(user.role==='admin'?'Simson':''));
+   setLastName(user.last_name||(user.role==='admin'?'Hannawell':''));
+   setEmail(user.email||'');
+   setNotice("Your request has been sent. hyrz support will contact you about changing your name or email.");
   });
  }
  async function changePassword(e) {
@@ -329,27 +346,30 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
    await request('/auth/change-password',{method:'POST',body:JSON.stringify({currentPassword,newPassword})});
    setCurrentPassword('');setNewPassword('');setConfirmNewPassword('');
    setNotice('Your password has been changed successfully.');
+   setShowPasswordEditor(false);
   });
  }
  return <section className="panel account-settings">
   <h2>My profile</h2>
-  <p>Your name and account email are fixed. You can update your profile photo or change your password below.</p>
-  <form className="admin-message-form" onSubmit={saveProfile}>
-   <div className="profile-picture-editor">
-    {profilePicture?<img className="profile-picture-preview" src={profilePicture} alt="Your profile" />:<div className="profile-picture-placeholder" aria-label="No profile photo"> {(firstName||user.email||'U').slice(0,1).toUpperCase()} </div>}
-    <div><label>Profile picture<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e=>{
-      const file=e.target.files?.[0];if(!file)return;
-      if(!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)){e.target.value='';return;}
-      if(file.size>400*1024){e.target.value='';window.alert('Choose an image smaller than 400 KB.');return;}
-      const reader=new FileReader();reader.onload=()=>setProfilePicture(String(reader.result||''));reader.readAsDataURL(file);
-    }}/></label>
-    <small>PNG, JPG, WEBP or GIF. Maximum 400 KB.</small>
-    {profilePicture&&<button type="button" className="secondary" onClick={()=>setProfilePicture('')}>Remove picture</button>}</div>
-   </div>
-   <label>Email address<input type="email" value={user.email||''} readOnly disabled/></label>
-   <label>First name<input type="text" value={user.first_name||(user.role==='admin'?'Simson':'')} readOnly aria-readonly="true"/></label>
-   <label>Last name<input type="text" value={user.last_name||(user.role==='admin'?'Hannawell':'')} readOnly aria-readonly="true"/></label>
-   <button className="primary" disabled={busy}>Save profile photo</button>
+  <div className="profile-picture-editor">
+   {profilePicture?<img className="profile-picture-preview" src={profilePicture} alt="Your profile" />:<div className="profile-picture-placeholder" aria-label="No profile photo"> {(firstName||user.email||'U').slice(0,1).toUpperCase()} </div>}
+   <div><label>Profile picture<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e=>{
+     const file=e.target.files?.[0];if(!file)return;
+     if(!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)){e.target.value='';window.alert('Choose a PNG, JPG, WEBP or GIF image.');return;}
+     if(file.size>400*1024){e.target.value='';window.alert('Choose an image smaller than 400 KB.');return;}
+     const reader=new FileReader();reader.onload=()=>{const image=String(reader.result||'');if(image)saveProfilePicture(image);};reader.readAsDataURL(file);
+   }}/></label>
+   <small>PNG, JPG, WEBP or GIF. Maximum 400 KB. Your photo saves automatically after upload.</small>
+   {profilePicture&&<button type="button" className="secondary" disabled={busy} onClick={()=>saveProfilePicture('')}>Remove picture</button>}</div>
+  </div>
+  <hr/>
+  <div className="account-password-heading"><h2>Name and email</h2><button type="button" className="password-edit-button" onClick={()=>{if(showDetailsEditor){setFirstName(user.first_name||(user.role==='admin'?'Simson':''));setLastName(user.last_name||(user.role==='admin'?'Hannawell':''));setEmail(user.email||'');}setShowDetailsEditor(v=>!v)}}>{showDetailsEditor?'Cancel':'✎ Edit'}</button></div>
+  <p>Need to change your name or email? Submit a request and hyrz support will contact you.</p>
+  <form className="admin-message-form" onSubmit={requestDetailsChange}>
+   <label>First name<input type="text" maxLength="100" value={firstName} readOnly={!showDetailsEditor} onChange={e=>setFirstName(e.target.value)} required/></label>
+   <label>Last name<input type="text" maxLength="100" value={lastName} readOnly={!showDetailsEditor} onChange={e=>setLastName(e.target.value)} required/></label>
+   <label>Email address<input type="email" maxLength="254" value={email} readOnly={!showDetailsEditor} onChange={e=>setEmail(e.target.value)} required/></label>
+   {showDetailsEditor&&<button className="primary" disabled={busy}>Confirm request</button>}
   </form>
   <hr/>
   <div className="account-password-heading"><h2>Password</h2><button type="button" className="password-edit-button" aria-label="Edit password" title="Edit password" onClick={()=>setShowPasswordEditor(v=>!v)}>{showPasswordEditor?'Cancel':'✎ Edit'}</button></div>
