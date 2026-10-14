@@ -403,7 +403,7 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
  const [recipientId,setRecipientId]=useState('');
  const [category,setCategory]=useState('enquiries');
  const [invoiceFilter,setInvoiceFilter]=useState('all');
- const [newAdminEmail,setNewAdminEmail]=useState('');const [newAdminPassword,setNewAdminPassword]=useState('');const [newAdminTier,setNewAdminTier]=useState('3');
+ const [newAdminEmail,setNewAdminEmail]=useState('');const [newAdminUsername,setNewAdminUsername]=useState('');const [newAdminPassword,setNewAdminPassword]=useState('');const [newAdminTier,setNewAdminTier]=useState('3');
  const [currentPassword,setCurrentPassword]=useState('');const [newPassword,setNewPassword]=useState('');
  const [disputeResolution,setDisputeResolution]=useState({});
  const sections=Number(user.admin_tier)===1?['INBOX','USERS','FINANCIAL REPORTS','INVOICES','ADMIN ACTIONS','CHECKOUT DISPUTES']:['INBOX','USERS','INVOICES','ADMIN ACTIONS','CHECKOUT DISPUTES'];
