@@ -25,12 +25,26 @@ app.use(cors({
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
-const ensureProfilePictureColumn = db.query('ALTER TABLE users ADD COLUMN profile_picture LONGTEXT NULL').catch(error => { if (error.code !== 'ER_DUP_FIELDNAME') { console.error('Could not initialise profile pictures:', error.message); throw error; } });
-const ensureUserAddressColumns = Promise.all([
-  db.query('ALTER TABLE users ADD COLUMN address_line_1 VARCHAR(255) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-  db.query('ALTER TABLE users ADD COLUMN address_city VARCHAR(120) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-  db.query('ALTER TABLE users ADD COLUMN address_postcode VARCHAR(20) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
-]).catch(error=>{console.error('Could not initialise user address fields:',error.message);throw error;});
+async function runSchemaChange(sql, label) {
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    try { await db.query(sql); return; }
+    catch (error) {
+      if (error.code === 'ER_DUP_FIELDNAME') return;
+      if ((error.code === 'ER_LOCK_DEADLOCK' || error.code === 'ER_LOCK_WAIT_TIMEOUT') && attempt < 5) {
+        await new Promise(resolve => setTimeout(resolve, attempt * 300));
+        continue;
+      }
+      console.error('Could not initialise ' + label + ':', error.message);
+      throw error;
+    }
+  }
+}
+const ensureProfilePictureColumn = runSchemaChange('ALTER TABLE users ADD COLUMN profile_picture LONGTEXT NULL','profile pictures');
+const ensureUserAddressColumns = (async()=>{
+  await runSchemaChange('ALTER TABLE users ADD COLUMN address_line_1 VARCHAR(255) NULL','user address line');
+  await runSchemaChange('ALTER TABLE users ADD COLUMN address_city VARCHAR(120) NULL','user address city');
+  await runSchemaChange('ALTER TABLE users ADD COLUMN address_postcode VARCHAR(20) NULL','user address postcode');
+})().catch(error=>{console.error('Could not initialise user address fields:',error.message);throw error;});
 const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
 const ensureUniqueEmails = (async () => {
   const [duplicates] = await db.query("SELECT LOWER(TRIM(email)) AS normalized_email, COUNT(*) AS account_count FROM users GROUP BY LOWER(TRIM(email)) HAVING COUNT(*) > 1 LIMIT 1");
