@@ -1601,3 +1601,8 @@ footer .brand span {
  .employer-shortcut small{font-size:11px}
 }
 @media(max-width:380px){.employer-shortcuts{grid-template-columns:1fr}.employer-shortcut{min-height:150px}}
+
+/* Employer sign-out stays visible after removing the sidebar. */
+.employer-signout{flex-shrink:0;white-space:nowrap;align-self:flex-start;margin-left:auto;border:1px solid #d9ded2;background:#fff;color:#252820;border-radius:8px;padding:10px 14px;font:600 12px 'DM Sans',sans-serif;cursor:pointer}
+.employer-signout:hover{background:#edf6df;border-color:#c5d9a7}
+@media(max-width:760px){.employer-signout{padding:9px 11px;font-size:12px}}
