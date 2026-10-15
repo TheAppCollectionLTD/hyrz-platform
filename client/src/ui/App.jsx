@@ -16,7 +16,8 @@ export default function App(){
  useEffect(() => {
    if (!rolePickerOpen && !shiftTypePickerOpen) return;
    function closeOnOutsidePointer(event) {
-     if (!event.target.closest('.role-multi-filter')) setRolePickerOpen(false);\n     if (!event.target.closest('.shift-type-multi-filter')) setShiftTypePickerOpen(false);
+     if (!event.target.closest('.role-multi-filter')) setRolePickerOpen(false);
+     if (!event.target.closest('.shift-type-multi-filter')) setShiftTypePickerOpen(false);
    }
    function closeOnEscape(event) {
      if (event.key === 'Escape') { setRolePickerOpen(false); setShiftTypePickerOpen(false); }
