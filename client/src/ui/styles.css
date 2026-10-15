@@ -2235,3 +2235,17 @@ footer .brand span {
 .worker-inbox-compose .admin-message-form>h2,.worker-inbox-compose .admin-message-form>p,.worker-inbox-compose .admin-message-form>h3,.worker-inbox-compose .admin-message-form>div{display:none}
 .worker-inbox-compose .admin-message-form form{margin-top:0}
 @media(max-width:760px){.worker-inbox-panel{padding:18px}.worker-inbox-message-top{align-items:flex-start;flex-direction:column;gap:4px}}
+
+/* Account profile: editable contact details and read-only verification records. */
+.account-inline-editor{display:grid;gap:13px;padding:16px;margin:10px 0 18px;border:1px solid #dfe4d8;border-radius:10px;background:rgba(255,255,255,.025)}
+.account-inline-editor label{display:grid;gap:6px}
+.account-inline-editor small{font-size:11px;color:#858d7d}
+.account-readonly-value{margin:8px 0 18px;color:#c7cdc0;font-size:13px;overflow-wrap:anywhere}
+.account-readonly-value p{margin:4px 0}
+.account-verification-details{display:grid;gap:0}
+.account-verification-details>div{display:grid;grid-template-columns:minmax(180px,1fr) minmax(0,1.4fr);gap:14px;padding:14px 0;border-bottom:1px solid #30352b}
+.account-verification-details>div:last-child{border-bottom:0}
+.account-verification-details strong{font-size:12px}
+.account-verification-details span{font-size:12px;color:#a9afa1;overflow-wrap:anywhere;text-transform:capitalize}
+.account-settings .account-password-heading h3{margin:0;font-size:15px}
+@media(max-width:600px){.account-verification-details>div{grid-template-columns:1fr;gap:5px}}
