@@ -1534,6 +1534,10 @@ footer .brand span {
 .worker main>footer{display:none!important}
 
 
+
+/* Employers use bottom navigation only; never show the legacy sidebar links. */
+.app.employer .sidebar nav{display:none!important}
+
 /* Employer workspace: calmer business-first layout */
 .app.employer{min-height:100vh;background:#f5f6f3;color:#171916;padding-bottom:92px}
 .employer main{padding-bottom:110px}
