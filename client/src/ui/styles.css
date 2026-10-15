@@ -2095,3 +2095,23 @@ footer .brand span {
  .app.worker .shift-date-range-inputs{grid-template-columns:repeat(2,minmax(0,1fr))}
  .app.worker .shift-date-range-inputs input{font-size:11px}
 }
+
+
+/* Final alignment pass: explicitly place the second row and align its controls. */
+@media(min-width:761px){
+ .app.worker .shift-filters{grid-template-rows:auto auto;align-items:start;}
+ .app.worker .shift-filters>.shift-date-range{grid-column:1;grid-row:2;align-self:start;}
+ .app.worker .shift-filters>.role-multi-filter{grid-column:2;grid-row:2;align-self:start;}
+ .app.worker .shift-filters>label:last-child{grid-column:3;grid-row:2;align-self:start;}
+ .app.worker .shift-date-range-label{height:13px;line-height:13px;}
+ .app.worker .shift-date-range-inputs{align-items:start;}
+ .app.worker .shift-date-range-inputs label{gap:7px;}
+ .app.worker .shift-date-range-inputs input{box-sizing:border-box;height:44px;min-height:44px;}
+ .app.worker .shift-filters>.role-multi-filter .role-multi-filter-heading>span,
+ .app.worker .shift-filters>label:last-child{line-height:13px;}
+}
+@media(max-width:760px){
+ .app.worker .shift-filters>.shift-date-range,
+ .app.worker .shift-filters>.role-multi-filter,
+ .app.worker .shift-filters>label:last-child{grid-column:auto;grid-row:auto;}
+}
