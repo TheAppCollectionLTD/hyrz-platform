@@ -2249,3 +2249,15 @@ footer .brand span {
 .account-verification-details span{font-size:12px;color:#a9afa1;overflow-wrap:anywhere;text-transform:capitalize}
 .account-settings .account-password-heading h3{margin:0;font-size:15px}
 @media(max-width:600px){.account-verification-details>div{grid-template-columns:1fr;gap:5px}}
+
+/* Widen the worker inbox and its compose form to use the available content area. */
+.worker-inbox-panel{width:100%;max-width:none;box-sizing:border-box}
+.worker-inbox-heading{width:100%}
+.worker-inbox-compose{width:100%;box-sizing:border-box}
+.worker-inbox-compose .admin-message-form{width:100%;max-width:none;box-sizing:border-box}
+.worker-inbox-compose .admin-message-form form{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.worker-inbox-compose .admin-message-form form label{min-width:0}
+.worker-inbox-compose .admin-message-form form label:nth-of-type(3){grid-column:1/-1}
+.worker-inbox-compose .admin-message-form form textarea{min-height:140px;width:100%;box-sizing:border-box}
+.worker-inbox-compose .admin-message-form form button{justify-self:start}
+@media(max-width:650px){.worker-inbox-compose .admin-message-form form{grid-template-columns:minmax(0,1fr)}.worker-inbox-compose .admin-message-form form label:nth-of-type(3){grid-column:auto}}
