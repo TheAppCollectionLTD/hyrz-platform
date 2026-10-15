@@ -1665,8 +1665,8 @@ footer .brand span {
 .rolling-calendar-heading span{font-size:11px;color:#767d6f}
 .calendar-clear{border:1px solid #dfe4d7;background:#fff;border-radius:8px;padding:8px 12px;font:600 11px 'DM Sans',sans-serif;color:#3e5429;cursor:pointer}
 .calendar-clear:disabled{opacity:.4;cursor:default}
-.rolling-calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
-.rolling-calendar-day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:76px;padding:8px 3px;border:1px solid #e5e8df;border-radius:9px;background:#fff;color:#33392e;cursor:pointer}
+.rolling-calendar-days{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:2px 2px 12px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#cbd5bd transparent;-webkit-overflow-scrolling:touch}
+.rolling-calendar-day{display:flex;flex:0 0 66px;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:66px;min-height:82px;padding:9px 5px;border:1px solid #e5e8df;border-radius:11px;background:#fff;color:#33392e;cursor:pointer;scroll-snap-align:start}
 .rolling-calendar-day small{font-size:10px;font-weight:700;text-transform:uppercase;color:#858b7e}
 .rolling-calendar-day strong{font:800 20px Manrope,sans-serif;line-height:1.1}
 .rolling-calendar-day>span{font-size:10px;color:#858b7e}
@@ -1674,4 +1674,4 @@ footer .brand span {
 .rolling-calendar-day.selected{background:#b5f34a;border-color:#8bbf39;color:#18200e}
 .rolling-calendar-day.selected small,.rolling-calendar-day.selected>span{color:#354c20}
 .rolling-calendar-day:focus-visible,.calendar-clear:focus-visible{outline:2px solid #638b2f;outline-offset:2px}
-@media(max-width:520px){.rolling-shift-calendar{padding:10px}.rolling-calendar-days{gap:5px}.rolling-calendar-day{min-height:68px}.rolling-calendar-day small,.rolling-calendar-day>span{font-size:9px}.rolling-calendar-day strong{font-size:17px}}
+@media(max-width:520px){.rolling-shift-calendar{padding:12px}.rolling-calendar-days{gap:7px}.rolling-calendar-day{flex-basis:60px;min-width:60px;min-height:76px}.rolling-calendar-day small,.rolling-calendar-day>span{font-size:9px}.rolling-calendar-day strong{font-size:18px}}
