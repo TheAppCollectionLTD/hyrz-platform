@@ -1798,3 +1798,126 @@ footer .brand span {
 .role-picker-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid #30352b;padding-top:9px;color:#a1a799;font-size:10px}
 .role-picker-footer button{border:0;border-radius:6px;background:#b5f34a;color:#151a0d;padding:8px 12px;font:700 11px 'DM Sans',sans-serif;cursor:pointer}
 @media(max-width:760px){.role-picker-panel{max-height:390px}.role-picker-options{max-height:250px}}
+
+
+/* Tidy, balanced worker filters and a compact role-picker popover. */
+.app.worker .shift-filters{
+  position:relative;
+  box-sizing:border-box;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:start;
+  gap:18px 16px;
+  padding:22px;
+  margin:0 0 22px;
+  border:1px solid #343a2d;
+  border-radius:14px;
+  background:#171a14;
+  box-shadow:0 8px 24px #00000012;
+}
+.app.worker .shift-filters>label{
+  min-width:0;
+  align-self:start;
+  gap:8px;
+  color:#d5dacd;
+  font-size:11px;
+  letter-spacing:.1px;
+}
+.app.worker .shift-filters input,
+.app.worker .shift-filters select{
+  min-height:44px;
+  border:1px solid #d9dfd0;
+  border-radius:9px;
+  padding:10px 12px;
+  box-shadow:0 1px 2px #00000008;
+}
+.app.worker .shift-filters input:focus,
+.app.worker .shift-filters select:focus,
+.app.worker .role-picker-panel>input[type="search"]:focus{
+  outline:2px solid #b5f34a;
+  outline-offset:2px;
+  border-color:#8bbf39;
+}
+.app.worker .role-multi-filter{
+  z-index:5;
+  gap:8px;
+  margin:0;
+  align-self:start;
+}
+.app.worker .role-multi-filter-heading{
+  min-height:20px;
+  color:#d5dacd;
+}
+.app.worker .role-picker-toggle{
+  min-height:44px;
+  min-width:142px;
+  border-color:#d9dfd0;
+  border-radius:9px;
+  padding:10px 12px;
+  font-weight:600;
+}
+.app.worker .role-filter-hint{
+  color:#aeb5a4;
+  font-size:10px;
+}
+.app.worker .role-clear-button{
+  color:#c5f777;
+  font-size:11px;
+}
+.app.worker .role-picker-panel{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  width:min(380px,calc(100vw - 64px));
+  max-width:100%;
+  box-sizing:border-box;
+  z-index:30;
+  padding:12px;
+  border:1px solid #454b3e;
+  border-radius:12px;
+  background:#11140f;
+  box-shadow:0 16px 38px #0008;
+}
+.app.worker .role-picker-options{
+  max-height:260px;
+  scrollbar-width:thin;
+  scrollbar-color:#59634d transparent;
+}
+.app.worker .role-picker-group legend{
+  color:#c5f777;
+  line-height:1.4;
+}
+.app.worker .role-picker-option{
+  border-radius:6px;
+  padding:7px 5px;
+}
+.app.worker .role-picker-option:hover{
+  background:#24291f;
+}
+.app.worker .role-picker-footer{
+  padding-top:11px;
+}
+.app.worker .shift-filters>label:last-child{
+  grid-column:auto;
+}
+@media(max-width:760px){
+  .app.worker .shift-filters{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:15px 12px;
+    padding:16px;
+  }
+  .app.worker .role-multi-filter{grid-column:1/-1}
+  .app.worker .role-picker-panel{
+    width:min(420px,calc(100vw - 64px));
+  }
+}
+@media(max-width:460px){
+  .app.worker .shift-filters{
+    grid-template-columns:minmax(0,1fr);
+    gap:14px;
+    padding:14px;
+  }
+  .app.worker .role-multi-filter{grid-column:auto}
+  .app.worker .role-picker-panel{
+    width:calc(100vw - 60px);
+  }
+}
