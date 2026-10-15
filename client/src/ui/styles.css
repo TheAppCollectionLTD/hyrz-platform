@@ -2214,3 +2214,24 @@ footer .brand span {
 .worker-dashboard-stat:hover{border-color:#a2df43;transform:translateY(-1px)}
 .worker-dashboard-stat span{display:block;margin-top:10px;font-size:11px;font-weight:700;color:#58634b}
 @media(max-width:760px){.stats.worker-dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.worker-dashboard-stat{padding:13px 10px}.worker-dashboard-stat strong{font-size:23px}.worker-dashboard-stat small{font-size:8px;letter-spacing:.4px}.worker-dashboard-stat span{font-size:10px}}
+
+/* Worker inbox: conversation list first, with a compact compose control. */
+.worker-inbox-panel{max-width:900px;margin-left:auto;margin-right:auto}
+.worker-inbox-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:22px}
+.worker-inbox-heading h2{margin:10px 0 5px}
+.worker-inbox-heading p{margin:0;color:#a9afa1;font-size:13px}
+.compose-message-button{width:42px;height:42px;flex:0 0 42px;border:0;border-radius:50%;display:grid;place-items:center;background:#b5f34a;color:#11150c;font-size:22px;font-weight:700;cursor:pointer}
+.compose-message-button:hover{background:#c8ff70}
+.worker-inbox-messages{display:grid;gap:0}
+.worker-inbox-message{padding:17px 2px;border-top:1px solid #30352b}
+.worker-inbox-message-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.worker-inbox-message-top strong{font-size:14px;color:#f2f4ee}
+.worker-inbox-message-top small,.worker-inbox-message>small{font-size:11px;color:#92998a}
+.worker-inbox-message p{margin:10px 0;color:#d3d7ce;font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.worker-inbox-compose{margin:0 0 22px;padding:16px;border:1px solid #30352b;border-radius:12px}
+.worker-inbox-compose-heading h3{margin:0 0 5px}
+.worker-inbox-compose-heading p{margin:0 0 14px;color:#a9afa1;font-size:12px}
+.worker-inbox-compose .admin-message-form{padding:0;border:0;background:transparent;box-shadow:none}
+.worker-inbox-compose .admin-message-form>h2,.worker-inbox-compose .admin-message-form>p,.worker-inbox-compose .admin-message-form>h3,.worker-inbox-compose .admin-message-form>div{display:none}
+.worker-inbox-compose .admin-message-form form{margin-top:0}
+@media(max-width:760px){.worker-inbox-panel{padding:18px}.worker-inbox-message-top{align-items:flex-start;flex-direction:column;gap:4px}}
