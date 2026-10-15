@@ -1675,3 +1675,22 @@ footer .brand span {
 .rolling-calendar-day.selected small,.rolling-calendar-day.selected>span{color:#354c20}
 .rolling-calendar-day:focus-visible,.calendar-clear:focus-visible{outline:2px solid #638b2f;outline-offset:2px}
 @media(max-width:520px){.rolling-shift-calendar{padding:12px}.rolling-calendar-days{gap:7px}.rolling-calendar-day{flex-basis:60px;min-width:60px;min-height:76px}.rolling-calendar-day small,.rolling-calendar-day>span{font-size:9px}.rolling-calendar-day strong{font-size:18px}}
+
+
+/* Refine Find shifts alignment and keep the date strip compact and current-day-first. */
+.app.worker main{box-sizing:border-box;width:calc(100% - 190px);margin-left:190px;padding-left:clamp(18px,3vw,42px);padding-right:clamp(18px,3vw,42px)}
+.app.worker main>header,.app.worker main>.alert,.app.worker main>.find-shifts-panel{box-sizing:border-box;width:100%;max-width:1120px;margin-left:auto;margin-right:auto}
+.app.worker main>.find-shifts-panel{align-self:center}
+.app.worker .find-shifts-heading{display:block;width:100%;margin-bottom:14px}
+.app.worker .rolling-shift-calendar{box-sizing:border-box;width:100%;max-width:860px;margin:0 auto 22px;padding:12px 14px}
+.app.worker .rolling-calendar-heading{margin-bottom:9px}
+.app.worker .rolling-calendar-days{gap:6px;padding-bottom:8px}
+.app.worker .rolling-calendar-day{flex:0 0 52px;min-width:52px;min-height:66px;padding:7px 3px;gap:3px;border-radius:8px}
+.app.worker .rolling-calendar-day strong{font-size:17px}
+.app.worker .rolling-calendar-day small,.app.worker .rolling-calendar-day>span{font-size:9px}
+@media(max-width:760px){
+ .app.worker main{width:100%;margin-left:0;padding-left:14px;padding-right:14px}
+ .app.worker main>.find-shifts-panel{padding:18px 14px}
+ .app.worker .rolling-shift-calendar{padding:10px}
+ .app.worker .rolling-calendar-day{flex-basis:48px;min-width:48px;min-height:62px}
+}
