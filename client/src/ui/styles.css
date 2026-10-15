@@ -2115,3 +2115,11 @@ footer .brand span {
  .app.worker .shift-filters>.role-multi-filter,
  .app.worker .shift-filters>label:last-child{grid-column:auto;grid-row:auto;}
 }
+
+
+/* Keep the Clear all filters action visible when active filters are collapsed,
+   and align the second row of worker filter controls. */
+@media(min-width:761px){
+ .app.worker .shift-filters>.role-multi-filter,
+ .app.worker .shift-filters>label:last-child{padding-top:20px;box-sizing:border-box;}
+}
