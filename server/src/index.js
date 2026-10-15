@@ -487,6 +487,12 @@ app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asy
  if(!rows.length)return res.status(404).json({error:'Application not found'});
  await db.execute('UPDATE applications SET status=? WHERE id=?',[status,req.params.id]);await audit(req,'application.'+status,'application',req.params.id);res.json({ok:true});
 }));
+app.post('/api/applications/:id/cancel',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ const [rows]=await db.execute("SELECT id FROM applications WHERE id=? AND worker_id=? AND status='pending'",[req.params.id,req.user.id]);
+ if(!rows.length)return res.status(404).json({error:'Pending application not found'});
+ await db.execute("UPDATE applications SET status='cancelled' WHERE id=? AND worker_id=? AND status='pending'",[req.params.id,req.user.id]);
+ await audit(req,'application.cancelled','application',req.params.id);res.json({ok:true});
+}));
 app.post('/api/checkouts',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
  const {shiftId,actualStart,actualEnd,breakMinutes=0,comment=''}=req.body;
  const [a]=await db.execute("SELECT a.id,s.hourly_pay FROM applications a JOIN shifts s ON s.id=a.shift_id WHERE a.shift_id=? AND a.worker_id=? AND a.status='approved'",[shiftId,req.user.id]);
