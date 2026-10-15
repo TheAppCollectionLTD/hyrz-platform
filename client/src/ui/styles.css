@@ -1779,3 +1779,22 @@ footer .brand span {
  .app.worker .job-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:5px}
  .app.worker .job-tabs button{min-width:0;min-height:40px;padding:9px 6px;font-size:11px;white-space:normal}
 }
+
+
+/* Worker role filter: searchable multi-select with grouped checkboxes. */
+.role-multi-filter{position:relative;display:flex;flex-direction:column;gap:7px;min-width:0;margin-bottom:15px;color:#c4cabb;font-size:11px;font-weight:700}
+.role-multi-filter-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.role-picker-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:40px;padding:9px 10px;border:1px solid #dfe4d7;border-radius:7px;background:#fff;color:#171916;font:12px 'DM Sans',sans-serif;cursor:pointer}
+.role-filter-hint{font-size:10px;line-height:1.45;font-weight:400;color:#a1a799}
+.role-clear-button{align-self:flex-start;border:0;background:transparent;color:#c5f777;font:600 10px 'DM Sans',sans-serif;text-decoration:underline;cursor:pointer;padding:2px 0}
+.role-picker-panel{position:relative;display:flex;flex-direction:column;gap:10px;padding:10px;border:1px solid #454b3e;border-radius:9px;background:#11140f;min-width:0}
+.role-picker-panel>input[type="search"]{width:100%;min-height:38px;padding:9px 10px;background:#fff;color:#171916;border:1px solid #dfe4d7;border-radius:7px;font:12px 'DM Sans',sans-serif}
+.role-picker-options{max-height:290px;overflow:auto;overscroll-behavior:contain;padding-right:3px}
+.role-picker-group{border:0;border-top:1px solid #30352b;margin:0;padding:9px 0 5px;min-width:0}
+.role-picker-group legend{padding:8px 0 5px;color:#c5f777;font-size:10px;font-weight:700}
+.role-picker-option{display:flex!important;grid-template-columns:none!important;grid-auto-flow:column;grid-template-columns:15px minmax(0,1fr)!important;justify-content:start;align-items:start;gap:8px!important;margin:0!important;padding:6px 2px;color:#f2f3ed!important;font-size:11px!important;font-weight:400!important;cursor:pointer}
+.role-picker-option input[type="checkbox"]{width:14px;height:14px;min-height:0;margin:1px 0 0;padding:0;accent-color:#b5f34a;flex:0 0 14px}
+.role-picker-option span{overflow-wrap:anywhere;line-height:1.4}
+.role-picker-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid #30352b;padding-top:9px;color:#a1a799;font-size:10px}
+.role-picker-footer button{border:0;border-radius:6px;background:#b5f34a;color:#151a0d;padding:8px 12px;font:700 11px 'DM Sans',sans-serif;cursor:pointer}
+@media(max-width:760px){.role-picker-panel{max-height:390px}.role-picker-options{max-height:250px}}
