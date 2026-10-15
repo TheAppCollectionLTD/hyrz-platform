@@ -2268,3 +2268,10 @@ main>section.panel:has(>h2:first-child) .list,
 main>section.panel:has(>h2:first-child) .empty,
 main>section.panel:has(>h2:first-child) .row{width:100%;box-sizing:border-box}
 main>section.panel:has(>h2:first-child) .empty{min-height:110px;display:flex;align-items:center;justify-content:center}
+
+/* Keep worker workchats, timetable and favourites panels full-width. */
+main>section.panel:has(>h2:first-child){width:100%;max-width:none;box-sizing:border-box}
+main>section.panel:has(>h2:first-child) .list,
+main>section.panel:has(>h2:first-child) .empty,
+main>section.panel:has(>h2:first-child) .row,
+main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;box-sizing:border-box}
