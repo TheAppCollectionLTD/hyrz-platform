@@ -15,6 +15,8 @@ export default function App(){
    try {
      const m=await request('/auth/me');
      setUser(m.user);
+     // Restore the correct signed-in landing page on refresh as well as after login.
+     if (page==='home' || page==='login') setPage(m.user.role==='admin'?'admin':m.user.role==='worker'?'jobs':'workchats');
      const statusResponse=await request('/onboarding/status');
      const status=statusResponse.onboarding;
      setOnboarding(status);
