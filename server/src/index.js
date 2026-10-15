@@ -26,6 +26,11 @@ app.use(express.json({ limit: '1mb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
 const ensureProfilePictureColumn = db.query('ALTER TABLE users ADD COLUMN profile_picture LONGTEXT NULL').catch(error => { if (error.code !== 'ER_DUP_FIELDNAME') { console.error('Could not initialise profile pictures:', error.message); throw error; } });
+const ensureUserAddressColumns = Promise.all([
+  db.query('ALTER TABLE users ADD COLUMN address_line_1 VARCHAR(255) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+  db.query('ALTER TABLE users ADD COLUMN address_city VARCHAR(120) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+  db.query('ALTER TABLE users ADD COLUMN address_postcode VARCHAR(20) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
+]).catch(error=>{console.error('Could not initialise user address fields:',error.message);throw error;});
 const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
 const ensureUniqueEmails = (async () => {
   const [duplicates] = await db.query("SELECT LOWER(TRIM(email)) AS normalized_email, COUNT(*) AS account_count FROM users GROUP BY LOWER(TRIM(email)) HAVING COUNT(*) > 1 LIMIT 1");
@@ -335,28 +340,37 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
   });
 }));
 
-app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{await ensureProfilePictureColumn;const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at FROM users WHERE id=?',[req.user.id]);res.json({user:u[0]});}));
+app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns]);
+ const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
+ res.json({user:u[0]});
+}));
 app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
-  await ensureProfilePictureColumn;
-  const firstName = String(req.body.firstName || '').trim();
-  const lastName = String(req.body.lastName || '').trim();
-  const phone = String(req.body.phone || '').trim();
-  const profilePicture = req.body.profilePicture === '' ? null : req.body.profilePicture;
-  if (profilePicture !== undefined && profilePicture !== null && (typeof profilePicture !== 'string' || !/^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(profilePicture) || profilePicture.length > 550000)) {
-    return res.status(400).json({ error: 'Choose a valid profile picture smaller than 400 KB.' });
-  }
-  if (firstName.length > 100 || lastName.length > 100 || phone.length > 40) {
-    return res.status(400).json({ error: 'Name or phone number is too long.' });
-  }
-  await db.execute(
-    'UPDATE users SET first_name=?, last_name=?, phone=?, profile_picture=? WHERE id=?',
-    [firstName || null, lastName || null, phone || null, profilePicture === undefined ? null : profilePicture, req.user.id]
-  );
-  const [rows] = await db.execute(
-    'SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at FROM users WHERE id=?',
-    [req.user.id]
-  );
-  return res.json({ user: rows[0] });
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns]);
+ const firstName = String(req.body.firstName || '').trim();
+ const lastName = String(req.body.lastName || '').trim();
+ const phone = String(req.body.phone || '').trim();
+ const addressLine1 = req.body.addressLine1 === undefined ? undefined : String(req.body.addressLine1 || '').trim();
+ const addressCity = req.body.addressCity === undefined ? undefined : String(req.body.addressCity || '').trim();
+ const addressPostcode = req.body.addressPostcode === undefined ? undefined : String(req.body.addressPostcode || '').trim().toUpperCase();
+ const email = req.body.email === undefined ? undefined : String(req.body.email || '').trim().toLowerCase();
+ const profilePicture = req.body.profilePicture === '' ? null : req.body.profilePicture;
+ if (profilePicture !== undefined && profilePicture !== null && (typeof profilePicture !== 'string' || !/^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(profilePicture) || profilePicture.length > 550000)) return res.status(400).json({ error: 'Choose a valid profile picture smaller than 400 KB.' });
+ if (firstName.length > 100 || lastName.length > 100 || phone.length > 40 || (addressLine1||'').length>255 || (addressCity||'').length>120 || (addressPostcode||'').length>20) return res.status(400).json({ error: 'One or more profile fields are too long.' });
+ if(email!==undefined && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)) return res.status(400).json({error:'Enter a valid email address.'});
+ if(email!==undefined){
+   const [existing]=await db.execute('SELECT id FROM users WHERE email_normalized=? AND id<>? LIMIT 1',[email,req.user.id]);
+   if(existing.length) return res.status(409).json({error:'That email address is already in use.'});
+ }
+ const updates=[],values=[];
+ if(req.body.profilePicture!==undefined){updates.push('profile_picture=?');values.push(profilePicture);}
+ if(req.body.addressLine1!==undefined){updates.push('address_line_1=?');values.push(addressLine1||null);}
+ if(req.body.addressCity!==undefined){updates.push('address_city=?');values.push(addressCity||null);}
+ if(req.body.addressPostcode!==undefined){updates.push('address_postcode=?');values.push(addressPostcode||null);}
+ if(email!==undefined){updates.push('email=?');values.push(email);updates.push('email_verified_at=NULL');}
+ if(updates.length){values.push(req.user.id);await db.execute('UPDATE users SET '+updates.join(', ')+' WHERE id=?',values);}
+ const [rows] = await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
+ return res.json({ user: rows[0], emailVerificationRequired: email!==undefined });
 }));
 
 app.post('/api/auth/change-password', auth, asyncRoute(async (req, res) => {
