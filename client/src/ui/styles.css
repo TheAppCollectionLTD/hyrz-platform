@@ -2123,3 +2123,27 @@ footer .brand span {
  .app.worker .shift-filters>.role-multi-filter,
  .app.worker .shift-filters>label:last-child{padding-top:20px;box-sizing:border-box;}
 }
+
+
+/* Improve legibility of total shift pay on available and applied shift cards. */
+.app.worker .shift-schedule-row:last-child .shift-meta-label{
+  color:#626b58;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.7px;
+  text-rendering:geometricPrecision;
+}
+.app.worker .shift-schedule-row:last-child strong{
+  color:#17200f;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:0;
+  line-height:1.5;
+  text-rendering:geometricPrecision;
+  -webkit-font-smoothing:antialiased;
+}
+.app.worker .shift-card .shiftpay>strong{
+  text-rendering:geometricPrecision;
+  letter-spacing:0;
+}
