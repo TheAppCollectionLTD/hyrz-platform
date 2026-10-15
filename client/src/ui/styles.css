@@ -2068,3 +2068,30 @@ footer .brand span {
  background:#eef3e7;
  border-color:#b5f34a;
 }
+
+
+/* Six clear, aligned shift-filter controls: three columns across two desktop rows. */
+.app.worker .shift-filters>.role-multi-filter,
+.app.worker .shift-filters>label:last-child{
+ grid-column:auto;
+ grid-row:auto;
+}
+.app.worker .shift-filters>.role-multi-filter{display:flex;flex-direction:column;gap:8px;min-width:0}
+.app.worker .shift-filters>.role-multi-filter .role-multi-filter-heading{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.app.worker .shift-filters>.role-multi-filter .role-multi-filter-heading>span{align-self:flex-start;min-height:13px}
+.app.worker .shift-filters>.role-multi-filter .role-picker-toggle{width:100%;min-width:0;box-sizing:border-box}
+.app.worker .shift-date-range{display:flex;flex-direction:column;gap:8px;min-width:0;color:#d5dacd;font-size:11px;font-weight:700}
+.app.worker .shift-date-range-label{display:block;min-height:13px}
+.app.worker .shift-date-range-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
+.app.worker .shift-date-range-inputs label{display:grid;gap:7px;min-width:0}
+.app.worker .shift-date-range-inputs input{min-width:0;width:100%;padding:9px 6px}
+.app.worker .clear-all-filters{display:inline-flex;align-items:center;justify-content:center;min-height:38px;margin:0 0 20px;padding:9px 14px;border:1px solid #d9dfd0;border-radius:9px;background:#fff;color:#171916;font:700 12px 'DM Sans',sans-serif;cursor:pointer}
+.app.worker .clear-all-filters:hover{background:#e6f8c9;border-color:#b5f34a}
+@media(max-width:760px){
+ .app.worker .shift-filters>.role-multi-filter{grid-column:auto}
+ .app.worker .shift-date-range-inputs{gap:6px}
+}
+@media(max-width:460px){
+ .app.worker .shift-date-range-inputs{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .app.worker .shift-date-range-inputs input{font-size:11px}
+}
