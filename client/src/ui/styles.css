@@ -1728,3 +1728,54 @@ footer .brand span {
 .shift-card.selected-date-shift .shiftpay{border-color:#c4e79b}
 @media(max-width:760px){.find-shifts-search{grid-template-columns:minmax(0,1fr) auto}.shift-filters{grid-template-columns:1fr 1fr;padding:13px;gap:10px}}
 @media(max-width:420px){.shift-filters{grid-template-columns:1fr}}
+
+
+/* Polished segmented tabs for Available, Applied, Upcoming, Rejected and Completed shifts. */
+.app.worker .job-tabs{
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ gap:8px;
+ width:100%;
+ margin:18px 0 22px;
+ padding:6px;
+ box-sizing:border-box;
+ border:1px solid #343a2d;
+ border-radius:12px;
+ background:#11140f;
+}
+.app.worker .job-tabs button{
+ flex:1 1 132px;
+ min-height:42px;
+ padding:10px 15px;
+ border:1px solid transparent;
+ border-radius:8px;
+ background:transparent;
+ color:#c4cabb;
+ font:600 12px/1.2 'DM Sans',sans-serif;
+ white-space:nowrap;
+ cursor:pointer;
+ transition:background .16s ease,color .16s ease,border-color .16s ease;
+}
+.app.worker .job-tabs button:hover{
+ background:#252b20;
+ color:#fff;
+}
+.app.worker .job-tabs button.selected{
+ background:#b5f34a;
+ color:#1a2111;
+ border-color:#b5f34a;
+ box-shadow:0 2px 7px #0002;
+}
+.app.worker .job-tabs button:focus-visible{
+ outline:2px solid #b5f34a;
+ outline-offset:2px;
+}
+.app.worker .find-shifts-panel>.list .admin-record,
+.app.worker .find-shifts-panel>.admin-record{
+ margin-top:10px;
+}
+@media(max-width:600px){
+ .app.worker .job-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:5px}
+ .app.worker .job-tabs button{min-width:0;min-height:40px;padding:9px 6px;font-size:11px;white-space:normal}
+}
