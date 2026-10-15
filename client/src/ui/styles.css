@@ -2261,3 +2261,10 @@ footer .brand span {
 .worker-inbox-compose .admin-message-form form textarea{min-height:140px;width:100%;box-sizing:border-box}
 .worker-inbox-compose .admin-message-form form button{justify-self:start}
 @media(max-width:650px){.worker-inbox-compose .admin-message-form form{grid-template-columns:minmax(0,1fr)}.worker-inbox-compose .admin-message-form form label:nth-of-type(3){grid-column:auto}}
+
+/* Full-width worker/employer sections for timesheets, checkouts and invoices. */
+main>section.panel:has(>h2:first-child){width:100%;max-width:none;box-sizing:border-box}
+main>section.panel:has(>h2:first-child) .list,
+main>section.panel:has(>h2:first-child) .empty,
+main>section.panel:has(>h2:first-child) .row{width:100%;box-sizing:border-box}
+main>section.panel:has(>h2:first-child) .empty{min-height:110px;display:flex;align-items:center;justify-content:center}
