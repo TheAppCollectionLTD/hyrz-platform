@@ -379,6 +379,14 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  const [newPassword,setNewPassword]=useState('');
  const [confirmNewPassword,setConfirmNewPassword]=useState('');
  const [profilePicture,setProfilePicture]=useState(user.profile_picture||'');
+ const [email,setEmail]=useState(user.email||'');
+ const [addressLine1,setAddressLine1]=useState(user.address_line_1||'');
+ const [addressCity,setAddressCity]=useState(user.address_city||'');
+ const [addressPostcode,setAddressPostcode]=useState(user.address_postcode||'');
+ const [showEmailEditor,setShowEmailEditor]=useState(false);
+ const [showAddressEditor,setShowAddressEditor]=useState(false);
+ const [verification,setVerification]=useState(null);
+ useEffect(()=>{request('/onboarding/status').then(r=>setVerification(r.onboarding)).catch(()=>{});},[]);
  async function saveProfilePicture(nextPicture) {
   await action(async()=>{
    const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({profilePicture:nextPicture})});
@@ -411,11 +419,23 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
    {profilePicture&&<button type="button" className="secondary" disabled={busy} onClick={()=>saveProfilePicture('')}>Remove picture</button>}</div>
   </div>
   <hr/>
-  <div className="account-password-heading"><h2>Name and email</h2></div>
+  <div className="account-password-heading"><h2>Personal details</h2></div>
   <label>First name<input type="text" value={user.first_name||(user.role==='admin'?'Simson':'')} readOnly aria-readonly="true"/></label>
   <label>Last name<input type="text" value={user.last_name||(user.role==='admin'?'Hannawell':'')} readOnly aria-readonly="true"/></label>
-  <label>Email address<input type="email" value={user.email||''} readOnly aria-readonly="true"/></label>
+  <div className="account-password-heading"><h3>Email address</h3><button type="button" className="password-edit-button" onClick={()=>{setEmail(user.email||'');setShowEmailEditor(v=>!v);}}>{showEmailEditor?'Cancel':'✎ Edit'}</button></div>
+  {!showEmailEditor?<p className="account-readonly-value">{user.email||'Not provided'} · {user.email_verified_at?'Verified':'Verification may be required'}</p>:<form className="account-inline-editor" onSubmit={e=>{e.preventDefault();action(async()=>{const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({email})});setUser(result.user);setEmail(result.user.email);setShowEmailEditor(false);setNotice(result.emailVerificationRequired?'Email updated. You must verify the new address before accessing restricted features.':'Email updated.');});}}><label>New email address<input type="email" required maxLength="254" value={email} onChange={e=>setEmail(e.target.value)}/></label><button className="secondary" disabled={busy}>Save email</button><small>Changing your email will require you to verify the new address.</small></form>}
   <hr/>
+  <div className="account-password-heading"><h2>Address</h2><button type="button" className="password-edit-button" onClick={()=>{setAddressLine1(user.address_line_1||'');setAddressCity(user.address_city||'');setAddressPostcode(user.address_postcode||'');setShowAddressEditor(v=>!v);}}>{showAddressEditor?'Cancel':'✎ Edit'}</button></div>
+  {!showAddressEditor?<div className="account-readonly-value"><p>{user.address_line_1||'Address not added'}</p><p>{[user.address_city,user.address_postcode].filter(Boolean).join(', ')}</p></div>:<form className="account-inline-editor" onSubmit={e=>{e.preventDefault();action(async()=>{const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({addressLine1,addressCity,addressPostcode})});setUser(result.user);setShowAddressEditor(false);setNotice('Your address has been saved.');});}}><label>Address line<input autoComplete="street-address" maxLength="255" value={addressLine1} onChange={e=>setAddressLine1(e.target.value)}/></label><div className="grid2"><label>Town or city<input autoComplete="address-level2" maxLength="120" value={addressCity} onChange={e=>setAddressCity(e.target.value)}/></label><label>Postcode<input autoComplete="postal-code" maxLength="20" value={addressPostcode} onChange={e=>setAddressPostcode(e.target.value.toUpperCase())}/></label></div><button className="secondary" disabled={busy}>Save address</button></form>}
+  <hr/>
+  <div className="account-password-heading"><h2>Verification details</h2><span className="muted">Read-only</span></div>
+  <div className="account-verification-details">
+   <div><strong>Identity verification</strong><span>{verification?.identityStatus||'Status unavailable'}</span></div>
+   {user.role==='worker'&&<div><strong>Right-to-work check</strong><span>{verification?.rightToWorkStatus||'Status unavailable'}</span></div>}
+   {user.role==='employer'&&<div><strong>Company verification</strong><span>{verification?.companyStatus||'Status unavailable'}</span></div>}
+   {user.role==='worker'&&<><div><strong>National Insurance / worker permit number</strong><span>Identifier is stored as a one-way security hash and cannot be displayed again.</span></div><div><strong>Identity document number</strong><span>No retrievable document number is currently stored on your profile.</span></div><div><strong>Uploaded identity / right-to-work documents</strong><span>Document upload and secure document storage are not yet connected.</span></div></>}
+   {user.role==='employer'&&<div><strong>Uploaded verification documents</strong><span>Document upload and secure document storage are not yet connected.</span></div>}
+  </div>
   <div className="account-password-heading"><h2>Password</h2><button type="button" className="password-edit-button" aria-label="Edit password" title="Edit password" onClick={()=>setShowPasswordEditor(v=>!v)}>{showPasswordEditor?'Cancel':'✎ Edit'}</button></div>
   {showPasswordEditor&&<>
   <p>Choose a unique password of at least 12 characters. You'll need your current password to confirm the change.</p>
