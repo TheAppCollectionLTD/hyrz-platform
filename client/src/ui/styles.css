@@ -1715,3 +1715,16 @@ footer .brand span {
  .shift-schedule-row{grid-template-columns:52px minmax(0,1fr);gap:8px}
  .shift-schedule-row strong{font-size:12px}
 }
+
+
+/* Shift discovery filters, selected-date highlighting, and schedule totals. */
+.find-shifts-search{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.shift-filter-toggle{min-height:44px;white-space:nowrap}
+.shift-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px;margin:0 0 20px;border:1px solid #343a2d;border-radius:12px;background:#1b1f18}
+.shift-filters label{display:grid;gap:7px;color:#c4cabb;font-size:11px;font-weight:700}
+.shift-filters input,.shift-filters select{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:9px 10px;border:1px solid #dfe4d7;border-radius:7px;background:#fff;color:#171916;font:12px 'DM Sans',sans-serif}
+.shift-filters button{align-self:end;justify-self:start}
+.shift-card.selected-date-shift{background:#e6f8c9;border-color:#9dd34b;box-shadow:0 0 0 2px #b5f34a55}
+.shift-card.selected-date-shift .shiftpay{border-color:#c4e79b}
+@media(max-width:760px){.find-shifts-search{grid-template-columns:minmax(0,1fr) auto}.shift-filters{grid-template-columns:1fr 1fr;padding:13px;gap:10px}}
+@media(max-width:420px){.shift-filters{grid-template-columns:1fr}}
