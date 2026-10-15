@@ -1655,3 +1655,23 @@ footer .brand span {
 .app.worker .find-shifts-heading,.app.worker .find-shifts-search,.app.worker .find-shifts-panel>.job-tabs,.app.worker .find-shifts-panel>.list,.app.worker .find-shifts-panel>.empty{width:100%;max-width:100%}
 .app.worker .find-shifts-panel>.list{margin:0 auto}
 @media(max-width:760px){.app.worker main>.find-shifts-panel{padding:18px 14px}}
+
+
+/* Rolling 42-day shift calendar */
+.rolling-shift-calendar{width:100%;min-width:0;margin:0 0 22px;padding:16px;border:1px solid #e5e8df;border-radius:13px;background:#fafbf8}
+.rolling-calendar-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+.rolling-calendar-heading>div{display:grid;gap:4px}
+.rolling-calendar-heading strong{font:800 14px Manrope,sans-serif;color:#252a20}
+.rolling-calendar-heading span{font-size:11px;color:#767d6f}
+.calendar-clear{border:1px solid #dfe4d7;background:#fff;border-radius:8px;padding:8px 12px;font:600 11px 'DM Sans',sans-serif;color:#3e5429;cursor:pointer}
+.calendar-clear:disabled{opacity:.4;cursor:default}
+.rolling-calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
+.rolling-calendar-day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:76px;padding:8px 3px;border:1px solid #e5e8df;border-radius:9px;background:#fff;color:#33392e;cursor:pointer}
+.rolling-calendar-day small{font-size:10px;font-weight:700;text-transform:uppercase;color:#858b7e}
+.rolling-calendar-day strong{font:800 20px Manrope,sans-serif;line-height:1.1}
+.rolling-calendar-day>span{font-size:10px;color:#858b7e}
+.rolling-calendar-day.today{border-color:#a8c87a}
+.rolling-calendar-day.selected{background:#b5f34a;border-color:#8bbf39;color:#18200e}
+.rolling-calendar-day.selected small,.rolling-calendar-day.selected>span{color:#354c20}
+.rolling-calendar-day:focus-visible,.calendar-clear:focus-visible{outline:2px solid #638b2f;outline-offset:2px}
+@media(max-width:520px){.rolling-shift-calendar{padding:10px}.rolling-calendar-days{gap:5px}.rolling-calendar-day{min-height:68px}.rolling-calendar-day small,.rolling-calendar-day>span{font-size:9px}.rolling-calendar-day strong{font-size:17px}}
