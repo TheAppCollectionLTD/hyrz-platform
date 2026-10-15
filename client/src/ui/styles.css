@@ -2017,3 +2017,32 @@ footer .brand span {
 .app.worker .shift-type-picker-footer{display:flex;justify-content:space-between;gap:8px;border-top:1px solid #30352b;margin-top:8px;padding-top:9px}
 .app.worker .shift-type-picker-footer button{border:0;border-radius:6px;background:#b5f34a;color:#151a0d;padding:8px 12px;font:700 11px 'DM Sans',sans-serif;cursor:pointer}
 .app.worker .shift-type-picker-footer button:first-child{background:transparent;color:#c5f777;text-decoration:underline}
+
+
+/* Match the shift-type control's vertical rhythm to the other first-row filters. */
+@media(min-width:761px){
+ .app.worker .shift-filters>.shift-type-multi-filter{
+   align-self:start;
+   display:flex;
+   flex-direction:column;
+   gap:8px;
+   margin:0;
+   padding:0;
+   min-width:0;
+ }
+ .app.worker .shift-filters>.shift-type-multi-filter>.shift-type-filter-label{
+   display:block;
+   box-sizing:border-box;
+   height:13px;
+   min-height:13px;
+   margin:0;
+   padding:0;
+   line-height:13px;
+ }
+ .app.worker .shift-filters>.shift-type-multi-filter>.shift-type-picker-toggle{
+   display:flex;
+   margin:0;
+   min-height:44px;
+   height:44px;
+ }
+}
