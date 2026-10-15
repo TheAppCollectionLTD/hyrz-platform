@@ -1694,3 +1694,24 @@ footer .brand span {
  .app.worker .rolling-shift-calendar{padding:10px}
  .app.worker .rolling-calendar-day{flex-basis:48px;min-width:48px;min-height:62px}
 }
+
+
+/* Find shifts uses one aligned column: heading, calendar, search, filters and cards. */
+.app.worker main{display:flex;flex-direction:column;align-items:center}
+.app.worker main>header,.app.worker main>.alert,.app.worker main>.find-shifts-panel{width:100%;max-width:1120px;margin-left:auto;margin-right:auto}
+.app.worker main>.find-shifts-panel{align-self:center;display:block}
+.app.worker .find-shifts-heading{width:100%;margin-bottom:14px}
+.app.worker .rolling-shift-calendar{width:100%;max-width:none;margin:0 0 20px}
+.app.worker .find-shifts-search,.app.worker .find-shifts-panel>.job-tabs,.app.worker .find-shifts-panel>.list,.app.worker .find-shifts-panel>.empty{width:100%;max-width:none}
+.app.worker .shift-card{box-sizing:border-box;width:100%}
+.shift-schedule{display:grid;gap:9px;margin-top:12px}
+.shift-schedule-row{display:grid;grid-template-columns:62px minmax(0,1fr);align-items:baseline;gap:10px}
+.shift-schedule-row .shift-meta-label{white-space:nowrap}
+.shift-schedule-row strong{font-size:13px;color:#252a20;font-weight:700;line-height:1.4}
+@media(max-width:760px){
+ .app.worker main{width:100%;margin-left:0;padding-left:14px;padding-right:14px}
+ .app.worker main>header,.app.worker main>.alert,.app.worker main>.find-shifts-panel{max-width:100%}
+ .app.worker .rolling-shift-calendar{width:100%}
+ .shift-schedule-row{grid-template-columns:52px minmax(0,1fr);gap:8px}
+ .shift-schedule-row strong{font-size:12px}
+}
