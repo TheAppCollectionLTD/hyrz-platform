@@ -456,7 +456,7 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
 app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
  const {title,description,location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false}=req.body;
  if(!title||!VALID_JOB_ROLES.has(title)) return res.status(400).json({error:'Choose a job role from the approved role list.'});
- if(!location||!startsAt||!endsAt||new Date(endsAt)<=new Date(startsAt)||Number(hourlyPay)<=0||Number(slots)<1||Number(breakMinutes)<0) return res.status(400).json({error:'Invalid shift details'});
+ if(!location||!startsAt||!endsAt||new Date(endsAt)<=new Date(startsAt)||Number(hourlyPay)<8||Number(slots)<1||Number(breakMinutes)<0) return res.status(400).json({error:'Invalid shift details. Hourly pay must be at least £8.00'});
  const [bs]=await db.execute('SELECT id FROM businesses WHERE owner_user_id=?',[req.user.id]);
  if(!bs.length)return res.status(400).json({error:'Business profile missing'});
  const [r]=await db.execute('INSERT INTO shifts(business_id,created_by,title,description,location,starts_at,ends_at,break_minutes,hourly_pay,slots,auto_approve) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
