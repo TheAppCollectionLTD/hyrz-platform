@@ -1921,3 +1921,33 @@ footer .brand span {
     width:calc(100vw - 60px);
   }
 }
+
+
+/* Align the second row of shift filters to the same column grid as row one. */
+@media(min-width:761px){
+ .app.worker .shift-filters>.role-multi-filter{
+   display:grid;
+   grid-template-columns:minmax(0,1fr);
+   grid-column:1;
+   grid-row:2;
+   align-content:start;
+ }
+ .app.worker .shift-filters>label:last-child{
+   grid-column:2;
+   grid-row:2;
+ }
+ .app.worker .role-multi-filter-heading{
+   min-height:44px;
+ }
+ .app.worker .role-multi-filter-heading>span{
+   align-self:center;
+ }
+ .app.worker .role-picker-toggle{
+   min-width:0;
+   width:100%;
+   box-sizing:border-box;
+ }
+ .app.worker .role-filter-hint{
+   min-height:14px;
+ }
+}
