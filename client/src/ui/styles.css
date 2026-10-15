@@ -1536,10 +1536,11 @@ footer .brand span {
 
 
 /* Employers use bottom navigation only; never show the legacy sidebar links. */
-.app.employer .sidebar nav{display:none!important}
+.app.employer .sidebar{display:none!important}
+.app.employer main{margin-left:0!important;width:100%;min-width:0}
 
 /* Employer workspace: calmer business-first layout */
-.app.employer{min-height:100vh;background:#f5f6f3;color:#171916;padding-bottom:92px}
+.app.employer{min-height:100vh;background:#f5f6f3;color:#171916;padding-bottom:92px;display:block}
 .employer main{padding-bottom:110px}
 .employer header{align-items:flex-start;margin-bottom:28px}
 .employer .employer-welcome{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.65fr);gap:22px;align-items:stretch}
