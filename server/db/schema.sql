@@ -36,6 +36,8 @@ CREATE TABLE IF NOT EXISTS businesses (
  name VARCHAR(200) NOT NULL,
  company_number VARCHAR(30) NULL,
  role_at_company VARCHAR(120) NULL,
+ address_line_1 VARCHAR(255) NULL,
+ city VARCHAR(120) NULL,
  postcode VARCHAR(20) NULL,
  verification_status ENUM('pending','verified','rejected','manual_review') NOT NULL DEFAULT 'pending',
 identity_verification_status ENUM('not_started','pending','verified','rejected','manual_review') NOT NULL DEFAULT 'not_started',
