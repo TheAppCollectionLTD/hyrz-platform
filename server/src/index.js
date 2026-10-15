@@ -438,7 +438,7 @@ app.put('/api/profile',auth,asyncRoute(async(req,res)=>{
 }));
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  const {postcode,from,to,search}=req.query;
- let sql=`SELECT s.*,b.name AS business_name FROM shifts s JOIN businesses b ON b.id=s.business_id WHERE s.status='open'`;
+ let sql=`SELECT s.*,b.name AS business_name,u.profile_picture AS employer_profile_picture FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
  const args=[];
  if(from){sql+=' AND s.starts_at>=?';args.push(from);}
  if(to){sql+=' AND s.starts_at<=?';args.push(to);}
