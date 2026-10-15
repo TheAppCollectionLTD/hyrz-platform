@@ -436,7 +436,13 @@ app.put('/api/profile',auth,asyncRoute(async(req,res)=>{
  [bio||null,JSON.stringify(skills||[]),postcode||null,hourlyRate||null,JSON.stringify(availability||[]),req.user.id]);
  await audit(req,'profile.updated','user',req.user.id);res.json({ok:true});
 }));
+// Expire open shifts once their start time is within five minutes. Shifts linked to a checkout or rating are retained for records.
+async function deleteImminentOpenShifts(){
+ const [result]=await db.execute(`DELETE s FROM shifts s WHERE s.status='open' AND s.starts_at<=DATE_ADD(NOW(), INTERVAL 5 MINUTE) AND NOT EXISTS (SELECT 1 FROM checkouts c WHERE c.shift_id=s.id) AND NOT EXISTS (SELECT 1 FROM ratings r WHERE r.shift_id=s.id)`);
+ return result.affectedRows||0;
+}
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
+ await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
  let sql=`SELECT s.*,b.name AS business_name,u.profile_picture AS employer_profile_picture FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
  const args=[];
@@ -633,4 +639,10 @@ app.patch('/api/admin/users/:id/status',auth,allow('admin'),asyncRoute(async(req
 }));
 app.use((err,req,res,next)=>{console.error(err);res.status(err.status||500).json({error:err.status?err.message:'Internal server error'});});
 const port=Number(process.env.PORT||4000);
-app.listen(port,()=>console.log(`hyrz API listening on http://localhost:${port}`));
+app.listen(port,()=>{
+ console.log(`hyrz API listening on http://localhost:${port}`);
+ // Run regularly so imminent open shifts are removed even when nobody is browsing shifts.
+ const expiryTimer=setInterval(()=>deleteImminentOpenShifts().catch(err=>console.error('Shift expiry cleanup failed:',err.message)),60*1000);
+ if(typeof expiryTimer.unref==='function')expiryTimer.unref();
+ deleteImminentOpenShifts().catch(err=>console.error('Initial shift expiry cleanup failed:',err.message));
+});
