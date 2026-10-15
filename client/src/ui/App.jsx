@@ -1,6 +1,6 @@
 import React,{useEffect,useState}from'react';import{request,token}from'../api';
 import JOB_ROLE_GROUPS from '../../../shared/job-roles.json';
-const JOB_ROLES=JOB_ROLE_GROUPS.flatMap(([,roles])=>roles);=JOB_ROLE_GROUPS.flatMap(([,roles])=>roles);
+const JOB_ROLES=JOB_ROLE_GROUPS.flatMap(([,roles])=>roles);
 const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n||0));
 export default function App(){
  const [user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
