@@ -46,6 +46,10 @@ const ensureUniqueEmails = (async () => {
   }
   return true;
 })().catch(error => { console.error('Could not initialise case-insensitive email uniqueness:', error.message); throw error; });
+const ensureBusinessAddressColumns = Promise.all([
+  db.query('ALTER TABLE businesses ADD COLUMN address_line_1 VARCHAR(255) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
+  db.query('ALTER TABLE businesses ADD COLUMN city VARCHAR(120) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
+]).catch(error=>{console.error('Could not initialise business address fields:',error.message);throw error;});
 const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
 const ensureCheckoutCounterColumns = Promise.all([
   db.query('ALTER TABLE checkouts ADD COLUMN employer_comment TEXT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
@@ -106,7 +110,7 @@ async function sendVerificationEmail(email, rawToken) {
 app.post('/api/auth/register', asyncRoute(async (req, res) => {
   const {
     email, password, role = 'worker', firstName = '', lastName = '',
-    businessName, companyNumber, companyRole, postcode, nationalInsuranceNumber, workerPermitNumber, confirmPassword
+    businessName, companyNumber, companyRole, postcode, businessAddress, businessCity, nationalInsuranceNumber, workerPermitNumber, confirmPassword
   } = req.body;
 
   if (!email || !/^\S+@\S+\.\S+$/.test(email) ||
@@ -124,9 +128,9 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     return res.status(400).json({ error: 'Invalid registration role' });
   }
 
-  if (role === 'employer' && (!businessName || !String(companyRole || '').trim())) {
+  if (role === 'employer' && (!businessName || !String(firstName || '').trim() || !String(lastName || '').trim() || !String(companyRole || '').trim() || !String(businessAddress || '').trim() || !String(businessCity || '').trim() || !String(postcode || '').trim())) {
     return res.status(400).json({
-      error: 'Business name and your role at the company are required'
+      error: 'Business name, owner/contact name, business address, city, postcode and your role at the company are required'
     });
   }
 
@@ -182,14 +186,17 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
           workerPermitNumber ? hashIdentifier(workerPermitNumber) : null]
       );
     } else {
+      await ensureBusinessAddressColumns;
       await conn.execute(
-        'INSERT INTO businesses (owner_user_id,name,company_number,postcode,role_at_company) VALUES (?,?,?,?,?)',
+        'INSERT INTO businesses (owner_user_id,name,company_number,postcode,role_at_company,address_line_1,city) VALUES (?,?,?,?,?,?,?)',
         [
           result.insertId,
           String(businessName).trim(),
           companyNumber || null,
-          postcode || null,
-          String(companyRole).trim()
+          String(postcode).trim().toUpperCase(),
+          String(companyRole).trim(),
+          String(businessAddress).trim(),
+          String(businessCity).trim()
         ]
       );
     }
