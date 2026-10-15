@@ -2046,3 +2046,25 @@ footer .brand span {
    height:44px;
  }
 }
+
+
+/* Present Clear selected roles as a compact secondary control matching Shift types. */
+.app.worker .role-clear-button{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ min-height:36px;
+ margin-top:2px;
+ padding:8px 12px;
+ border:1px solid #d9dfd0;
+ border-radius:9px;
+ background:#fff;
+ color:#171916;
+ font:600 11px 'DM Sans',sans-serif;
+ text-decoration:none;
+ cursor:pointer;
+}
+.app.worker .role-clear-button:hover{
+ background:#eef3e7;
+ border-color:#b5f34a;
+}
