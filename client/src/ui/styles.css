@@ -2147,3 +2147,26 @@ footer .brand span {
   text-rendering:geometricPrecision;
   letter-spacing:0;
 }
+
+
+/* Render total shift pay figures with crisp, high-contrast system text. */
+.app.worker .shift-schedule-row:last-child .shift-meta-label{
+  color:#454d3d;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.35px;
+  -webkit-font-smoothing:unset;
+  text-shadow:none;
+}
+.app.worker .shift-schedule-row:last-child strong{
+  color:#11170c;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:0;
+  -webkit-font-smoothing:unset;
+  text-shadow:none;
+  filter:none;
+  opacity:1;
+}
