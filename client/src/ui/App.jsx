@@ -11,6 +11,24 @@ export default function App(){
  const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[confirmPassword,setConfirmPassword]=useState(''),[role,setRole]=useState('worker'),[firstName,setFirstName]=useState(''),[lastName,setLastName]=useState(''),[businessName,setBusinessName]=useState(''),[companyRole,setCompanyRole]=useState(''),[companyNumber,setCompanyNumber]=useState(''),[businessAddress,setBusinessAddress]=useState(''),[businessCity,setBusinessCity]=useState(''),[businessPostcode,setBusinessPostcode]=useState(''),[nationalInsuranceNumber,setNationalInsuranceNumber]=useState(''),[workerPermitNumber,setWorkerPermitNumber]=useState('');
  const [shifts,setShifts]=useState([]),[applications,setApplications]=useState([]),[checkouts,setCheckouts]=useState([]),[invoices,setInvoices]=useState([]),[overview,setOverview]=useState(null),[search,setSearch]=useState(''),[selectedShiftDate,setSelectedShiftDate]=useState(''),[shiftTypeFilter,setShiftTypeFilter]=useState('all'),[minHourlyRate,setMinHourlyRate]=useState(''),[maxHourlyRate,setMaxHourlyRate]=useState(''),[maxDistance,setMaxDistance]=useState(''),[roleFilters,setRoleFilters]=useState([]),[roleSearch,setRoleSearch]=useState(''),[rolePickerOpen,setRolePickerOpen]=useState(false),[showShiftFilters,setShowShiftFilters]=useState(false),[verificationAccounts,setVerificationAccounts]=useState([]),[jobFilter,setJobFilter]=useState('available');
  const [shift,setShift]=useState({title:'',description:'',location:'',startsAt:'',endsAt:'',hourlyPay:'15',breakMinutes:0,slots:1});
+
+ // Close the searchable role list when the user clicks outside it or presses Escape.
+ useEffect(() => {
+   if (!rolePickerOpen) return;
+   function closeOnOutsidePointer(event) {
+     if (!event.target.closest('.role-multi-filter')) setRolePickerOpen(false);
+   }
+   function closeOnEscape(event) {
+     if (event.key === 'Escape') setRolePickerOpen(false);
+   }
+   document.addEventListener('pointerdown', closeOnOutsidePointer);
+   document.addEventListener('keydown', closeOnEscape);
+   return () => {
+     document.removeEventListener('pointerdown', closeOnOutsidePointer);
+     document.removeEventListener('keydown', closeOnEscape);
+   };
+ }, [rolePickerOpen]);
+
  async function load(){
    if(!token())return;
    setOnboardingLoading(true);
