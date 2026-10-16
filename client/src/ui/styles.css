@@ -2490,3 +2490,63 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 }
 @media(max-width:900px){.employer-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.employer-shortcuts .employer-shortcut{min-height:0;aspect-ratio:1 / 1;padding:18px}}
 @media(max-width:520px){.employer-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.employer-shortcuts .employer-shortcut{padding:14px}.employer-shortcut strong{font-size:15px}.employer-shortcut small{font-size:11px}}
+
+/* Consistent dashboard-style square cards for every employer and worker subsection navigator. */
+.worker-section-links.job-tabs,
+.employer .worker-section-links.job-tabs{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:14px;
+ margin:18px 0 24px;
+ padding:0;
+ border:0;
+ border-radius:0;
+ background:transparent;
+}
+.worker-section-links.job-tabs>button,
+.employer .worker-section-links.job-tabs>button,
+.employer .worker-section-links.job-tabs>.employer-shift-tab{
+ display:flex;
+ flex-direction:column;
+ align-items:flex-start;
+ justify-content:flex-start;
+ width:100%;
+ min-width:0;
+ min-height:0;
+ aspect-ratio:1 / 1;
+ padding:22px;
+ border:1px solid #e5e8e0;
+ border-radius:14px;
+ background:#fff;
+ color:#171916;
+ font-size:15px;
+ font-weight:700;
+ line-height:1.4;
+ white-space:normal;
+ text-align:left;
+ box-shadow:0 2px 5px rgba(0,0,0,.04);
+ transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.worker-section-links.job-tabs>button:hover,
+.employer .worker-section-links.job-tabs>button:hover,
+.employer .worker-section-links.job-tabs>.employer-shift-tab:hover{
+ transform:translateY(-2px);
+ border-color:#c6d8a8;
+ box-shadow:0 12px 30px #1d28120c;
+}
+.worker-section-links.job-tabs>button.selected,
+.employer .worker-section-links.job-tabs>button.selected,
+.employer .worker-section-links.job-tabs>.employer-shift-tab.selected{
+ border-color:#c6d8a8;
+ background:#edf6df;
+ color:#25361b;
+ box-shadow:0 3px 8px rgba(0,0,0,.08);
+}
+@media(max-width:900px){
+ .worker-section-links.job-tabs,.employer .worker-section-links.job-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .worker-section-links.job-tabs>button,.employer .worker-section-links.job-tabs>button,.employer .worker-section-links.job-tabs>.employer-shift-tab{padding:18px}
+}
+@media(max-width:520px){
+ .worker-section-links.job-tabs,.employer .worker-section-links.job-tabs{gap:10px}
+ .worker-section-links.job-tabs>button,.employer .worker-section-links.job-tabs>button,.employer .worker-section-links.job-tabs>.employer-shift-tab{padding:14px;font-size:13px}
+}
