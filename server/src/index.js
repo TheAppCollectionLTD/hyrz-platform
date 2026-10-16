@@ -65,6 +65,7 @@ function createTable(sql, label) {
   return enqueueSchemaChange(async () => { await db.query(sql); }, label);
 }
 const ensureProfilePictureColumn = addColumn('users','profile_picture LONGTEXT NULL','profile pictures');
+const ensureShiftPublishingColumns = (async()=>{await addColumn('shifts',"shift_type VARCHAR(80) NOT NULL DEFAULT 'hospitality'",'shift type');await addColumn('shifts','requirements JSON NULL','shift requirements');})();
 const ensureUserAddressColumns = (async()=>{
   await addColumn('users','address_line_1 VARCHAR(255) NULL','user address line');
   await addColumn('users','address_city VARCHAR(120) NULL','user address city');
@@ -582,13 +583,14 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  const [rows]=await db.execute(sql,args);res.json({shifts:rows});
 }));
 app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
- const {title,description,location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false}=req.body;
+ const {title,description,location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false,shiftType='hospitality',requirements=[]}=req.body;
  if(!title||!VALID_JOB_ROLES.has(title)) return res.status(400).json({error:'Choose a job role from the approved role list.'});
- if(!location||!startsAt||!endsAt||new Date(endsAt)<=new Date(startsAt)||Number(hourlyPay)<8||Number(slots)<1||Number(breakMinutes)<0) return res.status(400).json({error:'Invalid shift details. Hourly pay must be at least £8.00'});
- const [bs]=await db.execute('SELECT id FROM businesses WHERE owner_user_id=?',[req.user.id]);
+ if(!startsAt||!endsAt||new Date(endsAt)<=new Date(startsAt)||Number(hourlyPay)<8||Number(slots)<1||Number(breakMinutes)<0||!Array.isArray(requirements)||requirements.length>10||requirements.some(x=>typeof x!=='string'||x.trim().length>250)) return res.status(400).json({error:'Invalid shift details. Hourly pay must be at least £8.00'});
+ const [bs]=await db.execute('SELECT id, address_line_1, city FROM businesses WHERE owner_user_id=?',[req.user.id]);
  if(!bs.length)return res.status(400).json({error:'Business profile missing'});
- const [r]=await db.execute('INSERT INTO shifts(business_id,created_by,title,description,location,starts_at,ends_at,break_minutes,hourly_pay,slots,auto_approve) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
- [bs[0].id,req.user.id,title,description||null,location,startsAt,endsAt,breakMinutes,hourlyPay,slots,!!autoApprove]);
+ const shiftLocation=String(location||[bs[0].address_line_1,bs[0].city].filter(Boolean).join(', ')||'Location to be confirmed').trim();
+ const [r]=await db.execute('INSERT INTO shifts(business_id,created_by,title,description,location,starts_at,ends_at,break_minutes,hourly_pay,slots,auto_approve,shift_type,requirements) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
+ [bs[0].id,req.user.id,title,description||null,shiftLocation,startsAt,endsAt,breakMinutes,hourlyPay,slots,!!autoApprove,shiftType,JSON.stringify(requirements.map(x=>x.trim()).filter(Boolean))]);
  await audit(req,'shift.created','shift',r.insertId);res.status(201).json({id:r.insertId});
 }));
 app.get('/api/shifts/:id',auth,asyncRoute(async(req,res)=>{
