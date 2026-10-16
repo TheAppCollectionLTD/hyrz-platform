@@ -487,15 +487,8 @@ app.put('/api/worker/availability',auth,asyncRoute(async(req,res)=>{
  const roles=Array.isArray(req.body.roles)?req.body.roles:[],shiftTypes=Array.isArray(req.body.shiftTypes)?req.body.shiftTypes:[],employerMode=req.body.employerMode==='favourites'?'favourites':'all',preferredEmployerIds=Array.isArray(req.body.preferredEmployerIds)?[...new Set(req.body.preferredEmployerIds.map(Number).filter(id=>Number.isSafeInteger(id)&&id>0))]:[];
  if(!Number.isFinite(minHourlyRate)||minHourlyRate<8||!Number.isFinite(minTotalPay)||minTotalPay<8||!Number.isInteger(maxDistance)||maxDistance<1) return res.status(400).json({error:'Minimum hourly rate and total shift pay must be at least £8; distance must be at least 1 mile.'});
  const datePattern=/^\d{4}-\d{2}-\d{2}$/;
- const clockPattern=/^([01]\d|2[0-3]):[0-5]\d$/;
  for(const [date,timing] of Object.entries(timings)){
-   if(!datePattern.test(date)||!timing||typeof timing.start!=='string'||typeof timing.end!=='string') return res.status(400).json({error:'Each availability date must have valid start and end times.'});
-   const startIsAnytime=timing.start==='anytime';
-   const startValid=startIsAnytime||clockPattern.test(timing.start);
-   const endIsShiftEnd=timing.end==='shift_end';
-   const endIsNextDay=typeof timing.end==='string'&&timing.end.startsWith('nextday:')&&clockPattern.test(timing.end.slice(8));
-   const endValid=endIsShiftEnd||endIsNextDay||clockPattern.test(timing.end);
-   if(!startValid||!endValid||(!startIsAnytime&&!endIsShiftEnd&&!endIsNextDay&&timing.start>=timing.end)) return res.status(400).json({error:'Each availability date must have valid start and end times.'});
+   if(!datePattern.test(date)||!timing||typeof timing.start!=='string'||typeof timing.end!=='string'||!/^([01]\d|2[0-3]):[0-5]\d$/.test(timing.start)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(timing.end)||timing.start>=timing.end) return res.status(400).json({error:'Each availability date must have valid start and end times.'});
  }
  await db.execute(`INSERT INTO worker_availability (user_id,timings,min_hourly_rate,min_total_pay,max_distance,roles,shift_types,automatic_enabled,employer_mode,preferred_employer_ids) VALUES (?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE timings=VALUES(timings),min_hourly_rate=VALUES(min_hourly_rate),min_total_pay=VALUES(min_total_pay),max_distance=VALUES(max_distance),roles=VALUES(roles),shift_types=VALUES(shift_types),automatic_enabled=VALUES(automatic_enabled),employer_mode=VALUES(employer_mode),preferred_employer_ids=VALUES(preferred_employer_ids)`,[req.user.id,JSON.stringify(timings),minHourlyRate,minTotalPay,maxDistance,JSON.stringify(roles),JSON.stringify(shiftTypes),req.body.automatic?1:0,employerMode,JSON.stringify(preferredEmployerIds)]);
  res.json({ok:true,availability:{timings,minHourlyRate,minTotalPay,maxDistance,roles,shiftTypes,automatic:Boolean(req.body.automatic),employerMode,preferredEmployerIds}});
