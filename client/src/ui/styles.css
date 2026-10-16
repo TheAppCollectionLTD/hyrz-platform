@@ -2275,3 +2275,25 @@ main>section.panel:has(>h2:first-child) .list,
 main>section.panel:has(>h2:first-child) .empty,
 main>section.panel:has(>h2:first-child) .row,
 main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;box-sizing:border-box}
+
+/* Availability planning and section filter controls. */
+.worker-availability-panel{width:100%;max-width:none;box-sizing:border-box}
+.worker-availability-panel .job-tabs,.inbox-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.worker-availability-panel .job-tabs button,.inbox-tabs button{padding:10px 15px;border:1px solid #353b30;border-radius:8px;background:#171a14;color:#d8dfd0;cursor:pointer}
+.worker-availability-panel .job-tabs button.active,.inbox-tabs button.active{background:#b5f34a;color:#15190f;border-color:#b5f34a;font-weight:800}
+.availability-timing-editor,.availability-automation-settings{margin-top:22px;padding:22px;border:1px solid #343a2f;border-radius:12px;background:rgba(255,255,255,.02)}
+.availability-timing-editor h3,.availability-automation-settings h3{margin-top:0}
+.availability-timing-editor>p,.availability-automation-settings>p{color:#a9afa1;font-size:13px}
+.availability-timing-editor .primary,.availability-automation-settings .primary{margin-top:12px}
+.availability-timing-editor input,.availability-automation-settings input,.availability-automation-settings select{width:100%;box-sizing:border-box}
+.availability-automation-settings>label{display:grid;gap:8px;margin-top:18px}
+.availability-automation-settings select[multiple]{min-height:140px;padding:10px}
+.availability-enable-button{font-size:15px!important;font-weight:800!important;padding:15px 22px!important;box-shadow:0 0 0 2px rgba(181,243,74,.18)}
+.availability-confirm-dialog{margin-top:20px;padding:20px;border:2px solid #b5f34a;border-radius:12px;background:#20251b}
+.availability-confirm-dialog p{line-height:1.6;color:#e1e7d9}
+.availability-confirm-dialog>div{display:flex;flex-wrap:wrap;gap:10px}
+.confirmed-availability-list{margin:25px 0}
+.availability-date-row{display:flex;align-items:center;gap:10px;padding:13px 0;border-top:1px solid #343a2f}
+.availability-date-row>div{display:flex;flex:1;flex-wrap:wrap;gap:14px;align-items:center}
+.availability-date-row span{font-size:13px;color:#b8c0ae}
+@media(max-width:650px){.availability-timing-editor,.availability-automation-settings{padding:14px}.availability-date-row{flex-wrap:wrap}.availability-date-row>div{flex-basis:100%}}
