@@ -666,10 +666,17 @@ app.delete('/api/applications/:id',auth,allow('employer'),requireVerification,as
  res.json({ok:true,fee});
 }));
 app.post('/api/applications/:id/cancel',auth,allow('worker'),asyncRoute(async(req,res)=>{
- const [rows]=await db.execute("SELECT id FROM applications WHERE id=? AND worker_id=? AND status='pending'",[req.params.id,req.user.id]);
- if(!rows.length)return res.status(404).json({error:'Pending application not found'});
- await db.execute("UPDATE applications SET status='withdrawn' WHERE id=? AND worker_id=? AND status='pending'",[req.params.id,req.user.id]);
- await audit(req,'application.cancelled','application',req.params.id);res.json({ok:true});
+ const [rows]=await db.execute("SELECT a.id,a.status,a.shift_id,s.starts_at FROM applications a JOIN shifts s ON s.id=a.shift_id WHERE a.id=? AND a.worker_id=? AND a.status IN ('pending','approved')",[req.params.id,req.user.id]);
+ if(!rows.length)return res.status(404).json({error:'Active application not found'});
+ const a=rows[0],within24Hours=(new Date(a.starts_at).getTime()-Date.now())<=24*60*60*1000;
+ if(a.status==='approved'&&within24Hours&&req.body?.confirmStrike!==true)return res.status(409).json({error:'Cancelling an approved shift within 24 hours will give you a strike. Do you want to continue?',strike:true});
+ await db.execute("UPDATE applications SET status='withdrawn' WHERE id=? AND worker_id=?",[a.id,req.user.id]);
+ if(a.status==='approved'&&within24Hours){
+   await db.execute("CREATE TABLE IF NOT EXISTS worker_strikes (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,worker_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,shift_id BIGINT UNSIGNED NOT NULL,reason VARCHAR(255) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uniq_worker_strike_application (application_id))");
+   await db.execute("INSERT IGNORE INTO worker_strikes(worker_id,application_id,shift_id,reason) VALUES(?,?,?,'Worker cancelled an approved shift within 24 hours')",[req.user.id,a.id,a.shift_id]);
+ }
+ await audit(req,'application.cancelled','application',req.params.id,{shiftId:a.shift_id,wasApproved:a.status==='approved',within24Hours,strikeApplied:a.status==='approved'&&within24Hours});
+ res.json({ok:true,strike:a.status==='approved'&&within24Hours});
 }));
 app.post('/api/checkouts',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
  const {shiftId,actualStart,actualEnd,breakMinutes=0,comment=''}=req.body;
