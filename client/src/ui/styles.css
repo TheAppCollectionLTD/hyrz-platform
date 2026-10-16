@@ -2324,3 +2324,21 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .availability-rate-settings{margin-top:24px;padding-top:20px;border-top:1px solid #343a2f}
 .availability-rate-settings>label{display:grid;gap:8px;margin-top:18px}
 .availability-rate-settings select[multiple]{min-height:120px;padding:10px;width:100%;box-sizing:border-box}
+
+/* Worker employer search and favourites. */
+.worker-employer-favourites{width:100%;max-width:none;box-sizing:border-box}
+.worker-employer-favourites .job-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.worker-employer-favourites .job-tabs button{padding:10px 15px;border:1px solid #353b30;border-radius:8px;background:#171a14;color:#d8dfd0;cursor:pointer}
+.worker-employer-favourites .job-tabs button.active{background:#b5f34a;color:#15190f;border-color:#b5f34a;font-weight:800}
+.employer-search-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:end;padding:18px;margin:16px 0 22px;border:1px solid #343a2f;border-radius:12px;background:rgba(255,255,255,.02)}
+.employer-search-filters label{display:grid;gap:7px;min-width:0}
+.employer-search-filters input{width:100%;min-width:0;box-sizing:border-box}
+.employer-search-filters button{justify-self:start}
+.employer-favourite-results{display:grid;gap:12px;margin-top:18px}
+.employer-favourite-card{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:18px;border:1px solid #343a2f;border-radius:12px;background:rgba(255,255,255,.02)}
+.employer-favourite-card-main{min-width:0;overflow-wrap:anywhere}
+.employer-favourite-card h3{margin:0 0 10px}
+.employer-favourite-card p{margin:6px 0;font-size:13px;color:#c2c9b8}
+.employer-favourite-card small{font-size:11px;color:#9ea692}
+.employer-favourite-card-actions{flex-shrink:0}
+@media(max-width:760px){.employer-search-filters{grid-template-columns:minmax(0,1fr)}.employer-favourite-card{flex-direction:column}.employer-favourite-card-actions{width:100%}}
