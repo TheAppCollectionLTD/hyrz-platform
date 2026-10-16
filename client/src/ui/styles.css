@@ -2425,3 +2425,16 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .mandatory-missing{color:#b42318!important}
 .formgrid label.mandatory-missing input,.formgrid label.mandatory-missing select,.formgrid label.mandatory-missing textarea{border:1px solid #d92d20!important;outline-color:#d92d20!important;background:#fff8f7}
 .mandatory-message{display:block;margin-top:6px;color:#b42318;font-size:.82rem;font-weight:600;line-height:1.35}
+
+/* Employer unfilled-shift applicant review */
+.unfilled-shift-select{display:flex;width:100%;flex-direction:column;align-items:flex-start;gap:7px;padding:10px 12px;border:0;border-radius:9px;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.unfilled-shift-select:hover,.selected-unfilled-shift .unfilled-shift-select{background:#f2f5ec}
+.unfilled-shift-select strong{font-size:1rem}
+.unfilled-shift-select small,.unfilled-shift-select span{font-size:.86rem}
+.unfilled-open-label{font-weight:700;margin-top:3px}
+.applicant-review-subsection{margin-top:18px;padding-top:14px;border-top:1px solid #dfe4d7}
+.applicant-search-filters{display:grid;grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:12px;margin:12px 0 16px}
+.applicant-search-filters label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.88rem}
+.applicant-search-filters input,.applicant-search-filters select{width:100%;min-width:0}
+.applicant-result{align-items:center}
+@media(max-width:640px){.applicant-search-filters{grid-template-columns:1fr}.unfilled-shift-select{padding:8px}}
