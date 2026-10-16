@@ -491,6 +491,7 @@ async function deleteImminentOpenShifts(){
 }
 const ensureWorkerEmployerFavourites = createTable(`CREATE TABLE IF NOT EXISTS worker_employer_favourites (worker_user_id BIGINT UNSIGNED NOT NULL, business_id BIGINT UNSIGNED NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(worker_user_id,business_id), FOREIGN KEY(worker_user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(business_id) REFERENCES businesses(id) ON DELETE CASCADE)`,'worker employer favourites');
 app.get('/api/worker/employers/search',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ await ensureBusinessAddressColumns;
  await ensureWorkerEmployerFavourites;
  const q=String(req.query.q||'').trim();
  const role=String(req.query.role||'').trim();
@@ -514,6 +515,7 @@ app.get('/api/worker/employers/search',auth,allow('worker'),asyncRoute(async(req
  res.json({employers:rows.map(row=>({...row,rolesAvailable:row.roles_available?row.roles_available.split('||'):[],isFavourite:Boolean(row.is_favourite),workedWith:Boolean(row.worked_with)}))});
 }));
 app.get('/api/worker/employers/favourites',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ await ensureBusinessAddressColumns;
  await ensureWorkerEmployerFavourites;
  const [rows]=await db.execute(`SELECT b.id AS business_id,b.name AS company_name,COALESCE(NULLIF(CONCAT_WS(', ',NULLIF(b.address_line_1,''),NULLIF(b.city,'')),''),'') AS company_location,GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR '||') AS roles_available,MAX(s.starts_at) AS latest_shift FROM worker_employer_favourites f JOIN businesses b ON b.id=f.business_id LEFT JOIN shifts s ON s.business_id=b.id WHERE f.worker_user_id=? GROUP BY b.id,b.name,b.address_line_1,b.city ORDER BY b.name`,[req.user.id]);
  res.json({employers:rows.map(row=>({...row,rolesAvailable:row.roles_available?row.roles_available.split('||'):[],isFavourite:true}))});
