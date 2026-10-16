@@ -2474,3 +2474,12 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  box-shadow:0 3px 8px rgba(0,0,0,.12);
 }
 @media(max-width:600px){.job-tabs-squares{grid-template-columns:repeat(2,minmax(0,1fr))}.job-tabs-squares button{min-height:76px}}
+
+/* Dashboard navigation tiles use the same prominent square treatment across roles. */
+.employer-shortcuts .employer-shortcut{
+ min-height:210px;
+ aspect-ratio:1 / 1;
+ justify-content:flex-start;
+}
+@media(max-width:900px){.employer-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.employer-shortcuts .employer-shortcut{min-height:0;aspect-ratio:1 / 1;padding:18px}}
+@media(max-width:520px){.employer-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.employer-shortcuts .employer-shortcut{padding:14px}.employer-shortcut strong{font-size:15px}.employer-shortcut small{font-size:11px}}
