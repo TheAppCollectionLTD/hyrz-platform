@@ -2393,3 +2393,10 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 /* Consistent active-subsection highlighting throughout worker dashboard sections. */
 .app.worker .panel .job-tabs button.active{background:#b5f34a!important;color:#15190f!important;border-color:#b5f34a!important;font-weight:800;box-shadow:0 2px 7px #0002}
 .app.worker .panel .job-tabs button:not(.active){border-color:rgba(160,170,145,.18)}
+
+
+/* Large, prominent employer shift section tabs. */
+.employer .employer-shift-tab{flex:1;min-width:0;min-height:76px;padding:20px 24px;font-size:17px;font-weight:750;line-height:1.25;border:1px solid rgba(160,170,145,.28);border-radius:12px;background:rgba(255,255,255,.035);color:var(--text,#f1f4eb);transition:background .15s,border-color .15s,transform .15s;cursor:pointer}
+.employer .employer-shift-tab:hover{border-color:var(--accent,#b5f34a);transform:translateY(-1px)}
+.employer .employer-shift-tab.selected{background:var(--accent,#b5f34a);border-color:var(--accent,#b5f34a);color:#15190f;box-shadow:0 3px 10px #0002}
+@media(max-width:560px){.employer .employer-shift-tab{min-height:64px;padding:14px 8px;font-size:14px}}
