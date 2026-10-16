@@ -66,6 +66,7 @@ function createTable(sql, label) {
 }
 const ensureProfilePictureColumn = addColumn('users','profile_picture LONGTEXT NULL','profile pictures');
 const ensureShiftPublishingColumns = (async()=>{await addColumn('shifts',"shift_type VARCHAR(80) NOT NULL DEFAULT 'hospitality'",'shift type');await addColumn('shifts','requirements JSON NULL','shift requirements');})();
+const ensureApplicationCancellationFee = addColumn('applications','cancellation_fee DECIMAL(10,2) NOT NULL DEFAULT 0','application cancellation fee');
 const ensureUserAddressColumns = (async()=>{
   await addColumn('users','address_line_1 VARCHAR(255) NULL','user address line');
   await addColumn('users','address_city VARCHAR(120) NULL','user address city');
@@ -570,6 +571,10 @@ app.post('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyn
 app.delete('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;await db.execute('DELETE FROM employer_worker_favourites WHERE employer_user_id=? AND worker_user_id=?',[req.user.id,Number(req.params.workerId)]);res.json({ok:true,favourite:false});
 }));
+app.get('/api/shifts/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
+ const [rows]=await db.execute('SELECT s.*,b.owner_user_id AS employer_id,b.name AS business_name FROM shifts s JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY s.starts_at DESC',[req.user.id]);
+ res.json({shifts:rows});
+}));
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
@@ -593,6 +598,23 @@ app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(asy
  const [r]=await db.execute('INSERT INTO shifts(business_id,created_by,title,description,location,starts_at,ends_at,break_minutes,hourly_pay,slots,auto_approve,shift_type,requirements) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
  [bs[0].id,req.user.id,title,description||null,shiftLocation,startsAt,endsAt,breakMinutes,hourlyPay,slots,!!autoApprove,shiftType,JSON.stringify(requirements.map(x=>x.trim()).filter(Boolean))]);
  await audit(req,'shift.created','shift',r.insertId);res.status(201).json({id:r.insertId});
+}));
+app.delete('/api/shifts/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
+ await ensureApplicationCancellationFee;
+ const [rows]=await db.execute('SELECT s.id,s.starts_at,s.ends_at,s.hourly_pay,s.break_minutes FROM shifts s JOIN businesses b ON b.id=s.business_id WHERE s.id=? AND b.owner_user_id=?',[req.params.id,req.user.id]);
+ if(!rows.length)return res.status(404).json({error:'Shift not found'});
+ const shift=rows[0];
+ const [approved]=await db.execute("SELECT id FROM applications WHERE shift_id=? AND status='approved'",[shift.id]);
+ const within24Hours=(new Date(shift.starts_at).getTime()-Date.now())<=24*60*60*1000;
+ const durationHours=Math.max(0,(new Date(shift.ends_at)-new Date(shift.starts_at))/3600000-(Number(shift.break_minutes||0)/60));
+ const feePerWorker=within24Hours?Math.round(Number(shift.hourly_pay)*durationHours*50)/100:0;
+ const totalFee=Math.round(feePerWorker*approved.length*100)/100;
+ if(approved.length&&within24Hours&&req.body?.confirmCancellationFee!==true)return res.status(409).json({error:'Cancelling within 24 hours of the shift incurs a fine of 50% of the total shift pay per approved worker.',approvedWorkers:approved.length,feePerWorker,totalFee});
+ await db.execute("UPDATE applications SET status='withdrawn',cancellation_fee=? WHERE shift_id=? AND status='approved'",[feePerWorker,shift.id]);
+ await db.execute("UPDATE applications SET status='withdrawn' WHERE shift_id=? AND status='pending'",[shift.id]);
+ await db.execute("UPDATE shifts SET status='cancelled' WHERE id=?",[shift.id]);
+ await audit(req,'shift.cancelled','shift',shift.id,{approvedWorkers:approved.length,within24Hours,feePerWorker,totalCancellationFee:totalFee});
+ res.json({ok:true,approvedWorkers:approved.length,feePerWorker,totalFee});
 }));
 app.get('/api/shifts/:id',auth,asyncRoute(async(req,res)=>{
  const [rows]=await db.execute('SELECT s.*,b.name AS business_name FROM shifts s JOIN businesses b ON b.id=s.business_id WHERE s.id=?',[req.params.id]);
@@ -620,6 +642,19 @@ app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asy
  const [rows]=await db.execute('SELECT a.id,a.shift_id FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=? AND b.owner_user_id=?',[req.params.id,req.user.id]);
  if(!rows.length)return res.status(404).json({error:'Application not found'});
  await db.execute('UPDATE applications SET status=? WHERE id=?',[status,req.params.id]);await audit(req,'application.'+status,'application',req.params.id);res.json({ok:true});
+}));
+app.delete('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
+ await ensureApplicationCancellationFee;
+ const [rows]=await db.execute("SELECT a.id,a.status,a.shift_id,s.starts_at,s.ends_at,s.hourly_pay,s.break_minutes FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=? AND b.owner_user_id=?",[req.params.id,req.user.id]);
+ if(!rows.length)return res.status(404).json({error:'Worker application not found'});
+ const a=rows[0];if(a.status!=='approved')return res.status(400).json({error:'Only approved workers can be removed with this action.'});
+ const within24Hours=(new Date(a.starts_at).getTime()-Date.now())<=24*60*60*1000;
+ const durationHours=Math.max(0,(new Date(a.ends_at)-new Date(a.starts_at))/3600000-(Number(a.break_minutes||0)/60));
+ const fee=within24Hours?Math.round(Number(a.hourly_pay)*durationHours*50)/100:0;
+ if(within24Hours&&req.body?.confirmCancellationFee!==true)return res.status(409).json({error:'Removing an approved worker within 24 hours incurs a fine of 50% of the total shift pay.',fee});
+ await db.execute("UPDATE applications SET status='withdrawn',cancellation_fee=? WHERE id=?",[fee,a.id]);
+ await audit(req,'application.approved_worker_removed','application',a.id,{shiftId:a.shift_id,within24Hours,cancellationFee:fee});
+ res.json({ok:true,fee});
 }));
 app.post('/api/applications/:id/cancel',auth,allow('worker'),asyncRoute(async(req,res)=>{
  const [rows]=await db.execute("SELECT id FROM applications WHERE id=? AND worker_id=? AND status='pending'",[req.params.id,req.user.id]);
