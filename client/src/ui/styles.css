@@ -2314,3 +2314,13 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app.worker .find-shifts-panel .rolling-calendar-day[aria-pressed="true"] small,
 .app.worker .find-shifts-panel .rolling-calendar-day[aria-pressed="true"] strong,
 .app.worker .find-shifts-panel .rolling-calendar-day[aria-pressed="true"] span{color:#17200d!important}
+
+/* Availability layout: confirmed tab is a simple list; scheduling sits below roles in automation. */
+.confirmed-availability-only{margin-top:18px}
+.confirmed-availability-only>h3{margin-bottom:16px}
+.availability-automation-settings>label{display:grid;gap:8px;margin:18px 0}
+.availability-timing-editor-inline{margin-top:22px}
+.availability-timing-editor-inline .rolling-shift-calendar{margin:16px 0}
+.availability-rate-settings{margin-top:24px;padding-top:20px;border-top:1px solid #343a2f}
+.availability-rate-settings>label{display:grid;gap:8px;margin-top:18px}
+.availability-rate-settings select[multiple]{min-height:120px;padding:10px;width:100%;box-sizing:border-box}
