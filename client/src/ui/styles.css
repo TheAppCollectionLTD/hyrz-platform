@@ -2297,3 +2297,20 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .availability-date-row>div{display:flex;flex:1;flex-wrap:wrap;gap:14px;align-items:center}
 .availability-date-row span{font-size:13px;color:#b8c0ae}
 @media(max-width:650px){.availability-timing-editor,.availability-automation-settings{padding:14px}.availability-date-row{flex-wrap:wrap}.availability-date-row>div{flex-basis:100%}}
+
+/* Explicit selected state for the Find shifts calendar date buttons. */
+.app.worker .find-shifts-panel .rolling-calendar-day.active,
+.app.worker .find-shifts-panel .rolling-calendar-day.active:hover,
+.app.worker .find-shifts-panel .rolling-calendar-day[aria-pressed="true"]{
+  background:#b5f34a!important;
+  background-color:#b5f34a!important;
+  color:#17200d!important;
+  border:2px solid #b5f34a!important;
+  box-shadow:inset 0 0 0 1px rgba(23,32,13,.12)!important;
+}
+.app.worker .find-shifts-panel .rolling-calendar-day.active small,
+.app.worker .find-shifts-panel .rolling-calendar-day.active strong,
+.app.worker .find-shifts-panel .rolling-calendar-day.active span,
+.app.worker .find-shifts-panel .rolling-calendar-day[aria-pressed="true"] small,
+.app.worker .find-shifts-panel .rolling-calendar-day[aria-pressed="true"] strong,
+.app.worker .find-shifts-panel .rolling-calendar-day[aria-pressed="true"] span{color:#17200d!important}
