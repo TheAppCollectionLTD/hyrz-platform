@@ -28,7 +28,28 @@ const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).cat
 // Run schema changes one at a time: concurrent ALTER TABLE statements were deadlocking at startup.
 let schemaQueue = Promise.resolve();
 function enqueueSchemaChange(task, label) {
-  const result = schemaQueue.then(task);
+  const runWithRetry = async () => {
+    let lastError;
+    for (let attempt = 1; attempt <= 5; attempt += 1) {
+      try {
+        return await task();
+      } catch (error) {
+        lastError = error;
+        const transientLockError = error && (
+          error.code === 'ER_LOCK_DEADLOCK' ||
+          error.code === 'ER_LOCK_WAIT_TIMEOUT' ||
+          error.errno === 1213 ||
+          error.errno === 1205
+        );
+        if (!transientLockError || attempt === 5) throw error;
+        const delayMs = attempt * 500;
+        console.warn('Retrying schema change "' + label + '" after database lock conflict (' + attempt + '/5).');
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      }
+    }
+    throw lastError;
+  };
+  const result = schemaQueue.then(runWithRetry);
   schemaQueue = result.catch(error => {
     console.error('Could not initialise ' + label + ':', error.message);
   });
