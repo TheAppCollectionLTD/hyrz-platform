@@ -25,63 +25,61 @@ app.use(cors({
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
-async function runSchemaChange(sql, label) {
-  for (let attempt = 1; attempt <= 5; attempt++) {
-    try { await db.query(sql); return; }
-    catch (error) {
-      if (error.code === 'ER_DUP_FIELDNAME') return;
-      if ((error.code === 'ER_LOCK_DEADLOCK' || error.code === 'ER_LOCK_WAIT_TIMEOUT') && attempt < 5) {
-        await new Promise(resolve => setTimeout(resolve, attempt * 300));
-        continue;
-      }
-      console.error('Could not initialise ' + label + ':', error.message);
-      throw error;
-    }
-  }
+// Run schema changes one at a time: concurrent ALTER TABLE statements were deadlocking at startup.
+let schemaQueue = Promise.resolve();
+function enqueueSchemaChange(task, label) {
+  const result = schemaQueue.then(task);
+  schemaQueue = result.catch(error => {
+    console.error('Could not initialise ' + label + ':', error.message);
+  });
+  return result;
 }
-const ensureProfilePictureColumn = runSchemaChange('ALTER TABLE users ADD COLUMN profile_picture LONGTEXT NULL','profile pictures');
+function addColumn(table, definition, label) {
+  return enqueueSchemaChange(async () => {
+    try { await db.query('ALTER TABLE ' + table + ' ADD COLUMN ' + definition); }
+    catch (error) { if (error.code !== 'ER_DUP_FIELDNAME') throw error; }
+  }, label);
+}
+function createTable(sql, label) {
+  return enqueueSchemaChange(async () => { await db.query(sql); }, label);
+}
+const ensureProfilePictureColumn = addColumn('users','profile_picture LONGTEXT NULL','profile pictures');
 const ensureUserAddressColumns = (async()=>{
-  await runSchemaChange('ALTER TABLE users ADD COLUMN address_line_1 VARCHAR(255) NULL','user address line');
-  await runSchemaChange('ALTER TABLE users ADD COLUMN address_city VARCHAR(120) NULL','user address city');
-  await runSchemaChange('ALTER TABLE users ADD COLUMN address_postcode VARCHAR(20) NULL','user address postcode');
-})().catch(error=>{console.error('Could not initialise user address fields:',error.message);throw error;});
-const adminLoginNamesReady = db.query(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err => { console.error('Could not initialise administrator usernames:', err.message); throw err; });
-const ensureUniqueEmails = (async () => {
+  await addColumn('users','address_line_1 VARCHAR(255) NULL','user address line');
+  await addColumn('users','address_city VARCHAR(120) NULL','user address city');
+  await addColumn('users','address_postcode VARCHAR(20) NULL','user address postcode');
+})();
+const adminLoginNamesReady = createTable(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`,'administrator usernames');
+const ensureUniqueEmails = enqueueSchemaChange(async () => {
   const [duplicates] = await db.query("SELECT LOWER(TRIM(email)) AS normalized_email, COUNT(*) AS account_count FROM users GROUP BY LOWER(TRIM(email)) HAVING COUNT(*) > 1 LIMIT 1");
   if (duplicates.length) {
     console.error('Email uniqueness migration paused: existing accounts share an email address after normalization. Resolve duplicates before enabling the database constraint.');
     return false;
   }
   await db.query('UPDATE users SET email=LOWER(TRIM(email)) WHERE email<>LOWER(TRIM(email))');
-  try {
-    await db.query("ALTER TABLE users ADD COLUMN email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED");
-  } catch (error) {
-    if (error.code !== 'ER_DUP_FIELDNAME') throw error;
-  }
-  try {
-    await db.query('ALTER TABLE users ADD UNIQUE KEY uq_users_email_normalized (email_normalized)');
-  } catch (error) {
-    if (error.code !== 'ER_DUP_KEYNAME') throw error;
-  }
+  try { await db.query("ALTER TABLE users ADD COLUMN email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED"); }
+  catch (error) { if (error.code !== 'ER_DUP_FIELDNAME') throw error; }
+  try { await db.query('ALTER TABLE users ADD UNIQUE KEY uq_users_email_normalized (email_normalized)'); }
+  catch (error) { if (error.code !== 'ER_DUP_KEYNAME') throw error; }
   return true;
-})().catch(error => { console.error('Could not initialise case-insensitive email uniqueness:', error.message); throw error; });
-const ensureBusinessAddressColumns = Promise.all([
-  db.query('ALTER TABLE businesses ADD COLUMN address_line_1 VARCHAR(255) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-  db.query('ALTER TABLE businesses ADD COLUMN city VARCHAR(120) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
-]).catch(error=>{console.error('Could not initialise business address fields:',error.message);throw error;});
-const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
-const ensureCheckoutCounterColumns = Promise.all([
-  db.query('ALTER TABLE checkouts ADD COLUMN employer_comment TEXT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-  db.query('ALTER TABLE checkouts ADD COLUMN counter_start DATETIME NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-  db.query('ALTER TABLE checkouts ADD COLUMN counter_end DATETIME NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-  db.query('ALTER TABLE checkouts ADD COLUMN counter_break_minutes INT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-  db.query('ALTER TABLE checkouts ADD COLUMN counter_gross_pay DECIMAL(10,2) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
-]).catch(err=>{console.error('Could not initialise checkout counter-offer fields:',err.message);throw err;});
-const ensureWorkerAvailabilityTable = db.query(`CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err=>{console.error('Could not initialise worker availability:',err.message);throw err;});
-const ensureWorkerIdentifierColumns = Promise.all([
-  db.query('ALTER TABLE worker_profiles ADD COLUMN national_insurance_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-  db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
-]).catch(err=>{console.error('Could not initialise worker identifier hashes:',err.message);throw err;});
+},'case-insensitive email uniqueness');
+const ensureBusinessAddressColumns = (async()=>{
+  await addColumn('businesses','address_line_1 VARCHAR(255) NULL','business address line');
+  await addColumn('businesses','city VARCHAR(120) NULL','business city');
+})();
+const ensureBlockedIdentifiers = createTable(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`,'blocked identifiers');
+const ensureCheckoutCounterColumns = (async()=>{
+  await addColumn('checkouts','employer_comment TEXT NULL','checkout employer comment');
+  await addColumn('checkouts','counter_start DATETIME NULL','checkout counter start');
+  await addColumn('checkouts','counter_end DATETIME NULL','checkout counter end');
+  await addColumn('checkouts','counter_break_minutes INT NULL','checkout counter break');
+  await addColumn('checkouts','counter_gross_pay DECIMAL(10,2) NULL','checkout counter gross pay');
+})();
+const ensureWorkerAvailabilityTable = createTable(`CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`,'worker availability');
+const ensureWorkerIdentifierColumns = (async()=>{
+  await addColumn('worker_profiles','national_insurance_hash CHAR(64) NULL','worker National Insurance hash');
+  await addColumn('worker_profiles','worker_permit_hash CHAR(64) NULL','worker permit hash');
+})();
 const audit = async (req, action, entityType, entityId, details={}) => {
   await db.execute('INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,details,ip_address) VALUES(?,?,?,?,?,?)',
     [req.user?.id || null, action, entityType, entityId || null, JSON.stringify(details), req.ip]);
