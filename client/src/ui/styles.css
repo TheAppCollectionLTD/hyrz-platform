@@ -2369,3 +2369,17 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .timetable-shift-card p{margin:7px 0;color:#c8cebf;font-size:13px}
 .timetable-shift-card small{color:#aeb6a3}
 @media(max-width:560px){.timetable-weekdays,.timetable-days{gap:5px;min-width:350px}.timetable-day{min-height:64px;padding:6px 2px}.timetable-day strong{font-size:18px}}
+
+/* Availability dropdowns must float above following sections instead of pushing/overlapping them. */
+.worker-availability-panel .availability-collapsible,
+.worker-availability-panel .availability-employer-preferences{position:relative;overflow:visible}
+.worker-availability-panel .availability-collapsible .role-picker-panel,
+.worker-availability-panel .availability-collapsible .shift-type-picker-panel,
+.worker-availability-panel .availability-employer-preferences .role-picker-panel{position:absolute;top:calc(100% + 6px);left:0;right:0;width:100%;max-width:100%;min-width:0;max-height:min(380px,55vh);overflow:hidden;box-sizing:border-box;z-index:1000;box-shadow:0 14px 32px #000a}
+.worker-availability-panel .availability-collapsible .role-picker-options,
+.worker-availability-panel .availability-employer-preferences .role-picker-options{max-height:min(280px,40vh);overflow-y:auto}
+.worker-availability-panel .availability-collapsible .shift-type-picker-panel{top:calc(100% + 6px);left:0;right:0;width:100%;max-height:min(340px,50vh);overflow:auto;z-index:1000}
+.worker-availability-panel .availability-collapsible .shift-type-picker-options{max-height:min(250px,35vh);overflow-y:auto}
+.worker-availability-panel .availability-collapsible .role-picker-panel>input[type="search"]{flex:0 0 auto}
+.worker-availability-panel .availability-collapsible .role-picker-footer,
+.worker-availability-panel .availability-employer-preferences .role-picker-footer{flex:0 0 auto}
