@@ -2342,3 +2342,30 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .employer-favourite-card small{font-size:11px;color:#9ea692}
 .employer-favourite-card-actions{flex-shrink:0}
 @media(max-width:760px){.employer-search-filters{grid-template-columns:minmax(0,1fr)}.employer-favourite-card{flex-direction:column}.employer-favourite-card-actions{width:100%}}
+
+/* Worker timetable: six-week calendar grid using the same compact day-card style. */
+.worker-timetable-panel{width:100%;max-width:none;box-sizing:border-box}
+.timetable-legend{display:flex;flex-wrap:wrap;gap:18px;margin:18px 0;font-size:12px;color:#c8cebf}
+.timetable-legend span{display:inline-flex;align-items:center;gap:7px}
+.timetable-legend i{display:inline-block;width:12px;height:12px;border-radius:3px}
+.timetable-legend-red{background:#f16b6b}
+.timetable-legend-green{background:#b5f34a}
+.timetable-grid{width:100%;overflow-x:auto}
+.timetable-weekdays,.timetable-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:420px}
+.timetable-weekdays{margin-bottom:8px}
+.timetable-weekdays strong{text-align:center;font-size:12px;color:#aeb6a3;padding:8px 0}
+.timetable-day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:76px;padding:9px 4px;border:1px solid transparent;border-radius:10px;cursor:pointer;color:#17200d;transition:filter .15s,border-color .15s}
+.timetable-day small{font-size:10px;text-transform:uppercase;opacity:.8}
+.timetable-day strong{font-size:21px;line-height:1}
+.timetable-day span{font-size:10px;font-weight:700}
+.timetable-day.free-day{background:#b5f34a;border-color:#9ad331}
+.timetable-day.has-shift{background:#f16b6b;border-color:#df5656;color:#241111}
+.timetable-day:hover{filter:brightness(1.08)}
+.timetable-day.selected{outline:3px solid #fff;outline-offset:2px;position:relative;z-index:1}
+.timetable-selected-shifts{margin-top:26px;padding-top:20px;border-top:1px solid #343a2f}
+.timetable-selected-shifts h3{margin-top:0}
+.timetable-shift-card{padding:17px;margin:12px 0;border:1px solid #343a2f;border-radius:12px;background:rgba(255,255,255,.025)}
+.timetable-shift-card h4{margin:0 0 12px}
+.timetable-shift-card p{margin:7px 0;color:#c8cebf;font-size:13px}
+.timetable-shift-card small{color:#aeb6a3}
+@media(max-width:560px){.timetable-weekdays,.timetable-days{gap:5px;min-width:350px}.timetable-day{min-height:64px;padding:6px 2px}.timetable-day strong{font-size:18px}}
