@@ -2389,3 +2389,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 /* Make the active Inbox audience subsection unmistakable. */
 .worker-inbox-panel .inbox-section-tabs button.active{background:var(--accent,#b7f34a);color:#10140b;border-color:var(--accent,#b7f34a);font-weight:750;box-shadow:0 0 0 2px rgba(183,243,74,.18)}
 .worker-inbox-panel .inbox-section-tabs button:not(.active){background:transparent;color:var(--text-muted,#a8ad9f);border-color:rgba(160,170,145,.22)}
+
+/* Consistent active-subsection highlighting throughout worker dashboard sections. */
+.app.worker .panel .job-tabs button.active{background:#b5f34a!important;color:#15190f!important;border-color:#b5f34a!important;font-weight:800;box-shadow:0 2px 7px #0002}
+.app.worker .panel .job-tabs button:not(.active){border-color:rgba(160,170,145,.18)}
