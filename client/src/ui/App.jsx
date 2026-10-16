@@ -200,37 +200,11 @@ async function authenticate(register) {
   </div>
 </div>
 <div className="welcome-panel"><div className="brand-mark">hyrz</div>
-<h2>Work around your life.<br/><em>Not vice versa.</em></h2>
-<p>Explore jobs, choose shifts that suit your availability and earn on your terms.</p>
+<h2>Flexible work.<br/><em>Reliable staffing.</em></h2>
 <button className="primary" onClick={()=>navigateTo('chooseRole')}>Get started</button>
 <p>Already registered? <button className="textbutton" onClick={()=>navigateTo('login')}>Sign in</button></p>
 </div></section>}
-{!user&&page==='home'&&<section className="how-hyrz-works">
-  <div className="how-heading">
-    <span className="eyebrow">FLEXIBILITY, MADE SIMPLE</span>
-    <h2>Work that works around you.</h2>
-    <p>Finding shifts should fit into your life, not take it over.</p>
-  </div>
-  <div className="how-steps">
-    <article className="how-step">
-      <span className="step-number">01</span>
-      <h3>Choose your availability</h3>
-      <p>Decide which days and times work around your existing commitments.</p>
-    </article>
-    <article className="how-step">
-      <span className="step-number">02</span>
-      <h3>Explore suitable shifts</h3>
-      <p>Browse opportunities across different industries and working environments.</p>
-    </article>
-    <article className="how-step">
-      <span className="step-number">03</span>
-      <h3>Work on your terms</h3>
-      <p>Apply for available shifts that fit your schedule and preferences.</p>
-    </article>
-  </div>
-  <button className="primary how-cta" onClick={()=>navigateTo('chooseRole')}>Get started ↗</button>
-</section>}
- {!user&&page==='chooseRole'&&<section className="role-selection">
+{!user&&page==='chooseRole'&&<section className="role-selection">
 <button className="textbutton" onClick={()=>navigateTo('home')}>← Back</button>
 <h2>How will you use hyrz?</h2><p>Choose your account type.</p>
 <div className="role-cards">
