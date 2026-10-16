@@ -647,13 +647,16 @@ function WorkerInbox({user,action,busy,setNotice,setError,goBack}) {
  const [messages,setMessages]=useState([]);
  const [loading,setLoading]=useState(true);
  const [filter,setFilter]=useState('all');
+ const [section,setSection]=useState('all');
  async function refreshMessages(){try{const r=await request('/messages/mine');setMessages(r.messages||[]);}catch(e){setError(e.message);}finally{setLoading(false);}}
  useEffect(()=>{refreshMessages();},[]);
- const visible=messages.filter(m=>filter==='all'?true:filter==='received'?Number(m.sender_id)!==Number(user.id):filter==='sent'?Number(m.sender_id)===Number(user.id):Number(m.sender_id)!==Number(user.id)&&!m.read_at);
- const unreadCount=messages.filter(m=>Number(m.sender_id)!==Number(user.id)&&!m.read_at).length;
+ const inSection=m=>section==='all'||(section==='admins'&&(m.sender_role==='admin'||m.recipient_role==='admin'))||(section==='employers'&&(m.sender_role==='employer'||m.recipient_role==='employer'));
+ const sectionMessages=messages.filter(inSection);
+ const visible=sectionMessages.filter(m=>filter==='all'?true:filter==='received'?Number(m.sender_id)!==Number(user.id):filter==='sent'?Number(m.sender_id)===Number(user.id):Number(m.sender_id)!==Number(user.id)&&!m.read_at);
+ const unreadCount=sectionMessages.filter(m=>Number(m.sender_id)!==Number(user.id)&&!m.read_at).length;
  return <section className="panel worker-inbox-panel">
   <div className="worker-inbox-heading"><div><button className="textbutton" onClick={goBack}>← Back</button><h2>Inbox</h2><p>Your conversations and messages.</p></div><button type="button" className="compose-message-button" aria-label="Compose a new message" title="Compose a new message" onClick={()=>setComposeOpen(v=>!v)}>{composeOpen?'×':'✎'}</button></div>
-  <div className="job-tabs inbox-tabs">{[['all','All'],['received','Received'],['sent','Sent'],['unread','Unread']].map(([id,label])=><button type="button" key={id} className={filter===id?'active':''} onClick={()=>setFilter(id)}>{label}{id==='unread'?' ('+unreadCount+')':''}</button>)}</div>
+  <div className="job-tabs inbox-section-tabs">{[['all','All'],['admins','Admins'],['employers','Employers']].map(([id,label])=><button type="button" key={id} className={section===id?'active':''} onClick={()=>{setSection(id);setFilter('all');}}>{label}{id==='admins'?' ('+messages.filter(m=>m.sender_role==='admin'||m.recipient_role==='admin').length+')':id==='employers'?' ('+messages.filter(m=>m.sender_role==='employer'||m.recipient_role==='employer').length+')':''}</button>)}</div><div className="job-tabs inbox-tabs">{[['all','All'],['received','Received'],['sent','Sent'],['unread','Unread']].map(([id,label])=><button type="button" key={id} className={filter===id?'active':''} onClick={()=>setFilter(id)}>{label}{id==='unread'?' ('+unreadCount+')':''}</button>)}</div>
   {composeOpen&&<div className="worker-inbox-compose"><div className="worker-inbox-compose-heading"><h3>New message</h3><p>Send a new message to hyrz support.</p></div><SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/></div>}
   <div className="worker-inbox-messages">{loading?<p className="muted">Loading messages…</p>:visible.length===0?<div className="empty-state">No {filter==='all'?'messages':filter+' messages'} to show.</div>:visible.map(m=><article className="worker-inbox-message" key={m.id}><div className="worker-inbox-message-top"><strong>{m.subject||'Message'}</strong><small>{new Date(m.created_at).toLocaleString('en-GB')}</small></div><p>{m.body}</p><small>{Number(m.sender_id)===Number(user.id)?'Sent by you':'Received'} · {m.read_at?'Read':'Unread'}</small></article>)}</div>
  </section>;
