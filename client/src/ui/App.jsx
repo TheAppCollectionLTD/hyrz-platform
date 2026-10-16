@@ -404,7 +404,9 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
   <div className="account-password-heading"><h3>Email address</h3><button type="button" className="password-edit-button" onClick={()=>{setEmail(user.email||'');setShowEmailEditor(v=>!v);}}>{showEmailEditor?'Cancel':'✎ Edit'}</button></div>
   {!showEmailEditor?<p className="account-readonly-value">{user.email||'Not provided'} · {user.email_verified_at?'Verified':'Verification may be required'}</p>:<form className="account-inline-editor" onSubmit={e=>{e.preventDefault();action(async()=>{const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({email})});setUser(result.user);setEmail(result.user.email);setShowEmailEditor(false);setNotice(result.emailVerificationRequired?'Email updated. You must verify the new address before accessing restricted features.':'Email updated.');});}}><label>New email address<input type="email" required maxLength="254" value={email} onChange={e=>setEmail(e.target.value)}/></label><button className="secondary" disabled={busy}>Save email</button><small>Changing your email will require you to verify the new address.</small></form>}
   <hr/>
-  address section
+  <div className="account-password-heading"><h2>Business address</h2><span className="muted">Locked</span></div>
+  <div className="account-readonly-value"><p>{user.business_address||user.address_line_1||'Business address not added'}</p><p>{[user.business_city||user.address_city,user.business_postcode||user.address_postcode].filter(Boolean).join(', ')}</p></div>
+  <p className="muted">For security, business addresses cannot be changed here. Contact hyrz administrators to request an update.</p>
   <hr/>
   <div className="account-password-heading"><h2>Verification details</h2><span className="muted">Read-only</span></div>
   <div className="account-verification-details">
