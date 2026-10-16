@@ -643,7 +643,7 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
 app.get('/api/applications/mine',auth,asyncRoute(async(req,res)=>{
  const sql=req.user.role==='worker'
  ? `SELECT a.*,s.title,s.location,s.starts_at,s.ends_at,s.hourly_pay,b.name business_name FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.worker_id=? ORDER BY a.created_at DESC`
- : `SELECT a.*,s.title,s.starts_at,s.ends_at,u.first_name,u.last_name,u.email FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN users u ON u.id=a.worker_id JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY a.created_at DESC`;
+ : `SELECT a.*,s.title,s.starts_at,s.ends_at,u.first_name,u.last_name,u.email,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS rating_count FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN users u ON u.id=a.worker_id JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY a.created_at DESC`;
  const [rows]=await db.execute(sql,[req.user.id]);res.json({applications:rows});
 }));
 app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
