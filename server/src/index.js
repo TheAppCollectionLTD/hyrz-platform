@@ -583,6 +583,7 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  const [rows]=await db.execute(sql,args);res.json({shifts:rows});
 }));
 app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
+ await ensureShiftPublishingColumns;
  const {title,description,location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false,shiftType='hospitality',requirements=[]}=req.body;
  if(!title||!VALID_JOB_ROLES.has(title)) return res.status(400).json({error:'Choose a job role from the approved role list.'});
  if(!startsAt||!endsAt||new Date(endsAt)<=new Date(startsAt)||Number(hourlyPay)<8||Number(slots)<1||Number(breakMinutes)<0||!Array.isArray(requirements)||requirements.length>10||requirements.some(x=>typeof x!=='string'||x.trim().length>250)) return res.status(400).json({error:'Invalid shift details. Hourly pay must be at least £8.00'});
@@ -598,8 +599,11 @@ app.get('/api/shifts/:id',auth,asyncRoute(async(req,res)=>{
  if(!rows.length)return res.status(404).json({error:'Shift not found'});res.json({shift:rows[0]});
 }));
 app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
- const [s]=await db.execute('SELECT id,status,auto_approve FROM shifts WHERE id=?',[req.params.id]);
+ await ensureShiftPublishingColumns;
+ const [s]=await db.execute('SELECT id,status,auto_approve,requirements FROM shifts WHERE id=?',[req.params.id]);
  if(!s.length||s[0].status!=='open')return res.status(404).json({error:'Shift not available'});
+ const requiredItems=Array.isArray(s[0].requirements)?s[0].requirements:(typeof s[0].requirements==='string'?JSON.parse(s[0].requirements||'[]'):[]);
+ if(requiredItems.length&&req.body?.confirmedRequirements!==true)return res.status(400).json({error:'Confirm all shift requirements before applying.'});
  try {
  const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status) VALUES(?,?,?)',[req.params.id,req.user.id,s[0].auto_approve?'approved':'pending']);
  res.status(201).json({id:r.insertId,status:s[0].auto_approve?'approved':'pending'});
