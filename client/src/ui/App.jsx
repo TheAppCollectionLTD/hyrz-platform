@@ -360,6 +360,9 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
  const [showEmailEditor,setShowEmailEditor]=useState(false);
  const [showAddressEditor,setShowAddressEditor]=useState(false);
  const [verification,setVerification]=useState(null);
+ const [referralCopied,setReferralCopied]=useState(false);
+ const referralLink=typeof window!=='undefined'?window.location.origin+'/?ref='+encodeURIComponent(user.id):'';
+ async function copyReferralLink(){try{await navigator.clipboard.writeText(referralLink);setReferralCopied(true);window.setTimeout(()=>setReferralCopied(false),2200);}catch{const field=document.createElement('textarea');field.value=referralLink;field.style.position='fixed';field.style.opacity='0';document.body.appendChild(field);field.select();const copied=document.execCommand('copy');field.remove();if(copied){setReferralCopied(true);window.setTimeout(()=>setReferralCopied(false),2200);}}}
  useEffect(()=>{request('/onboarding/status').then(r=>setVerification(r.onboarding)).catch(()=>{});},[]);
  async function saveProfilePicture(nextPicture) {
   await action(async()=>{
@@ -392,6 +395,7 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
    <small>PNG, JPG, WEBP or GIF. Maximum 400 KB. Your photo saves automatically after upload.</small>
    {profilePicture&&<button type="button" className="secondary" disabled={busy} onClick={()=>saveProfilePicture('')}>Remove picture</button>}</div>
   </div>
+  {user.role==='worker'&&<><hr/><section className="referral-link-section"><h2>Referral link</h2><p>Invite friends to join hyrz using your personal referral link.</p><div className="referral-link-copy-row"><input aria-label="Your referral link" type="text" readOnly value={referralLink}/><button type="button" className="primary" onClick={copyReferralLink}>{referralCopied?'Copied!':'Copy link'}</button></div><details className="referral-commission-info"><summary aria-label="How referral commission works" title="How referral commission works"><span aria-hidden="true">?</span> How commissions work</summary><p>You can earn <strong>£20 per week</strong> for each employee you refer who works a full week. A week worked is defined as <strong>40 hours worked</strong>.</p></details></section></>}
   <hr/>
   <div className="account-password-heading"><h2>Personal details</h2></div>
   <label>First name<input type="text" value={user.first_name||(user.role==='admin'?'Simson':'')} readOnly aria-readonly="true"/></label>
