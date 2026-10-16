@@ -334,7 +334,7 @@ async function authenticate(register) {
  {user?.role==='worker'&&page==='favourites'&&<WorkerEmployerFavourites navigateTo={navigateTo} action={action} busy={busy} setError={setError} setNotice={setNotice}/>}
  {user?.role==='worker'&&page==='complaints'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Complaints</h2><p>Report concerns about a client, a person or conditions at a work site. Your message is sent to hyrz support.</p><SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/></section>}
  {user?.role==='worker'&&page==='timetable'&&<WorkerTimetable applications={applications} navigateTo={navigateTo}/>}
- {user?.role==='worker'&&page==='notifications'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Notifications</h2><p>Shift decisions, checkout reminders and messages from hyrz will appear here once the notification feed and email reminders are connected.</p><div className="empty-state">You're all caught up.</div></section>}
+ {user?.role==='worker'&&page==='notifications'&&<WorkerNotifications navigateTo={navigateTo} setError={setError} setNotice={setNotice}/ >}
  {user?.role==='worker'&&page==='workchats'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Workchats</h2><p>Group conversations for employers who have added you to their favourites will appear here.</p><div className="empty-state">No workchats available yet.</div></section>}
  {user?.role==='worker'&&page==='contact'&&<SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
 
@@ -615,6 +615,17 @@ function WorkerAvailability({action,busy,setNotice,setError,navigateTo}) {
  {confirmAuto&&<div className="availability-confirm-dialog" role="dialog" aria-modal="true"><h3>Confirm automatic matching</h3><p>Confirm to activate automatic matching and publish the availability dates you have selected. Only confirmed dates will appear under Confirmed availability.</p><div><button type="button" className="primary" disabled={busy} onClick={async()=>{const confirmedTimings=Object.fromEntries(Object.entries(timings).map(([date,t])=>[date,{...t,confirmed:true}]));setAutomatic(true);setConfirmAuto(false);setDates([]);await save({...savePayload,automatic:true,timings:confirmedTimings},'Automatic matching confirmed and availability published.');}}>Confirm automatic matching</button><button type="button" className="secondary" onClick={()=>setConfirmAuto(false)}>Cancel</button></div></div>}
  </div>}
  </section>;
+}
+
+function WorkerNotifications({navigateTo,setError,setNotice}) {
+ const [tab,setTab]=useState('all');
+ const [preferences,setPreferences]=useState({shiftReminders:{email:true,inApp:true},shiftAcceptances:{email:true,inApp:true},shiftRescindments:{email:true,inApp:true}});
+ const [loaded,setLoaded]=useState(false);
+ const [saving,setSaving]=useState(false);
+ useEffect(()=>{request('/worker/notification-preferences').then(r=>{if(r.preferences)setPreferences(p=>({...p,...r.preferences}));}).catch(e=>setError(e.message)).finally(()=>setLoaded(true));},[]);
+ const updatePreference=async(type,channel,value)=>{const next={...preferences,[type]:{...preferences[type],[channel]:value}};setPreferences(next);setSaving(true);try{await request('/worker/notification-preferences',{method:'PUT',body:JSON.stringify({preferences:next})});setNotice('Notification settings saved.');}catch(e){setError(e.message);}finally{setSaving(false);}};
+ const types=[['shiftReminders','Shift reminders','Reminders about upcoming shifts.'],['shiftAcceptances','Shift acceptances','When a shift booking is accepted.'],['shiftRescindments','Shift rescindments','When an accepted shift is rescinded or withdrawn.']];
+ return <section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Notifications</h2><div className="job-tabs">{[['all','All'],['unread','Unread'],['settings','Settings']].map(([id,label])=><button type="button" key={id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{label}</button>)}</div>{tab==='settings'?<div className="notification-settings"><h3>Notification preferences</h3><p>Choose which channels can send you these notification types. Other notification types cannot be turned off here.</p>{types.map(([type,label,description])=><article className="notification-setting-row" key={type}><div><strong>{label}</strong><p>{description}</p></div><div className="notification-channel-toggles">{[['email','Email'],['inApp','In-app']].map(([channel,title])=><label key={channel}><input type="checkbox" checked={Boolean(preferences[type]?.[channel])} disabled={!loaded||saving} onChange={e=>updatePreference(type,channel,e.target.checked)}/><span>{title}</span></label>)}</div></article>)}{saving&&<p className="muted">Saving settings…</p>}</div>:<div className="empty-state">{tab==='unread'?'You have no unread notifications.':'No notifications yet. Your notifications will appear here when they are available.'}</div>}</section>;
 }
 
 function WorkerInbox({user,action,busy,setNotice,setError,goBack}) {
