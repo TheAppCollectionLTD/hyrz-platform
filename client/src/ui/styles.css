@@ -2550,3 +2550,41 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .worker-section-links.job-tabs,.employer .worker-section-links.job-tabs{gap:10px}
  .worker-section-links.job-tabs>button,.employer .worker-section-links.job-tabs>button,.employer .worker-section-links.job-tabs>.employer-shift-tab{padding:14px;font-size:13px}
 }
+
+/* Equal-sized square subsection cards across employer and worker workspaces. */
+.worker-section-links.job-tabs,
+.employer .worker-section-links.job-tabs{
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ align-items:stretch;
+}
+.worker-section-links.job-tabs>button,
+.employer .worker-section-links.job-tabs>button,
+.employer .worker-section-links.job-tabs>.employer-shift-tab{
+ box-sizing:border-box;
+ width:100%;
+ height:auto;
+ min-height:0;
+ aspect-ratio:1 / 1;
+ overflow-wrap:anywhere;
+}
+.available-shifts-open-section{
+ width:100%;
+ min-width:0;
+ margin-top:4px;
+ padding:24px;
+ border:1px solid #e5e8e0;
+ border-radius:14px;
+ background:#fff;
+ color:#171916;
+ box-sizing:border-box;
+}
+.available-shifts-open-section .find-shifts-heading{margin-top:0}
+.available-shifts-open-section .rolling-shift-calendar{margin-top:16px}
+.available-shifts-open-section .find-shifts-search{margin-top:16px}
+@media(max-width:900px){
+ .worker-section-links.job-tabs,.employer .worker-section-links.job-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+ .worker-section-links.job-tabs,.employer .worker-section-links.job-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .available-shifts-open-section{padding:14px}
+}
