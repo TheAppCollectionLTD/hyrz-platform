@@ -2412,3 +2412,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .employer .past-shift-review{margin-top:16px;padding:14px;border-radius:8px;background:#f4f6ef;color:#202719}
 .employer .past-shift-review p{margin:7px 0;color:#303a28}
 .employer .past-shift-review strong{color:#202719}
+
+
+/* Clear, paired actions at the bottom of the employer shift form. */
+.shift-template-choice{padding-top:1rem;border-top:1px solid #e5e7df}.template-opt-in-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.75rem 1rem;border:1px solid #cfd5c8;border-radius:10px;background:#f7f8f4;color:#1c2a1f;font-weight:700;cursor:pointer}.shift-publish-actions{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.5rem}.shift-publish-actions button{min-height:50px;font-weight:800;white-space:normal}.shift-save-template-button{border:1px solid #cfd5c8}.shift-publish-button{box-shadow:0 3px 0 rgba(0,0,0,.12)}@media(max-width:600px){.shift-publish-actions{grid-template-columns:1fr}}
