@@ -77,6 +77,7 @@ const ensureCheckoutCounterColumns = Promise.all([
   db.query('ALTER TABLE checkouts ADD COLUMN counter_break_minutes INT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
   db.query('ALTER TABLE checkouts ADD COLUMN counter_gross_pay DECIMAL(10,2) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
 ]).catch(err=>{console.error('Could not initialise checkout counter-offer fields:',err.message);throw err;});
+const ensureWorkerAvailabilityTable = db.query(`CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err=>{console.error('Could not initialise worker availability:',err.message);throw err;});
 const ensureWorkerIdentifierColumns = Promise.all([
   db.query('ALTER TABLE worker_profiles ADD COLUMN national_insurance_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
   db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
@@ -451,6 +452,27 @@ app.get('/api/onboarding/status', auth, asyncRoute(async (req, res) => {
   }
 
   res.json({ onboarding });
+}));
+app.get('/api/worker/availability',auth,asyncRoute(async(req,res)=>{
+ if(req.user.role!=='worker') return res.status(403).json({error:'Worker accounts only.'});
+ await ensureWorkerAvailabilityTable;
+ const [rows]=await db.execute('SELECT timings,min_hourly_rate,min_total_pay,max_distance,roles,shift_types,automatic_enabled FROM worker_availability WHERE user_id=?',[req.user.id]);
+ const row=rows[0];
+ res.json({availability:row?{timings:typeof row.timings==='string'?JSON.parse(row.timings):row.timings,minHourlyRate:Number(row.min_hourly_rate),minTotalPay:Number(row.min_total_pay),maxDistance:Number(row.max_distance),roles:typeof row.roles==='string'?JSON.parse(row.roles):row.roles,shiftTypes:typeof row.shift_types==='string'?JSON.parse(row.shift_types):row.shift_types,automatic:Boolean(row.automatic_enabled)}:{timings:{},minHourlyRate:8,minTotalPay:20,maxDistance:10,roles:[],shiftTypes:[],automatic:false}});
+}));
+app.put('/api/worker/availability',auth,asyncRoute(async(req,res)=>{
+ if(req.user.role!=='worker') return res.status(403).json({error:'Worker accounts only.'});
+ await ensureWorkerAvailabilityTable;
+ const timings=req.body.timings&&typeof req.body.timings==='object'&&!Array.isArray(req.body.timings)?req.body.timings:{};
+ const minHourlyRate=Number(req.body.minHourlyRate??8),minTotalPay=Number(req.body.minTotalPay??20),maxDistance=Number(req.body.maxDistance??10);
+ const roles=Array.isArray(req.body.roles)?req.body.roles:[],shiftTypes=Array.isArray(req.body.shiftTypes)?req.body.shiftTypes:[];
+ if(!Number.isFinite(minHourlyRate)||minHourlyRate<8||!Number.isFinite(minTotalPay)||minTotalPay<8||!Number.isInteger(maxDistance)||maxDistance<1) return res.status(400).json({error:'Minimum hourly rate and total shift pay must be at least £8; distance must be at least 1 mile.'});
+ const datePattern=/^\d{4}-\d{2}-\d{2}$/;
+ for(const [date,timing] of Object.entries(timings)){
+   if(!datePattern.test(date)||!timing||typeof timing.start!=='string'||typeof timing.end!=='string'||!/^([01]\d|2[0-3]):[0-5]\d$/.test(timing.start)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(timing.end)||timing.start>=timing.end) return res.status(400).json({error:'Each availability date must have valid start and end times.'});
+ }
+ await db.execute(`INSERT INTO worker_availability (user_id,timings,min_hourly_rate,min_total_pay,max_distance,roles,shift_types,automatic_enabled) VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE timings=VALUES(timings),min_hourly_rate=VALUES(min_hourly_rate),min_total_pay=VALUES(min_total_pay),max_distance=VALUES(max_distance),roles=VALUES(roles),shift_types=VALUES(shift_types),automatic_enabled=VALUES(automatic_enabled)`,[req.user.id,JSON.stringify(timings),minHourlyRate,minTotalPay,maxDistance,JSON.stringify(roles),JSON.stringify(shiftTypes),req.body.automatic?1:0]);
+ res.json({ok:true,availability:{timings,minHourlyRate,minTotalPay,maxDistance,roles,shiftTypes,automatic:Boolean(req.body.automatic)}});
 }));
 app.get('/api/profile',auth,asyncRoute(async(req,res)=>{
  const [u]=await db.execute('SELECT id,email,role,first_name,last_name,phone FROM users WHERE id=?',[req.user.id]);
