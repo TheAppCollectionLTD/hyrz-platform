@@ -2400,3 +2400,15 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .employer .employer-shift-tab:hover{border-color:var(--accent,#b5f34a);transform:translateY(-1px)}
 .employer .employer-shift-tab.selected{background:var(--accent,#b5f34a);border-color:var(--accent,#b5f34a);color:#15190f;box-shadow:0 3px 10px #0002}
 @media(max-width:560px){.employer .employer-shift-tab{min-height:64px;padding:14px 8px;font-size:14px}}
+
+
+/* Ensure employer shift tabs have high-contrast, readable labels on every state. */
+.employer .employer-shift-tab{color:#202719!important;background:#f4f6ef!important;border-color:#cbd2c1!important}
+.employer .employer-shift-tab:hover{color:#17200d!important;background:#e9f0df!important}
+.employer .employer-shift-tab.selected{color:#17200d!important;background:#b5f34a!important;border-color:#91c82b!important}
+.employer .past-shift-card{display:block;margin:14px 0;padding:20px;border:1px solid #dce2d5;border-radius:12px;background:#fff;color:#202719}
+.employer .past-shift-card>strong{display:block;color:#202719;font-size:17px;margin-bottom:8px}
+.employer .past-shift-card>small{display:block;color:#59624f;line-height:1.5}
+.employer .past-shift-review{margin-top:16px;padding:14px;border-radius:8px;background:#f4f6ef;color:#202719}
+.employer .past-shift-review p{margin:7px 0;color:#303a28}
+.employer .past-shift-review strong{color:#202719}
