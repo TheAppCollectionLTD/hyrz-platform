@@ -71,7 +71,8 @@
       "Dishwasher",
       "Food Preparation Assistant",
       "Catering Crew",
-      "Barista - High Volume Service"
+      "Barista - High Volume Service",
+      "General Purpose"
     ]
   ],
   [
@@ -131,7 +132,8 @@
       "Green Room Host",
       "Artist Liaison Assistant",
       "Box Office Supervisor",
-      "Event Cleaner"
+      "Event Cleaner",
+      "General Purpose"
     ]
   ],
   [
@@ -197,7 +199,8 @@
       "Recycling Operative",
       "Waste Sorting Operative",
       "Postal Delivery Assistant",
-      "Distribution Assistant"
+      "Distribution Assistant",
+      "General Purpose"
     ]
   ],
   [
@@ -249,7 +252,8 @@
       "Route Planner",
       "Traffic Office Assistant",
       "Fleet Administrator",
-      "Driver Supervisor"
+      "Driver Supervisor",
+      "General Purpose"
     ]
   ],
   [
@@ -318,7 +322,8 @@
       "Online Order Assistant",
       "Car Park Attendant",
       "Petrol Station Assistant",
-      "Travel Retail Assistant"
+      "Travel Retail Assistant",
+      "General Purpose"
     ]
   ],
   [
@@ -419,7 +424,8 @@
       "Project Support Officer",
       "PMO Administrator",
       "Bid Administrator",
-      "Tender Coordinator"
+      "Tender Coordinator",
+      "General Purpose"
     ]
   ],
   [
@@ -474,7 +480,8 @@
       "Planned Maintenance Assistant",
       "Handyman / Handyperson",
       "Moving & Setup Operative",
-      "Facilities Helpdesk Operator"
+      "Facilities Helpdesk Operator",
+      "General Purpose"
     ]
   ],
   [
@@ -513,7 +520,8 @@
       "Dental Assistant",
       "Medical Records Clerk",
       "Healthcare Administrator",
-      "Vaccination Centre Assistant"
+      "Vaccination Centre Assistant",
+      "General Purpose"
     ]
   ],
   [
@@ -554,7 +562,8 @@
       "Leisure Centre Receptionist",
       "Activity Instructor",
       "Outdoor Activity Assistant",
-      "Play Centre Assistant"
+      "Play Centre Assistant",
+      "General Purpose"
     ]
   ],
   [
@@ -594,7 +603,8 @@
       "Tool Store Assistant",
       "Plant Operative",
       "Plant Machine Operator",
-      "Construction Materials Handler"
+      "Construction Materials Handler",
+      "General Purpose"
     ]
   ],
   [
@@ -620,7 +630,8 @@
       "Gatehouse Security Officer",
       "Security Team Leader",
       "Fire Safety Marshal",
-      "Emergency Evacuation Marshal"
+      "Emergency Evacuation Marshal",
+      "General Purpose"
     ]
   ],
   [
@@ -665,7 +676,8 @@
       "General Operative",
       "Multi-Skilled Operative",
       "Relief Staff",
-      "Temporary Event Worker"
+      "Temporary Event Worker",
+      "General Purpose"
     ]
   ]
 ]
