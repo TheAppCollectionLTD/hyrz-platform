@@ -14,6 +14,27 @@ const accounts = [
     identifier: 'HYRZTESTWORKER2026'
   },
   {
+    email: 'test.worker2@hyrz.local',
+    password: 'HyrzTestWorker2!2026',
+    role: 'worker',
+    firstName: 'Casey',
+    lastName: 'Testworker',
+    identifier: 'HYRZTESTWORKER22026'
+  },
+  {
+    email: 'test.employer2@hyrz.local',
+    password: 'HyrzTestEmployer2!2026',
+    role: 'employer',
+    firstName: 'Morgan',
+    lastName: 'Testemployer',
+    businessName: 'hyrz Test Staffing Two Ltd',
+    companyNumber: null,
+    companyRole: 'Staffing Manager',
+    address: '20 Test Street',
+    city: 'London',
+    postcode: 'EC1A 2AA'
+  },
+  {
     email: 'test.employer@hyrz.local',
     password: 'HyrzTestEmployer!2026',
     role: 'employer',
@@ -77,8 +98,10 @@ async function main() {
 
     await conn.commit();
     console.log('Test accounts are ready in hyrz_test. These are fictional accounts for local testing only.');
-    console.log('Worker:   test.worker@hyrz.local / HyrzTestWorker!2026');
-    console.log('Employer: test.employer@hyrz.local / HyrzTestEmployer!2026');
+    console.log('Worker 1:   test.worker@hyrz.local / HyrzTestWorker!2026');
+    console.log('Employer 1: test.employer@hyrz.local / HyrzTestEmployer!2026');
+    console.log('Worker 2:   test.worker2@hyrz.local / HyrzTestWorker2!2026');
+    console.log('Employer 2: test.employer2@hyrz.local / HyrzTestEmployer2!2026');
   } catch (error) {
     await conn.rollback();
     throw error;
