@@ -32,7 +32,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   app.get('/api/messages/mine', auth, asyncRoute(async(req,res) => {
     await ensureMeta;
     const [messages]=await db.execute(`SELECT m.id,m.body,m.created_at,m.sender_id,meta.category,meta.subject,meta.read_at,meta.recipient_id,
-      sender.email AS sender_email,recipient.email AS recipient_email
+      sender.email AS sender_email,sender.role AS sender_role,recipient.email AS recipient_email,recipient.role AS recipient_role
       FROM messages m JOIN admin_message_meta meta ON meta.message_id=m.id
       JOIN users sender ON sender.id=m.sender_id JOIN users recipient ON recipient.id=meta.recipient_id
       WHERE m.sender_id=? OR meta.recipient_id=? ORDER BY m.created_at DESC LIMIT 200`,[req.user.id,req.user.id]);
