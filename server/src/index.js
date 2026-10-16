@@ -489,6 +489,48 @@ async function deleteImminentOpenShifts(){
  const [result]=await db.execute(`DELETE s FROM shifts s WHERE s.status='open' AND s.starts_at<=DATE_ADD(NOW(), INTERVAL 5 MINUTE) AND NOT EXISTS (SELECT 1 FROM checkouts c WHERE c.shift_id=s.id) AND NOT EXISTS (SELECT 1 FROM ratings r WHERE r.shift_id=s.id)`);
  return result.affectedRows||0;
 }
+const ensureWorkerEmployerFavourites = createTable(`CREATE TABLE IF NOT EXISTS worker_employer_favourites (worker_user_id BIGINT UNSIGNED NOT NULL, business_id BIGINT UNSIGNED NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(worker_user_id,business_id), FOREIGN KEY(worker_user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY(business_id) REFERENCES businesses(id) ON DELETE CASCADE)`,'worker employer favourites');
+app.get('/api/worker/employers/search',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ await ensureWorkerEmployerFavourites;
+ const q=String(req.query.q||'').trim();
+ const role=String(req.query.role||'').trim();
+ const location=String(req.query.location||'').trim();
+ const past=req.query.past==='1';
+ const args=[];
+ let sql=`SELECT b.id AS business_id,b.name AS company_name,COALESCE(NULLIF(CONCAT_WS(', ',NULLIF(b.address_line_1,''),NULLIF(b.city,'')),''),'') AS company_location,
+ GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR '||') AS roles_available,
+ MAX(s.starts_at) AS latest_shift,
+ EXISTS(SELECT 1 FROM worker_employer_favourites f WHERE f.worker_user_id=? AND f.business_id=b.id) AS is_favourite,
+ EXISTS(SELECT 1 FROM applications a JOIN shifts sh ON sh.id=a.shift_id WHERE a.worker_id=? AND sh.business_id=b.id) AS worked_with
+ FROM businesses b LEFT JOIN shifts s ON s.business_id=b.id
+ WHERE 1=1`;
+ args.push(req.user.id,req.user.id);
+ if(q){sql+=' AND b.name LIKE ?';args.push('%'+q+'%');}
+ if(location){sql+=' AND (b.address_line_1 LIKE ? OR b.city LIKE ? OR EXISTS(SELECT 1 FROM shifts sl WHERE sl.business_id=b.id AND sl.location LIKE ?))';args.push('%'+location+'%','%'+location+'%','%'+location+'%');}
+ if(role){sql+=' AND EXISTS(SELECT 1 FROM shifts sr WHERE sr.business_id=b.id AND sr.title LIKE ?)';args.push('%'+role+'%');}
+ if(past){sql+=' AND EXISTS(SELECT 1 FROM applications ap JOIN shifts sp ON sp.id=ap.shift_id WHERE ap.worker_id=? AND sp.business_id=b.id)';args.push(req.user.id);}
+ sql+=' GROUP BY b.id,b.name,b.address_line_1,b.city ORDER BY worked_with DESC,b.name LIMIT 200';
+ const [rows]=await db.execute(sql,args);
+ res.json({employers:rows.map(row=>({...row,rolesAvailable:row.roles_available?row.roles_available.split('||'):[],isFavourite:Boolean(row.is_favourite),workedWith:Boolean(row.worked_with)}))});
+}));
+app.get('/api/worker/employers/favourites',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ await ensureWorkerEmployerFavourites;
+ const [rows]=await db.execute(`SELECT b.id AS business_id,b.name AS company_name,COALESCE(NULLIF(CONCAT_WS(', ',NULLIF(b.address_line_1,''),NULLIF(b.city,'')),''),'') AS company_location,GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR '||') AS roles_available,MAX(s.starts_at) AS latest_shift FROM worker_employer_favourites f JOIN businesses b ON b.id=f.business_id LEFT JOIN shifts s ON s.business_id=b.id WHERE f.worker_user_id=? GROUP BY b.id,b.name,b.address_line_1,b.city ORDER BY b.name`,[req.user.id]);
+ res.json({employers:rows.map(row=>({...row,rolesAvailable:row.roles_available?row.roles_available.split('||'):[],isFavourite:true}))});
+}));
+app.post('/api/worker/employers/:businessId/favourite',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ await ensureWorkerEmployerFavourites;
+ const businessId=Number(req.params.businessId);
+ const [business]=await db.execute('SELECT id FROM businesses WHERE id=?',[businessId]);
+ if(!business.length)return res.status(404).json({error:'Employer not found.'});
+ await db.execute('INSERT IGNORE INTO worker_employer_favourites(worker_user_id,business_id) VALUES(?,?)',[req.user.id,businessId]);
+ res.json({ok:true,favourite:true});
+}));
+app.delete('/api/worker/employers/:businessId/favourite',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ await ensureWorkerEmployerFavourites;
+ await db.execute('DELETE FROM worker_employer_favourites WHERE worker_user_id=? AND business_id=?',[req.user.id,Number(req.params.businessId)]);
+ res.json({ok:true,favourite:false});
+}));
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
