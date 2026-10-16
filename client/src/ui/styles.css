@@ -2420,3 +2420,8 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .template-setup-panel{margin-top:.8rem;padding:1rem;border:1px solid #dfe4d8;border-radius:10px;background:#fafbf8}.template-setup-panel label{display:flex;flex-direction:column;gap:.4rem;font-weight:700}.template-setup-panel input{width:100%;box-sizing:border-box}.template-setup-panel p{margin:.7rem 0;color:#4c554c}.template-confirm-button{min-height:44px;font-weight:800}
 
 .template-toggle{display:inline-flex;align-items:center;gap:.7rem;min-height:44px}.template-toggle-track{width:42px;height:24px;border-radius:999px;background:#cbd0c6;padding:3px;display:inline-flex;align-items:center;box-sizing:border-box;transition:background .15s}.template-toggle-track span{height:18px;width:18px;background:#fff;border-radius:50%;box-shadow:0 1px 3px #0002;transition:transform .15s}.template-toggle.is-on .template-toggle-track{background:#a7e75d}.template-toggle.is-on .template-toggle-track span{transform:translateX(18px)}.template-setup-panel{animation:templateDrop .18s ease-out}@keyframes templateDrop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+
+/* Inline mandatory-field validation for shift publishing */
+.mandatory-missing{color:#b42318!important}
+.formgrid label.mandatory-missing input,.formgrid label.mandatory-missing select,.formgrid label.mandatory-missing textarea{border:1px solid #d92d20!important;outline-color:#d92d20!important;background:#fff8f7}
+.mandatory-message{display:block;margin-top:6px;color:#b42318;font-size:.82rem;font-weight:600;line-height:1.35}
