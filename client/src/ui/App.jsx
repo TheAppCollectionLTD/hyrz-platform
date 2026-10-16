@@ -334,7 +334,7 @@ async function authenticate(register) {
  {user?.role==='worker'&&page==='favourites'&&<WorkerEmployerFavourites navigateTo={navigateTo} action={action} busy={busy} setError={setError} setNotice={setNotice}/>}
  {user?.role==='worker'&&page==='complaints'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Complaints</h2><p>Report concerns about a client, a person or conditions at a work site. Your message is sent to hyrz support.</p><SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/></section>}
  {user?.role==='worker'&&page==='timetable'&&<WorkerTimetable applications={applications} navigateTo={navigateTo}/>}
- {user?.role==='worker'&&page==='notifications'&&<WorkerNotifications navigateTo={navigateTo} setError={setError} setNotice={setNotice}/ >}
+ {user?.role==='worker'&&page==='notifications'&&<WorkerNotifications navigateTo={navigateTo} setError={setError} setNotice={setNotice}/>}
  {user?.role==='worker'&&page==='workchats'&&<section className="panel"><button className="textbutton" onClick={()=>navigateTo('dashboard')}>← Back to Dashboard</button><h2>Workchats</h2><p>Group conversations for employers who have added you to their favourites will appear here.</p><div className="empty-state">No workchats available yet.</div></section>}
  {user?.role==='worker'&&page==='contact'&&<SupportContact user={user} action={action} busy={busy} setNotice={setNotice} setError={setError}/>}
 
