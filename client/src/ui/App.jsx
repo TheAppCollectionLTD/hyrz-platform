@@ -384,7 +384,7 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
   });
  }
  return <section className="panel account-settings">
-  <h2>My profile</h2>
+  <h2>Business profile</h2>
   <div className="profile-picture-editor">
    {profilePicture?<img className="profile-picture-preview" src={profilePicture} alt="Your profile" />:<div className="profile-picture-placeholder" aria-label="No profile photo"> {(firstName||user.email||'U').slice(0,1).toUpperCase()} </div>}
    <div><label>Profile picture<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e=>{
@@ -404,8 +404,7 @@ function AccountSettings({user,setUser,action,busy,setNotice}) {
   <div className="account-password-heading"><h3>Email address</h3><button type="button" className="password-edit-button" onClick={()=>{setEmail(user.email||'');setShowEmailEditor(v=>!v);}}>{showEmailEditor?'Cancel':'✎ Edit'}</button></div>
   {!showEmailEditor?<p className="account-readonly-value">{user.email||'Not provided'} · {user.email_verified_at?'Verified':'Verification may be required'}</p>:<form className="account-inline-editor" onSubmit={e=>{e.preventDefault();action(async()=>{const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({email})});setUser(result.user);setEmail(result.user.email);setShowEmailEditor(false);setNotice(result.emailVerificationRequired?'Email updated. You must verify the new address before accessing restricted features.':'Email updated.');});}}><label>New email address<input type="email" required maxLength="254" value={email} onChange={e=>setEmail(e.target.value)}/></label><button className="secondary" disabled={busy}>Save email</button><small>Changing your email will require you to verify the new address.</small></form>}
   <hr/>
-  <div className="account-password-heading"><h2>Address</h2><button type="button" className="password-edit-button" onClick={()=>{setAddressLine1(user.address_line_1||'');setAddressCity(user.address_city||'');setAddressPostcode(user.address_postcode||'');setShowAddressEditor(v=>!v);}}>{showAddressEditor?'Cancel':'✎ Edit'}</button></div>
-  {!showAddressEditor?<div className="account-readonly-value"><p>{user.address_line_1||'Address not added'}</p><p>{[user.address_city,user.address_postcode].filter(Boolean).join(', ')}</p></div>:<form className="account-inline-editor" onSubmit={e=>{e.preventDefault();action(async()=>{const result=await request('/auth/profile',{method:'PATCH',body:JSON.stringify({addressLine1,addressCity,addressPostcode})});setUser(result.user);setShowAddressEditor(false);setNotice('Your address has been saved.');});}}><label>Address line<input autoComplete="street-address" maxLength="255" value={addressLine1} onChange={e=>setAddressLine1(e.target.value)}/></label><div className="grid2"><label>Town or city<input autoComplete="address-level2" maxLength="120" value={addressCity} onChange={e=>setAddressCity(e.target.value)}/></label><label>Postcode<input autoComplete="postal-code" maxLength="20" value={addressPostcode} onChange={e=>setAddressPostcode(e.target.value.toUpperCase())}/></label></div><button className="secondary" disabled={busy}>Save address</button></form>}
+  address section
   <hr/>
   <div className="account-password-heading"><h2>Verification details</h2><span className="muted">Read-only</span></div>
   <div className="account-verification-details">
