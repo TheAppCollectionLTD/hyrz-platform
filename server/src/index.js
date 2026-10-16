@@ -626,9 +626,18 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  if(!s.length||s[0].status!=='open')return res.status(404).json({error:'Shift not available'});
  const requiredItems=Array.isArray(s[0].requirements)?s[0].requirements:(typeof s[0].requirements==='string'?JSON.parse(s[0].requirements||'[]'):[]);
  if(requiredItems.length&&req.body?.confirmedRequirements!==true)return res.status(400).json({error:'Confirm all shift requirements before applying.'});
+ const nextStatus=s[0].auto_approve?'approved':'pending';
+ const [existing]=await db.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1',[req.params.id,req.user.id]);
+ if(existing.length){
+   if(['withdrawn','cancelled'].includes(existing[0].status)){
+     await db.execute('UPDATE applications SET status=?,cancellation_fee=0 WHERE id=?',[nextStatus,existing[0].id]);
+     return res.status(200).json({id:existing[0].id,status:nextStatus});
+   }
+   return res.status(409).json({error:'Already applied'});
+ }
  try {
- const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status) VALUES(?,?,?)',[req.params.id,req.user.id,s[0].auto_approve?'approved':'pending']);
- res.status(201).json({id:r.insertId,status:s[0].auto_approve?'approved':'pending'});
+ const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status) VALUES(?,?,?)',[req.params.id,req.user.id,nextStatus]);
+ res.status(201).json({id:r.insertId,status:nextStatus});
  }catch(e){if(e.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});throw e;}
 }));
 app.get('/api/applications/mine',auth,asyncRoute(async(req,res)=>{
