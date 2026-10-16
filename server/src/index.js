@@ -659,7 +659,7 @@ app.delete('/api/applications/:id',auth,allow('employer'),requireVerification,as
 app.post('/api/applications/:id/cancel',auth,allow('worker'),asyncRoute(async(req,res)=>{
  const [rows]=await db.execute("SELECT id FROM applications WHERE id=? AND worker_id=? AND status='pending'",[req.params.id,req.user.id]);
  if(!rows.length)return res.status(404).json({error:'Pending application not found'});
- await db.execute("UPDATE applications SET status='cancelled' WHERE id=? AND worker_id=? AND status='pending'",[req.params.id,req.user.id]);
+ await db.execute("UPDATE applications SET status='withdrawn' WHERE id=? AND worker_id=? AND status='pending'",[req.params.id,req.user.id]);
  await audit(req,'application.cancelled','application',req.params.id);res.json({ok:true});
 }));
 app.post('/api/checkouts',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
