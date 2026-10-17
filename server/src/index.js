@@ -582,19 +582,20 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  const [userAddress]=await db.execute('SELECT address_postcode FROM users WHERE id=?',[req.user.id]);
  const employerPostcode=employers[0]?.postcode||userAddress[0]?.address_postcode||'';
  if(!employerPostcode)return res.status(400).json({error:'Add your business postcode to your account before searching for workers within 10 miles.'});
- const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,wp.postcode,
+ const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,
+ COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode,
  EXISTS(SELECT 1 FROM employer_worker_favourites f WHERE f.employer_user_id=? AND f.worker_user_id=u.id) AS is_favourite
  FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id
  WHERE u.role='worker' AND u.status='active'
  AND (?='' OR LOWER(CONCAT_WS(' ',u.first_name,u.last_name)) LIKE LOWER(?) OR LOWER(u.email) LIKE LOWER(?))
- AND wp.postcode IS NOT NULL AND TRIM(wp.postcode)<>''
- ORDER BY u.first_name,u.last_name LIMIT 500`,[req.user.id,q,'%'+q+'%','%'+q+'%']);
+ AND (NULLIF(TRIM(wp.postcode),'') IS NOT NULL OR NULLIF(TRIM(u.address_postcode),'') IS NOT NULL)
+ ORDER BY u.first_name,u.last_name LIMIT 1000`,[req.user.id,q,'%'+q+'%','%'+q+'%']);
  const coordinates=await lookupPostcodeCoordinates([employerPostcode,...rows.map(row=>row.postcode)]);
  const origin=coordinates[employerPostcode.trim().toUpperCase()];
  if(!origin)return res.status(400).json({error:'We could not locate your business postcode. Check it in your account details and try again.'});
  const workers=rows.map(row=>{const point=coordinates[String(row.postcode||'').trim().toUpperCase()];return point?{...row,distanceMiles:Math.round(distanceMiles(origin,point)*10)/10,isFavourite:Boolean(row.is_favourite)}:null;})
  .filter(row=>row&&row.distanceMiles<=10).sort((a,b)=>a.distanceMiles-b.distanceMiles);
- res.json({workers,radiusMiles:10,matched:workers.length});
+ res.json({workers,radiusMiles:10,matched:workers.length,searchTerm:q});
 }));
 app.post('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;const workerId=Number(req.params.workerId);
