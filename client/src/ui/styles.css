@@ -2598,3 +2598,32 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  border-radius:9px;
  font-weight:700;
 }
+
+
+/* Keep every worker/employer subsection tile identical, including the final row. */
+.app.worker .worker-section-links.job-tabs,
+.app.worker .worker-section-links.job-tabs.job-tabs-squares,
+.employer .worker-section-links.job-tabs{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ grid-auto-rows:1fr;
+ align-items:stretch;
+}
+.app.worker .worker-section-links.job-tabs>button,
+.app.worker .worker-section-links.job-tabs.job-tabs-squares>button,
+.employer .worker-section-links.job-tabs>button,
+.employer .worker-section-links.job-tabs>.employer-shift-tab{
+ box-sizing:border-box;
+ width:100%;
+ height:auto;
+ min-height:0;
+ aspect-ratio:1 / 1;
+ grid-column:auto;
+ grid-row:auto;
+ align-self:stretch;
+}
+@media(max-width:900px){
+ .app.worker .worker-section-links.job-tabs,
+ .app.worker .worker-section-links.job-tabs.job-tabs-squares,
+ .employer .worker-section-links.job-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
