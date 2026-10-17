@@ -2627,3 +2627,35 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .app.worker .worker-section-links.job-tabs.job-tabs-squares,
  .employer .worker-section-links.job-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+
+/* Make subsection card labels prominent and centrally aligned. */
+.app.worker .worker-section-links.job-tabs>button,
+.app.worker .worker-section-links.job-tabs.job-tabs-squares>button,
+.employer .worker-section-links.job-tabs>button,
+.employer .worker-section-links.job-tabs>.employer-shift-tab{
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ font-size:clamp(20px,2vw,28px);
+ line-height:1.25;
+ padding:24px;
+}
+@media(max-width:900px){
+ .app.worker .worker-section-links.job-tabs>button,
+ .app.worker .worker-section-links.job-tabs.job-tabs-squares>button,
+ .employer .worker-section-links.job-tabs>button,
+ .employer .worker-section-links.job-tabs>.employer-shift-tab{
+  font-size:clamp(18px,3vw,24px);
+  padding:18px;
+ }
+}
+@media(max-width:520px){
+ .app.worker .worker-section-links.job-tabs>button,
+ .app.worker .worker-section-links.job-tabs.job-tabs-squares>button,
+ .employer .worker-section-links.job-tabs>button,
+ .employer .worker-section-links.job-tabs>.employer-shift-tab{
+  font-size:18px;
+  padding:14px;
+ }
+}
