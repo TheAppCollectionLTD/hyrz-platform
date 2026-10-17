@@ -556,11 +556,40 @@ app.delete('/api/worker/employers/:businessId/favourite',auth,allow('worker'),as
  await ensureWorkerEmployerFavourites;
  await db.execute('DELETE FROM worker_employer_favourites WHERE worker_user_id=? AND business_id=?',[req.user.id,Number(req.params.businessId)]);res.json({ok:true,favourite:false});
 }));
+async function lookupPostcodeCoordinates(postcodes){
+ const normalized=[...new Set(postcodes.map(p=>String(p||'').trim().toUpperCase()).filter(Boolean))];
+ if(!normalized.length)return {};
+ const response=await fetch('https://api.postcodes.io/postcodes', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({postcodes:normalized})});
+ if(!response.ok)throw new Error('Postcode location lookup is temporarily unavailable.');
+ const data=await response.json();const result={};
+ for(const item of data.result||[]){if(item.result)result[String(item.query||'').toUpperCase()]={lat:item.result.latitude,lon:item.result.longitude};}
+ return result;
+}
+function distanceMiles(a,b){
+ const radians=value=>value*Math.PI/180;const dLat=radians(b.lat-a.lat),dLon=radians(b.lon-a.lon);
+ const h=Math.sin(dLat/2)**2+Math.cos(radians(a.lat))*Math.cos(radians(b.lat))*Math.sin(dLon/2)**2;
+ return 3958.8*2*Math.atan2(Math.sqrt(h),Math.sqrt(Math.max(0,1-h)));
+}
 app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;
  const q=String(req.query.q||'').trim();
- const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,wp.postcode,EXISTS(SELECT 1 FROM employer_worker_favourites f WHERE f.employer_user_id=? AND f.worker_user_id=u.id) AS is_favourite FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id WHERE u.role='worker' AND (?='' OR LOWER(CONCAT_WS(' ',u.first_name,u.last_name)) LIKE LOWER(?) OR LOWER(u.email) LIKE LOWER(?)) ORDER BY u.first_name,u.last_name LIMIT 200`,[req.user.id,q,'%'+q+'%','%'+q+'%']);
- res.json({workers:rows.map(row=>({...row,isFavourite:Boolean(row.is_favourite)}))});
+ const [employers]=await db.execute('SELECT postcode FROM businesses WHERE owner_user_id=? ORDER BY id DESC LIMIT 1',[req.user.id]);
+ const [userAddress]=await db.execute('SELECT address_postcode FROM users WHERE id=?',[req.user.id]);
+ const employerPostcode=employers[0]?.postcode||userAddress[0]?.address_postcode||'';
+ if(!employerPostcode)return res.status(400).json({error:'Add your business postcode to your account before searching for workers within 10 miles.'});
+ const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,wp.postcode,
+ EXISTS(SELECT 1 FROM employer_worker_favourites f WHERE f.employer_user_id=? AND f.worker_user_id=u.id) AS is_favourite
+ FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id
+ WHERE u.role='worker' AND u.status='active'
+ AND (?='' OR LOWER(CONCAT_WS(' ',u.first_name,u.last_name)) LIKE LOWER(?) OR LOWER(u.email) LIKE LOWER(?))
+ AND wp.postcode IS NOT NULL AND TRIM(wp.postcode)<>''
+ ORDER BY u.first_name,u.last_name LIMIT 500`,[req.user.id,q,'%'+q+'%','%'+q+'%']);
+ const coordinates=await lookupPostcodeCoordinates([employerPostcode,...rows.map(row=>row.postcode)]);
+ const origin=coordinates[employerPostcode.trim().toUpperCase()];
+ if(!origin)return res.status(400).json({error:'We could not locate your business postcode. Check it in your account details and try again.'});
+ const workers=rows.map(row=>{const point=coordinates[String(row.postcode||'').trim().toUpperCase()];return point?{...row,distanceMiles:Math.round(distanceMiles(origin,point)*10)/10,isFavourite:Boolean(row.is_favourite)}:null;})
+ .filter(row=>row&&row.distanceMiles<=10).sort((a,b)=>a.distanceMiles-b.distanceMiles);
+ res.json({workers,radiusMiles:10,matched:workers.length});
 }));
 app.post('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;const workerId=Number(req.params.workerId);
