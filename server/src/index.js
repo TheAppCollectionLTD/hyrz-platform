@@ -571,6 +571,22 @@ app.post('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyn
 app.delete('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;await db.execute('DELETE FROM employer_worker_favourites WHERE employer_user_id=? AND worker_user_id=?',[req.user.id,Number(req.params.workerId)]);res.json({ok:true,favourite:false});
 }));
+app.get('/api/employer/workers/past',auth,allow('employer'),asyncRoute(async(req,res)=>{
+ await ensureEmployerWorkerFavourites;
+ const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,wp.postcode,
+ GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR ', ') AS roles,
+ MAX(s.starts_at) AS last_shift,
+ EXISTS(SELECT 1 FROM employer_worker_favourites f WHERE f.employer_user_id=? AND f.worker_user_id=u.id) AS is_favourite
+ FROM applications a
+ JOIN shifts s ON s.id=a.shift_id
+ JOIN businesses b ON b.id=s.business_id
+ JOIN users u ON u.id=a.worker_id
+ LEFT JOIN worker_profiles wp ON wp.user_id=u.id
+ WHERE b.owner_user_id=? AND s.ends_at<NOW() AND a.status IN ('approved','completed')
+ GROUP BY u.id,u.first_name,u.last_name,u.email,wp.postcode
+ ORDER BY last_shift DESC`,[req.user.id,req.user.id]);
+ res.json({workers:rows.map(row=>({...row,isFavourite:Boolean(row.is_favourite)}))});
+}));
 app.get('/api/shifts/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
  const [rows]=await db.execute('SELECT s.*,b.owner_user_id AS employer_id,b.name AS business_name FROM shifts s JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY s.starts_at DESC',[req.user.id]);
  res.json({shifts:rows});
