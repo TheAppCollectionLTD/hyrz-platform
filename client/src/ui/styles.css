@@ -2659,3 +2659,34 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   padding:14px;
  }
 }
+
+
+/* Polished notification preferences and accessible pill switches */
+.worker-notifications-panel{width:100%;min-width:0;box-sizing:border-box;align-self:stretch;padding:clamp(20px,3vw,38px);border-radius:20px}
+.notification-back{display:inline-flex;align-items:center;gap:8px;margin:0 0 22px;padding:10px 15px;border:1px solid #343b2d;border-radius:10px;background:#20251c;color:#c5ff64;font-weight:700;cursor:pointer}
+.notification-page-heading{text-align:center;margin:0 auto 26px}
+.notification-page-heading .eyebrow{display:block;margin-bottom:8px;color:#9caf82;font-size:10px;letter-spacing:2px;font-weight:800}
+.notification-page-heading h2{margin:0;font-size:clamp(26px,3vw,34px);letter-spacing:-.8px}
+.notification-page-heading p{margin:8px 0 0;color:#a6ad9c;font-size:14px}
+.notification-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 28px;padding:6px;border:1px solid #30372a;border-radius:14px;background:#10130f}
+.notification-tabs button{min-height:44px;border-radius:10px;font-weight:700}
+.notification-settings{max-width:880px;margin:0 auto}
+.notification-settings-intro{text-align:center;margin:0 auto 22px;max-width:620px}
+.notification-settings-intro h3{margin:0 0 9px;font-size:21px;letter-spacing:-.3px}
+.notification-settings-intro p{margin:0;color:#a6ad9c;font-size:13px;line-height:1.65}
+.notification-settings-list{display:grid;gap:12px}
+.notification-setting-row{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:20px 22px;border:1px solid #30372a;border-radius:15px;background:linear-gradient(135deg,#1a1e17,#151812);text-align:left;transition:border-color .18s ease,background .18s ease}
+.notification-setting-row:hover{border-color:#566b3b;background:linear-gradient(135deg,#1e2419,#171b14)}
+.notification-setting-copy{min-width:0}
+.notification-setting-copy strong{display:block;color:#f3f5ee;font-size:15px;font-weight:750}
+.notification-setting-copy p{margin:6px 0 0;color:#a6ad9c;font-size:12px;line-height:1.5}
+.notification-channel-toggles{display:flex;align-items:center;justify-content:flex-end;gap:18px;flex-shrink:0}
+.notification-toggle-option{display:flex;align-items:center;gap:9px;color:#c5cbbb;font-size:12px;font-weight:650;white-space:nowrap;cursor:pointer}
+.notification-switch{appearance:none;-webkit-appearance:none;position:relative;display:inline-block;width:42px;height:24px;flex:0 0 42px;margin:0;border:1px solid #59604f;border-radius:999px;background:#343a2f;cursor:pointer;transition:background .18s ease,border-color .18s ease,box-shadow .18s ease}
+.notification-switch::before{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#dce2d3;box-shadow:0 1px 3px #0005;transition:transform .18s ease,background .18s ease}
+.notification-switch:checked{background:#b5f34a;border-color:#b5f34a}
+.notification-switch:checked::before{transform:translateX(18px);background:#18200f}
+.notification-switch:focus-visible{outline:2px solid #d2ff85;outline-offset:3px}
+.notification-switch:disabled{opacity:.55;cursor:wait}
+.notification-saving{text-align:center;margin-top:16px}
+@media(max-width:640px){.worker-notifications-panel{padding:18px 14px}.notification-setting-row{align-items:flex-start;flex-direction:column;padding:17px;gap:16px}.notification-channel-toggles{width:100%;justify-content:flex-start;gap:22px}.notification-tabs{gap:5px}.notification-tabs button{padding:10px 5px;font-size:12px}.notification-page-heading{margin-bottom:20px}}
