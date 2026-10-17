@@ -2913,3 +2913,24 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  overflow-wrap:anywhere;
  line-height:1.25;
 }
+
+
+/* Final centring for worker critical-info cards and the Contact section. */
+.app.worker .shifts-critical-info,
+.app.worker .workchat-critical-info{
+  justify-self:center !important;
+  place-self:center !important;
+}
+.app.worker main > .panel.employer-contact,
+.app.worker main > .panel.admin-message-form,
+.app.worker main > .panel.worker-complaints-panel{
+  width:min(100%,900px) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  box-sizing:border-box;
+}
+.app.worker main > .admin-message-form{
+  width:min(100%,900px) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
