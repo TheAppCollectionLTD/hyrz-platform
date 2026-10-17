@@ -3064,3 +3064,47 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .employer .employer-dashboard-sections-head>div{min-width:0;flex:1}
 .employer .employer-dashboard-sections-head .employer-dashboard-post{flex:0 0 auto;margin:0;align-self:flex-start}
 @media(max-width:560px){.employer .employer-dashboard-sections-head{gap:12px;align-items:center}.employer .employer-dashboard-sections-head .employer-dashboard-post{white-space:nowrap;padding:10px 12px;font-size:12px}}
+
+
+/* Employer workspace theme aligned with the worker dashboard: dark panels and quiet olive surfaces. */
+.app.employer{background:#0d0f0c;color:#f4f5f0;min-height:100vh}
+.app.employer main{color:#f4f5f0}
+.app.employer main>header h1{color:#f4f5f0}
+.app.employer .eyebrow{color:#a4ab9b}
+.app.employer .panel,.app.employer .stat,.app.employer .employer-dashboard-sections{background:#171a15;border-color:#2a2e26;color:#f2f3ed}
+.app.employer .panel p,.app.employer .panel .muted{color:#a1a799}
+.app.employer .panel h2,.app.employer .panel h3,.app.employer .panel h4{color:#f2f3ed}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button,
+.app.employer .worker-section-links.job-tabs-squares>button{background:#292d25;color:#f2f3ed;border:1px solid #444a3d;border-radius:12px;box-shadow:none}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:hover,
+.app.employer .worker-section-links.job-tabs-squares>button:hover{background:#30362a;border-color:#b5f34a;transform:translateY(-1px)}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button.selected,
+.app.employer .worker-section-links.job-tabs-squares>button.active{background:#b5f34a;color:#15190f;border-color:#b5f34a}
+.app.employer .worker-section-links.job-tabs button{background:#20241d;color:#dfe4d8;border-color:#343a2f}
+.app.employer .worker-section-links.job-tabs button.active,
+.app.employer .worker-section-links.job-tabs button.selected{background:#b5f34a;color:#15190f;border-color:#b5f34a}
+.app.employer .secondary{background:#2c3028;color:#f2f3ed}
+.app.employer .empty-state{border-color:#343a2f;color:#a1a799;background:#131610}
+.app.employer .past-shift-list{color:#f2f3ed}
+.app.employer .past-shift-list>h3{margin:0 0 6px}
+.app.employer .past-shift-list>p{color:#a1a799}
+.app.employer .past-shift-list>.published-shift-card{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:22px;row-gap:0;margin:10px 0;padding:18px 20px;background:#fff;color:#171916;border:1px solid #e5e8e0;border-radius:12px;box-shadow:none}
+.app.employer .past-shift-list>.published-shift-card>strong{display:block;grid-column:1;grid-row:1;font:800 19px Manrope,sans-serif;line-height:1.25;letter-spacing:-.3px;color:#171916;margin:0 0 7px}
+.app.employer .past-shift-list>.published-shift-card>small{display:block;grid-column:1;grid-row:2;color:#697064;font-size:12px;line-height:1.5}
+.app.employer .past-shift-list>.published-shift-card>.employer-section-actions{grid-column:2;grid-row:1 / span 2;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;margin:0}
+.app.employer .past-shift-list>.published-shift-card>.employer-section-actions button{padding:10px 13px;min-height:36px;font-size:12px;border-radius:8px}
+.app.employer .past-shift-list>.published-shift-card>.employer-section-actions button.primary{background:#edf6df;color:#405b1e}
+.app.employer .past-shift-list>.published-shift-card .past-shift-review{grid-column:1/-1;grid-row:3;margin-top:15px;padding:14px;background:#f4f6ef;color:#202719;border:1px solid #e5e8e0}
+.app.employer .past-shift-list>.published-shift-card .past-shift-review h4,
+.app.employer .past-shift-list>.published-shift-card .past-shift-review strong{color:#202719}
+.app.employer .past-shift-list>.published-shift-card .past-shift-review p{color:#303a28}
+.app.employer .past-shift-list>.past-shift-card:not(.published-shift-card){background:#20241d;color:#f2f3ed;border-color:#343a2f}
+.app.employer .past-shift-list>.past-shift-card:not(.published-shift-card)>strong{color:#f2f3ed}
+.app.employer .past-shift-list>.past-shift-card:not(.published-shift-card)>small{color:#a1a799}
+.app.employer input,.app.employer select,.app.employer textarea{background:#11140f;color:#f2f3ed;border-color:#343a2f}
+.app.employer input::placeholder,.app.employer textarea::placeholder{color:#858d7d}
+@media(max-width:760px){
+ .app.employer .past-shift-list>.published-shift-card{grid-template-columns:minmax(0,1fr);gap:10px;padding:15px}
+ .app.employer .past-shift-list>.published-shift-card>strong,.app.employer .past-shift-list>.published-shift-card>small,.app.employer .past-shift-list>.published-shift-card>.employer-section-actions{grid-column:1;grid-row:auto}
+ .app.employer .past-shift-list>.published-shift-card>.employer-section-actions{justify-content:flex-start}
+}
