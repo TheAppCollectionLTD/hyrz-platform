@@ -3037,12 +3037,13 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 }
 
 /* Employer favourites subsections and worker result cards */
-.employer .employer-favourites-panel .favourites-subsections{display:grid;grid-template-columns:repeat(3,minmax(0,140px));gap:10px;margin:16px 0 20px}
-.employer .employer-favourites-panel .favourites-subsections>button{width:100%;min-width:0;min-height:0;height:64px;aspect-ratio:auto;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:12px;background:#f4f6ef;color:#202719;border:1px solid #cbd2c1;border-radius:10px;font-size:13px;font-weight:700;text-align:center;box-shadow:none;transform:none}
-.employer .employer-favourites-panel .favourites-subsections>button:hover{background:#e9f0df;border-color:#b7c4a7;box-shadow:none;transform:none}
-.employer .employer-favourites-panel .favourites-subsections>button.is-active{background:#b5f34a;color:#17200d;border-color:#91c82b;box-shadow:none}
-.employer .employer-favourites-panel .favourites-subsections>button:focus-visible{outline:2px solid #242620;outline-offset:3px}
-@media(max-width:640px){.employer .employer-favourites-panel .favourites-subsections{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.employer .employer-favourites-panel .favourites-subsections>button{height:58px;padding:8px;font-size:12px}}
+/* Employer Favourites uses the same compact horizontal tabs as the worker Favourites screen. */
+.employer .employer-favourites-panel .favourites-subsections{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0 20px}
+.employer .employer-favourites-panel .favourites-subsections>button{width:auto;min-width:0;min-height:0;height:auto;aspect-ratio:auto;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;margin:0;background:#fff;color:#171916;border:1px solid #e5e8e0;border-radius:8px;font-size:13px;font-weight:600;text-align:center;box-shadow:none;transform:none}
+.employer .employer-favourites-panel .favourites-subsections>button:hover{background:#f4f6ef;border-color:#cbd2c1;box-shadow:none;transform:none}
+.employer .employer-favourites-panel .favourites-subsections>button.active{background:#edf6df;border-color:#d8e8c0;color:#35551a;box-shadow:none}
+.employer .employer-favourites-panel .favourites-subsections>button:focus-visible{outline:2px solid #c6d8a8;outline-offset:3px}
+@media(max-width:640px){.employer .employer-favourites-panel .favourites-subsections{display:flex;gap:6px}.employer .employer-favourites-panel .favourites-subsections>button{padding:9px 11px;font-size:12px}}
 .favourites-subsections{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 24px}
 .favourites-subsections>button{min-height:112px;display:flex;align-items:flex-start;justify-content:flex-start;padding:22px;background:#fff;color:#171916;border:1px solid #e5e8e0;border-radius:14px;font-weight:700;text-align:left}
 .favourites-subsections>button:hover{border-color:#9b9f95;box-shadow:0 12px 30px #1d28120c;transform:translateY(-2px)}
