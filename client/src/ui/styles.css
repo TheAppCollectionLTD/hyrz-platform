@@ -2763,10 +2763,15 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app.worker .shifts-critical-info{
  width:100%;
  max-width:430px;
- margin:0 auto 20px;
+ margin:0 auto 20px !important;
  display:flex;
  justify-content:center;
  align-items:center;
+ grid-column:1 / -1;
+ justify-self:center;
+ position:relative;
+ left:50%;
+ transform:translateX(-50%);
 }
 .app.worker .shifts-critical-info .worker-dashboard-stat{
  width:122px;
