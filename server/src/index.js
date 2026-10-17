@@ -559,10 +559,15 @@ app.delete('/api/worker/employers/:businessId/favourite',auth,allow('worker'),as
 async function lookupPostcodeCoordinates(postcodes){
  const normalized=[...new Set(postcodes.map(p=>String(p||'').trim().toUpperCase()).filter(Boolean))];
  if(!normalized.length)return {};
- const response=await fetch('https://api.postcodes.io/postcodes', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({postcodes:normalized})});
- if(!response.ok)throw new Error('Postcode location lookup is temporarily unavailable.');
- const data=await response.json();const result={};
- for(const item of data.result||[]){if(item.result)result[String(item.query||'').toUpperCase()]={lat:item.result.latitude,lon:item.result.longitude};}
+ const result={};
+ // postcodes.io bulk lookups accept at most 100 postcodes per request.
+ for(let i=0;i<normalized.length;i+=100){
+  const batch=normalized.slice(i,i+100);
+  const response=await fetch('https://api.postcodes.io/postcodes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({postcodes:batch})});
+  if(!response.ok)throw new Error('Postcode location lookup is temporarily unavailable. Please try again.');
+  const data=await response.json();
+  for(const item of data.result||[]){if(item.result)result[String(item.query||'').toUpperCase()]={lat:item.result.latitude,lon:item.result.longitude};}
+ }
  return result;
 }
 function distanceMiles(a,b){
