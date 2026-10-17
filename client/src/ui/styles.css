@@ -2934,3 +2934,54 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   margin-left:auto !important;
   margin-right:auto !important;
 }
+
+
+/* Worker finances dashboard section */
+.app.worker .worker-finances-panel{
+  width:min(100%,900px);
+  margin:0 auto;
+  box-sizing:border-box;
+}
+.app.worker .worker-finances-panel>h2,
+.app.worker .worker-finances-panel>p{
+  text-align:center;
+}
+.app.worker .worker-finance-cards{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin:24px auto;
+  width:100%;
+}
+.app.worker .worker-finance-card{
+  min-width:0;
+  min-height:150px;
+  box-sizing:border-box;
+  padding:22px;
+  border:1px solid var(--border,#2a2d25);
+  border-radius:14px;
+  background:var(--panel,#171a14);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.app.worker .worker-finance-card small{
+  font-size:11px;
+  letter-spacing:.09em;
+  font-weight:700;
+  color:var(--muted,#9b9f91);
+}
+.app.worker .worker-finance-card strong{
+  font-size:clamp(24px,3vw,34px);
+  line-height:1.1;
+  overflow-wrap:anywhere;
+}
+.app.worker .worker-finance-card span{
+  font-size:12px;
+  line-height:1.45;
+  color:var(--muted,#9b9f91);
+}
+@media(max-width:760px){
+ .app.worker .worker-finance-cards{grid-template-columns:1fr;gap:10px}
+ .app.worker .worker-finance-card{min-height:0;padding:18px}
+}
