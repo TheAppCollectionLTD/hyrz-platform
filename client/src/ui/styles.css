@@ -2985,3 +2985,13 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .app.worker .worker-finance-cards{grid-template-columns:1fr;gap:10px}
  .app.worker .worker-finance-card{min-height:0;padding:18px}
 }
+
+
+/* Keep the Upcoming Shifts critical-info card directly above the middle (Applied shifts) tile. */
+.app.worker main > .shifts-critical-info{
+  grid-column:2 !important;
+  justify-self:center !important;
+  align-self:start !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
