@@ -502,6 +502,13 @@ app.get('/api/profile',auth,asyncRoute(async(req,res)=>{
  if(req.user.role==='worker'){const [p]=await db.execute('SELECT bio,skills,postcode,hourly_rate,right_to_work_status,availability FROM worker_profiles WHERE user_id=?',[req.user.id]);return res.json({user:u[0],profile:p[0]||{}});}
  res.json({user:u[0]});
 }));
+app.put('/api/worker/location',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ const postcode=String(req.body.postcode||'').trim().toUpperCase();
+ if(postcode.length>20)return res.status(400).json({error:'Enter a valid UK postcode.'});
+ await db.execute('INSERT INTO worker_profiles (user_id,postcode) VALUES (?,?) ON DUPLICATE KEY UPDATE postcode=VALUES(postcode)',[req.user.id,postcode||null]);
+ await audit(req,'worker.location.updated','user',req.user.id);
+ res.json({ok:true,postcode});
+}));
 app.put('/api/profile',auth,asyncRoute(async(req,res)=>{
  const {firstName,lastName,phone,bio,skills,postcode,hourlyRate,availability}=req.body;
  await db.execute('UPDATE users SET first_name=?,last_name=?,phone=? WHERE id=?',[firstName||null,lastName||null,phone||null,req.user.id]);
