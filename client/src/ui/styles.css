@@ -3057,3 +3057,9 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .favourite-worker-card strong{font-weight:700}
 .favourite-worker-card small{font-size:12px;color:#72786d;overflow-wrap:anywhere}
 @media(max-width:640px){.favourites-subsections{grid-template-columns:1fr;gap:10px}.favourites-subsections>button{min-height:64px;padding:16px}.favourite-worker-card{align-items:flex-start;flex-direction:column}}
+
+/* Keep the primary Post a shift action aligned with the top-right of its dashboard section. */
+.employer .employer-dashboard-sections-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;width:100%;margin-bottom:0}
+.employer .employer-dashboard-sections-head>div{min-width:0;flex:1}
+.employer .employer-dashboard-sections-head .employer-dashboard-post{flex:0 0 auto;margin:0;align-self:flex-start}
+@media(max-width:560px){.employer .employer-dashboard-sections-head{gap:12px;align-items:center}.employer .employer-dashboard-sections-head .employer-dashboard-post{white-space:nowrap;padding:10px 12px;font-size:12px}}
