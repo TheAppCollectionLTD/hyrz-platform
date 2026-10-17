@@ -2866,3 +2866,32 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .app.worker .worker-section-links.job-tabs-squares{max-width:430px;gap:8px}
  .app.worker .worker-section-links.job-tabs-squares>button{padding:12px;font-size:12px}
 }
+
+
+/* Center the actual card groups within the full Jobs content panel (override legacy grid rules). */
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares{
+ width:min(100%,430px) !important;
+ max-width:430px !important;
+ margin-left:auto !important;
+ margin-right:auto !important;
+ justify-self:center !important;
+ position:relative;
+ left:auto;
+ right:auto;
+}
+.app.worker .find-shifts-panel .shifts-critical-info,
+.app.worker .find-shifts-panel .workchat-critical-info{
+ width:min(100%,430px) !important;
+ max-width:430px !important;
+ margin-left:auto !important;
+ margin-right:auto !important;
+ justify-self:center !important;
+}
+.app.worker .find-shifts-panel .shifts-critical-info{
+ grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+}
+.app.worker .find-shifts-panel .workchat-critical-info{
+ width:max-content !important;
+ max-width:100% !important;
+ grid-template-columns:repeat(2,122px) !important;
+}
