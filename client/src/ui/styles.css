@@ -2802,3 +2802,67 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .app.worker .worker-section-links.job-tabs-squares{max-width:100%;gap:8px}
  .app.worker .worker-section-links.job-tabs-squares>button{padding:12px;font-size:12px}
 }
+
+
+/* Final alignment pass: center all worker cards and use the same compact dashboard tile geometry. */
+.app.worker .shifts-critical-info,
+.app.worker .workchat-critical-info{
+ display:grid;
+ width:100%;
+ max-width:430px;
+ margin:0 auto 22px;
+ justify-content:center;
+ justify-items:stretch;
+ align-items:stretch;
+ gap:10px;
+}
+.app.worker .shifts-critical-info{grid-template-columns:repeat(3,minmax(0,1fr))}
+.app.worker .workchat-critical-info{
+ width:max-content;
+ max-width:100%;
+ grid-template-columns:repeat(2,122px);
+}
+.app.worker .shifts-critical-info .worker-dashboard-stat,
+.app.worker .workchat-critical-info .worker-dashboard-stat{
+ width:100%;
+ min-width:0;
+ min-height:115px;
+ height:115px;
+ box-sizing:border-box;
+ padding:16px;
+ margin:0;
+ text-align:left;
+}
+.app.worker .worker-section-links.job-tabs-squares{
+ display:grid;
+ width:100%;
+ max-width:430px;
+ margin:0 auto 24px;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ justify-content:center;
+ justify-items:stretch;
+ align-items:stretch;
+ gap:10px;
+}
+.app.worker .worker-section-links.job-tabs-squares>button{
+ width:100%;
+ height:auto;
+ min-width:0;
+ min-height:0;
+ aspect-ratio:1 / 1;
+ box-sizing:border-box;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ padding:16px;
+ margin:0;
+}
+@media(max-width:760px){
+ .app.worker .shifts-critical-info{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .app.worker .shifts-critical-info .worker-dashboard-stat{height:105px;min-height:105px;padding:10px 8px}
+ .app.worker .workchat-critical-info{grid-template-columns:repeat(2,minmax(0,122px));gap:8px}
+ .app.worker .workchat-critical-info .worker-dashboard-stat{height:115px;min-height:115px;padding:10px}
+ .app.worker .worker-section-links.job-tabs-squares{max-width:430px;gap:8px}
+ .app.worker .worker-section-links.job-tabs-squares>button{padding:12px;font-size:12px}
+}
