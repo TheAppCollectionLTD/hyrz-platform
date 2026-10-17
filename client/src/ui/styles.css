@@ -2895,3 +2895,21 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  max-width:100% !important;
  grid-template-columns:repeat(2,122px) !important;
 }
+
+
+/* Prevent helper captions from overflowing the compact critical-info cards. */
+.app.worker .shifts-critical-info .worker-dashboard-stat>span,
+.app.worker .workchat-critical-info .worker-dashboard-stat>span{
+ display:none !important;
+}
+.app.worker .shifts-critical-info .worker-dashboard-stat,
+.app.worker .workchat-critical-info .worker-dashboard-stat{
+ overflow:hidden;
+}
+.app.worker .shifts-critical-info .worker-dashboard-stat small,
+.app.worker .workchat-critical-info .worker-dashboard-stat small{
+ display:block;
+ max-width:100%;
+ overflow-wrap:anywhere;
+ line-height:1.25;
+}
