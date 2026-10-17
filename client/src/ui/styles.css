@@ -2690,3 +2690,52 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .notification-switch:disabled{opacity:.55;cursor:wait}
 .notification-saving{text-align:center;margin-top:16px}
 @media(max-width:640px){.worker-notifications-panel{padding:18px 14px}.notification-setting-row{align-items:flex-start;flex-direction:column;padding:17px;gap:16px}.notification-channel-toggles{width:100%;justify-content:flex-start;gap:22px}.notification-tabs{gap:5px}.notification-tabs button{padding:10px 5px;font-size:12px}.notification-page-heading{margin-bottom:20px}}
+
+
+/* Match Find shifts section tiles to the worker Dashboard tile design. */
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:12px;
+ margin:0;
+ padding:0;
+ border:0;
+ border-radius:0;
+ background:transparent;
+}
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button{
+ display:flex;
+ align-items:flex-start;
+ justify-content:flex-start;
+ aspect-ratio:1 / 1;
+ width:100%;
+ min-width:0;
+ min-height:0;
+ padding:22px;
+ border:1px solid #bfc4b8;
+ border-radius:13px;
+ background:#2b2f27;
+ color:#f4f5ef;
+ font-size:15px;
+ font-weight:750;
+ line-height:1.4;
+ text-align:left;
+ white-space:normal;
+ box-shadow:none;
+ transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease;
+}
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button:hover{
+ transform:translateY(-2px);
+ border-color:#c5ff64;
+ background:#343a2d;
+ color:#c5ff64;
+ box-shadow:0 8px 22px #0002;
+}
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button.selected{
+ border-color:#b5f34a;
+ background:#b5f34a;
+ color:#171b12;
+ box-shadow:none;
+}
+@media(max-width:900px){.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares{grid-template-columns:repeat(2,minmax(0,1fr))}.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button{padding:18px}}
+@media(max-width:520px){.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares{gap:10px}.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button{padding:14px;font-size:13px}}
