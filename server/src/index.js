@@ -587,8 +587,7 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  const q=String(req.query.q||'').trim();
  const [employers]=await db.execute('SELECT postcode FROM businesses WHERE owner_user_id=? ORDER BY id DESC LIMIT 1',[req.user.id]);
  const [userAddress]=await db.execute('SELECT address_postcode FROM users WHERE id=?',[req.user.id]);
- const employerPostcode=employers[0]?.postcode||userAddress[0]?.address_postcode||'';
- if(!employerPostcode)return res.status(400).json({error:'Add your business postcode to your account before searching for workers within 10 miles.'});
+ const employerPostcode=String(employers[0]?.postcode||userAddress[0]?.address_postcode||'').trim().toUpperCase();
  const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,
  COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode,
  EXISTS(SELECT 1 FROM employer_worker_favourites f WHERE f.employer_user_id=? AND f.worker_user_id=u.id) AS is_favourite
@@ -596,13 +595,25 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  WHERE u.role='worker' AND u.status='active'
  AND (?='' OR LOWER(CONCAT_WS(' ',u.first_name,u.last_name)) LIKE LOWER(?) OR LOWER(u.email) LIKE LOWER(?))
  ORDER BY u.first_name,u.last_name LIMIT 1000`,[req.user.id,q,'%'+q+'%','%'+q+'%']);
- const coordinates=await lookupPostcodeCoordinates([employerPostcode,...rows.map(row=>row.postcode)]);
- const origin=coordinates[employerPostcode.trim().toUpperCase()];
- if(!origin)return res.status(400).json({error:'We could not locate your business postcode. Check it in your account details and try again.'});
- const workers=rows.map(row=>{const point=coordinates[String(row.postcode||'').trim().toUpperCase()];const distance=point?Math.round(distanceMiles(origin,point)*10)/10:null;return {...row,distanceMiles:distance,locationVerified:Boolean(point),isFavourite:Boolean(row.is_favourite)};})
- .filter(row=>row.locationVerified?row.distanceMiles<=10:true)
- .sort((a,b)=>{if(a.locationVerified!==b.locationVerified)return a.locationVerified?-1:1;if(a.distanceMiles==null)return 1;if(b.distanceMiles==null)return -1;return a.distanceMiles-b.distanceMiles;});
- res.json({workers,radiusMiles:10,matched:workers.filter(w=>w.locationVerified).length,locationUnverified:workers.filter(w=>!w.locationVerified).length,searchTerm:q});
+ // Do not fail the entire search if the employer or worker has not saved a postcode.
+ // Show those workers explicitly as location-unverified; only apply the 10-mile filter
+ // where both ends of the distance calculation can actually be verified.
+ let coordinates={};
+ try {
+  coordinates=await lookupPostcodeCoordinates([...(employerPostcode?[employerPostcode]:[]),...rows.map(row=>row.postcode)]);
+ } catch(error) {
+  console.error('Employer worker search postcode lookup failed:',error.message);
+ }
+ const origin=employerPostcode?coordinates[employerPostcode]:null;
+ const workers=rows.map(row=>{
+  const point=coordinates[String(row.postcode||'').trim().toUpperCase()];
+  const locationVerified=Boolean(origin&&point);
+  const distance=locationVerified?Math.round(distanceMiles(origin,point)*10)/10:null;
+  return {...row,distanceMiles:distance,locationVerified,isFavourite:Boolean(row.is_favourite)};
+ })
+ .filter(row=>!row.locationVerified||row.distanceMiles<=10)
+ .sort((a,b)=>{if(a.locationVerified!==b.locationVerified)return a.locationVerified?-1:1;if(a.distanceMiles==null)return a.first_name.localeCompare(b.first_name);if(b.distanceMiles==null)return -1;return a.distanceMiles-b.distanceMiles;});
+ res.json({workers,radiusMiles:10,matched:workers.filter(w=>w.locationVerified).length,locationUnverified:workers.filter(w=>!w.locationVerified).length,employerLocationVerified:Boolean(origin),searchTerm:q});
 }));
 app.post('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;const workerId=Number(req.params.workerId);
