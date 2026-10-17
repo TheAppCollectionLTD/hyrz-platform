@@ -2757,3 +2757,48 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  box-shadow:none;
  transform:translateY(-1px);
 }
+
+
+/* Keep Jobs critical-info cards and subsection tiles the same compact dimensions as Dashboard cards. */
+.app.worker .shifts-critical-info,
+.app.worker .workchat-critical-info{
+ width:100%;
+ max-width:400px;
+ margin:0 auto 22px;
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:10px;
+}
+.app.worker .shifts-critical-info .worker-dashboard-stat,
+.app.worker .workchat-critical-info .worker-dashboard-stat{
+ box-sizing:border-box;
+ width:100%;
+ min-width:0;
+ min-height:115px;
+ padding:16px;
+ border-radius:12px;
+}
+.app.worker .workchat-critical-info{max-width:400px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.app.worker .worker-section-links.job-tabs-squares{
+ width:100%;
+ max-width:430px;
+ margin:0 auto 24px;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:10px;
+}
+.app.worker .worker-section-links.job-tabs-squares>button{
+ box-sizing:border-box;
+ width:100%;
+ min-height:0;
+ aspect-ratio:1 / 1;
+ padding:16px;
+ border-radius:12px;
+ font-size:14px;
+}
+@media(max-width:760px){
+ .app.worker .shifts-critical-info{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .app.worker .shifts-critical-info .worker-dashboard-stat{min-height:105px;padding:10px 8px}
+ .app.worker .workchat-critical-info{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .app.worker .worker-section-links.job-tabs-squares{max-width:100%;gap:8px}
+ .app.worker .worker-section-links.job-tabs-squares>button{padding:12px;font-size:12px}
+}
