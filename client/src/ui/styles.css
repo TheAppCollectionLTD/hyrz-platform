@@ -3108,3 +3108,23 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .app.employer .past-shift-list>.published-shift-card>strong,.app.employer .past-shift-list>.published-shift-card>small,.app.employer .past-shift-list>.published-shift-card>.employer-section-actions{grid-column:1;grid-row:auto}
  .app.employer .past-shift-list>.published-shift-card>.employer-section-actions{justify-content:flex-start}
 }
+
+
+/* Employer published shifts now share the worker Available shifts card structure and proportions. */
+.app.employer .past-shift-list>.published-shift-card{display:grid;grid-template-columns:104px minmax(0,1fr) minmax(180px,230px);align-items:center;gap:24px;width:100%;min-height:210px;margin:14px 0;padding:24px 20px;background:#fff;color:#171916;border:1px solid #e4e8dc;border-radius:14px;box-shadow:0 5px 18px #18220e08;box-sizing:border-box}
+.app.employer .past-shift-list>.published-shift-card>.shift-employer-avatar{display:flex;align-items:center;justify-content:center;width:104px;height:104px;border-radius:12px;background:#edf1e6;border:1px solid #e0e7d5;color:#60774a;font-size:32px;font-weight:700}
+.app.employer .past-shift-list>.published-shift-card>.shiftmain{display:flex;flex-direction:column;gap:8px;min-width:0;align-self:center}
+.app.employer .past-shift-list>.published-shift-card>.shiftmain>b{margin:0;color:#171916;font:800 22px Manrope,sans-serif;line-height:1.25;letter-spacing:-.45px}
+.app.employer .past-shift-list>.published-shift-card>.shiftmain .shift-business{font-size:13px;line-height:1.5;color:#697064}
+.app.employer .past-shift-list>.published-shift-card .shift-schedule-row{display:flex;flex-direction:column;gap:3px;margin-top:4px}
+.app.employer .past-shift-list>.published-shift-card .shift-meta-label{font-size:9px;font-weight:800;letter-spacing:1px;color:#78806f}
+.app.employer .past-shift-list>.published-shift-card .shift-schedule-row strong{font-size:12px;line-height:1.45;color:#25291f}
+.app.employer .past-shift-list>.published-shift-card>.shiftpay{display:grid;align-content:center;justify-items:start;gap:10px;min-height:110px;padding-left:22px;border-left:1px solid #ecefe7}
+.app.employer .past-shift-list>.published-shift-card>.shiftpay>strong{margin:0;color:#2d421d;font:800 30px Manrope,sans-serif;letter-spacing:-.8px;white-space:nowrap}
+.app.employer .past-shift-list>.published-shift-card>.shiftpay>strong small{font:700 13px 'DM Sans',sans-serif;color:#6f7766;letter-spacing:0}
+.app.employer .past-shift-list>.published-shift-card>.shiftpay>.employer-section-actions{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:7px;width:100%;margin:0}
+.app.employer .past-shift-list>.published-shift-card>.shiftpay>.employer-section-actions button{width:100%;min-height:34px;padding:9px 10px;font-size:11px;white-space:normal;border-radius:8px}
+.app.employer .past-shift-list>.published-shift-card>.shiftpay>.employer-section-actions button.primary{background:#edf6df;color:#405b1e;border-color:#e1edcf}
+.app.employer .past-shift-list>.published-shift-card>.past-shift-review{grid-column:1/-1;width:100%;box-sizing:border-box;margin:4px 0 0;padding:16px;background:#f4f6ef;color:#202719;border:1px solid #e5e8e0;border-radius:10px}
+@media(min-width:1200px){.app.employer .past-shift-list>.published-shift-card{grid-template-columns:120px minmax(0,1fr) minmax(190px,230px);gap:28px;min-height:230px}.app.employer .past-shift-list>.published-shift-card>.shift-employer-avatar{width:120px;height:120px}}
+@media(max-width:760px){.app.employer .past-shift-list>.published-shift-card{grid-template-columns:76px minmax(0,1fr);gap:14px;padding:16px;min-height:0}.app.employer .past-shift-list>.published-shift-card>.shift-employer-avatar{width:76px;height:76px;font-size:25px}.app.employer .past-shift-list>.published-shift-card>.shiftmain>b{font-size:18px}.app.employer .past-shift-list>.published-shift-card>.shiftpay{grid-column:2;border-left:0;border-top:1px solid #ecefe7;padding:13px 0 0;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}.app.employer .past-shift-list>.published-shift-card>.shiftpay>.employer-section-actions{display:grid;grid-template-columns:1fr;gap:7px}.app.employer .past-shift-list>.published-shift-card>.past-shift-review{grid-column:1/-1}}
