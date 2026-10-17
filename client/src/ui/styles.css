@@ -3026,3 +3026,17 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  outline:2px solid #c6d8a8;
  outline-offset:3px;
 }
+
+/* Employer favourites subsections and worker result cards */
+.favourites-subsections{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 24px}
+.favourites-subsections>button{min-height:112px;display:flex;align-items:flex-start;justify-content:flex-start;padding:22px;background:#fff;color:#171916;border:1px solid #e5e8e0;border-radius:14px;font-weight:700;text-align:left}
+.favourites-subsections>button:hover{border-color:#c6d8a8;box-shadow:0 12px 30px #1d28120c;transform:translateY(-2px)}
+.favourites-search{display:flex;flex-direction:column;gap:8px;max-width:620px;margin:0 0 20px}
+.favourites-search label{font-size:13px;font-weight:700}
+.favourites-search input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #dfe3d9;border-radius:10px;background:#fff;color:#171916}
+.favourite-worker-list{display:grid;gap:10px}
+.favourite-worker-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 18px;border:1px solid #e5e8e0;border-radius:12px;background:#fff}
+.favourite-worker-card>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+.favourite-worker-card strong{font-weight:700}
+.favourite-worker-card small{font-size:12px;color:#72786d;overflow-wrap:anywhere}
+@media(max-width:640px){.favourites-subsections{grid-template-columns:1fr;gap:10px}.favourites-subsections>button{min-height:64px;padding:16px}.favourite-worker-card{align-items:flex-start;flex-direction:column}}
