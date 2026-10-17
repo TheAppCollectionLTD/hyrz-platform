@@ -2760,13 +2760,20 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 
 
 /* Keep Jobs critical-info cards and subsection tiles the same compact dimensions as Dashboard cards. */
-.app.worker .shifts-critical-info,
+.app.worker .shifts-critical-info{
+ width:100%;
+ max-width:100%;
+ margin:0 auto 24px;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+}
 .app.worker .workchat-critical-info{
  width:100%;
  max-width:400px;
  margin:0 auto 22px;
  display:grid;
- grid-template-columns:repeat(3,minmax(0,1fr));
+ grid-template-columns:repeat(2,minmax(0,1fr));
  gap:10px;
 }
 .app.worker .shifts-critical-info .worker-dashboard-stat,
