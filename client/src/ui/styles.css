@@ -2739,3 +2739,21 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 }
 @media(max-width:900px){.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares{grid-template-columns:repeat(2,minmax(0,1fr))}.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button{padding:18px}}
 @media(max-width:520px){.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares{gap:10px}.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button{padding:14px;font-size:13px}}
+
+
+/* Find shifts subsection tiles behave like dashboard navigation: neutral cards, no persistent selection highlight. */
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button,
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button.selected{
+ background:#2b2f27;
+ color:#f4f5ef;
+ border:1px solid #bfc4b8;
+ box-shadow:none;
+}
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button:hover,
+.app.worker .find-shifts-panel .worker-section-links.job-tabs-squares>button.selected:hover{
+ background:#343a2d;
+ color:#f4f5ef;
+ border-color:#bfc4b8;
+ box-shadow:none;
+ transform:translateY(-1px);
+}
