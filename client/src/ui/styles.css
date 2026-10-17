@@ -3011,3 +3011,18 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   margin-left:0 !important;
   margin-right:0 !important;
 }
+
+
+/* Employer platform cards: keep subsection tiles consistent and never highlight the current tile. */
+.employer .worker-section-links.job-tabs>.employer-shift-tab.selected,
+.worker-section-links.job-tabs>.employer-shift-tab.selected{
+ background:#fff;
+ border-color:#e5e8e0;
+ color:#171916;
+ box-shadow:0 2px 5px rgba(0,0,0,.04);
+}
+.employer .worker-section-links.job-tabs>.employer-shift-tab:focus-visible,
+.worker-section-links.job-tabs>.employer-shift-tab:focus-visible{
+ outline:2px solid #c6d8a8;
+ outline-offset:3px;
+}
