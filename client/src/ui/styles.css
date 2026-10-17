@@ -3030,7 +3030,9 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 /* Employer favourites subsections and worker result cards */
 .favourites-subsections{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 24px}
 .favourites-subsections>button{min-height:112px;display:flex;align-items:flex-start;justify-content:flex-start;padding:22px;background:#fff;color:#171916;border:1px solid #e5e8e0;border-radius:14px;font-weight:700;text-align:left}
-.favourites-subsections>button:hover{border-color:#c6d8a8;box-shadow:0 12px 30px #1d28120c;transform:translateY(-2px)}
+.favourites-subsections>button:hover{border-color:#9b9f95;box-shadow:0 12px 30px #1d28120c;transform:translateY(-2px)}
+.favourites-subsections>button.is-active{border-color:#242620;background:#f7f7f4;box-shadow:inset 0 0 0 1px #242620}
+.favourites-subsections>button:focus-visible{outline:2px solid #242620;outline-offset:3px}
 .favourites-search{display:flex;flex-direction:column;gap:8px;max-width:620px;margin:0 0 20px}
 .favourites-search label{font-size:13px;font-weight:700}
 .favourites-search input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #dfe3d9;border-radius:10px;background:#fff;color:#171916}
