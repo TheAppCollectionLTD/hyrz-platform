@@ -215,7 +215,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const [messages]=await db.execute('SELECT id,deleted_at FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
     if(!messages.length)return res.status(404).json({error:'Message not found in this workchat.'});
     if(messages[0].deleted_at)return res.json({ok:true,alreadyDeleted:true});
-    await db.execute('UPDATE workchat_messages SET deleted_at=NOW(),deleted_by=? WHERE id=? AND workchat_id=?',[req.user.id,messageId,id]);
+    await db.execute("UPDATE workchat_messages SET body='This message was deleted.',deleted_at=NOW(),deleted_by=? WHERE id=? AND workchat_id=?",[req.user.id,messageId,id]);
     await db.execute('DELETE FROM workchat_pins WHERE message_id=? AND workchat_id=?',[messageId,id]);
     await audit(req,'workchat.message.deleted','workchat',id,{messageId});res.json({ok:true,deleted:true});
   }));
