@@ -223,7 +223,9 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
     if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can manage participants.'});
     const q=String(req.query.q||'').trim(),like='%'+q+'%';
-    const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role FROM users u WHERE u.status='active' AND u.role IN ('worker','employer') AND (u.first_name LIKE ? OR u.last_name LIKE ? OR u.email LIKE ?) AND NOT EXISTS(SELECT 1 FROM workchat_participants p WHERE p.workchat_id=? AND p.user_id=u.id) ORDER BY u.first_name,u.last_name LIMIT 30`,[like,like,like,id]);
+    // The add list is intentionally limited to this employer's favourites.
+    // A blank query returns the whole available favourites list; a query filters that same list.
+    const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role FROM employer_worker_favourites f JOIN users u ON u.id=f.worker_user_id WHERE f.employer_user_id=? AND u.status='active' AND u.role='worker' AND (?='' OR LOWER(CONCAT_WS(' ',u.first_name,u.last_name)) LIKE LOWER(?) OR LOWER(u.email) LIKE LOWER(?)) AND NOT EXISTS(SELECT 1 FROM workchat_participants p WHERE p.workchat_id=? AND p.user_id=u.id) ORDER BY u.first_name,u.last_name LIMIT 1000`,[chat.employer_user_id,q,like,like,id]);
     res.json({participants:rows.map(p=>({...p,id:Number(p.id),name:[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email}))});
   }));
   app.post('/api/workchats/:id/participants',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
