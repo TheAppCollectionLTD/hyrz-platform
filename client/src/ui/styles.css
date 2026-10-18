@@ -3501,3 +3501,19 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .app main:not(.page-dashboard) .favourite-worker-card .actions{width:100%}
  .app main:not(.page-dashboard) .employer-welcome{grid-template-columns:1fr}
 }
+
+
+/* Critical-information tiles outside dashboards are compact Inbox-style rows, not cards. */
+.app main:not(.page-dashboard) .stats:not(.admin-overview-stats){
+  display:block!important;width:100%;margin:12px 0 16px;gap:0;
+}
+.app main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat{
+  width:100%;min-height:0;box-sizing:border-box;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 14px;
+  padding:12px 2px;margin:0;
+  border:0;border-top:1px solid #30352b;border-radius:0;
+  background:transparent;color:#f1f4eb;box-shadow:none;text-align:left;
+}
+.app main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat small{grid-column:1;color:#a9afa1}
+.app main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat strong{grid-column:2;grid-row:1/3;font-size:22px}
+.app main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat span{grid-column:1;color:#a9afa1}
