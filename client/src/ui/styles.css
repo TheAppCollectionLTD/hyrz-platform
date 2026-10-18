@@ -5252,3 +5252,10 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   font-size:12px!important;
   line-height:1.5!important;
 }
+
+
+/* Workchat message actions appear only after an authorised user selects a message. */
+.workchat-message-bubble[role="button"]{cursor:pointer;outline-offset:3px;}
+.workchat-message-bubble[role="button"]:focus-visible{outline:2px solid #dba640;}
+.workchat-message-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;margin-top:7px;}
+.workchat-message-actions button{font-size:12px;padding:6px 10px;}
