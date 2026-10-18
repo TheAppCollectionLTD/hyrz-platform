@@ -3580,3 +3580,82 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat small{grid-column:1;color:#a9afa1}
 .app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat strong{grid-column:2;grid-row:1/3;font-size:22px}
 .app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat span{grid-column:1;color:#a9afa1}
+
+
+/* Repair worker Find Shifts layout: compact subsection buttons must never collapse into vertical text. */
+.app.worker main .shifts-critical-info{
+  position:static!important;
+  left:auto!important;
+  transform:none!important;
+  width:100%!important;
+  max-width:900px!important;
+  margin:0 auto 14px!important;
+  display:flex!important;
+  justify-content:flex-start!important;
+  align-items:stretch!important;
+  box-sizing:border-box;
+}
+.app.worker main .shifts-critical-info .worker-dashboard-stat{
+  flex:0 0 150px!important;
+  width:150px!important;
+  min-width:150px!important;
+  min-height:76px!important;
+  padding:12px 14px!important;
+  box-sizing:border-box;
+}
+.app.worker main .find-shifts-panel{
+  width:100%!important;
+  max-width:900px!important;
+  min-width:0!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  box-sizing:border-box;
+}
+.app.worker main .find-shifts-panel .worker-section-links.job-tabs-squares{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  gap:6px!important;
+  margin:8px 0 16px!important;
+  padding:0 0 12px!important;
+  border:0!important;
+  border-bottom:1px solid #30352b!important;
+  position:static!important;
+  box-sizing:border-box;
+}
+.app.worker main .find-shifts-panel .worker-section-links.job-tabs-squares>button{
+  display:inline-flex!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:max-content!important;
+  max-width:100%!important;
+  min-height:28px!important;
+  height:28px!important;
+  max-height:28px!important;
+  aspect-ratio:auto!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:4px 10px!important;
+  margin:0!important;
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  writing-mode:horizontal-tb!important;
+  font-size:11px!important;
+  line-height:1.15!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+}
+@media(max-width:760px){
+  .app.worker main .shifts-critical-info .worker-dashboard-stat{
+    flex-basis:140px!important;width:140px!important;min-width:140px!important;
+  }
+  .app.worker main .find-shifts-panel .worker-section-links.job-tabs-squares>button{
+    min-height:28px!important;height:28px!important;max-height:28px!important;
+    padding:4px 8px!important;font-size:10px!important;
+  }
+}
