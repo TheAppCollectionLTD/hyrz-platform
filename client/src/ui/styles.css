@@ -5100,3 +5100,26 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   background:#fff1ee!important;
   border-color:#e4c4bf!important;
 }
+
+
+/* Make the workchat name the primary heading; participant count is secondary metadata. */
+.app main.page-workchats .workchat-conversation-header .workchat-conversation-title h3{
+  margin:0!important;
+  font-size:28px!important;
+  line-height:1.18!important;
+  font-weight:800!important;
+  letter-spacing:-.035em!important;
+  color:#fffdf9!important;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-conversation-title p{
+  margin:2px 0 0!important;
+  font-size:12px!important;
+  line-height:1.4!important;
+  font-weight:500!important;
+  color:#c4cede!important;
+}
+@media(max-width:650px){
+  .app main.page-workchats .workchat-conversation-header .workchat-conversation-title h3{
+    font-size:25px!important;
+  }
+}
