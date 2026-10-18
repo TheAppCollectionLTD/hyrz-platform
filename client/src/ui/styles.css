@@ -5150,3 +5150,47 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   color:#697386!important;
   font:500 10px/1.4 'DM Sans',sans-serif!important;
 }
+
+
+/* Workchat message search */
+.app main.page-workchats .workchat-message-search{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:7px 12px;
+  align-items:center;
+  padding:14px 18px 0;
+  background:#fffdf9;
+}
+.app main.page-workchats .workchat-message-search label{
+  grid-column:1/-1;
+  color:#26354d;
+  font-size:12px;
+  font-weight:700;
+}
+.app main.page-workchats .workchat-message-search input{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  border:1px solid #d9d1c4;
+  border-radius:9px;
+  padding:10px 12px;
+  background:#fff;
+  color:#17263e;
+  font:500 13px 'DM Sans',sans-serif;
+}
+.app main.page-workchats .workchat-message-search span{
+  color:#65738a;
+  font-size:11px;
+  white-space:nowrap;
+}
+.app main.page-workchats .workchat-message-list{
+  padding-top:12px;
+}
+@media(max-width:520px){
+  .app main.page-workchats .workchat-message-search{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .app main.page-workchats .workchat-message-search span{
+    white-space:normal;
+  }
+}
