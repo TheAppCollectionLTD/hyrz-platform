@@ -5230,3 +5230,25 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app main.page-workchats .workchat-message-row.mine .workchat-pin-button{
   margin-left:auto;
 }
+
+
+/* Keep the Add participants section clearly visible before a search is entered. */
+.app main.page-workchats .workchat-add-participants-heading{
+  margin:18px 0 12px;
+  padding:14px 15px;
+  border:1px solid #ded5c8;
+  border-radius:9px;
+  background:#fffdf9;
+}
+.app main.page-workchats .workchat-add-participants-heading h5{
+  margin:0 0 5px!important;
+  color:#17243b!important;
+  font-size:15px!important;
+  font-weight:800!important;
+}
+.app main.page-workchats .workchat-add-participants-heading p{
+  margin:0!important;
+  color:#626b7a!important;
+  font-size:12px!important;
+  line-height:1.5!important;
+}
