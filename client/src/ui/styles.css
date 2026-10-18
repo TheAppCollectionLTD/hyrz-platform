@@ -4285,3 +4285,26 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 }
 .app .workchat-section-tabs button,.app .workchat-item strong,
 .app .workchat-create label{color:#17243b}
+
+
+/* Employer workchat participant picker */
+.workchat-participant-picker{margin-top:24px;padding:20px;border:1px solid #e3e0d7;border-radius:12px;background:#fbfaf7}
+.workchat-participant-picker h4{margin:0 0 7px;font:700 15px Manrope,sans-serif;color:#17243b}
+.workchat-participant-picker h4 span{color:#9a5b35}
+.workchat-participant-picker>.muted{margin-bottom:14px}
+.workchat-participant-picker .workchat-section-tabs{margin:0 0 14px}
+.workchat-worker-list{display:grid;gap:8px;max-height:280px;overflow:auto;margin-top:12px}
+.workchat-worker-option{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #e3e0d7;border-radius:9px;background:#fff;cursor:pointer}
+.workchat-worker-option.selected{border-color:#7b8da9;background:#f0f3f8}
+.workchat-worker-option input{width:16px;height:16px;flex:0 0 auto;accent-color:#1b2a44}
+.workchat-worker-option>span:nth-of-type(1){display:grid;gap:3px;min-width:0;flex:1}
+.workchat-worker-option strong{font-size:13px;color:#1b2a44}
+.workchat-worker-option small{font-size:11px;color:#72766f;overflow-wrap:anywhere}
+.workchat-worker-check{font-size:11px;font-weight:700;color:#485b77}
+.workchat-selected-count{margin:12px 0 0;font-size:12px;font-weight:700;color:#34445d}
+.workchat-selected-list{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:12px}
+.workchat-selected-list>strong{width:100%;font-size:12px;color:#34445d}
+.workchat-selected-list>span{display:inline-flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid #d9dfeb;border-radius:18px;background:#eef2f8;font-size:11px;color:#23334d}
+.workchat-selected-list button{border:0;background:transparent;color:#23334d;font-size:16px;cursor:pointer;padding:0}
+.workchat-create-actions .primary:disabled{opacity:.48;cursor:not-allowed}
+.workchat-item small{display:block;margin-top:5px}
