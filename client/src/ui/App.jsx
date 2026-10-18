@@ -7,9 +7,15 @@ export default function App(){
  const [pageHistory,setPageHistory]=useState([]);
  const [workchatSection,setWorkchatSection]=useState('current');
  const [workchatDraft,setWorkchatDraft]=useState('');
+ const [workchatWorkerSource,setWorkchatWorkerSource]=useState('favourites');
+ const [workchatWorkerQuery,setWorkchatWorkerQuery]=useState('');
+ const [workchatWorkerResults,setWorkchatWorkerResults]=useState([]);
+ const [workchatSelectedWorkers,setWorkchatSelectedWorkers]=useState([]);
+ const [workchatWorkersLoading,setWorkchatWorkersLoading]=useState(false);
+ useEffect(()=>{if(user?.role!=='employer'||page!=='workchats'||workchatSection!=='new')return;let active=true;setWorkchatWorkersLoading(true);(async()=>{try{const q=workchatWorkerSource==='search'?workchatWorkerQuery.trim():'';const d=await request('/employer/workers/search?q='+encodeURIComponent(q));if(active){const workers=d.workers||[];setWorkchatWorkerResults(workchatWorkerSource==='favourites'?workers.filter(w=>w.isFavourite):workers);}}catch(e){if(active){setWorkchatWorkerResults([]);setError(e.message||'Could not load workers.');}}finally{if(active)setWorkchatWorkersLoading(false);}})();return()=>{active=false}},[user?.role,page,workchatSection,workchatWorkerSource,workchatWorkerQuery]);
  const [workchatItems,setWorkchatItems]=useState(()=>{try{return JSON.parse(localStorage.getItem('hyrz-workchats-'+(JSON.parse(localStorage.getItem('hyrz-user')||'null')?.id||'session'))||'[]')}catch{return[]}});
  useEffect(()=>{try{localStorage.setItem('hyrz-workchats-'+(user?.id||'session'),JSON.stringify(workchatItems))}catch{}},[workchatItems,user?.id]);
- function createWorkchat(){const name=workchatDraft.trim();if(!name)return;setWorkchatItems(items=>[{id:Date.now(),name,status:'current',createdAt:new Date().toISOString()},...items]);setWorkchatDraft('');setWorkchatSection('current');}
+ function createWorkchat(){const name=workchatDraft.trim();if(!name||workchatSelectedWorkers.length===0)return;setWorkchatItems(items=>[{id:Date.now(),name,status:'current',participants:workchatSelectedWorkers,createdAt:new Date().toISOString()},...items]);setWorkchatDraft('');setWorkchatSelectedWorkers([]);setWorkchatWorkerQuery('');setWorkchatSection('current');}
  function archiveWorkchat(id){setWorkchatItems(items=>items.map(item=>item.id===id?{...item,status:'past',archivedAt:new Date().toISOString()}:item));}
 
  const mainWorkerPages=['dashboard','jobs','contact','account','workchats','employerInbox','employerShifts','favourites','invoices','checkouts','funds'];
@@ -356,7 +362,23 @@ async function authenticate(register) {
      <button type="button" className={workchatSection==='current'?'selected':''} onClick={()=>setWorkchatSection('current')}>Current workchats ({workchatItems.filter(w=>w.status==='current').length})</button>
      <button type="button" className={workchatSection==='past'?'selected':''} onClick={()=>setWorkchatSection('past')}>Past workchats ({workchatItems.filter(w=>w.status==='past').length})</button>
     </div>
-    {workchatSection==='new'&&<div className="workchat-create"><label htmlFor="new-workchat-name">Workchat name</label><input id="new-workchat-name" value={workchatDraft} onChange={e=>setWorkchatDraft(e.target.value)} placeholder="e.g. Weekend hospitality team" maxLength={100}/><div className="workchat-create-actions"><button type="button" className="primary" disabled={!workchatDraft.trim()} onClick={createWorkchat}>Create workchat</button></div><p className="muted">This creates a workchat entry. Live group messaging and adding participants are not connected yet.</p></div>}
+    {workchatSection==='new'&&<div className="workchat-create">
+      <label htmlFor="new-workchat-name">Workchat name</label><input id="new-workchat-name" value={workchatDraft} onChange={e=>setWorkchatDraft(e.target.value)} placeholder="e.g. Weekend hospitality team" maxLength={100}/>
+      <div className="workchat-participant-picker">
+       <h4>Add workers <span aria-hidden="true">*</span></h4><p className="muted">Choose at least one worker to add before creating this workchat.</p>
+       <div className="workchat-section-tabs" role="tablist" aria-label="Choose workers">
+        <button type="button" className={workchatWorkerSource==='favourites'?'selected':''} onClick={()=>setWorkchatWorkerSource('favourites')}>Favourite pool</button>
+        <button type="button" className={workchatWorkerSource==='search'?'selected':''} onClick={()=>setWorkchatWorkerSource('search')}>Search workers</button>
+       </div>
+       {workchatWorkerSource==='search'&&<label htmlFor="workchat-worker-search">Search by worker name or email</label>}
+       {workchatWorkerSource==='search'&&<input id="workchat-worker-search" type="search" value={workchatWorkerQuery} onChange={e=>setWorkchatWorkerQuery(e.target.value)} placeholder="Enter a name or email address"/>}
+       <div className="workchat-worker-list">{workchatWorkersLoading?<p className="muted">Loading workers…</p>:workchatWorkerResults.length?workchatWorkerResults.map(worker=>{const id=String(worker.id);const selected=workchatSelectedWorkers.some(w=>String(w.id)===id);const name=[worker.first_name,worker.last_name].filter(Boolean).join(' ')||worker.name||'Worker';return <label className={'workchat-worker-option'+(selected?' selected':'')} key={id}><input type="checkbox" checked={selected} onChange={()=>setWorkchatSelectedWorkers(current=>selected?current.filter(w=>String(w.id)!==id):[...current,{id:worker.id,name,email:worker.email||''}])}/><span><strong>{name}</strong>{worker.email&&<small>{worker.email}</small>}</span><span className="workchat-worker-check">{selected?'Added':'Add'}</span></label>}):<div className="empty-state">{workchatWorkerSource==='favourites'?'No workers in your favourites yet. Switch to Search workers to find someone.':'No workers found. Try another name or email.'}</div>}</div>
+       <p className="workchat-selected-count">{workchatSelectedWorkers.length} worker{workchatSelectedWorkers.length===1?'':'s'} selected</p>
+       {workchatSelectedWorkers.length>0&&<div className="workchat-selected-list"><strong>Selected workers</strong>{workchatSelectedWorkers.map(worker=><span key={worker.id}>{worker.name}<button type="button" aria-label={'Remove '+worker.name} onClick={()=>setWorkchatSelectedWorkers(current=>current.filter(w=>String(w.id)!==String(worker.id)))}>×</button></span>)}</div>}
+      </div>
+      <div className="workchat-create-actions"><button type="button" className="primary" disabled={!workchatDraft.trim()||workchatSelectedWorkers.length===0} onClick={createWorkchat}>Create workchat</button></div>
+      <p className="muted">Workers selected here are saved as participants on this workchat entry. Live group messaging is not connected yet.</p>
+    </div>}
     {workchatSection==='current'&&<div className="workchat-list">{workchatItems.filter(w=>w.status==='current').length?workchatItems.filter(w=>w.status==='current').map(w=><article className="workchat-item" key={w.id}><div><strong>{w.name}</strong><small>Created {new Date(w.createdAt).toLocaleDateString('en-GB')}</small></div><button type="button" className="secondary" onClick={()=>archiveWorkchat(w.id)}>Disable / move to past</button></article>):<div className="empty-state">No current workchats yet. Choose “New workchat +” to create one.</div>}</div>}
     {workchatSection==='past'&&<div className="workchat-list">{workchatItems.filter(w=>w.status==='past').length?workchatItems.filter(w=>w.status==='past').map(w=><article className="workchat-item" key={w.id}><div><strong>{w.name}</strong><small>Moved to past {new Date(w.archivedAt||w.createdAt).toLocaleDateString('en-GB')}</small></div><button type="button" className="secondary" onClick={()=>setWorkchatItems(items=>items.map(item=>item.id===w.id?{...item,status:'current',archivedAt:null}:item))}>Restore</button></article>):<div className="empty-state">Disabled workchats will appear here.</div>}</div>}
    </div>
