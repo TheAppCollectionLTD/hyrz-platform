@@ -710,7 +710,7 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  if(confirmedPreferences.some(item=>typeof item!=='string'||!preferredItems.includes(item))||new Set(confirmedPreferences).size!==confirmedPreferences.length)return res.status(400).json({error:'One or more selected preferences are invalid.'});
  const confirmedPreferencesJson=JSON.stringify(confirmedPreferences);
  const requestedRate=req.body?.requestedHourlyRate==null||req.body.requestedHourlyRate===''?null:Number(req.body.requestedHourlyRate);const rateMessage=String(req.body?.rateMessage||'').trim();if(requestedRate!==null&&(!Number.isFinite(requestedRate)||requestedRate<Number(s[0].hourly_pay||8)||requestedRate>500))return res.status(400).json({error:'A counter-offer must be at least the advertised hourly rate and no more than £500 per hour.'});if(rateMessage.length>1000)return res.status(400).json({error:'The optional message must be 1,000 characters or fewer.'});
- const nextStatus=s[0].auto_approve?'approved':'pending';
+ const nextStatus=requestedRate!==null?'pending':(s[0].auto_approve?'approved':'pending');
  const [existing]=await db.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1',[req.params.id,req.user.id]);
  if(existing.length){
    if(['withdrawn','cancelled'].includes(existing[0].status)){
