@@ -3232,3 +3232,12 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
     white-space:nowrap;
   }
 }
+
+
+/* Employer shifts: persistent compact subsection controls with content displayed below. */
+.employer .employer-shift-tabs{display:flex;flex-wrap:wrap;align-items:center;gap:7px;width:100%;margin:14px 0 18px;padding:0;border:0;border-radius:0;background:transparent}
+.employer .employer-shift-tabs .employer-shift-tab{flex:0 0 auto;min-width:0;min-height:36px;padding:8px 12px;border:1px solid #343a2d!important;border-radius:9px;background:#20241d!important;color:#e8ecdf!important;font:600 12px/1.2 'DM Sans',sans-serif;white-space:nowrap;box-shadow:none!important;transform:none!important}
+.employer .employer-shift-tabs .employer-shift-tab:hover{border-color:#b5f34a!important}
+.employer .employer-shift-tabs .employer-shift-tab.selected{background:#b5f34a!important;border-color:#b5f34a!important;color:#15190f!important}
+.employer .shift-new-panel{margin-top:4px}
+@media(max-width:560px){.employer .employer-shift-tabs{gap:6px;margin:12px 0 16px}.employer .employer-shift-tabs .employer-shift-tab{min-height:34px;padding:8px 9px;font-size:11px}}
