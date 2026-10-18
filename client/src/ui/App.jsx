@@ -222,7 +222,11 @@ async function authenticate(register) {
 <h2>Flexible work.<br/><em>Reliable staffing.</em></h2>
 <button className="primary" onClick={()=>navigateTo('chooseRole')}>Get started</button>
 <p>Already registered? <button className="textbutton" onClick={()=>navigateTo('login')}>Sign in</button></p>
-</div></section>}
+</div>
+<section className="download-app-section">
+<div className="download-app-copy"><span className="download-app-eyebrow">HYRZ ON THE GO</span><h2>Work around <em>your life.</em></h2><p>Stay on top of shift opportunities, get updates and reminders, and keep your work organised wherever you are.</p><div className="download-app-actions"><button type="button" className="app-store-placeholder" disabled><span className="store-symbol">●</span><span><small>COMING SOON TO</small><strong>App Store</strong></span></button><button type="button" className="app-store-placeholder" disabled><span className="store-symbol">▶</span><span><small>COMING SOON TO</small><strong>Google Play</strong></span></button></div><small className="download-app-note">The Hyrz mobile app is not available to download yet. In the meantime, you can use Hyrz on the web.</small><button className="download-web-cta" onClick={()=>navigateTo('chooseRole')}>Get started with Hyrz →</button></div>
+<div className="download-app-visual" role="img" aria-label="A glimpse of flexible work opportunities"><div className="app-visual-orbit orbit-one"></div><div className="app-visual-orbit orbit-two"></div><div className="app-visual-phone"><div className="app-visual-speaker"></div><div className="app-visual-logo">hyrz<span>.</span></div><div className="app-visual-shift-label">SHIFT MATCHED</div><strong>Office Assistant</strong><small>Tomorrow · 09:00–17:00</small><div className="app-visual-pay">£120.00 <small>total shift pay</small></div><div className="app-visual-confirm">✓ Shift details</div></div></div>
+</section></section>}
 {!user&&page==='chooseRole'&&<section className="role-selection">
 <div className="role-selection-top"><button className="textbutton" onClick={()=>navigateTo('home')}>← Back</button><button type="button" className="how-work-link" onClick={()=>setShowHowItWorks(v=>!v)}>How we work</button></div>
 <h2>How will you use hyrz?</h2><p>Choose your account type.</p>
