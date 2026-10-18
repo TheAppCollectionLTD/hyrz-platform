@@ -3790,3 +3790,26 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 @media(max-width:760px){
  .shift-card .shiftmain{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+
+/* Final shift-card layout: middle details are six stacked items in three side-by-side columns. */
+.shift-card .shiftmain{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:auto auto;
+  align-items:start;
+  gap:10px 14px;
+}
+.shift-card .shiftmain>b{grid-column:1/-1}
+.shift-card .shiftmain .shift-business{min-width:0;overflow-wrap:anywhere}
+.shift-card .shift-schedule{display:contents}
+.shift-card .shift-schedule-row{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+.shift-card .instant-pay-status{min-width:0}
+@media(max-width:760px){
+ .shift-card .shiftmain{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .shift-card .shiftmain>b{grid-column:1/-1}
+ .shift-card .shiftmain .shift-business{font-size:9px;line-height:1.25}
+ .shift-card .shift-schedule-row .shift-meta-label{font-size:7px;letter-spacing:.4px}
+ .shift-card .shift-schedule-row strong{font-size:10px;line-height:1.25}
+ .shift-card .instant-pay-badge{font-size:8px;padding:4px 5px}
+}
