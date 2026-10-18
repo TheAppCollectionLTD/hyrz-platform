@@ -798,7 +798,7 @@ app.patch('/api/checkouts/:id/review',auth,requireVerification,asyncRoute(async(
  const [rows]=await db.execute(query,args);if(!rows.length)return res.status(404).json({error:'Checkout not found'});
  await db.execute('UPDATE checkouts SET status=?,reviewed_by=?,reviewed_at=NOW() WHERE id=?',[status,req.user.id,req.params.id]);
  await audit(req,'checkout.'+status,'checkout',req.params.id);
- if(status==='approved'&&req.user.role!=='admin'){
+ if(status==='approved'){
   const [business]=await db.execute('SELECT business_id FROM shifts WHERE id=?',[rows[0].shift_id]);
   const [c]=await db.execute('SELECT * FROM checkouts WHERE id=?',[req.params.id]);
   const due=new Date(Date.now()+14*86400000).toISOString().slice(0,10);
@@ -816,6 +816,44 @@ app.post('/api/ratings',auth,asyncRoute(async(req,res)=>{
  res.status(201).json({id:r.insertId});
 }));
 app.get('/api/ratings/shift/:shiftId',auth,asyncRoute(async(req,res)=>{const [rows]=await db.execute('SELECT r.*,u.first_name,u.last_name FROM ratings r JOIN users u ON u.id=r.reviewer_id WHERE r.shift_id=?',[req.params.shiftId]);res.json({ratings:rows});}));
+
+// Employer payment automation preferences. These settings do not charge a payment method by themselves;
+// actual automatic collection/top-ups require a configured payment provider and confirmed payment methods.
+let employerPaymentPreferencesReady;
+async function ensureEmployerPaymentPreferences(){
+ if(!employerPaymentPreferencesReady)employerPaymentPreferencesReady=db.query(`CREATE TABLE IF NOT EXISTS employer_payment_preferences (
+  employer_user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+  auto_top_up_enabled TINYINT(1) NOT NULL DEFAULT 0,
+  top_up_threshold DECIMAL(10,2) NOT NULL DEFAULT 50.00,
+  top_up_amount DECIMAL(10,2) NOT NULL DEFAULT 100.00,
+  auto_pay_enabled TINYINT(1) NOT NULL DEFAULT 0,
+  auto_pay_cadence VARCHAR(16) NOT NULL DEFAULT '7_days',
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+ ) ENGINE=InnoDB`);
+ await employerPaymentPreferencesReady;
+}
+function serializePaymentPreferences(row){
+ return {autoTopUpEnabled:Boolean(row?.auto_top_up_enabled),topUpThreshold:Number(row?.top_up_threshold??50).toFixed(2),topUpAmount:Number(row?.top_up_amount??100).toFixed(2),autoPayEnabled:Boolean(row?.auto_pay_enabled),autoPayCadence:row?.auto_pay_cadence||'7_days'};
+}
+app.get('/api/employer/payment-preferences',auth,allow('employer'),asyncRoute(async(req,res)=>{
+ await ensureEmployerPaymentPreferences();
+ const [rows]=await db.execute('SELECT * FROM employer_payment_preferences WHERE employer_user_id=?',[req.user.id]);
+ res.json({preferences:serializePaymentPreferences(rows[0])});
+}));
+app.put('/api/employer/payment-preferences',auth,allow('employer'),asyncRoute(async(req,res)=>{
+ await ensureEmployerPaymentPreferences();
+ const threshold=Number(req.body.topUpThreshold),amount=Number(req.body.topUpAmount),cadence=String(req.body.autoPayCadence||'7_days');
+ if(!Number.isFinite(threshold)||threshold<1||threshold>1000000)return res.status(400).json({error:'Top-up threshold must be between £1 and £1,000,000.'});
+ if(!Number.isFinite(amount)||amount<1||amount>1000000)return res.status(400).json({error:'Top-up amount must be between £1 and £1,000,000.'});
+ if(!['instant','3_days','7_days','14_days'].includes(cadence))return res.status(400).json({error:'Choose a valid automatic invoice payment schedule.'});
+ await db.execute(`INSERT INTO employer_payment_preferences(employer_user_id,auto_top_up_enabled,top_up_threshold,top_up_amount,auto_pay_enabled,auto_pay_cadence)
+ VALUES(?,?,?,?,?,?) ON DUPLICATE KEY UPDATE auto_top_up_enabled=VALUES(auto_top_up_enabled),top_up_threshold=VALUES(top_up_threshold),top_up_amount=VALUES(top_up_amount),auto_pay_enabled=VALUES(auto_pay_enabled),auto_pay_cadence=VALUES(auto_pay_cadence)`,
+ [req.user.id,req.body.autoTopUpEnabled?1:0,threshold.toFixed(2),amount.toFixed(2),req.body.autoPayEnabled?1:0,cadence]);
+ const [rows]=await db.execute('SELECT * FROM employer_payment_preferences WHERE employer_user_id=?',[req.user.id]);
+ await audit(req,'employer.payment_preferences.updated','employer',req.user.id,{autoTopUpEnabled:!!req.body.autoTopUpEnabled,autoPayEnabled:!!req.body.autoPayEnabled,autoPayCadence:cadence});
+ res.json({preferences:serializePaymentPreferences(rows[0])});
+}));
+
 app.get('/api/invoices/mine',auth,asyncRoute(async(req,res)=>{
  const [rows]=req.user.role==='employer'
  ? await db.execute('SELECT i.*,s.title FROM invoices i JOIN businesses b ON b.id=i.business_id JOIN checkouts c ON c.id=i.checkout_id JOIN shifts s ON s.id=c.shift_id WHERE b.owner_user_id=? ORDER BY i.created_at DESC',[req.user.id])
