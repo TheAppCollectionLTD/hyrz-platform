@@ -4276,3 +4276,12 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app .workchat-item strong{color:#17243b!important}
 .app .workchat-item small{color:#515b6d!important}
 @media(max-width:600px){.app .workchat-item{align-items:flex-start;flex-direction:column}.app .workchat-section-tabs button{flex:1 1 100%;text-align:left}}
+
+
+/* Hyrz text policy: never use green for written content; reserve colour accents for surfaces/icons. */
+.app .green,.app .live,.app .success-text,.app .text-success,.app .positive,
+.app .brand span,.app .employer-hero h2 em{
+ color:#34425b!important;
+}
+.app .workchat-section-tabs button,.app .workchat-item strong,
+.app .workchat-create label{color:#17243b}
