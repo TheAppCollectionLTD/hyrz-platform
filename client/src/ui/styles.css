@@ -4065,3 +4065,51 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 
 
 .auth-welcome .welcome-panel .welcome-tagline{max-width:320px;margin:12px 0 24px;color:#596276;font-size:15px;line-height:1.6;font-weight:650;letter-spacing:.1px}
+
+
+/* Hyrz global design system — navy, warm cream, amber and muted coral. */
+:root{
+ --hyrz-ink:#17243b;
+ --hyrz-navy:#202e49;
+ --hyrz-cream:#f7f2e9;
+ --hyrz-cream-deep:#eee5d7;
+ --hyrz-amber:#f2b84b;
+ --hyrz-coral:#e97861;
+ --hyrz-muted:#626879;
+ --hyrz-border:#ded5c8;
+ --hyrz-white:#fffdf9;
+}
+.app{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
+.app main{color:var(--hyrz-ink)}
+.app .sidebar{background:var(--hyrz-ink)!important;color:var(--hyrz-white)!important;border-right:1px solid #34425b}
+.app .brand,.app .sidebar .brand{color:var(--hyrz-white)!important}
+.app .brand span,.app .green,.app .live{color:var(--hyrz-amber)!important}
+.app .tag,.app .eyebrow{color:#b4bdcd!important}
+.app .sidebar nav button,.app .sidebottom button{color:#d0d6e1!important}
+.app .sidebar nav button.selected,.app .sidebar nav button:hover{background:#34425b!important;color:var(--hyrz-amber)!important}
+.app .panel,.app .stat,.app .card,.app .section-card,.app .dashboard-card,.app .critical-info-box{background:var(--hyrz-white)!important;color:var(--hyrz-ink)!important;border-color:var(--hyrz-border)!important;box-shadow:0 5px 18px #17243b0a}
+.app .stats .stat{background:var(--hyrz-white)!important;color:var(--hyrz-ink)!important;border-color:var(--hyrz-border)!important}
+.app .stats .stat small,.app .stat small,.app .muted,.app .hint,.app small.muted{color:var(--hyrz-muted)!important}
+.app .primary,.app button.primary,.app .formgrid .primary{background:var(--hyrz-amber)!important;border-color:var(--hyrz-amber)!important;color:var(--hyrz-ink)!important}
+.app .primary:hover,.app button.primary:hover{background:#ffd37a!important;border-color:#ffd37a!important}
+.app .secondary,.app button.secondary{background:var(--hyrz-cream-deep)!important;border:1px solid var(--hyrz-border)!important;color:var(--hyrz-ink)!important}
+.app input,.app select,.app textarea{background:#fffdf9!important;border-color:#d5cbbb!important;color:var(--hyrz-ink)!important}
+.app input::placeholder,.app textarea::placeholder{color:#737b8a!important;opacity:1}
+.app input:focus,.app select:focus,.app textarea:focus{border-color:var(--hyrz-coral)!important;box-shadow:0 0 0 3px #e9786120!important;outline:none}
+.app table th,.app .table th{background:var(--hyrz-cream-deep)!important;color:var(--hyrz-ink)!important;border-color:var(--hyrz-border)!important}
+.app table td,.app .table td,.app .row,.app .shiftrow,.app .admin-record{border-color:var(--hyrz-border)!important}
+.app .selected,.app .tabs button.selected,.app .subsection-tabs button.selected,.app .section-tabs button.selected{background:var(--hyrz-ink)!important;color:#fffdf9!important;border-color:var(--hyrz-ink)!important}
+.app .pill,.app .tag-pill{background:#f8e7c6!important;color:#75501a!important;border-color:#e9c878!important}
+.app .shiftdate{background:#f8e7c6!important;color:#75501a!important}
+.app .hero-card,.app .critical-card,.app .dark-card{background:var(--hyrz-navy)!important;color:#fffdf9!important;border-color:#34425b!important}
+.app .hero-card .card-top,.app .hero-card small,.app .dark-card small{color:#c7cfdd!important}
+.app .hero-card .big-stat strong,.app .hero-card .live{color:var(--hyrz-amber)!important}
+.app .notice,.app .info-box,.app .empty-state{border-color:var(--hyrz-border)!important}
+.app a{color:#a94d3c}
+.app button:focus-visible,.app a:focus-visible{outline:3px solid var(--hyrz-coral)!important;outline-offset:2px}
+.app .danger,.app .danger-button{background:#f8dfd8!important;color:#8c3428!important;border-color:#e8a79a!important}
+.app .success,.app .success-badge{background:#f8e7c6!important;color:#75501a!important;border-color:#e9c878!important}
+@media(max-width:760px){
+ .app{background:var(--hyrz-cream)!important}
+ .app main{color:var(--hyrz-ink)!important}
+}
