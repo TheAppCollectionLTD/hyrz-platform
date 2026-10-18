@@ -3891,3 +3891,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .shift-card .shift-pay-action-row{display:flex;flex-direction:column;align-items:flex-end;gap:8px;width:100%;margin-top:10px}
 .shift-card .shift-pay-action-row .instant-pay-badge{max-width:100%;text-align:right;white-space:normal;line-height:1.35}
 .shift-card .shift-pay-action-row button{width:100%}
+
+
+/* Only show the Instant Pay badge beside the hourly rate, never beneath shift details. */
+.shift-card .shiftmain > .instant-pay-status{display:none!important}
