@@ -3128,3 +3128,12 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app.employer .past-shift-list>.published-shift-card>.past-shift-review{grid-column:1/-1;width:100%;box-sizing:border-box;margin:4px 0 0;padding:16px;background:#f4f6ef;color:#202719;border:1px solid #e5e8e0;border-radius:10px}
 @media(min-width:1200px){.app.employer .past-shift-list>.published-shift-card{grid-template-columns:120px minmax(0,1fr) minmax(190px,230px);gap:28px;min-height:230px}.app.employer .past-shift-list>.published-shift-card>.shift-employer-avatar{width:120px;height:120px}}
 @media(max-width:760px){.app.employer .past-shift-list>.published-shift-card{grid-template-columns:76px minmax(0,1fr);gap:14px;padding:16px;min-height:0}.app.employer .past-shift-list>.published-shift-card>.shift-employer-avatar{width:76px;height:76px;font-size:25px}.app.employer .past-shift-list>.published-shift-card>.shiftmain>b{font-size:18px}.app.employer .past-shift-list>.published-shift-card>.shiftpay{grid-column:2;border-left:0;border-top:1px solid #ecefe7;padding:13px 0 0;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}.app.employer .past-shift-list>.published-shift-card>.shiftpay>.employer-section-actions{display:grid;grid-template-columns:1fr;gap:7px}.app.employer .past-shift-list>.published-shift-card>.past-shift-review{grid-column:1/-1}}
+
+
+/* Instant Pay eligibility badge on available shift cards */
+.instant-pay-status{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.7rem}
+.instant-pay-status>small{font-size:.75rem;color:var(--muted,#73786d)}
+.instant-pay-badge{display:inline-flex;align-items:center;border-radius:999px;padding:.35rem .65rem;font-size:.75rem;font-weight:700;line-height:1.2;border:1px solid transparent}
+.instant-pay-badge.available{background:#eaf5d9;color:#35551c;border-color:#cde5a9}
+.instant-pay-badge.unavailable{background:#f8e8e5;color:#8b3328;border-color:#efc7c0}
+.instant-pay-badge.unknown{background:#f1f0e9;color:#65675e;border-color:#deded3}
