@@ -4707,3 +4707,27 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   background:#f9e8e4!important;
   color:#9b3028!important;
 }
+
+
+/* Entire workchat rows open the conversation; keep secondary actions distinct. */
+.app main.page-workchats .workchat-item-clickable{
+  cursor:pointer;
+  outline:none;
+}
+.app main.page-workchats .workchat-item-clickable:focus-visible{
+  outline:3px solid #8c9bb2;
+  outline-offset:3px;
+  border-color:#8c9bb2;
+  box-shadow:0 0 0 4px #8c9bb226;
+}
+.app main.page-workchats .workchat-item-clickable::after{
+  content:"Open conversation →";
+  display:block;
+  margin-top:10px;
+  color:#52617a;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.01em;
+}
+.app main.page-workchats .workchat-item-clickable .workchat-item-actions{position:relative;z-index:1}
+.app main.page-workchats .workchat-item-clickable .workchat-item-actions button{cursor:pointer}
