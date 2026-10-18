@@ -355,7 +355,7 @@ async function authenticate(register) {
  
 
  {user?.role==='employer'&&page==='workchats'&&<section className="employer-welcome">
-   <div className="employer-hero"><span className="eyebrow">YOUR TEAM, IN ONE PLACE</span><h2>Good work starts with<br/><em>good people.</em></h2><p>Keep conversations with your favourite workers together, coordinate upcoming shifts and build a team you can rely on.</p></div>
+   <div className="employer-hero"><span className="eyebrow">YOUR TEAM, IN ONE PLACE</span><h2>The right people.<br/><em>The right shifts.</em></h2><p>Keep conversations with your favourite workers together, coordinate upcoming shifts and build a team you can rely on.</p></div>
    <div className="employer-workchat-card"><div className="employer-chat-icon">↗</div><span className="eyebrow">WORKCHAT</span><h3>Your workchats</h3>
     <div className="workchat-section-tabs" role="tablist" aria-label="Workchat sections">
      <button type="button" className={workchatSection==='new'?'selected':''} onClick={()=>setWorkchatSection('new')}>New workchat +</button>
