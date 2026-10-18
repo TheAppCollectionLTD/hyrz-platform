@@ -3813,3 +3813,25 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .shift-card .shift-schedule-row strong{font-size:10px;line-height:1.25}
  .shift-card .instant-pay-badge{font-size:8px;padding:4px 5px}
 }
+
+
+/* Available shift cards: exactly three columns by two rows for the six requested details. */
+.shift-card .shiftmain{display:flex;flex-direction:column;align-items:stretch;gap:10px;min-width:0}
+.shift-card .shift-detail-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:auto auto;
+  gap:12px 16px;
+  width:100%;
+  min-width:0;
+}
+.shift-card .shift-detail-item{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+.shift-card .shift-detail-item .shift-meta-label{font-size:8px;letter-spacing:.8px;line-height:1.2}
+.shift-card .shift-detail-item strong{font-size:11px;line-height:1.35;color:#252a20;overflow-wrap:anywhere}
+.shift-card .instant-pay-status{align-self:flex-start;min-width:0}
+@media(max-width:760px){
+ .shift-card .shift-detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px 8px}
+ .shift-card .shift-detail-item .shift-meta-label{font-size:7px;letter-spacing:.35px}
+ .shift-card .shift-detail-item strong{font-size:10px;line-height:1.25}
+ .shift-card .instant-pay-badge{font-size:8px;padding:4px 5px}
+}
