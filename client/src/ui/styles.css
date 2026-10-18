@@ -3910,23 +3910,23 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 
 
 /* Checkouts filters are compact, readable tabs rather than oversized square tiles. */
-.employer-checkouts-panel .checkout-section-cards{
+.app.employer main:not(.page-dashboard) .checkout-section-cards{
  display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important;
  margin:14px 0 18px!important;padding:0!important;border:0!important;background:transparent!important;
 }
-.employer-checkouts-panel .checkout-section-cards button{
+.app.employer main:not(.page-dashboard) .checkout-section-cards button{
  display:inline-flex!important;flex:0 1 auto!important;align-items:center!important;justify-content:center!important;
  width:auto!important;min-width:92px!important;min-height:38px!important;aspect-ratio:auto!important;
  padding:10px 14px!important;border:1px solid #3a4232!important;border-radius:8px!important;
  background:#20241d!important;color:#f1f4eb!important;font-size:12px!important;font-weight:600!important;
  line-height:1.3!important;white-space:normal!important;text-align:center!important;overflow-wrap:normal!important;
 }
-.employer-checkouts-panel .checkout-section-cards button.selected{
+.app.employer main:not(.page-dashboard) .checkout-section-cards button.selected{
  background:#b5f34a!important;border-color:#b5f34a!important;color:#17200e!important;
 }
-.employer-checkouts-panel .checkout-section-cards button:hover{border-color:#b5f34a!important;color:#fff!important}
-.employer-checkouts-panel .checkout-section-cards button.selected:hover{color:#17200e!important}
-@media(max-width:520px){.employer-checkouts-panel .checkout-section-cards button{flex:1 1 calc(50% - 8px)!important;min-width:0!important}}
+.app.employer main:not(.page-dashboard) .checkout-section-cards button:hover{border-color:#b5f34a!important;color:#fff!important}
+.app.employer main:not(.page-dashboard) .checkout-section-cards button.selected:hover{color:#17200e!important}
+@media(max-width:520px){.app.employer main:not(.page-dashboard) .checkout-section-cards button{flex:1 1 calc(50% - 8px)!important;min-width:0!important}}
 
 
 /* Public onboarding: accessible How we work guide with audience-specific tabs. */
@@ -5275,3 +5275,9 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .shift-publish-feedback{grid-column:1/-1;display:flex;flex-direction:column;gap:5px;padding:13px 15px;border:1px solid;border-radius:10px;font-size:14px;line-height:1.45;overflow-wrap:anywhere;}
 .shift-publish-error{color:#842029;background:#fff0f0;border-color:#e6a5a5;}
 .shift-publish-notice{color:#173b2c;background:#edf8ef;border-color:#a9d4b3;}
+
+
+/* Invoices and employer Favourites share the compact filter-tab treatment used by Checkouts. */
+.app.employer main:not(.page-dashboard) .employer-invoices-panel .checkout-section-cards,
+.app.employer main:not(.page-dashboard) .employer-favourites-panel .checkout-section-cards{border-bottom:0!important;padding-bottom:0!important;background:transparent!important}
+.app.employer main:not(.page-dashboard) .employer-favourites-panel .checkout-section-cards button{min-width:92px!important}
