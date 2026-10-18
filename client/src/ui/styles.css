@@ -4256,3 +4256,23 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app .success *,.app .success-badge *,.app .status-success *{
  color:#75501a!important;
 }
+
+
+/* Keep Hyrz writing in high-contrast navy/slate; no green text accents. */
+.app .employer-hero h2 em{color:#34425b!important}
+.app .employer-hero h2,.app .employer-hero h2 *{color:#17243b}
+.app .employer-hero p{color:#3e485a!important}
+.app .eyebrow,.app .tag,.app .section-label{color:#515b6d!important}
+.app .workchat-section-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 16px;padding-bottom:12px;border-bottom:1px solid #ded5c8}
+.app .workchat-section-tabs button{border:1px solid #ded5c8;border-radius:8px;padding:9px 12px;background:#eee5d7;color:#17243b;font-weight:700;cursor:pointer}
+.app .workchat-section-tabs button.selected{background:#17243b;color:#fffdf9;border-color:#17243b}
+.app .workchat-create{display:grid;gap:10px;margin:10px 0 14px}
+.app .workchat-create label{color:#17243b;font-weight:700}
+.app .workchat-create-actions{display:flex;flex-wrap:wrap;gap:8px}
+.app .workchat-create .muted{color:#515b6d!important}
+.app .workchat-list{display:grid;gap:10px;margin:12px 0}
+.app .workchat-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border:1px solid #ded5c8;border-radius:10px;background:#fffdf9;color:#17243b}
+.app .workchat-item>div{display:grid;gap:5px;min-width:0}
+.app .workchat-item strong{color:#17243b!important}
+.app .workchat-item small{color:#515b6d!important}
+@media(max-width:600px){.app .workchat-item{align-items:flex-start;flex-direction:column}.app .workchat-section-tabs button{flex:1 1 100%;text-align:left}}
