@@ -5281,3 +5281,20 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app.employer main:not(.page-dashboard) .employer-invoices-panel .checkout-section-cards,
 .app.employer main:not(.page-dashboard) .employer-favourites-panel .checkout-section-cards{border-bottom:0!important;padding-bottom:0!important;background:transparent!important}
 .app.employer main:not(.page-dashboard) .employer-favourites-panel .checkout-section-cards button{min-width:92px!important}
+
+
+/* Employer automatic payment settings */
+.payment-settings-tabs{margin:18px 0 22px!important;display:flex;flex-wrap:wrap;gap:8px!important;padding:8px!important;border-radius:10px}
+.payment-preferences-form{display:grid;gap:16px;margin-top:18px;padding:20px;border:1px solid var(--border,#e3d8c8);border-radius:12px;background:#fffdf9}
+.payment-preferences-form h3{margin:0;font-size:1.1rem}
+.payment-preferences-form>p{margin:0;line-height:1.55}
+.payment-preference-toggle{display:flex!important;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--border,#e3d8c8);border-radius:10px;background:#fff}
+.payment-preference-toggle input{margin-top:4px;width:18px;height:18px;flex:0 0 auto}
+.payment-preference-toggle span{display:grid;gap:4px}
+.payment-preference-toggle small{font-weight:400;color:var(--muted,#6e7784);line-height:1.45}
+.payment-preference-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.payment-preference-grid label,.payment-preferences-form>label:not(.payment-preference-toggle){display:grid;gap:7px;font-weight:600}
+.payment-preferences-form input[type=number],.payment-preferences-form select{width:100%;box-sizing:border-box}
+.payment-integration-notice{padding:12px 14px;border-left:3px solid #b78330;border-radius:4px;background:#fff4dc;color:#5b4625;font-size:.92rem}
+.payment-preferences-feedback{margin-top:14px;padding:12px 14px;border-radius:8px;background:#f0f6e7;color:#334b25}
+@media(max-width:640px){.payment-preference-grid{grid-template-columns:1fr}.payment-preferences-form{padding:14px}}
