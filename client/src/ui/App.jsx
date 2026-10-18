@@ -179,6 +179,8 @@ async function authenticate(register) {
     </div>
   </section>}
  {!user&&page==='home'&&<section className="auth-welcome">
+<header className="public-home-nav"><button className="public-home-logo" onClick={()=>navigateTo('home')} aria-label="hyrz home">hyrz<span>.</span></button><nav><button type="button" className="public-how-work-trigger" onClick={()=>setShowHowItWorks(v=>!v)}>How we work <span>⌄</span></button><button type="button" className="public-nav-signin" onClick={()=>navigateTo('login')}>Sign in</button><button type="button" className="public-nav-signup" onClick={()=>navigateTo('chooseRole')}>Sign up</button></nav>{showHowItWorks&&<div className="public-how-work-panel"><div className="how-work-tabs"><button type="button" className={howWorkAudience==='worker'?'selected':''} onClick={()=>setHowWorkAudience('worker')}>For workers</button><button type="button" className={howWorkAudience==='employer'?'selected':''} onClick={()=>setHowWorkAudience('employer')}>For employers</button></div>{howWorkAudience==='worker'?<div><h3>How hyrz works for workers</h3><ol><li>Create your worker account and complete your profile.</li><li>Choose your roles, availability and shift preferences.</li><li>Browse available shifts and apply for the ones that suit you.</li><li>Attend confirmed shifts and manage your timesheets and payments in your account.</li></ol><button type="button" className="public-how-work-cta" onClick={()=>{setRole('worker');setShowHowItWorks(false);navigateTo('register')}}>Get started as a worker →</button></div>:<div><h3>How hyrz works for employers</h3><ol><li>Create your employer account and add your business details.</li><li>Post shifts with the roles, hours, pay and requirements you need.</li><li>Review applicants, select workers and manage published shifts.</li><li>Track checkouts, invoices and payments from your dashboard.</li></ol><button type="button" className="public-how-work-cta" onClick={()=>{setRole('employer');setShowHowItWorks(false);navigateTo('register')}}>Get started as an employer →</button></div>}</div>}
+</header>
 <div className="work-carousel">
   <div className="carousel-slide slide-hospitality">
     <span className="pill">HOSPITALITY & BARS</span>
@@ -216,7 +218,7 @@ async function authenticate(register) {
     <p>From hospitality and logistics to office work, retail and beyond, discover opportunities that suit your availability.</p>
   </div>
 </div>
-<div className="welcome-panel"><div className="brand-mark">hyrz</div>
+<div className="welcome-panel">
 <h2>Flexible work.<br/><em>Reliable staffing.</em></h2>
 <button className="primary" onClick={()=>navigateTo('chooseRole')}>Get started</button>
 <p>Already registered? <button className="textbutton" onClick={()=>navigateTo('login')}>Sign in</button></p>
