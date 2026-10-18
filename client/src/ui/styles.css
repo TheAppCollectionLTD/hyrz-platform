@@ -3106,8 +3106,8 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 }
 @media(max-width:900px){
   .app.employer .stats.worker-dashboard-stats.employer-dashboard-critical{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:8px;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:6px;
   }
   .app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button{
     min-height:76px;
