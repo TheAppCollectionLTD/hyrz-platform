@@ -5314,3 +5314,8 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .shift-confirm-checklist input{margin-top:4px;flex:0 0 auto;width:17px;height:17px}
 .shift-confirm-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:20px}
 @media(max-width:560px){.shift-option-editor-row{align-items:stretch;flex-direction:column}.shift-option-editor-row input,.shift-option-editor-row button{width:100%}.shift-confirm-actions>*{flex:1}}
+
+.shift-perks-display{margin-top:12px;padding:10px 12px;border-radius:8px;background:#f6f4ec;border:1px solid #e7e1d4}
+.shift-perks-display>strong{display:block;margin-bottom:5px;font-size:.9rem}
+.shift-perks-display ul{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding-left:18px}
+.shift-perks-display li{font-size:.9rem;line-height:1.4}
