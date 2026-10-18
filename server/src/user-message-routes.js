@@ -170,6 +170,18 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const [rows]=await db.execute(`SELECT t.user_id,u.first_name,u.last_name FROM workchat_typing t JOIN users u ON u.id=t.user_id WHERE t.workchat_id=? AND t.user_id<>? AND t.updated_at>=DATE_SUB(NOW(),INTERVAL 6 SECOND)`,[id,req.user.id]);
     res.json({typing:rows.map(x=>({id:Number(x.user_id),name:[x.first_name,x.last_name].filter(Boolean).join(' ')||'A participant'}))});
   }));
+  app.delete('/api/workchats/:id',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;
+    const id=Number(req.params.id);
+    const chat=await getWorkchat(id,req.user.id);
+    if(!chat)return res.status(404).json({error:'Workchat not found.'});
+    await db.execute('DELETE FROM workchat_typing WHERE workchat_id=?',[id]);
+    await db.execute('DELETE FROM workchat_messages WHERE workchat_id=?',[id]);
+    await db.execute('DELETE FROM workchat_participants WHERE workchat_id=?',[id]);
+    await db.execute('DELETE FROM workchats WHERE id=?',[id]);
+    await audit(req,'workchat.deleted','workchat',id,{name:chat.name});
+    res.json({ok:true});
+  }));
   app.patch('/api/workchats/:id/status',auth,allow('employer'),asyncRoute(async(req,res)=>{
     await ensureGroupWorkchats;const status=req.body.status;if(!['current','past'].includes(status))return res.status(400).json({error:'Choose a valid workchat status.'});
     const [result]=await db.execute('UPDATE workchats SET status=? WHERE id=? AND employer_user_id=?',[status,Number(req.params.id),req.user.id]);if(!result.affectedRows)return res.status(404).json({error:'Workchat not found.'});res.json({ok:true});
