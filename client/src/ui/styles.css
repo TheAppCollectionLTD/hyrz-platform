@@ -4731,3 +4731,42 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 }
 .app main.page-workchats .workchat-item-clickable .workchat-item-actions{position:relative;z-index:1}
 .app main.page-workchats .workchat-item-clickable .workchat-item-actions button{cursor:pointer}
+
+
+/* Minimal workchat list cards: name and participant count only. */
+.app main.page-workchats .workchat-item-minimal{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-rows:auto auto;
+  align-items:center;
+  column-gap:18px;
+  row-gap:5px;
+  padding:20px 22px;
+}
+.app main.page-workchats .workchat-item-minimal>strong{
+  grid-column:1;
+  grid-row:1;
+  color:#17243b!important;
+  font-size:18px;
+  font-weight:800;
+  line-height:1.3;
+  overflow-wrap:anywhere;
+}
+.app main.page-workchats .workchat-item-minimal>small{
+  grid-column:1;
+  grid-row:2;
+  color:#626b7a!important;
+  font-size:12px;
+}
+.app main.page-workchats .workchat-item-minimal>button{
+  grid-column:2;
+  grid-row:1 / span 2;
+  position:relative;
+  z-index:1;
+}
+.app main.page-workchats .workchat-item-clickable::after{content:none!important;display:none!important}
+.app main.page-workchats .workchat-item-minimal:not(:has(>button)){grid-template-columns:minmax(0,1fr)}
+@media(max-width:650px){
+  .app main.page-workchats .workchat-item-minimal{padding:16px}
+  .app main.page-workchats .workchat-item-minimal>strong{font-size:16px}
+}
