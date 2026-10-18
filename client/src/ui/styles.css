@@ -4359,3 +4359,77 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app .worker-workchat-panel{width:min(100%,900px);margin:0 auto}
 .app .worker-workchat-panel .workchat-conversation{margin-top:16px}
 @media(max-width:650px){.app main.page-workchats{padding-left:16px;padding-right:16px}.app .employer-workchat-card{padding:15px}.app .workchat-conversation-header{align-items:flex-start;flex-direction:column}.app .workchat-message-row{max-width:100%}.app .workchat-composer{align-items:stretch;flex-direction:column}.app .workchat-composer button{width:100%}.app .workchat-item-actions{width:100%}}
+
+
+/* Workchat layout correction: centre the entire workspace and stack card content vertically. */
+.app main.page-workchats{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0;
+  box-sizing:border-box;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:clamp(18px,4vw,48px)!important;
+  padding-right:clamp(18px,4vw,48px)!important;
+  padding-bottom:150px!important;
+}
+.app main.page-workchats>header{
+  width:100%!important;
+  max-width:1100px;
+  margin:0 auto 26px!important;
+  box-sizing:border-box;
+}
+.app main.page-workchats>.employer-welcome,
+.app main.page-workchats>.worker-workchat-panel{
+  width:min(100%,1100px)!important;
+  max-width:1100px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  box-sizing:border-box;
+}
+.app main.page-workchats>.employer-welcome{gap:24px}
+.app main.page-workchats .employer-hero{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  box-sizing:border-box;
+  padding:8px 20px 18px;
+  gap:0;
+}
+.app main.page-workchats .employer-hero h2{
+  max-width:100%;
+  margin:14px 0 12px;
+  text-align:center;
+  line-height:1.22;
+  letter-spacing:-.035em;
+}
+.app main.page-workchats .employer-hero h2 em{font-style:normal}
+.app main.page-workchats .employer-workchat-card{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:0;
+  width:100%!important;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  padding:24px;
+}
+.app main.page-workchats .employer-workchat-card>.employer-chat-icon{align-self:center;margin-bottom:8px}
+.app main.page-workchats .employer-workchat-card>.eyebrow,
+.app main.page-workchats .employer-workchat-card>h3{text-align:center}
+.app main.page-workchats .employer-workchat-card>h3{margin:6px 0 14px}
+.app main.page-workchats .employer-workchat-card>.workchat-section-tabs{justify-content:center;width:100%;box-sizing:border-box}
+.app main.page-workchats .workchat-conversation{margin-top:8px}
+.app main.page-workchats .workchat-message-list{min-height:300px}
+.app main.page-workchats .workchat-composer textarea{min-height:48px}
+.app .employer-bottom-nav{z-index:1000}
+@media(max-width:650px){
+  .app main.page-workchats{padding-left:14px!important;padding-right:14px!important;padding-bottom:130px!important}
+  .app main.page-workchats .employer-workchat-card{padding:14px}
+  .app main.page-workchats .employer-hero{padding:8px 4px 14px}
+  .app main.page-workchats .employer-hero h2{font-size:clamp(25px,7vw,34px)}
+  .app main.page-workchats .workchat-section-tabs button{flex:1 1 auto;text-align:center}
+}
