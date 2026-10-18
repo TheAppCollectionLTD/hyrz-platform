@@ -5382,3 +5382,61 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .rate-counteroffer-review small{color:var(--muted,#6e7784)}
 .application-review-row{align-items:flex-start}
 @media(max-width:560px){.shift-pay-action-row{justify-content:stretch}.shift-pay-action-row>button{width:100%}.rate-negotiation-modal .actions>*{flex:1 1 100%}}
+
+
+/* Platform-wide switch controls: use toggles instead of square checkboxes. */
+input[type="checkbox"]{
+  -webkit-appearance:none!important;
+  appearance:none!important;
+  position:relative;
+  display:inline-block;
+  width:40px!important;
+  min-width:40px!important;
+  height:23px!important;
+  min-height:23px!important;
+  margin:0;
+  padding:0!important;
+  flex:0 0 40px!important;
+  border:1px solid #c8cbbf!important;
+  border-radius:999px!important;
+  background:#d8dbd2!important;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.08)!important;
+  cursor:pointer;
+  vertical-align:middle;
+  accent-color:transparent!important;
+  transition:background .16s ease,border-color .16s ease;
+}
+input[type="checkbox"]::after{
+  content:"";
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.22);
+  transition:transform .16s ease;
+}
+input[type="checkbox"]:checked{
+  background:#a9e943!important;
+  border-color:#91ce31!important;
+}
+input[type="checkbox"]:checked::after{transform:translateX(17px)}
+input[type="checkbox"]:focus-visible{outline:3px solid rgba(169,233,67,.45);outline-offset:2px}
+input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
+.role-picker-option,.shift-type-picker-option{align-items:center!important;justify-content:space-between!important;gap:12px!important}
+.role-picker-option span,.shift-type-picker-option span{order:1;flex:1;min-width:0}
+.role-picker-option input[type="checkbox"],.shift-type-picker-option input[type="checkbox"]{order:2;margin:0 0 0 auto!important}
+.payment-preference-toggle{align-items:center!important}
+.payment-preference-toggle input[type="checkbox"]{order:2;margin-left:auto!important;margin-top:0!important}
+.payment-preference-toggle span{order:1;flex:1;min-width:0}
+.shift-confirm-checklist label{align-items:center!important;gap:12px!important}
+.shift-confirm-checklist label span{order:1;flex:1;min-width:0}
+.shift-confirm-checklist label input[type="checkbox"]{order:2;margin:0 0 0 auto!important}
+.workchat-worker-option input[type="checkbox"]{order:3;margin-left:auto!important}
+.private-offer-worker>input[type="checkbox"]{order:4;margin-left:auto!important}
+.private-offer-avatar{order:1}
+.private-offer-worker-copy{order:2}
+.private-offer-favourite{order:3}
+@media(prefers-reduced-motion:reduce){input[type="checkbox"],input[type="checkbox"]::after{transition:none}}
