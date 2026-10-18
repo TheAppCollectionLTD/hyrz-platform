@@ -92,6 +92,7 @@ const ensureBusinessAddressColumns = (async()=>{
   await addColumn('businesses','city VARCHAR(120) NULL','business city');
 })();
 const ensureBlockedIdentifiers = createTable(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`,'blocked identifiers');
+const ensureApplicationRateNegotiation = (async()=>{await addColumn('applications','requested_hourly_rate DECIMAL(8,2) NULL','application requested hourly rate');await addColumn('applications','rate_message TEXT NULL','application rate message');await addColumn('applications','rate_decision VARCHAR(20) NULL','application rate decision');await addColumn('applications','negotiated_hourly_rate DECIMAL(8,2) NULL','application negotiated hourly rate');})();
 const ensureCheckoutCounterColumns = (async()=>{
   await addColumn('checkouts','employer_comment TEXT NULL','checkout employer comment');
   await addColumn('checkouts','counter_start DATETIME NULL','checkout counter start');
@@ -699,8 +700,8 @@ app.get('/api/shifts/:id',auth,asyncRoute(async(req,res)=>{
  if(!rows.length)return res.status(404).json({error:'Shift not found'});res.json({shift:rows[0]});
 }));
 app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
- await ensureShiftPublishingColumns; await ensureApplicationPreferencesColumn;
- const [s]=await db.execute('SELECT id,status,auto_approve,requirements,preferences FROM shifts WHERE id=?',[req.params.id]);
+ await ensureShiftPublishingColumns; await ensureApplicationPreferencesColumn; await ensureApplicationRateNegotiation;
+ const [s]=await db.execute('SELECT id,status,auto_approve,requirements,preferences,hourly_pay FROM shifts WHERE id=?',[req.params.id]);
  if(!s.length||s[0].status!=='open')return res.status(404).json({error:'Shift not available'});
  const requiredItems=Array.isArray(s[0].requirements)?s[0].requirements:(typeof s[0].requirements==='string'?JSON.parse(s[0].requirements||'[]'):[]);
  if(requiredItems.length&&req.body?.confirmedRequirements!==true)return res.status(400).json({error:'Confirm all shift requirements before applying.'});
@@ -708,17 +709,18 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  const confirmedPreferences=Array.isArray(req.body?.confirmedPreferences)?req.body.confirmedPreferences:[];
  if(confirmedPreferences.some(item=>typeof item!=='string'||!preferredItems.includes(item))||new Set(confirmedPreferences).size!==confirmedPreferences.length)return res.status(400).json({error:'One or more selected preferences are invalid.'});
  const confirmedPreferencesJson=JSON.stringify(confirmedPreferences);
+ const requestedRate=req.body?.requestedHourlyRate==null||req.body.requestedHourlyRate===''?null:Number(req.body.requestedHourlyRate);const rateMessage=String(req.body?.rateMessage||'').trim();if(requestedRate!==null&&(!Number.isFinite(requestedRate)||requestedRate<Number(s[0].hourly_pay||8)||requestedRate>500))return res.status(400).json({error:'A counter-offer must be at least the advertised hourly rate and no more than £500 per hour.'});if(rateMessage.length>1000)return res.status(400).json({error:'The optional message must be 1,000 characters or fewer.'});
  const nextStatus=s[0].auto_approve?'approved':'pending';
  const [existing]=await db.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1',[req.params.id,req.user.id]);
  if(existing.length){
    if(['withdrawn','cancelled'].includes(existing[0].status)){
-     await db.execute('UPDATE applications SET status=?,cancellation_fee=0,confirmed_preferences=? WHERE id=?',[nextStatus,confirmedPreferencesJson,existing[0].id]);
+     await db.execute('UPDATE applications SET status=?,cancellation_fee=0,confirmed_preferences=?,requested_hourly_rate=?,rate_message=?,rate_decision=?,negotiated_hourly_rate=NULL WHERE id=?',[nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,requestedRate===null?null:'pending',existing[0].id]);
      return res.status(200).json({id:existing[0].id,status:nextStatus});
    }
    return res.status(409).json({error:'Already applied'});
  }
  try {
- const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences) VALUES(?,?,?,?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson]);
+ const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences,requested_hourly_rate,rate_message,rate_decision) VALUES(?,?,?,?,?,?,?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,requestedRate===null?null:'pending']);
  res.status(201).json({id:r.insertId,status:nextStatus});
  }catch(e){if(e.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});throw e;}
 }));
@@ -729,10 +731,11 @@ app.get('/api/applications/mine',auth,asyncRoute(async(req,res)=>{
  const [rows]=await db.execute(sql,[req.user.id]);res.json({applications:rows});
 }));
 app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
+ await ensureApplicationRateNegotiation;const acceptRequestedRate=req.body?.acceptRequestedRate===true;
  const status=req.body.status;if(!['approved','rejected'].includes(status))return res.status(400).json({error:'Invalid status'});
  const [rows]=await db.execute('SELECT a.id,a.shift_id FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=? AND b.owner_user_id=?',[req.params.id,req.user.id]);
  if(!rows.length)return res.status(404).json({error:'Application not found'});
- await db.execute('UPDATE applications SET status=? WHERE id=?',[status,req.params.id]);await audit(req,'application.'+status,'application',req.params.id);res.json({ok:true});
+ const [applicationRows]=await db.execute('SELECT requested_hourly_rate FROM applications WHERE id=?',[req.params.id]);const requested=applicationRows[0]?.requested_hourly_rate;if(acceptRequestedRate&&(!requested||status!=='approved'))return res.status(400).json({error:'This application has no rate counter-offer to accept.'});if(acceptRequestedRate){await db.execute("UPDATE applications SET status='approved',rate_decision='accepted',negotiated_hourly_rate=requested_hourly_rate WHERE id=?",[req.params.id]);}else{await db.execute("UPDATE applications SET status=?,rate_decision=CASE WHEN requested_hourly_rate IS NOT NULL THEN 'declined' ELSE rate_decision END WHERE id=?",[status,req.params.id]);}await audit(req,acceptRequestedRate?'application.rate_counter_accepted':'application.'+status,'application',req.params.id,{requestedHourlyRate:requested||null,acceptRequestedRate});res.json({ok:true});
 }));
 app.delete('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
  await ensureApplicationCancellationFee;
