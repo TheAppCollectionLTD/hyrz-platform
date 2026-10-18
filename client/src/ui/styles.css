@@ -5027,3 +5027,76 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* Fix workchat settings menu contrast: the header's white-text rule must not affect menu items. */
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:4px!important;
+  width:244px!important;
+  min-width:244px!important;
+  max-width:min(280px,calc(100vw - 36px))!important;
+  padding:8px!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  background:#fffdf9!important;
+  border:1px solid #d8cfc1!important;
+  border-radius:12px!important;
+  box-shadow:0 14px 34px rgba(16,26,42,.22)!important;
+  z-index:999!important;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu button,
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu button span{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  width:100%!important;
+  min-height:48px!important;
+  height:auto!important;
+  max-height:none!important;
+  padding:12px 13px!important;
+  box-sizing:border-box!important;
+  border:1px solid #e5ddd1!important;
+  border-radius:8px!important;
+  background:#fffdf9!important;
+  color:#17243b!important;
+  font:700 12px/1.35 'DM Sans',sans-serif!important;
+  text-align:left!important;
+  white-space:normal!important;
+  opacity:1!important;
+  visibility:visible!important;
+  text-shadow:none!important;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu button:hover{
+  background:#f1f4f8!important;
+  border-color:#bdc8d7!important;
+  color:#17243b!important;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu button .workchat-toggle{
+  display:inline-flex!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:48px!important;
+  min-height:26px!important;
+  height:26px!important;
+  padding:4px 9px!important;
+  border:0!important;
+  border-radius:20px!important;
+  background:#e7e9ed!important;
+  color:#414b5c!important;
+  font:800 10px/1 'DM Sans',sans-serif!important;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu button .workchat-toggle.on{
+  background:#f8d8d4!important;
+  color:#9b3028!important;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu button.workchat-delete-action,
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu button.workchat-delete-action:hover{
+  color:#9b3028!important;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-menu button.workchat-delete-action:hover{
+  background:#fff1ee!important;
+  border-color:#e4c4bf!important;
+}
