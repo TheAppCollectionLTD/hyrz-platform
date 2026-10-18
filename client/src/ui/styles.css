@@ -5140,3 +5140,13 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
     padding:16px 16px 12px!important;
   }
 }
+
+
+/* Keyboard hint for the workchat composer. */
+.app main.page-workchats .workchat-composer .workchat-enter-hint{
+  grid-column:1/-1;
+  display:block;
+  margin:-2px 0 0 2px;
+  color:#697386!important;
+  font:500 10px/1.4 'DM Sans',sans-serif!important;
+}
