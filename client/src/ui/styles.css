@@ -3941,3 +3941,35 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .how-work-panel h3{margin:0 0 10px;font-size:19px;color:#17200f}
 .how-work-panel ol{margin:0;padding-left:22px;display:grid;gap:9px;line-height:1.55;color:#41483c}
 @media(max-width:600px){.how-work-panel{padding:16px}.role-selection-top,.register-top-links{align-items:flex-start}.how-work-link{padding:9px 11px;font-size:12px}}
+
+
+/* Public homepage navigation inspired by modern staffing sites. */
+.auth-welcome{position:relative;padding-top:76px}
+.public-home-nav{position:absolute;z-index:20;top:0;left:0;right:0;height:76px;padding:0 clamp(22px,4.2vw,64px);display:flex;align-items:center;justify-content:space-between;gap:20px;background:#103b32;color:#fff}
+.public-home-logo{border:0;background:transparent;color:#fff;font-size:32px;line-height:1;font-weight:900;letter-spacing:-2px;cursor:pointer;padding:8px 0}
+.public-home-logo span{color:#b5f34a}
+.public-home-nav nav{display:flex;align-items:center;gap:clamp(10px,2vw,28px)}
+.public-home-nav nav button{font-size:13px;font-weight:750;cursor:pointer}
+.public-how-work-trigger{border:0;background:transparent;color:#fff;padding:12px 4px}
+.public-how-work-trigger span{margin-left:5px;color:#b5f34a}
+.public-nav-signin{border:0;background:transparent;color:#fff;padding:12px 5px}
+.public-nav-signup{border:1px solid #b5f34a;border-radius:999px;background:#b5f34a;color:#18220f;padding:12px 22px}
+.public-nav-signup:hover{background:#c5ff61}
+.public-how-work-panel{position:absolute;top:66px;right:clamp(22px,4.2vw,64px);width:min(470px,calc(100vw - 32px));padding:22px 24px;border:1px solid #dce4d5;border-radius:14px;background:#fff;color:#20251d;box-shadow:0 18px 50px #0003}
+.public-how-work-panel .how-work-tabs{margin-bottom:14px}
+.public-how-work-panel h3{font-size:19px;margin:0 0 10px;color:#17200f}
+.public-how-work-panel ol{display:grid;gap:8px;margin:0;padding-left:21px;color:#41483c;font-size:13px;line-height:1.5}
+.public-how-work-cta{margin-top:16px;padding:10px 14px;border:0;border-radius:8px;background:#b5f34a;color:#17200f;font-size:12px;font-weight:800;cursor:pointer}
+.auth-welcome .work-carousel,.auth-welcome .welcome-panel{min-height:calc(100vh - 76px)}
+.auth-welcome .welcome-panel .brand-mark{display:none}
+@media(max-width:760px){
+ .auth-welcome{padding-top:68px}
+ .public-home-nav{height:68px;padding:0 16px}
+ .public-home-logo{font-size:28px}
+ .public-home-nav nav{gap:12px}
+ .public-home-nav nav button{font-size:12px}
+ .public-nav-signup{padding:10px 14px}
+ .public-how-work-panel{top:60px;right:12px;padding:17px}
+ .auth-welcome .work-carousel,.auth-welcome .welcome-panel{min-height:540px}
+}
+@media(max-width:420px){.public-home-nav nav{gap:8px}.public-how-work-trigger{max-width:85px}.public-nav-signup{padding:9px 11px}}
