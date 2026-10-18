@@ -4168,3 +4168,46 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app .workchat-empty,.app .empty-state,.app .notice,.app .info-box{
  color:#17243b!important;
 }
+
+
+/* Contrast fix for page headers and dark empty-state panels. */
+.app main>header,.app main>.page-header,.app main>.section-header,
+.app main header:not(.sidebar header),.app .page-title,.app .page-heading,
+.app main h1,.app main>.title,.app main>.heading{
+ color:#17243b!important;
+}
+.app main>header h1,.app main>.page-header h1,.app main>.section-header h1,
+.app main header h1,.app .page-title h1,.app .page-heading h1,
+.app main h1,.app main h2,.app main h3{
+ color:#17243b!important;
+}
+.app .workchat-hero,.app .workchat-header,.app .workchat-intro,
+.app .page-intro,.app .section-intro{
+ color:#17243b!important;
+}
+.app .workchat-hero h1,.app .workchat-header h1,.app .workchat-intro h1,
+.app .page-intro h1,.app .section-intro h1,
+.app .workchat-hero h2,.app .workchat-header h2,.app .workchat-intro h2,
+.app .page-intro h2,.app .section-intro h2{
+ color:#17243b!important;
+}
+.app .workchat-hero p,.app .workchat-header p,.app .workchat-intro p,
+.app .page-intro p,.app .section-intro p{
+ color:#3e485a!important;
+}
+.app .empty-state,.app .empty-state *,
+.app .empty-state p,.app .empty-state span,
+.app .empty-state small,.app .empty-state strong,
+.app .empty-state h1,.app .empty-state h2,.app .empty-state h3{
+ color:#fffdf9!important;
+}
+.app .empty-state{background:#17243b!important;border-color:#34425b!important}
+.app .workchat-empty,.app .workchat-empty *,
+.app .empty-workchat,.app .empty-workchat *{
+ color:#fffdf9!important;
+}
+.app .workchat-empty,.app .empty-workchat{background:#17243b!important}
+.app main .eyebrow,.app main .tag,.app main .kicker,
+.app main .overline,.app main .section-label{
+ color:#515b6d!important;
+}
