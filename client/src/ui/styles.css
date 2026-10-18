@@ -3241,3 +3241,42 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .employer .employer-shift-tabs .employer-shift-tab.selected{background:#b5f34a!important;border-color:#b5f34a!important;color:#15190f!important}
 .employer .shift-new-panel{margin-top:4px}
 @media(max-width:560px){.employer .employer-shift-tabs{gap:6px;margin:12px 0 16px}.employer .employer-shift-tabs .employer-shift-tab{min-height:34px;padding:8px 9px;font-size:11px}}
+
+
+/* Override the legacy square-card rules for the compact, always-visible Shifts controls. */
+.app.employer .worker-section-links.job-tabs.employer-shift-tabs{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:4px!important;
+  margin:8px 0 12px!important;
+  padding:0!important;
+}
+.app.employer .worker-section-links.job-tabs.employer-shift-tabs>.employer-shift-tab{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:24px!important;
+  min-height:24px!important;
+  max-height:24px!important;
+  aspect-ratio:auto!important;
+  grid-column:auto!important;
+  padding:2px 4px!important;
+  border-radius:5px!important;
+  font-size:9px!important;
+  font-weight:650!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  text-align:center!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  transform:none!important;
+  box-shadow:none!important;
+}
+@media(max-width:560px){
+  .app.employer .worker-section-links.job-tabs.employer-shift-tabs{gap:4px!important}
+  .app.employer .worker-section-links.job-tabs.employer-shift-tabs>.employer-shift-tab{
+    height:24px!important;min-height:24px!important;max-height:24px!important;
+    padding:2px 3px!important;font-size:9px!important;
+  }
+}
