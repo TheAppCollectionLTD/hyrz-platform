@@ -3280,3 +3280,70 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
     padding:2px 3px!important;font-size:9px!important;
   }
 }
+
+
+/* Inbox visual standard: the worker inbox is the reference layout across all roles.
+   Dashboard navigation remains the only place for oversized section cards. */
+.app.employer .employer-direct-inbox,
+.app.worker .worker-inbox-panel{
+  width:100%;max-width:900px;margin-left:auto;margin-right:auto;
+  padding:18px;box-sizing:border-box;border:1px solid #292e25;
+  border-radius:14px;background:#171a14;color:#f1f4eb;
+}
+.app.employer .employer-direct-inbox>h2{margin:8px 0 5px;font-size:20px}
+.app.employer .employer-direct-inbox>p{margin:0 0 16px;color:#a9afa1;font-size:13px;line-height:1.5}
+.app.employer .employer-direct-inbox .employer-section-actions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.app.employer .employer-direct-inbox .inbox-worker-search{
+  margin:0 0 16px;padding:14px 0;border:0;border-top:1px solid #30352b;
+  border-bottom:1px solid #30352b;border-radius:0;background:transparent;
+}
+.app.employer .employer-direct-inbox .inbox-worker-search h3{font-size:14px;margin:0 0 10px}
+.app.employer .employer-direct-inbox .inbox-worker-search input{
+  width:100%;max-width:none;box-sizing:border-box;background:#10130e;color:#f1f4eb;
+  border:1px solid #30352b;border-radius:8px;padding:11px 12px;
+}
+.app.employer .employer-direct-inbox .direct-inbox-layout{
+  grid-template-columns:minmax(0,1fr);gap:0;margin-top:8px;
+}
+.app.employer .employer-direct-inbox .direct-conversation-list,
+.app.employer .employer-direct-inbox .direct-conversation-thread{
+  min-width:0;padding:0;border:0;border-radius:0;background:transparent;
+}
+.app.employer .employer-direct-inbox .direct-conversation-list h3{font-size:14px;margin:0 0 6px}
+.app.employer .employer-direct-inbox .direct-conversation-item{
+  width:100%;margin:0;padding:14px 2px;gap:6px;
+  border:0;border-top:1px solid #30352b;border-radius:0;
+  background:transparent;color:#f2f4ee;box-shadow:none;text-align:left;
+}
+.app.employer .employer-direct-inbox .direct-conversation-item:hover,
+.app.employer .employer-direct-inbox .direct-conversation-item.selected{
+  border-color:#30352b;background:rgba(255,255,255,.025);
+}
+.app.employer .employer-direct-inbox .direct-conversation-item>small,
+.app.employer .employer-direct-inbox .direct-conversation-item>span{font-size:12px;color:#a9afa1}
+.app.employer .employer-direct-inbox .direct-conversation-item>span{overflow-wrap:anywhere}
+.app.employer .employer-direct-inbox .direct-unread-count{color:#b5f34a;font-size:11px}
+.app.employer .employer-direct-inbox .direct-message-history{display:flex;flex-direction:column;gap:10px;margin:14px 0;padding:12px 0;border-top:1px solid #30352b}
+.app.employer .employer-direct-inbox .direct-message-bubble{max-width:85%;padding:10px 12px;border-radius:10px;background:#20241d;color:#f1f4eb}
+.app.employer .employer-direct-inbox .direct-message-bubble.sent{align-self:flex-end;background:#29351c}
+.app.employer .employer-direct-inbox .direct-message-bubble p{margin:0 0 6px;white-space:pre-wrap;overflow-wrap:anywhere}
+.app.employer .employer-direct-inbox .direct-message-bubble small{color:#a9afa1;font-size:10px}
+.app.employer .employer-direct-inbox .direct-message-compose{display:flex;gap:8px;align-items:flex-end}
+.app.employer .employer-direct-inbox .direct-message-compose textarea{flex:1;min-width:0;box-sizing:border-box;background:#10130e;color:#f1f4eb;border:1px solid #30352b;border-radius:8px}
+.app.employer .employer-direct-inbox .direct-thread-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid #30352b}
+.app.employer .employer-direct-inbox .direct-thread-heading h3{margin:0 0 4px}
+.app.employer .employer-direct-inbox .direct-thread-heading small{color:#a9afa1;font-size:11px;overflow-wrap:anywhere}
+
+/* Admin inbox tabs and message rows use the same compact, dark inbox language. */
+.admin-console:has(.admin-tabs) .admin-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 16px;padding:0 0 12px;border-bottom:1px solid #30352b}
+.admin-console:has(.admin-tabs) .admin-tabs button{padding:9px 12px;border:1px solid #353b30;border-radius:8px;background:#171a14;color:#d8dfd0;font:600 11px/1.2 'DM Sans',sans-serif;letter-spacing:0;text-transform:none}
+.admin-console:has(.admin-tabs) .admin-tabs button.selected{background:#b5f34a;border-color:#b5f34a;color:#15190f;font-weight:750}
+.admin-console .admin-record{padding:14px 2px;border:0;border-top:1px solid #30352b;border-radius:0;background:transparent;box-shadow:none}
+.admin-console .admin-record p{color:#d3d7ce;line-height:1.5;overflow-wrap:anywhere}
+.admin-console .admin-message-form{max-width:none;border-top:1px solid #30352b;margin-top:18px;padding-top:18px}
+@media(max-width:560px){
+ .app.employer .employer-direct-inbox,.app.worker .worker-inbox-panel{padding:14px}
+ .app.employer .employer-direct-inbox .direct-message-compose{flex-direction:column;align-items:stretch}
+ .app.employer .employer-direct-inbox .direct-message-compose button{align-self:flex-start}
+ .admin-console:has(.admin-tabs) .admin-tabs button{padding:8px 9px;font-size:10px}
+}
