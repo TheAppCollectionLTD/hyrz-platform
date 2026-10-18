@@ -4686,3 +4686,24 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   .app main.page-workchats .workchat-settings{grid-column:2;grid-row:2}
   .app main.page-workchats .workchat-settings-button span{display:none}
 }
+
+
+/* Ensure settings controls keep their intended contrast against the navy conversation header. */
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-button{
+  background:#26344d!important;
+  color:#fffdf9!important;
+  border-color:#46536a!important;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-button:hover,
+.app main.page-workchats .workchat-conversation-header .workchat-settings .workchat-settings-button[aria-expanded="true"]{
+  background:#34435c!important;
+  color:#fffdf9!important;
+}
+.app main.page-workchats .workchat-settings-menu button{
+  background:#fffdf9!important;
+  color:#17243b!important;
+}
+.app main.page-workchats .workchat-settings-menu .workchat-delete-action:hover{
+  background:#f9e8e4!important;
+  color:#9b3028!important;
+}
