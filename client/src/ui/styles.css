@@ -3895,3 +3895,6 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 
 /* Only show the Instant Pay badge beside the hourly rate, never beneath shift details. */
 .shift-card .shiftmain > .instant-pay-status{display:none!important}
+
+/* Hide any legacy duplicate Instant Pay badge inside shift details. */
+.shift-card .instant-pay-status{display:none!important;visibility:hidden!important}
