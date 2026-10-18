@@ -4614,3 +4614,75 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   .app main.page-workchats .workchat-filter-heading{align-items:flex-start;flex-direction:column}
   .app main.page-workchats .workchat-filter-heading button{width:100%}
 }
+
+
+/* Workchat unread shortcuts lead to the full current list; unread conversations are ordered first. */
+.app main.page-workchats .workchat-filter-heading{display:none!important}
+.app main.page-workchats .workchat-conversation-header{
+  grid-template-columns:auto minmax(0,1fr) auto;
+}
+.app main.page-workchats .workchat-settings{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  align-self:start;
+}
+.app main.page-workchats .workchat-settings-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:40px;
+  padding:9px 13px;
+  border:1px solid #46536a;
+  border-radius:9px;
+  background:#26344d;
+  color:#fffdf9!important;
+  font:600 12px 'DM Sans',sans-serif;
+  cursor:pointer;
+}
+.app main.page-workchats .workchat-settings-button:hover,
+.app main.page-workchats .workchat-settings-button[aria-expanded="true"]{
+  background:#34435c;
+  border-color:#7888a2;
+}
+.app main.page-workchats .workchat-settings-menu{
+  position:absolute;
+  z-index:20;
+  top:calc(100% + 8px);
+  right:0;
+  min-width:176px;
+  padding:6px;
+  border:1px solid #ded5c8;
+  border-radius:10px;
+  background:#fffdf9;
+  box-shadow:0 12px 28px #101a2a25;
+}
+.app main.page-workchats .workchat-settings-menu button{
+  width:100%;
+  min-height:40px;
+  padding:10px 12px;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  text-align:left;
+  font:600 12px 'DM Sans',sans-serif;
+  cursor:pointer;
+}
+.app main.page-workchats .workchat-settings-menu .workchat-delete-action{
+  color:#9b3028!important;
+}
+.app main.page-workchats .workchat-settings-menu .workchat-delete-action:hover{
+  background:#f9e8e4;
+}
+.app main.page-workchats .workchat-conversation-header .workchat-settings button{color:#fffdf9!important}
+@media(max-width:650px){
+  .app main.page-workchats .workchat-conversation-header{
+    grid-template-columns:minmax(0,1fr) auto;
+  }
+  .app main.page-workchats .workchat-conversation-header>button{grid-column:1/-1;justify-self:start}
+  .app main.page-workchats .workchat-conversation-header>div:nth-child(2){grid-column:1}
+  .app main.page-workchats .workchat-settings{grid-column:2;grid-row:2}
+  .app main.page-workchats .workchat-settings-button span{display:none}
+}
