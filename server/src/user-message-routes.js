@@ -178,6 +178,8 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     if(!ids.length)return res.status(400).json({error:'Choose at least one worker to add to this workchat.'});
     const [workers]=await db.query(`SELECT id FROM users WHERE role='worker' AND status='active' AND id IN (${ids.map(()=>'?').join(',')})`,ids);
     if(workers.length!==ids.length)return res.status(400).json({error:'One or more selected workers are unavailable. Refresh the worker list and try again.'});
+    const [favourites]=await db.query(`SELECT worker_user_id FROM employer_worker_favourites WHERE employer_user_id=? AND worker_user_id IN (${ids.map(()=>'?').join(',')})`,[req.user.id,...ids]);
+    if(favourites.length!==ids.length)return res.status(400).json({error:'Only workers on your Favourites list can be added to a workchat. Add the worker to Favourites first.'});
     const [result]=await db.execute('INSERT INTO workchats(employer_user_id,name) VALUES(?,?)',[req.user.id,name]);const id=Number(result.insertId);
     const pairs=ids.flatMap(workerId=>[id,workerId]);await db.execute('INSERT INTO workchat_participants(workchat_id,user_id) VALUES '+ids.map(()=>'(?,?)').join(','),pairs);
     await db.execute('INSERT IGNORE INTO workchat_participants(workchat_id,user_id) VALUES(?,?)',[id,req.user.id]);
