@@ -5259,3 +5259,14 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .workchat-message-bubble[role="button"]:focus-visible{outline:2px solid #dba640;}
 .workchat-message-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;margin-top:7px;}
 .workchat-message-actions button{font-size:12px;padding:6px 10px;}
+
+
+.workchat-pinned-section{margin:0;padding:14px 18px;background:#fff9e9;border-bottom:1px solid #e8d9b4;}
+.workchat-pinned-section h4{margin:0 0 10px;color:#18263e;font-size:14px;}
+.workchat-pinned-items{display:flex;gap:9px;overflow-x:auto;padding:2px 1px 7px;}
+.workchat-pinned-item{display:flex;flex:0 0 min(260px,78%);flex-direction:column;align-items:flex-start;gap:5px;padding:10px 12px;border:1px solid #e0cf9f;border-radius:9px;background:#fff;color:#18263e;text-align:left;cursor:pointer;}
+.workchat-pinned-item:hover,.workchat-pinned-item:focus-visible{border-color:#c99b32;box-shadow:0 0 0 2px #f6e6b7;}
+.workchat-pinned-item strong{font-size:12px;}
+.workchat-pinned-item span{font-size:13px;overflow-wrap:anywhere;}
+.workchat-pinned-item small{font-size:10px;color:#6c6c6c;}
+.workchat-message-focused .workchat-message-bubble{outline:3px solid #e2b449;outline-offset:3px;}
