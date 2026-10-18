@@ -67,6 +67,7 @@ function createTable(sql, label) {
 const ensureProfilePictureColumn = addColumn('users','profile_picture LONGTEXT NULL','profile pictures');
 const ensureShiftPublishingColumns = (async()=>{await addColumn('shifts',"shift_type VARCHAR(80) NOT NULL DEFAULT 'hospitality'",'shift type');await addColumn('shifts','requirements JSON NULL','shift requirements');await addColumn('shifts','perks JSON NULL','shift perks');await addColumn('shifts','preferences JSON NULL','shift preferences');})();
 const ensureApplicationCancellationFee = addColumn('applications','cancellation_fee DECIMAL(10,2) NOT NULL DEFAULT 0','application cancellation fee');
+const ensureApplicationPreferencesColumn = addColumn('applications','confirmed_preferences JSON NULL','confirmed applicant preferences');
 const ensureUserAddressColumns = (async()=>{
   await addColumn('users','address_line_1 VARCHAR(255) NULL','user address line');
   await addColumn('users','address_city VARCHAR(120) NULL','user address city');
@@ -698,25 +699,26 @@ app.get('/api/shifts/:id',auth,asyncRoute(async(req,res)=>{
  if(!rows.length)return res.status(404).json({error:'Shift not found'});res.json({shift:rows[0]});
 }));
 app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
- await ensureShiftPublishingColumns;
+ await ensureShiftPublishingColumns; await ensureApplicationPreferencesColumn;
  const [s]=await db.execute('SELECT id,status,auto_approve,requirements,preferences FROM shifts WHERE id=?',[req.params.id]);
  if(!s.length||s[0].status!=='open')return res.status(404).json({error:'Shift not available'});
  const requiredItems=Array.isArray(s[0].requirements)?s[0].requirements:(typeof s[0].requirements==='string'?JSON.parse(s[0].requirements||'[]'):[]);
  if(requiredItems.length&&req.body?.confirmedRequirements!==true)return res.status(400).json({error:'Confirm all shift requirements before applying.'});
  const preferredItems=Array.isArray(s[0].preferences)?s[0].preferences:(typeof s[0].preferences==='string'?JSON.parse(s[0].preferences||'[]'):[]);
  const confirmedPreferences=Array.isArray(req.body?.confirmedPreferences)?req.body.confirmedPreferences:[];
- if(preferredItems.length&&(preferredItems.some(item=>!confirmedPreferences.includes(item))||preferredItems.length!==confirmedPreferences.length))return res.status(400).json({error:'Tick every listed preference before applying.'});
+ if(confirmedPreferences.some(item=>typeof item!=='string'||!preferredItems.includes(item))||new Set(confirmedPreferences).size!==confirmedPreferences.length)return res.status(400).json({error:'One or more selected preferences are invalid.'});
+ const confirmedPreferencesJson=JSON.stringify(confirmedPreferences);
  const nextStatus=s[0].auto_approve?'approved':'pending';
  const [existing]=await db.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1',[req.params.id,req.user.id]);
  if(existing.length){
    if(['withdrawn','cancelled'].includes(existing[0].status)){
-     await db.execute('UPDATE applications SET status=?,cancellation_fee=0 WHERE id=?',[nextStatus,existing[0].id]);
+     await db.execute('UPDATE applications SET status=?,cancellation_fee=0,confirmed_preferences=? WHERE id=?',[nextStatus,confirmedPreferencesJson,existing[0].id]);
      return res.status(200).json({id:existing[0].id,status:nextStatus});
    }
    return res.status(409).json({error:'Already applied'});
  }
  try {
- const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status) VALUES(?,?,?)',[req.params.id,req.user.id,nextStatus]);
+ const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences) VALUES(?,?,?,?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson]);
  res.status(201).json({id:r.insertId,status:nextStatus});
  }catch(e){if(e.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});throw e;}
 }));
