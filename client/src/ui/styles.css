@@ -5319,3 +5319,27 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .shift-perks-display>strong{display:block;margin-bottom:5px;font-size:.9rem}
 .shift-perks-display ul{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding-left:18px}
 .shift-perks-display li{font-size:.9rem;line-height:1.4}
+
+
+/* Employer profile payment methods prototype */
+.profile-payment-methods{margin:1.25rem 0}
+.profile-payment-methods .account-password-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.profile-payment-methods .account-password-heading h2{margin:0 0 6px}
+.profile-payment-methods .account-password-heading p{margin:0;max-width:620px;line-height:1.5}
+.profile-payment-method-list{display:grid;gap:10px;margin:16px 0}
+.profile-payment-method-card{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--border,#e3d8c8);border-radius:12px;background:#fff}
+.profile-payment-card-icon{width:48px;height:38px;display:grid;place-items:center;border:1px solid #e5dfd5;border-radius:8px;background:#f8f6f0;font-size:1.4rem;flex:0 0 auto}
+.profile-payment-card-details{display:grid;gap:4px;min-width:0;flex:1}
+.profile-payment-card-details strong{font-weight:700}
+.profile-payment-card-details span,.profile-payment-card-details small{font-size:.88rem;color:var(--muted,#6e7784)}
+.profile-payment-card-details .profile-payment-default{color:#40572f;font-weight:650}
+.profile-payment-card-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.profile-payment-empty{display:grid;justify-items:center;text-align:center;gap:8px;margin:16px 0;padding:28px 18px;border:1px dashed var(--border,#e3d8c8);border-radius:12px;background:#fffdf9}
+.profile-payment-empty>span{font-size:1.8rem;color:#7b8175}
+.profile-payment-empty p{margin:0;max-width:430px;line-height:1.5;color:var(--muted,#6e7784)}
+.profile-add-payment-form{display:grid;gap:14px;margin:16px 0;padding:18px;border:1px solid var(--border,#e3d8c8);border-radius:12px;background:#fffdf9}
+.profile-add-payment-form h3,.profile-add-payment-form p{margin:0}
+.profile-add-payment-form p{font-size:.92rem;line-height:1.5;color:var(--muted,#6e7784)}
+.profile-add-payment-form label{display:grid;gap:7px;font-weight:600}
+.profile-add-payment-form input,.profile-add-payment-form select{width:100%;box-sizing:border-box}
+@media(max-width:560px){.profile-payment-method-card{align-items:flex-start;flex-wrap:wrap}.profile-payment-card-actions{width:100%;padding-left:62px}.profile-payment-methods .account-password-heading>button{width:100%}}
