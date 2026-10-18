@@ -247,7 +247,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   app.patch('/api/workchats/:id/settings',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await ensureGroupWorkchats;const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
-    if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can change workchat settings.'});
+    // Any participant can pause/resume messaging; only workchat admins can manage participants.
     const disabled=!!req.body.disabled;
     await db.execute('INSERT INTO workchat_settings(workchat_id,disabled) VALUES(?,?) ON DUPLICATE KEY UPDATE disabled=VALUES(disabled)',[id,disabled?1:0]);
     if(disabled)await db.execute('DELETE FROM workchat_typing WHERE workchat_id=?',[id]);
