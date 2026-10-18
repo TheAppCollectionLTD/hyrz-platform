@@ -114,4 +114,65 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     res.status(201).json({ok:true,id:result.insertId});
   }));
 
+  const ensureGroupWorkchats = Promise.all([
+    db.query(`CREATE TABLE IF NOT EXISTS workchats (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, employer_user_id BIGINT UNSIGNED NOT NULL, name VARCHAR(100) NOT NULL, status ENUM('current','past') NOT NULL DEFAULT 'current', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, last_message_at TIMESTAMP NULL DEFAULT NULL, KEY idx_workchat_employer (employer_user_id,status,last_message_at)) ENGINE=InnoDB`),
+    db.query(`CREATE TABLE IF NOT EXISTS workchat_participants (workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,last_read_at DATETIME NULL,PRIMARY KEY(workchat_id,user_id),KEY idx_workchat_user(user_id,workchat_id)) ENGINE=InnoDB`),
+    db.query(`CREATE TABLE IF NOT EXISTS workchat_messages (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,workchat_id BIGINT UNSIGNED NOT NULL,sender_id BIGINT UNSIGNED NOT NULL,body TEXT NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,KEY idx_workchat_message(workchat_id,created_at,id)) ENGINE=InnoDB`),
+    db.query(`CREATE TABLE IF NOT EXISTS workchat_typing (workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,updated_at DATETIME NOT NULL,PRIMARY KEY(workchat_id,user_id)) ENGINE=InnoDB`)
+  ]);
+  async function getWorkchat(id,userId) {
+    const [rows]=await db.execute(`SELECT w.* FROM workchats w LEFT JOIN workchat_participants p ON p.workchat_id=w.id AND p.user_id=? WHERE w.id=? AND (w.employer_user_id=? OR p.user_id IS NOT NULL) LIMIT 1`,[userId,id,userId]);
+    return rows[0]||null;
+  }
+  app.get('/api/workchats/mine',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;
+    const [rows]=await db.execute(`SELECT DISTINCT w.id,w.name,w.status,w.created_at,w.last_message_at,
+      (SELECT COUNT(*) FROM workchat_participants p2 WHERE p2.workchat_id=w.id) participant_count,
+      (SELECT COUNT(*) FROM workchat_messages m JOIN workchat_participants me ON me.workchat_id=w.id AND me.user_id=? WHERE m.workchat_id=w.id AND m.sender_id<>? AND m.created_at>COALESCE(me.last_read_at,'1970-01-01')) unread_count,
+      (SELECT body FROM workchat_messages m WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message
+      FROM workchats w LEFT JOIN workchat_participants p ON p.workchat_id=w.id
+      WHERE w.employer_user_id=? OR p.user_id=? ORDER BY COALESCE(w.last_message_at,w.created_at) DESC,w.id DESC`,[req.user.id,req.user.id,req.user.id,req.user.id]);
+    const ids=rows.map(x=>Number(x.id));let members={};
+    if(ids.length){const [ps]=await db.query(`SELECT p.workchat_id,u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture FROM workchat_participants p JOIN users u ON u.id=p.user_id WHERE p.workchat_id IN (${ids.map(()=>'?').join(',')}) ORDER BY p.added_at`,ids);
+      for(const p of ps)(members[p.workchat_id] ||= []).push({id:Number(p.id),name:[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email,email:p.email,role:p.role,profile_picture:p.profile_picture});}
+    res.json({workchats:rows.map(w=>({...w,id:Number(w.id),participant_count:Number(w.participant_count||0),unread_count:Number(w.unread_count||0),participants:members[w.id]||[]}))});
+  }));
+  app.post('/api/workchats',auth,allow('employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;const name=String(req.body.name||'').trim();
+    const ids=[...new Set((Array.isArray(req.body.participantIds)?req.body.participantIds:[]).map(Number).filter(x=>Number.isInteger(x)&&x>0))];
+    if(!name||name.length>100)return res.status(400).json({error:'Workchat name is required (maximum 100 characters).'});
+    if(!ids.length)return res.status(400).json({error:'Choose at least one worker to add to this workchat.'});
+    const [workers]=await db.query(`SELECT id FROM users WHERE role='worker' AND status='active' AND id IN (${ids.map(()=>'?').join(',')})`,ids);
+    if(workers.length!==ids.length)return res.status(400).json({error:'One or more selected workers are unavailable. Refresh the worker list and try again.'});
+    const [result]=await db.execute('INSERT INTO workchats(employer_user_id,name) VALUES(?,?)',[req.user.id,name]);const id=Number(result.insertId);
+    const pairs=ids.flatMap(workerId=>[id,workerId]);await db.execute('INSERT INTO workchat_participants(workchat_id,user_id) VALUES '+ids.map(()=>'(?,?)').join(','),pairs);
+    await db.execute('INSERT IGNORE INTO workchat_participants(workchat_id,user_id) VALUES(?,?)',[id,req.user.id]);
+    await audit(req,'workchat.created','workchat',id,{participantCount:ids.length});res.status(201).json({workchatId:id});
+  }));
+  app.get('/api/workchats/:id/messages',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);if(!chat)return res.status(404).json({error:'Workchat not found.'});
+    await db.execute('UPDATE workchat_participants SET last_read_at=NOW() WHERE workchat_id=? AND user_id=?',[id,req.user.id]);
+    const [messages]=await db.execute(`SELECT m.id,m.workchat_id,m.sender_id,m.body,m.created_at,u.first_name sender_first_name,u.last_name sender_last_name,u.role sender_role,u.profile_picture sender_profile_picture FROM workchat_messages m JOIN users u ON u.id=m.sender_id WHERE m.workchat_id=? ORDER BY m.id ASC LIMIT 500`,[id]);
+    const [participants]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture FROM workchat_participants p JOIN users u ON u.id=p.user_id WHERE p.workchat_id=? ORDER BY p.added_at`,[id]);
+    res.json({workchat:chat,messages,participants:participants.map(p=>({...p,id:Number(p.id),name:[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email}))});
+  }));
+  app.post('/api/workchats/:id/messages',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;const id=Number(req.params.id),body=String(req.body.body||'').trim();if(!body||body.length>5000)return res.status(400).json({error:'Enter a message of 1-5000 characters.'});
+    const chat=await getWorkchat(id,req.user.id);if(!chat||chat.status!=='current')return res.status(404).json({error:'This workchat is unavailable.'});
+    const [result]=await db.execute('INSERT INTO workchat_messages(workchat_id,sender_id,body) VALUES(?,?,?)',[id,req.user.id,body]);await db.execute('UPDATE workchats SET last_message_at=NOW() WHERE id=?',[id]);await db.execute('DELETE FROM workchat_typing WHERE workchat_id=? AND user_id=?',[id,req.user.id]);await audit(req,'workchat.message.sent','workchat',id,{messageId:Number(result.insertId)});res.status(201).json({ok:true,id:Number(result.insertId)});
+  }));
+  app.post('/api/workchats/:id/typing',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;const id=Number(req.params.id);if(!await getWorkchat(id,req.user.id))return res.status(404).json({error:'Workchat not found.'});
+    if(req.body.typing)await db.execute('INSERT INTO workchat_typing(workchat_id,user_id,updated_at) VALUES(?,?,NOW()) ON DUPLICATE KEY UPDATE updated_at=NOW()',[id,req.user.id]);else await db.execute('DELETE FROM workchat_typing WHERE workchat_id=? AND user_id=?',[id,req.user.id]);res.json({ok:true});
+  }));
+  app.get('/api/workchats/:id/typing',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;const id=Number(req.params.id);if(!await getWorkchat(id,req.user.id))return res.status(404).json({error:'Workchat not found.'});
+    const [rows]=await db.execute(`SELECT t.user_id,u.first_name,u.last_name FROM workchat_typing t JOIN users u ON u.id=t.user_id WHERE t.workchat_id=? AND t.user_id<>? AND t.updated_at>=DATE_SUB(NOW(),INTERVAL 6 SECOND)`,[id,req.user.id]);
+    res.json({typing:rows.map(x=>({id:Number(x.user_id),name:[x.first_name,x.last_name].filter(Boolean).join(' ')||'A participant'}))});
+  }));
+  app.patch('/api/workchats/:id/status',auth,allow('employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;const status=req.body.status;if(!['current','past'].includes(status))return res.status(400).json({error:'Choose a valid workchat status.'});
+    const [result]=await db.execute('UPDATE workchats SET status=? WHERE id=? AND employer_user_id=?',[status,Number(req.params.id),req.user.id]);if(!result.affectedRows)return res.status(404).json({error:'Workchat not found.'});res.json({ok:true});
+  }));
+
 };
