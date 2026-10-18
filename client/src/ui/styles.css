@@ -3437,3 +3437,67 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
    padding:4px 9px!important;font-size:10px!important;
  }
 }
+
+
+/* Remove non-dashboard tile/card layouts that were left in individual sections. */
+.app main:not(.page-dashboard) .employer-welcome{
+  display:block;max-width:900px;margin:0 auto;
+}
+.app main:not(.page-dashboard) .employer-hero{
+  min-height:0;padding:0;margin:0 0 18px;border:0;border-radius:0;
+  background:transparent;color:#f1f4eb;box-shadow:none;
+}
+.app main:not(.page-dashboard) .employer-hero:after{display:none}
+.app main:not(.page-dashboard) .employer-hero h2{font-size:22px;line-height:1.25}
+.app main:not(.page-dashboard) .employer-hero p{max-width:680px;margin:8px 0 14px;color:#a9afa1}
+.app main:not(.page-dashboard) .employer-workchat-card{
+  min-height:0;margin:0;padding:16px 0;
+  display:flex;align-items:flex-start;
+  border:0;border-top:1px solid #30352b;border-radius:0;
+  background:transparent;color:#f1f4eb;box-shadow:none;
+}
+.app main:not(.page-dashboard) .employer-workchat-card .employer-chat-icon{display:none}
+.app main:not(.page-dashboard) .employer-workchat-card h3{font-size:15px;margin:8px 0}
+.app main:not(.page-dashboard) .employer-workchat-card p{color:#a9afa1;line-height:1.5}
+.app main:not(.page-dashboard) .worker-finance-cards{
+  display:block!important;width:100%;margin:14px 0!important;
+}
+.app main:not(.page-dashboard) .worker-finance-card{
+  min-height:0!important;width:100%;display:grid;grid-template-columns:minmax(120px,.7fr) minmax(110px,.5fr) minmax(0,1fr);
+  align-items:center;gap:12px;padding:14px 2px!important;margin:0;
+  border:0!important;border-top:1px solid #30352b!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+}
+.app main:not(.page-dashboard) .worker-finance-card strong{font-size:20px}
+.app main:not(.page-dashboard) .worker-finance-card span{font-size:12px;color:#a9afa1}
+.app main:not(.page-dashboard) .favourite-worker-list{display:block!important;gap:0!important}
+.app main:not(.page-dashboard) .favourite-worker-card{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:14px 2px;margin:0;
+  border:0;border-top:1px solid #30352b;border-radius:0;
+  background:transparent;color:#f1f4eb;box-shadow:none;
+}
+.app main:not(.page-dashboard) .favourite-worker-card>div{min-width:0}
+.app main:not(.page-dashboard) .favourite-worker-card small{color:#a9afa1}
+.app main:not(.page-dashboard) .favourite-worker-card .actions{display:flex;flex-wrap:wrap;gap:7px}
+.app main:not(.page-dashboard) .favourite-worker-card .actions button{padding:8px 11px;font-size:11px}
+.app.admin main > .panel.admin-console,
+.admin-console{
+  background:#171a14;color:#f1f4eb;border:1px solid #292e25;border-radius:14px;
+}
+.admin-console .panel-head h2,.admin-console h2,.admin-console h3,.admin-console h4{color:#f1f4eb}
+.admin-console p,.admin-console .muted{color:#a9afa1}
+.admin-console label{color:#d8dfd0}
+.admin-console input,.admin-console select,.admin-console textarea{
+  background:#10130e;color:#f1f4eb;border:1px solid #353b30;border-radius:8px;
+}
+.admin-console .secondary{background:#20241d;color:#f1f4eb;border-color:#353b30}
+.admin-console .primary{background:#b5f34a;color:#15190f;border-color:#b5f34a}
+.admin-console .status{border-radius:6px}
+@media(max-width:640px){
+ .app main:not(.page-dashboard) .worker-finance-card{grid-template-columns:1fr auto;gap:5px 12px}
+ .app main:not(.page-dashboard) .worker-finance-card span{grid-column:1/-1}
+ .app main:not(.page-dashboard) .favourite-worker-card{align-items:flex-start;flex-direction:column}
+ .app main:not(.page-dashboard) .favourite-worker-card .actions{width:100%}
+ .app main:not(.page-dashboard) .employer-welcome{grid-template-columns:1fr}
+}
