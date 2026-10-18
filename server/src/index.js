@@ -615,6 +615,14 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  .sort((a,b)=>{if(a.locationVerified!==b.locationVerified)return a.locationVerified?-1:1;if(a.distanceMiles==null)return a.first_name.localeCompare(b.first_name);if(b.distanceMiles==null)return -1;return a.distanceMiles-b.distanceMiles;});
  res.json({workers,radiusMiles:10,matched:workers.filter(w=>w.locationVerified).length,locationUnverified:workers.filter(w=>!w.locationVerified).length,employerLocationVerified:Boolean(origin),searchTerm:q});
 }));
+app.get('/api/employer/workers/favourites',auth,allow('employer'),asyncRoute(async(req,res)=>{
+ await ensureEmployerWorkerFavourites;
+ const [workers]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email
+ FROM employer_worker_favourites f JOIN users u ON u.id=f.worker_user_id
+ WHERE f.employer_user_id=? AND u.role='worker' AND u.status='active'
+ ORDER BY u.first_name,u.last_name`,[req.user.id]);
+ res.json({workers});
+}));
 app.post('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;const workerId=Number(req.params.workerId);
  const [rows]=await db.execute('SELECT id FROM users WHERE id=? AND role=\'worker\'',[workerId]);
