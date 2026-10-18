@@ -3137,3 +3137,33 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .instant-pay-badge.available{background:#eaf5d9;color:#35551c;border-color:#cde5a9}
 .instant-pay-badge.unavailable{background:#f8e8e5;color:#8b3328;border-color:#efc7c0}
 .instant-pay-badge.unknown{background:#f1f0e9;color:#65675e;border-color:#deded3}
+
+
+/* Employer-worker direct inbox and message actions */
+.direct-inbox-layout{display:grid;grid-template-columns:minmax(240px,.8fr) minmax(0,1.5fr);gap:16px;margin-top:18px;align-items:stretch}
+.direct-conversation-list,.direct-conversation-thread,.inbox-worker-search{min-width:0;border:1px solid #2a2e26;border-radius:14px;padding:16px;background:#11140f}
+.direct-conversation-list h3,.inbox-worker-search h3{margin:0 0 12px}
+.direct-conversation-item{display:flex;width:100%;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:12px;margin-bottom:8px;border:1px solid #353b30;border-radius:10px;background:#20241d;color:#f2f3ed;cursor:pointer}
+.direct-conversation-item.selected,.direct-conversation-item:hover{border-color:#b5f34a}
+.direct-conversation-item small,.direct-conversation-item span{font-size:12px;color:#aeb6a5;overflow-wrap:anywhere}
+.direct-unread-count{font-size:11px;color:#15190f;background:#b5f34a;border-radius:999px;padding:3px 7px}
+.direct-thread-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid #353b30}
+.direct-thread-heading h3,.direct-thread-heading h4{margin:0 0 4px}
+.direct-thread-heading small{color:#aeb6a5}
+.direct-message-history{display:flex;flex-direction:column;gap:10px;max-height:440px;min-height:220px;overflow-y:auto;padding:14px 0}
+.direct-message-bubble{max-width:82%;border:1px solid #353b30;border-radius:12px;padding:10px 12px;background:#20241d;overflow-wrap:anywhere}
+.direct-message-bubble.sent{align-self:flex-end;background:#29351d;border-color:#506b2d}
+.direct-message-bubble p{margin:0 0 6px;white-space:pre-wrap}
+.direct-message-bubble small{font-size:11px;color:#aeb6a5}
+.direct-message-compose{display:flex;gap:10px;align-items:flex-end}
+.direct-message-compose textarea{flex:1;min-height:68px;resize:vertical}
+.inbox-worker-search{margin-top:18px}
+.inbox-worker-search label{display:block;margin-bottom:7px;font-size:12px;color:#aeb6a5}
+.inbox-worker-search>input{width:100%;max-width:560px;box-sizing:border-box}
+.inbox-worker-search-results{max-width:720px;margin-top:10px}
+.inbox-worker-search-result{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #2a2e26}
+.inbox-worker-search-result>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.inbox-worker-search-result small{font-size:12px;color:#aeb6a5;overflow-wrap:anywhere}
+.worker-direct-inbox{margin-top:18px}
+.worker-direct-conversation-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(max-width:760px){.direct-inbox-layout{grid-template-columns:minmax(0,1fr)}.worker-direct-conversation-list{grid-template-columns:minmax(0,1fr)}.direct-message-compose{flex-direction:column;align-items:stretch}.direct-message-compose button{align-self:flex-end}.inbox-worker-search-result{align-items:flex-start;flex-direction:column}}
