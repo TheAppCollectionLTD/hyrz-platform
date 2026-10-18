@@ -219,7 +219,7 @@ async function authenticate(register) {
   </div>
 </div>
 <div className="welcome-panel">
-<h2>Flexible work.<br/><em>Reliable staffing.</em></h2>
+<h2>Flexible work.<br/><em>Reliable staffing.</em></h2><p className="welcome-tagline">Whoever you are. Wherever you are.</p>
 <button className="primary" onClick={()=>navigateTo('chooseRole')}>Get started</button>
 <p>Already registered? <button className="textbutton" onClick={()=>navigateTo('login')}>Sign in</button></p>
 </div>
