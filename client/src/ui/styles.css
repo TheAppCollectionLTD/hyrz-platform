@@ -5270,3 +5270,8 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .workchat-pinned-item span{font-size:13px;overflow-wrap:anywhere;}
 .workchat-pinned-item small{font-size:10px;color:#6c6c6c;}
 .workchat-message-focused .workchat-message-bubble{outline:3px solid #e2b449;outline-offset:3px;}
+
+/* Make shift publishing success and failure feedback impossible to miss. */
+.shift-publish-feedback{grid-column:1/-1;display:flex;flex-direction:column;gap:5px;padding:13px 15px;border:1px solid;border-radius:10px;font-size:14px;line-height:1.45;overflow-wrap:anywhere;}
+.shift-publish-error{color:#842029;background:#fff0f0;border-color:#e6a5a5;}
+.shift-publish-notice{color:#173b2c;background:#edf8ef;border-color:#a9d4b3;}
