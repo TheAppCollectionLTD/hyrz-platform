@@ -3779,3 +3779,14 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .shift-card .shift-schedule-row strong{font-size:11px}
  .shift-card .instant-pay-badge{font-size:9px}
 }
+
+
+/* Shift details: two columns by three rows (date, time, total rate). */
+.shift-card .shiftmain{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.shift-card .shiftmain>b{grid-column:1/-1}
+.shift-card .shift-schedule-row{min-width:0}
+@media(max-width:760px){
+ .shift-card .shiftmain{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
