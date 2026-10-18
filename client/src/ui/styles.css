@@ -4113,3 +4113,58 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .app{background:var(--hyrz-cream)!important}
  .app main{color:var(--hyrz-ink)!important}
 }
+
+
+/* Global readability and contrast safeguard: text must remain legible on every surface. */
+.app{color:#17243b!important}
+.app h1,.app h2,.app h3,.app h4,.app h5,.app h6,
+.app p,.app label,.app li,.app dt,.app dd,.app strong,.app b,
+.app .title,.app .heading,.app .section-title{color:#17243b}
+.app .muted,.app .hint,.app small,.app .description,.app .subtitle,
+.app .eyebrow,.app .tag,.app .meta,.app .help-text{color:#515b6d!important}
+.app main,.app main *{text-shadow:none}
+.app .panel,.app .card,.app .section-card,.app .dashboard-card,
+.app .critical-info-box,.app .stats .stat,.app .empty-state,
+.app .workchat-card,.app .workchat-list,.app .workchat-content{
+ color:#17243b;
+}
+.app .panel h1,.app .panel h2,.app .panel h3,.app .panel h4,
+.app .card h1,.app .card h2,.app .card h3,.app .card h4,
+.app .section-card h1,.app .section-card h2,.app .section-card h3,
+.app .dashboard-card h1,.app .dashboard-card h2,.app .dashboard-card h3,
+.app .critical-info-box h1,.app .critical-info-box h2,.app .critical-info-box h3,
+.app .workchat-card h1,.app .workchat-card h2,.app .workchat-card h3,
+.app .workchat-content h1,.app .workchat-content h2,.app .workchat-content h3{
+ color:#17243b!important;
+}
+.app .panel p,.app .panel li,.app .card p,.app .card li,
+.app .section-card p,.app .section-card li,.app .dashboard-card p,
+.app .critical-info-box p,.app .workchat-card p,.app .workchat-content p{
+ color:#3e485a;
+}
+.app .sidebar,.app .sidebar *,.app .sidebar h1,.app .sidebar h2,
+.app .sidebar h3,.app .sidebar p,.app .sidebar small,
+.app .sidebar nav button,.app .sidebottom button{
+ color:#fffdf9!important;
+}
+.app .sidebar nav button.selected,.app .sidebar nav button:hover{
+ color:#f2b84b!important;
+}
+.app button.primary,.app .primary,.app .btn-primary,
+.app button.primary *,.app .primary *{
+ color:#17243b!important;
+}
+.app button.secondary,.app .secondary,.app .btn-secondary,
+.app button.secondary *,.app .secondary *{
+ color:#17243b!important;
+}
+.app .danger,.app .danger-button,.app .danger *,
+.app .danger-button *{color:#8c3428!important}
+.app .success,.app .success-badge,.app .success *,
+.app .success-badge *{color:#75501a!important}
+.app input,.app select,.app textarea{color:#17243b!important}
+.app input::placeholder,.app textarea::placeholder{color:#626879!important;opacity:1!important}
+.app a:not(.primary):not(.secondary){color:#914333}
+.app .workchat-empty,.app .empty-state,.app .notice,.app .info-box{
+ color:#17243b!important;
+}
