@@ -3659,3 +3659,86 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
     padding:4px 8px!important;font-size:10px!important;
   }
 }
+
+
+/* Worker available-shift cards follow a mobile-first, image-led listing layout. */
+.app.worker main .find-shifts-panel .shift-card{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:0!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  padding:0!important;
+  overflow:hidden;
+  border-radius:16px!important;
+  margin:14px 0!important;
+  box-sizing:border-box;
+}
+.app.worker main .find-shifts-panel .shift-card .shift-employer-avatar{
+  display:grid!important;
+  width:100%!important;
+  height:190px!important;
+  min-height:190px!important;
+  border:0!important;
+  border-radius:0!important;
+  font-size:58px!important;
+  box-sizing:border-box;
+}
+.app.worker main .find-shifts-panel .shift-card .shift-employer-avatar img{
+  width:100%!important;height:100%!important;object-fit:cover!important;
+}
+.app.worker main .find-shifts-panel .shift-card .shiftmain{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:8px!important;
+  padding:16px 16px 10px!important;
+  min-width:0!important;
+  box-sizing:border-box;
+}
+.app.worker main .find-shifts-panel .shift-card .shiftmain>b{
+  font-size:19px!important;line-height:1.25!important;
+}
+.app.worker main .find-shifts-panel .shift-card .shift-schedule{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:9px!important;
+  margin-top:5px!important;
+}
+.app.worker main .find-shifts-panel .shift-card .shift-schedule-row{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:3px!important;
+}
+.app.worker main .find-shifts-panel .shift-card .instant-pay-status{
+  margin-top:5px!important;
+}
+.app.worker main .find-shifts-panel .shift-card .shiftpay{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:9px!important;
+  width:auto!important;
+  min-height:0!important;
+  margin:0 16px 16px!important;
+  padding:13px 0 0!important;
+  border-left:0!important;
+  border-top:1px solid #ecefe7!important;
+  box-sizing:border-box;
+}
+.app.worker main .find-shifts-panel .shift-card .shiftpay>strong{
+  font-size:28px!important;
+}
+.app.worker main .find-shifts-panel .shift-card .shiftpay button{
+  width:100%!important;
+  white-space:normal!important;
+}
+.app.worker main .find-shifts-panel .instant-pay-status>small{display:none!important}
+@media(min-width:761px){
+ .app.worker main .find-shifts-panel .shift-card .shift-employer-avatar{height:230px!important;min-height:230px!important}
+ .app.worker main .find-shifts-panel .shift-card .shiftmain{padding:18px 20px 10px!important}
+ .app.worker main .find-shifts-panel .shift-card .shiftpay{margin:0 20px 18px!important}
+}
