@@ -368,6 +368,10 @@ async function authenticate(register) {
 
  {user?.role==='employer'&&page==='workchats'&&<section className="employer-welcome">
    <div className="employer-hero"><span className="eyebrow">YOUR TEAM, IN ONE PLACE</span><h2>The right people.<br/><em>The right shifts.</em></h2><p>Keep conversations with your favourite workers together, coordinate upcoming shifts and build a team you can rely on.</p></div>
+   <div className="workchat-critical-info" aria-label="Workchat unread summary">
+    <article className="workchat-critical-box"><span className="workchat-critical-icon" aria-hidden="true">✉</span><div><span className="workchat-critical-label">Unread messages</span><strong>{workchatItems.reduce((total, chat) => total + (Number(chat.unread_count) || 0), 0)}</strong><small>Messages waiting to be read</small></div></article>
+    <article className="workchat-critical-box"><span className="workchat-critical-icon" aria-hidden="true">☏</span><div><span className="workchat-critical-label">Unread workchats</span><strong>{workchatItems.filter(chat => chat.status === 'current' && (Number(chat.unread_count) || 0) > 0).length}</strong><small>Conversations with unread messages</small></div></article>
+   </div>
    <div className="employer-workchat-card"><div className="employer-chat-icon">↗</div><span className="eyebrow">WORKCHAT</span><h3>Your workchats</h3>
     <div className="workchat-section-tabs" role="tablist" aria-label="Workchat sections">
      <button type="button" className={workchatSection==='new'?'selected':''} onClick={()=>setWorkchatSection('new')}>New workchat +</button>
