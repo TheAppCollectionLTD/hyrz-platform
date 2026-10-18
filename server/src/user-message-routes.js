@@ -184,6 +184,28 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const chat=await getWorkchat(id,req.user.id);if(!chat||chat.status!=='current')return res.status(404).json({error:'This workchat is unavailable.'});if(Number(chat.disabled))return res.status(403).json({error:'Messaging is disabled for this workchat.'});
     const [result]=await db.execute('INSERT INTO workchat_messages(workchat_id,sender_id,body) VALUES(?,?,?)',[id,req.user.id,body]);await db.execute('UPDATE workchats SET last_message_at=NOW() WHERE id=?',[id]);await db.execute('DELETE FROM workchat_typing WHERE workchat_id=? AND user_id=?',[id,req.user.id]);await audit(req,'workchat.message.sent','workchat',id,{messageId:Number(result.insertId)});res.status(201).json({ok:true,id:Number(result.insertId)});
   }));
+  app.patch('/api/workchats/:id/messages/:messageId',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;const id=Number(req.params.id),messageId=Number(req.params.messageId),body=String(req.body.body||'').trim(),chat=await getWorkchat(id,req.user.id);
+    if(!chat)return res.status(404).json({error:'Workchat not found.'});
+    if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can edit messages.'});
+    if(!body||body.length>5000)return res.status(400).json({error:'Enter a message of 1-5000 characters.'});
+    const [messages]=await db.execute('SELECT sender_id,created_at FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
+    if(!messages.length)return res.status(404).json({error:'Message not found in this workchat.'});
+    if(Number(messages[0].sender_id)!==Number(req.user.id))return res.status(403).json({error:'You can only edit your own messages.'});
+    if(Date.now()-new Date(messages[0].created_at).getTime()>5*60*1000)return res.status(403).json({error:'Messages can only be edited within 5 minutes of sending.'});
+    await db.execute('UPDATE workchat_messages SET body=? WHERE id=? AND workchat_id=?',[body,messageId,id]);
+    await audit(req,'workchat.message.edited','workchat',id,{messageId});res.json({ok:true});
+  }));
+  app.delete('/api/workchats/:id/messages/:messageId',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureGroupWorkchats;const id=Number(req.params.id),messageId=Number(req.params.messageId),chat=await getWorkchat(id,req.user.id);
+    if(!chat)return res.status(404).json({error:'Workchat not found.'});
+    if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can delete messages.'});
+    const [messages]=await db.execute('SELECT id FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
+    if(!messages.length)return res.status(404).json({error:'Message not found in this workchat.'});
+    await db.execute('DELETE FROM workchat_pins WHERE message_id=? AND workchat_id=?',[messageId,id]);
+    await db.execute('DELETE FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
+    await audit(req,'workchat.message.deleted','workchat',id,{messageId});res.json({ok:true});
+  }));
   app.post('/api/workchats/:id/messages/:messageId/pin',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await ensureGroupWorkchats;const id=Number(req.params.id),messageId=Number(req.params.messageId),chat=await getWorkchat(id,req.user.id);
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
