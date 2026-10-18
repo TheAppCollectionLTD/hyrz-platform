@@ -3347,3 +3347,93 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .app.employer .employer-direct-inbox .direct-message-compose button{align-self:flex-start}
  .admin-console:has(.admin-tabs) .admin-tabs button{padding:8px 9px;font-size:10px}
 }
+
+
+/* Global layout contract:
+   - Dashboard pages retain their dashboard card grids.
+   - Every other page uses compact Inbox-style panels and persistent subsection tabs. */
+.app main:not(.page-dashboard) > section.panel{
+  width:100%;max-width:900px;margin-left:auto;margin-right:auto;
+  box-sizing:border-box;padding:18px;
+  border-radius:14px;
+}
+.app main:not(.page-dashboard) .job-tabs,
+.app main:not(.page-dashboard) .worker-section-links.job-tabs,
+.app main:not(.page-dashboard) .worker-section-links.job-tabs-squares,
+.app main:not(.page-dashboard) .favourites-subsections{
+  display:flex;flex-wrap:wrap;align-items:center;gap:7px;
+  grid-template-columns:none;
+  margin:12px 0 16px;padding:0 0 12px;
+  border:0;border-bottom:1px solid #30352b;border-radius:0;
+  position:sticky;top:0;z-index:8;
+  background:#171a14;
+}
+.app main:not(.page-dashboard) .job-tabs>button,
+.app main:not(.page-dashboard) .worker-section-links.job-tabs>button,
+.app main:not(.page-dashboard) .worker-section-links.job-tabs-squares>button,
+.app main:not(.page-dashboard) .favourites-subsections>button{
+  display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;
+  width:auto;min-width:0;min-height:30px;height:30px;max-height:30px;
+  padding:5px 11px!important;margin:0;
+  border:1px solid #353b30;border-radius:8px;
+  background:#20241d;color:#dfe4d8;
+  box-shadow:none;transform:none;
+  font:600 11px/1.15 'DM Sans',sans-serif;letter-spacing:0;
+  text-align:center;white-space:normal;
+}
+.app main:not(.page-dashboard) .job-tabs>button.active,
+.app main:not(.page-dashboard) .job-tabs>button.selected,
+.app main:not(.page-dashboard) .worker-section-links>button.active,
+.app main:not(.page-dashboard) .worker-section-links>button.selected,
+.app main:not(.page-dashboard) .favourites-subsections>button.is-active{
+  background:#b5f34a;color:#15190f;border-color:#b5f34a;font-weight:750;
+}
+.app main:not(.page-dashboard) .panel-head{align-items:flex-start;gap:12px}
+.app main:not(.page-dashboard) .panel-head h2,
+.app main:not(.page-dashboard) > section.panel>h2{font-size:20px;line-height:1.25}
+.app main:not(.page-dashboard) .empty-state,
+.app main:not(.page-dashboard) .empty{
+  min-height:64px;padding:16px;box-sizing:border-box;
+  border:1px dashed #343a2f;border-radius:10px;
+  background:#131610;color:#a9afa1;
+}
+.app main:not(.page-dashboard) .row{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  padding:14px 2px;margin:0;
+  border:0;border-top:1px solid #30352b;border-radius:0;
+  background:transparent;box-shadow:none;
+}
+.app main:not(.page-dashboard) .row>div:first-child{flex:1 1 220px;min-width:0}
+.app main:not(.page-dashboard) .row small{color:#a9afa1}
+.app main:not(.page-dashboard) .favourites-subsections{grid-template-columns:none;gap:7px;margin:12px 0 16px}
+.app main:not(.page-dashboard) .favourites-subsections>button{
+  min-height:30px;display:inline-flex;align-items:center;justify-content:center;
+  padding:5px 11px!important;text-align:center;
+}
+.app main:not(.page-dashboard) .employer-shift-tabs>.employer-shift-tab{
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;
+  height:30px!important;min-height:30px!important;max-height:30px!important;
+  padding:5px 11px!important;font-size:11px!important;
+}
+.app main:not(.page-dashboard) .past-shift-list>h3{font-size:15px;margin:0 0 6px}
+.app main:not(.page-dashboard) .past-shift-list>p{margin:0 0 14px;line-height:1.5}
+.app main:not(.page-dashboard) .admin-overview-stats .stat{border-radius:12px}
+@media(max-width:760px){
+ .app main:not(.page-dashboard) > section.panel{padding:14px}
+ .app main:not(.page-dashboard) .job-tabs,
+ .app main:not(.page-dashboard) .worker-section-links.job-tabs,
+ .app main:not(.page-dashboard) .worker-section-links.job-tabs-squares,
+ .app main:not(.page-dashboard) .favourites-subsections{
+   top:0;gap:6px;padding:7px 0 10px;margin:8px 0 14px;
+ }
+ .app main:not(.page-dashboard) .job-tabs>button,
+ .app main:not(.page-dashboard) .worker-section-links.job-tabs>button,
+ .app main:not(.page-dashboard) .worker-section-links.job-tabs-squares>button,
+ .app main:not(.page-dashboard) .favourites-subsections>button{
+   min-height:28px;height:28px;max-height:28px;padding:4px 9px!important;font-size:10px;
+ }
+ .app main:not(.page-dashboard) .employer-shift-tabs>.employer-shift-tab{
+   height:28px!important;min-height:28px!important;max-height:28px!important;
+   padding:4px 9px!important;font-size:10px!important;
+ }
+}
