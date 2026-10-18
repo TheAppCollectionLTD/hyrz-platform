@@ -5366,3 +5366,19 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .private-offer-footer{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--border,#e3d8c8)}
 .private-offer-footer>span{margin-right:auto;color:var(--muted,#6e7784);font-size:.9rem}
 @media(max-width:560px){.shift-publish-actions>*{flex:1 1 100%!important}.private-offer-modal{padding:16px}.private-offer-footer>*{flex:1 1 100%}.private-offer-favourite{display:none}}
+
+/* Worker hourly-rate counter-offer */
+.shift-pay-action-row{display:flex;align-items:flex-end;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.shift-pay-action-row>button{white-space:nowrap}
+.negotiate-rate-button{background:#fff!important;color:#283b26!important;border:1px solid #cfc7b9!important}
+.rate-negotiation-modal{width:min(520px,calc(100vw - 32px));box-sizing:border-box}
+.rate-negotiation-modal h2{margin-top:0}
+.rate-negotiation-modal form{display:grid;gap:14px}
+.rate-negotiation-modal label{display:grid;gap:7px;font-weight:600}
+.rate-negotiation-modal input,.rate-negotiation-modal textarea{box-sizing:border-box;width:100%}
+.rate-negotiation-modal .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.rate-counteroffer-review{margin-top:12px;padding:12px 14px;border:1px solid #e5d9c5;border-radius:10px;background:#faf7ef}
+.rate-counteroffer-review p{margin:8px 0;line-height:1.45}
+.rate-counteroffer-review small{color:var(--muted,#6e7784)}
+.application-review-row{align-items:flex-start}
+@media(max-width:560px){.shift-pay-action-row{justify-content:stretch}.shift-pay-action-row>button{width:100%}.rate-negotiation-modal .actions>*{flex:1 1 100%}}
