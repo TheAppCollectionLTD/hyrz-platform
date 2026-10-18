@@ -3835,3 +3835,53 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
  .shift-card .shift-detail-item strong{font-size:10px;line-height:1.25}
  .shift-card .instant-pay-badge{font-size:8px;padding:4px 5px}
 }
+
+
+/* Restore critical-info boxes on every section/subsection. Dashboard remains unchanged;
+   all other pages keep the same compact card treatment for critical information. */
+.app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats){
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr))!important;
+  gap:10px!important;
+  margin:12px 0 16px!important;
+  width:100%;
+}
+.app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:7px!important;
+  width:auto!important;
+  min-width:0!important;
+  min-height:82px!important;
+  padding:13px 14px!important;
+  margin:0!important;
+  border:1px solid #30352b!important;
+  border-radius:11px!important;
+  background:#20241d!important;
+  color:#f1f4eb!important;
+  box-shadow:none!important;
+  text-align:left!important;
+}
+.app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat small,
+.app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat span{
+  grid-column:auto!important;
+  color:#a9afa1!important;
+  font-size:10px!important;
+}
+.app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat strong{
+  grid-column:auto!important;
+  grid-row:auto!important;
+  font-size:22px!important;
+  line-height:1.15!important;
+  color:#f1f4eb!important;
+}
+@media(max-width:560px){
+ .app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats){
+   grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;
+ }
+ .app:is(.worker,.employer,.admin) main:not(.page-dashboard) .stats:not(.admin-overview-stats) .stat{
+   min-height:76px!important;padding:11px!important;
+ }
+}
