@@ -1,10 +1,24 @@
 const { auth, allow } = require('./middleware');
 
 module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit }) {
-  const ensureMeta = db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', subject VARCHAR(200) NULL, opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`).then(async()=>{
-    try { await db.query('ALTER TABLE admin_message_meta ADD COLUMN subject VARCHAR(200) NULL'); }
-    catch(e) { if(e.code!=='ER_DUP_FIELDNAME') throw e; }
-  });
+  // Initialise support-message metadata once, avoiding unconditional ALTER TABLE calls.
+  // Running ALTER on every server start can deadlock when another app instance or migration
+  // is touching the same table. Re-check the schema and retry transient lock conflicts.
+  const ensureMeta = (async()=>{
+    await db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', subject VARCHAR(200) NULL, opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`);
+    for(let attempt=0;attempt<4;attempt++){
+      const [columns]=await db.query("SHOW COLUMNS FROM admin_message_meta LIKE 'subject'");
+      if(columns.length)return;
+      try{
+        await db.query('ALTER TABLE admin_message_meta ADD COLUMN subject VARCHAR(200) NULL');
+        return;
+      }catch(e){
+        if(e.code==='ER_DUP_FIELDNAME')return;
+        if(!['ER_LOCK_DEADLOCK','ER_LOCK_WAIT_TIMEOUT'].includes(e.code)||attempt===3)throw e;
+        await new Promise(resolve=>setTimeout(resolve,150*(attempt+1)));
+      }
+    }
+  })();
 
   app.post('/api/messages', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
     const category=String(req.body.category||'enquiries');
