@@ -588,7 +588,7 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  const [employers]=await db.execute('SELECT postcode FROM businesses WHERE owner_user_id=? ORDER BY id DESC LIMIT 1',[req.user.id]);
  const [userAddress]=await db.execute('SELECT address_postcode FROM users WHERE id=?',[req.user.id]);
  const employerPostcode=String(employers[0]?.postcode||userAddress[0]?.address_postcode||'').trim().toUpperCase();
- const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,
+ const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.profile_picture,
  COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode,
  EXISTS(SELECT 1 FROM employer_worker_favourites f WHERE f.employer_user_id=? AND f.worker_user_id=u.id) AS is_favourite
  FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id
@@ -634,7 +634,7 @@ app.delete('/api/employer/workers/:workerId/favourite',auth,allow('employer'),as
 }));
 app.get('/api/employer/workers/past',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;
- const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,wp.postcode,
+ const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,MAX(u.profile_picture) AS profile_picture,wp.postcode,
  GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR ', ') AS roles,
  MAX(s.starts_at) AS last_shift,
  EXISTS(SELECT 1 FROM employer_worker_favourites f WHERE f.employer_user_id=? AND f.worker_user_id=u.id) AS is_favourite
