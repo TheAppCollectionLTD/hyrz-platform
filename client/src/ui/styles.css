@@ -3885,3 +3885,9 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
    min-height:76px!important;padding:11px!important;
  }
 }
+
+
+/* Available-shift payment status sits to the right above the apply action. */
+.shift-card .shift-pay-action-row{display:flex;flex-direction:column;align-items:flex-end;gap:8px;width:100%;margin-top:10px}
+.shift-card .shift-pay-action-row .instant-pay-badge{max-width:100%;text-align:right;white-space:normal;line-height:1.35}
+.shift-card .shift-pay-action-row button{width:100%}
