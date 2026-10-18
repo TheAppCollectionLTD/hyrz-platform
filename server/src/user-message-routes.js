@@ -271,8 +271,11 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await ensureGroupWorkchats;const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id),userId=Number(req.body.userId);
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
     if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can manage participants.'});
-    const [users]=await db.execute("SELECT id FROM users WHERE id=? AND status='active' AND role IN ('worker','employer')",[userId]);
+    const [users]=await db.execute("SELECT id,role FROM users WHERE id=? AND status='active' AND role IN ('worker','employer')",[userId]);
     if(!users.length)return res.status(404).json({error:'Active participant not found.'});
+    if(users[0].role!=='worker')return res.status(400).json({error:'Only workers from your Favourites list can be added to a workchat.'});
+    const [favourites]=await db.execute('SELECT 1 FROM employer_worker_favourites WHERE employer_user_id=? AND worker_user_id=? LIMIT 1',[chat.employer_user_id,userId]);
+    if(!favourites.length)return res.status(400).json({error:'Only workers on your Favourites list can be added to a workchat. Add the worker to Favourites first.'});
     await db.execute('INSERT IGNORE INTO workchat_participants(workchat_id,user_id) VALUES(?,?)',[id,userId]);
     if(req.body.isAdmin===true)await db.execute('INSERT IGNORE INTO workchat_admins(workchat_id,user_id) VALUES(?,?)',[id,userId]);
     await audit(req,'workchat.participant.added','workchat',id,{userId,isAdmin:req.body.isAdmin===true});
