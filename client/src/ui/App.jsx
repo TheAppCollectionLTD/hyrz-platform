@@ -11,12 +11,24 @@ export default function App(){
  const [workchatWorkerQuery,setWorkchatWorkerQuery]=useState('');
  const [workchatWorkerResults,setWorkchatWorkerResults]=useState([]);
  const [workchatSelectedWorkers,setWorkchatSelectedWorkers]=useState([]);
+ const [workchatOpenId,setWorkchatOpenId]=useState(null);
+ const [workchatMessages,setWorkchatMessages]=useState([]);
+ const [workchatParticipants,setWorkchatParticipants]=useState([]);
+ const [workchatTypingUsers,setWorkchatTypingUsers]=useState([]);
+ const [workchatMessageDraft,setWorkchatMessageDraft]=useState('');
+ const [workchatSending,setWorkchatSending]=useState(false);
+ const [workchatLoadError,setWorkchatLoadError]=useState('');
+ const [workchatRefresh,setWorkchatRefresh]=useState(0);
  const [workchatWorkersLoading,setWorkchatWorkersLoading]=useState(false);
  useEffect(()=>{if(user?.role!=='employer'||page!=='workchats'||workchatSection!=='new')return;let active=true;setWorkchatWorkersLoading(true);(async()=>{try{const q=workchatWorkerSource==='search'?workchatWorkerQuery.trim():'';const d=await request('/employer/workers/search?q='+encodeURIComponent(q));if(active){const workers=d.workers||[];setWorkchatWorkerResults(workchatWorkerSource==='favourites'?workers.filter(w=>w.isFavourite):workers);}}catch(e){if(active){setWorkchatWorkerResults([]);setError(e.message||'Could not load workers.');}}finally{if(active)setWorkchatWorkersLoading(false);}})();return()=>{active=false}},[user?.role,page,workchatSection,workchatWorkerSource,workchatWorkerQuery]);
  const [workchatItems,setWorkchatItems]=useState(()=>{try{return JSON.parse(localStorage.getItem('hyrz-workchats-'+(JSON.parse(localStorage.getItem('hyrz-user')||'null')?.id||'session'))||'[]')}catch{return[]}});
  useEffect(()=>{try{localStorage.setItem('hyrz-workchats-'+(user?.id||'session'),JSON.stringify(workchatItems))}catch{}},[workchatItems,user?.id]);
- function createWorkchat(){const name=workchatDraft.trim();if(!name||workchatSelectedWorkers.length===0)return;setWorkchatItems(items=>[{id:Date.now(),name,status:'current',participants:workchatSelectedWorkers,createdAt:new Date().toISOString()},...items]);setWorkchatDraft('');setWorkchatSelectedWorkers([]);setWorkchatWorkerQuery('');setWorkchatSection('current');}
- function archiveWorkchat(id){setWorkchatItems(items=>items.map(item=>item.id===id?{...item,status:'past',archivedAt:new Date().toISOString()}:item));}
+ async function createWorkchat(){const name=workchatDraft.trim();if(!name||workchatSelectedWorkers.length===0)return;await action(async()=>{const result=await request('/workchats',{method:'POST',body:JSON.stringify({name,participantIds:workchatSelectedWorkers.map(w=>Number(w.id))})});setWorkchatDraft('');setWorkchatSelectedWorkers([]);setWorkchatWorkerQuery('');setWorkchatSection('current');setWorkchatOpenId(Number(result.workchatId));setWorkchatRefresh(v=>v+1);setNotice('Workchat created. You can now message its participants.');});}
+ async function archiveWorkchat(id){await action(async()=>{await request('/workchats/'+id+'/status',{method:'PATCH',body:JSON.stringify({status:'past'})});setWorkchatItems(items=>items.map(item=>item.id===id?{...item,status:'past',archivedAt:new Date().toISOString()}:item));setWorkchatRefresh(v=>v+1);});}
+ async function sendWorkchatMessage(event){event?.preventDefault();const body=workchatMessageDraft.trim();if(!body||!workchatOpenId||workchatSending)return;setWorkchatSending(true);try{await request('/workchats/'+workchatOpenId+'/messages',{method:'POST',body:JSON.stringify({body})});setWorkchatMessageDraft('');await request('/workchats/'+workchatOpenId+'/typing',{method:'POST',body:JSON.stringify({typing:false})});setWorkchatRefresh(v=>v+1);}catch(e){setWorkchatLoadError(e.message||'Message could not be sent.');}finally{setWorkchatSending(false);}}
+ useEffect(()=>{if(!user||!['worker','employer'].includes(user.role)||page!=='workchats')return;let active=true;(async()=>{try{const d=await request('/workchats/mine');if(active)setWorkchatItems(d.workchats||[]);}catch(e){if(active)setWorkchatLoadError(e.message||'Could not load workchats.');}})();return()=>{active=false}},[user?.id,user?.role,page,workchatRefresh]);
+ useEffect(()=>{if(!user||page!=='workchats'||!workchatOpenId)return;let active=true;const load=async()=>{try{const [d,t]=await Promise.all([request('/workchats/'+workchatOpenId+'/messages'),request('/workchats/'+workchatOpenId+'/typing')]);if(active){setWorkchatMessages(d.messages||[]);setWorkchatParticipants(d.participants||[]);setWorkchatTypingUsers(t.typing||[]);setWorkchatLoadError('');}}catch(e){if(active)setWorkchatLoadError(e.message||'Could not load this workchat.');}};load();const timer=setInterval(load,2200);return()=>{active=false;clearInterval(timer)}},[user?.id,page,workchatOpenId,workchatRefresh]);
+ useEffect(()=>{if(!workchatOpenId||page!=='workchats')return;const typing=Boolean(workchatMessageDraft.trim());request('/workchats/'+workchatOpenId+'/typing',{method:'POST',body:JSON.stringify({typing})}).catch(()=>{});},[workchatMessageDraft,workchatOpenId,page]);
 
  const mainWorkerPages=['dashboard','jobs','contact','account','workchats','employerInbox','employerShifts','favourites','invoices','checkouts','funds'];
  function navigateTo(next){setPageHistory(previous=>page===next?previous:[...previous,page]);setPage(next);}
