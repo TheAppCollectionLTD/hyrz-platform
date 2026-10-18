@@ -126,12 +126,12 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   }
   app.get('/api/workchats/mine',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await ensureGroupWorkchats;
-    const [rows]=await db.execute(`SELECT DISTINCT w.id,w.name,w.status,w.created_at,w.last_message_at,
+    const [rows]=await db.execute(`SELECT w.id,w.name,w.status,w.created_at,w.last_message_at,
       (SELECT COUNT(*) FROM workchat_participants p2 WHERE p2.workchat_id=w.id) participant_count,
       (SELECT COUNT(*) FROM workchat_messages m JOIN workchat_participants me ON me.workchat_id=w.id AND me.user_id=? WHERE m.workchat_id=w.id AND m.sender_id<>? AND m.created_at>COALESCE(me.last_read_at,'1970-01-01')) unread_count,
       (SELECT body FROM workchat_messages m WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message
-      FROM workchats w LEFT JOIN workchat_participants p ON p.workchat_id=w.id
-      WHERE w.employer_user_id=? OR p.user_id=? ORDER BY COALESCE(w.last_message_at,w.created_at) DESC,w.id DESC`,[req.user.id,req.user.id,req.user.id,req.user.id]);
+      FROM workchats w
+      WHERE w.employer_user_id=? OR EXISTS(SELECT 1 FROM workchat_participants p WHERE p.workchat_id=w.id AND p.user_id=?) ORDER BY COALESCE(w.last_message_at,w.created_at) DESC,w.id DESC`,[req.user.id,req.user.id,req.user.id,req.user.id]);
     const ids=rows.map(x=>Number(x.id));let members={};
     if(ids.length){const [ps]=await db.query(`SELECT p.workchat_id,u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture FROM workchat_participants p JOIN users u ON u.id=p.user_id WHERE p.workchat_id IN (${ids.map(()=>'?').join(',')}) ORDER BY p.added_at`,ids);
       for(const p of ps)(members[p.workchat_id] ||= []).push({id:Number(p.id),name:[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email,email:p.email,role:p.role,profile_picture:p.profile_picture});}
