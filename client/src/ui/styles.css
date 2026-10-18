@@ -3167,3 +3167,68 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .worker-direct-inbox{margin-top:18px}
 .worker-direct-conversation-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 @media(max-width:760px){.direct-inbox-layout{grid-template-columns:minmax(0,1fr)}.worker-direct-conversation-list{grid-template-columns:minmax(0,1fr)}.direct-message-compose{flex-direction:column;align-items:stretch}.direct-message-compose button{align-self:flex-end}.inbox-worker-search-result{align-items:flex-start;flex-direction:column}}
+
+
+/* Mobile worker layout: keep the five primary destinations fixed while the page content scrolls independently. */
+@media (max-width:760px){
+  .app.worker{
+    height:100vh;
+    height:100dvh;
+    min-height:0;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    padding-bottom:0;
+  }
+  .app.worker .sidebar{
+    position:relative;
+    inset:auto;
+    flex:0 0 auto;
+    z-index:2;
+  }
+  .app.worker main{
+    position:relative;
+    flex:1 1 auto;
+    width:100%;
+    min-width:0;
+    min-height:0;
+    height:auto;
+    max-height:100%;
+    margin:0;
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch;
+    padding-top:18px;
+    padding-bottom:calc(104px + env(safe-area-inset-bottom));
+    box-sizing:border-box;
+  }
+  .app.worker .worker-bottom-nav{
+    position:fixed;
+    z-index:1000;
+    left:0;
+    right:0;
+    bottom:0;
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    padding-top:7px;
+    padding-bottom:calc(7px + env(safe-area-inset-bottom));
+    background:#10120f;
+    border-top:1px solid #2a3024;
+    box-shadow:0 -8px 24px #0005;
+    transform:translateZ(0);
+  }
+  .app.worker .worker-bottom-nav button{
+    min-width:0;
+    min-height:52px;
+    padding:5px 2px;
+    gap:4px;
+  }
+  .app.worker .worker-bottom-nav button span{font-size:19px}
+  .app.worker .worker-bottom-nav button small{
+    display:block;
+    font-size:10px;
+    line-height:1.2;
+    white-space:nowrap;
+  }
+}
