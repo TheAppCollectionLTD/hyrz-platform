@@ -4211,3 +4211,48 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app main .overline,.app main .section-label{
  color:#515b6d!important;
 }
+
+
+/* Hyrz typography rule: never use green for text. Keep green out of all text states. */
+.app,.app *{
+ --hyrz-text-primary:#17243b;
+ --hyrz-text-secondary:#515b6d;
+ --hyrz-text-on-dark:#fffdf9;
+}
+.app .brand span,.app .green,.app .live,
+.app .sidebar nav button.selected,.app .sidebar nav button:hover,
+.app .tag,.app .eyebrow,.app .section-label,.app .kicker,
+.app .success,.app .success-badge,.app .success *,
+.app .success-badge *, .app .status-success,
+.app .status-success *{
+ color:#17243b!important;
+}
+.app main h1,.app main h2,.app main h3,.app main h4,
+.app main p,.app main label,.app main li,.app main small,
+.app main strong,.app main span,.app main a,
+.app .panel *,.app .card *,.app .section-card *,.app .dashboard-card *{
+ text-decoration-color:currentColor;
+}
+.app main .muted,.app main .hint,.app main .eyebrow,
+.app main .tag,.app main .meta,.app main .help-text,
+.app main .subtitle,.app main .description{
+ color:#515b6d!important;
+}
+.app .sidebar,.app .sidebar *,.app .sidebar nav button.selected,
+.app .sidebar nav button:hover{
+ color:#fffdf9!important;
+}
+.app .sidebar nav button.selected,.app .sidebar nav button:hover{
+ color:#f2b84b!important;
+}
+.app button.primary,.app .primary,.app .btn-primary,
+.app button.primary *,.app .primary *{
+ color:#17243b!important;
+}
+.app .success,.app .success-badge,.app .status-success{
+ background:#f8e7c6!important;border-color:#e9c878!important;
+}
+.app .success,.app .success-badge,.app .status-success,
+.app .success *,.app .success-badge *,.app .status-success *{
+ color:#75501a!important;
+}
