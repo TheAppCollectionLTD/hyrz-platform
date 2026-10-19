@@ -205,6 +205,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     const [blocked]=await db.execute("SELECT id FROM blocked_identifiers WHERE identifier_type='company_number' AND identifier_hash=? LIMIT 1",[hashIdentifier(normalizedCompanyNumber)]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
     if (blocked.length) return res.status(403).json({error:'This company registration number cannot be used to create a hyrz account. Please contact support if you believe this is an error.'});
   }
+  await ensureSignupTermsColumns;
   const rawToken = crypto.randomBytes(32).toString('hex');
   const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
 
@@ -727,7 +728,7 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
    return res.status(409).json({error:'Already applied'});
  }
  try {
- const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences,requested_hourly_rate,rate_message,rate_decision,contract_accepted_at,contract_snapshot) VALUES(?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,requestedRate===null?null:'pending',contractSnapshot]);
+ const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences,requested_hourly_rate,rate_message,rate_decision,contract_accepted_at,contract_snapshot) VALUES(?,?,?,?,?,?,?,UTC_TIMESTAMP(),?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,requestedRate===null?null:'pending',contractSnapshot]);
  res.status(201).json({id:r.insertId,status:nextStatus});
  }catch(e){if(e.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});throw e;}
 }));
