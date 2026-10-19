@@ -95,7 +95,7 @@ const [shift,setShift]=useState({title:'',description:'',shiftType:localStorage.
    return()=>{document.removeEventListener('pointerdown',closeHowWorkOnOutsidePointer);document.removeEventListener('keydown',closeHowWorkOnEscape)};
  },[showHowItWorks]);
 
- useEffect(()=>{if(page==='post')setError('')},[page]);
+ useEffect(()=>{if(page==='post'){setError('');setNotice('')}},[page]);
 
  // Close the searchable role list when the user clicks outside it or presses Escape.
  useEffect(() => {
