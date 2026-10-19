@@ -5552,3 +5552,26 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .public-contact-success{padding:12px 0}
 .public-contact-success p{color:var(--muted,#7d8792)}
 @media(max-width:600px){.public-footer-simple{grid-template-columns:1fr;gap:22px}.public-contact-modal{padding:20px}.public-contact-backdrop{padding:12px}}
+
+
+/* Signup consent and shift-contract review */
+.hyrz-toggle{appearance:none;-webkit-appearance:none;position:relative;display:inline-flex;align-items:center;flex:0 0 42px;width:42px;height:24px;padding:3px;border:0;border-radius:999px;background:#c8cbc4;cursor:pointer;transition:background .18s ease;vertical-align:middle}
+.hyrz-toggle>span{display:block;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0002;transition:transform .18s ease}
+.hyrz-toggle.on{background:#263a24}
+.hyrz-toggle.on>span{transform:translateX(18px)}
+.hyrz-toggle:focus-visible{outline:3px solid #e9a93f;outline-offset:3px}
+.signup-terms-row{display:flex;align-items:center;gap:12px;margin:18px 0 14px;padding:13px 14px;border:1px solid var(--border,#e3d8c8);border-radius:10px;background:#fffdf9;line-height:1.45}
+.inline-link{display:inline;padding:0;border:0;background:none;color:#b95740;text-decoration:underline;font:inherit;font-weight:700;cursor:pointer}
+.shift-contract-preview{margin:12px 0;padding:12px 14px;border:1px solid #e3d8c8;border-radius:10px;background:#fffdf8}
+.shift-contract-preview summary{cursor:pointer;font-weight:700;color:#24334a}
+.shift-contract-document{margin:14px 0;padding:16px;border:1px solid #e4dccd;border-radius:10px;background:#fffdf8;line-height:1.5;max-height:44vh;overflow:auto}
+.shift-contract-document h3{margin:0 0 12px}
+.shift-contract-document p{margin:8px 0}
+.shift-contract-document ul{margin:4px 0 10px;padding-left:22px}
+.shift-contract-document small{display:block;margin-top:12px;color:#686f69}
+.shift-contract-agreement{display:flex;align-items:center;gap:12px;margin:18px 0 8px;padding:14px;border:1px solid #c7d5b6;border-radius:10px;background:#f0f6e8;line-height:1.45}
+.shift-contract-agreement a{color:#263a24;font-weight:700;text-decoration:underline}
+.shift-confirm-checklist label{align-items:center;justify-content:space-between}
+.shift-confirm-checklist label>span{flex:1}
+.terms-modal{max-height:85vh;overflow:auto}
+@media(max-width:560px){.shift-contract-document{padding:12px}.signup-terms-row{align-items:flex-start}}
