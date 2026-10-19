@@ -5531,3 +5531,24 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .app.employer .hyrz-admin-message-copy small{color:#7c8674}
 .app.employer .hyrz-admin-message-copy>span{overflow:hidden;color:#65705f;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:600px){.app.employer .inbox-chat-overlay{padding:10px}.app.employer .inbox-chatbox{max-height:90vh;padding:14px}.app.employer .inbox-chatbox .direct-thread-heading{align-items:flex-start;flex-direction:column}.app.employer .inbox-chatbox .direct-message-compose{flex-direction:column;align-items:stretch}.app.employer .hyrz-admin-inbox-intro{align-items:flex-start;flex-direction:column}.app.employer .employer-inbox-tabs button{font-size:.85rem}}
+
+
+/* Compact public footer and public contact form */
+.public-footer-simple{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;padding:34px 0 28px}
+.public-footer-simple .public-footer-column{gap:12px}
+.public-home-footer .public-footer-bottom{justify-content:flex-start;padding-top:18px}
+.public-contact-backdrop{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,19,34,.72);backdrop-filter:blur(4px)}
+.public-contact-modal{width:min(100%,540px);max-height:min(90vh,780px);overflow:auto;padding:28px;border:1px solid var(--border,#e3d8c8);border-radius:18px;background:var(--surface,#fffdf9);box-shadow:0 24px 80px #0004;color:var(--hyrz-ink,#17253d)}
+.public-contact-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:22px}
+.public-contact-heading h2{margin:7px 0;font-size:27px}
+.public-contact-heading p{margin:0;color:var(--muted,#7d8792);line-height:1.5}
+.public-contact-heading>.textbutton{flex:0 0 auto}
+.public-contact-form{display:grid;gap:10px}
+.public-contact-form label{font-size:13px;font-weight:750}
+.public-contact-form input,.public-contact-form textarea{box-sizing:border-box;width:100%;padding:12px 13px;border:1px solid var(--border,#ded4c6);border-radius:9px;background:#fff;color:var(--hyrz-ink,#17253d);font:inherit}
+.public-contact-form textarea{resize:vertical;min-height:140px}
+.public-contact-form .primary{margin-top:8px;min-height:44px}
+.public-contact-error{margin:0;color:#b42318;font-size:13px}
+.public-contact-success{padding:12px 0}
+.public-contact-success p{color:var(--muted,#7d8792)}
+@media(max-width:600px){.public-footer-simple{grid-template-columns:1fr;gap:22px}.public-contact-modal{padding:20px}.public-contact-backdrop{padding:12px}}
