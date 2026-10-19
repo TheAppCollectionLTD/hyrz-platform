@@ -953,6 +953,39 @@ app.patch('/api/admin/users/:id/status',auth,allow('admin'),asyncRoute(async(req
  const status=req.body.status;if(!['active','blocked'].includes(status))return res.status(400).json({error:'Invalid status'});
  await db.execute('UPDATE users SET status=? WHERE id=?',[status,req.params.id]);await audit(req,'user.status_changed','user',req.params.id,{status});res.json({ok:true});
 }));
+
+const publicContactLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 5, standardHeaders: true, legacyHeaders: false });
+app.post('/api/public-contact', publicContactLimiter, asyncRoute(async (req, res) => {
+  const email = String(req.body?.email || '').trim().toLowerCase();
+  const message = String(req.body?.message || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+  if (message.length < 5 || message.length > 5000) {
+    return res.status(400).json({ error: 'Your message must be between 5 and 5000 characters.' });
+  }
+  if (!resend || !process.env.EMAIL_FROM) {
+    return res.status(503).json({ error: 'The contact form is temporarily unavailable. Please try again later.' });
+  }
+  const [admins] = await db.execute("SELECT email FROM users WHERE role='admin' AND status='active' AND email IS NOT NULL");
+  const recipients = admins.map(admin => admin.email).filter(Boolean);
+  if (!recipients.length) {
+    return res.status(503).json({ error: 'Hyrz support is temporarily unavailable. Please try again later.' });
+  }
+  const result = await resend.emails.send({
+    from: process.env.EMAIL_FROM,
+    to: recipients,
+    replyTo: email,
+    subject: 'New public Hyrz contact form message',
+    text: 'From: ' + email + '\\n\\nMessage:\\n' + message
+  });
+  if (result?.error) {
+    console.error('Public contact email failed:', result.error.message || result.error);
+    return res.status(502).json({ error: 'We could not send your message right now. Please try again.' });
+  }
+  res.status(201).json({ message: 'Your message has been sent to Hyrz support.' });
+}));
+
 app.use((err,req,res,next)=>{console.error(err);res.status(err.status||500).json({error:err.status?err.message:'Internal server error'});});
 const VALID_JOB_ROLES = new Set(require('../../shared/job-roles.json').flatMap(([, roles]) => roles));
 const port=Number(process.env.PORT||4000);
