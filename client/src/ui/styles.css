@@ -5440,3 +5440,24 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .private-offer-worker-copy{order:2}
 .private-offer-favourite{order:3}
 @media(prefers-reduced-motion:reduce){input[type="checkbox"],input[type="checkbox"]::after{transition:none}}
+
+
+/* Auto-accept rules in the shift creator */
+.shift-auto-accept-panel{margin-top:.25rem;padding:1.1rem;border:1px solid #e2d8c7;border-radius:12px;background:#fbf8f1}
+.shift-auto-accept-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.shift-auto-accept-heading h3{margin:.25rem 0 .35rem;color:#17243a}
+.shift-auto-accept-heading p,.shift-auto-accept-options>p{margin:.25rem 0 .8rem;color:#7c8a94}
+.shift-auto-accept-heading .template-opt-in-button{flex-shrink:0}
+.shift-auto-accept-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-top:.85rem}
+.shift-auto-accept-options>p{grid-column:1/-1;margin-bottom:.1rem}
+.shift-auto-accept-rule{display:flex;align-items:center;gap:.75rem;width:100%;min-height:76px;padding:.8rem;text-align:left;border:1px solid #e4dfd4;border-radius:10px;background:#fffdf9;color:#17243a;cursor:pointer}
+.shift-auto-accept-rule.is-on{border-color:#c3d9a8;background:#f7faef}
+.shift-auto-accept-track{width:38px;height:22px;flex:0 0 38px;padding:3px;display:inline-flex;align-items:center;box-sizing:border-box;border-radius:999px;background:#cbd0c6;transition:background .15s}
+.shift-auto-accept-track span{width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0002;transition:transform .15s}
+.shift-auto-accept-track.is-on{background:#a7e75d}
+.shift-auto-accept-track.is-on span{transform:translateX(16px)}
+.shift-auto-accept-rule-copy{display:flex;flex-direction:column;gap:.25rem}
+.shift-auto-accept-rule-copy strong{font-size:.9rem}
+.shift-auto-accept-rule-copy small{color:#7c8a94;line-height:1.4}
+.shift-auto-accept-panel>.payment-integration-notice{margin:.8rem 0 0}
+@media(max-width:650px){.shift-auto-accept-heading{align-items:flex-start;flex-direction:column}.shift-auto-accept-options{grid-template-columns:1fr}}
