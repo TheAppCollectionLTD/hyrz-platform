@@ -5487,3 +5487,10 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .rate-counteroffer-review.applicant-rate-counteroffer small{display:block;margin-top:8px;color:#7d4a45;font-weight:600}
 @media(prefers-reduced-motion:no-preference){.rate-counteroffer-review.applicant-rate-counteroffer{animation:counterofferAttention .45s ease-out 1}}
 @keyframes counterofferAttention{from{box-shadow:0 0 0 4px rgba(185,54,45,.18)}to{box-shadow:0 3px 10px rgba(145,42,32,.10)}}
+
+
+/* Worker count on available shift cards */
+.shift-workers-needed{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap;margin-top:12px;padding:9px 12px;border:1px solid #dfe7d5;border-radius:9px;background:#f5f8ef;color:#34442a}
+.shift-workers-needed>strong{font-size:1.15rem;font-weight:800;color:#293d20}
+.shift-workers-needed>span{font-size:.82rem;font-weight:650}
+.shift-workers-needed .shift-workers-hired{margin-left:auto;color:#697661;font-weight:500}
