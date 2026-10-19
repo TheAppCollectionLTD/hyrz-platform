@@ -65,6 +65,8 @@ function createTable(sql, label) {
   return enqueueSchemaChange(async () => { await db.query(sql); }, label);
 }
 const ensureProfilePictureColumn = addColumn('users','profile_picture LONGTEXT NULL','profile pictures');
+const ensureSignupTermsColumns = (async()=>{await addColumn('users','terms_accepted_at DATETIME NULL','signup terms acceptance timestamp');await addColumn('users',"terms_version VARCHAR(40) NULL",'signup terms version');})();
+const ensureShiftContractColumns = (async()=>{await addColumn('applications','contract_accepted_at DATETIME NULL','shift contract acceptance timestamp');await addColumn('applications','contract_snapshot LONGTEXT NULL','accepted shift contract snapshot');})();
 const ensureShiftPublishingColumns = (async()=>{await addColumn('shifts',"shift_type VARCHAR(80) NOT NULL DEFAULT 'hospitality'",'shift type');await addColumn('shifts','requirements JSON NULL','shift requirements');await addColumn('shifts','perks JSON NULL','shift perks');await addColumn('shifts','preferences JSON NULL','shift preferences');})();
 const ensureApplicationCancellationFee = addColumn('applications','cancellation_fee DECIMAL(10,2) NOT NULL DEFAULT 0','application cancellation fee');
 const ensureApplicationPreferencesColumn = addColumn('applications','confirmed_preferences JSON NULL','confirmed applicant preferences');
@@ -156,6 +158,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     businessName, companyNumber, companyRole, postcode, businessAddress, businessCity, nationalInsuranceNumber, workerPermitNumber, confirmPassword
   } = req.body;
 
+  if (req.body?.termsAccepted !== true || req.body?.termsVersion !== '2026-10-19') return res.status(400).json({error:'You must agree to the current Hyrz Terms & Conditions before creating an account.'});
+
   if (!email || !/^\S+@\S+\.\S+$/.test(email) ||
       typeof password !== 'string' || password.length < 12) {
     return res.status(400).json({
@@ -210,14 +214,15 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     await conn.beginTransaction();
 
     const [result] = await conn.execute(
-      'INSERT INTO users (email,password_hash,role,first_name,last_name,email_verification_token_hash,email_verification_expires_at) VALUES (?,?,?,?,?,?,DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE))',
+      'INSERT INTO users (email,password_hash,role,first_name,last_name,email_verification_token_hash,email_verification_expires_at,terms_accepted_at,terms_version) VALUES (?,?,?,?,?,?,DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE),UTC_TIMESTAMP(),?)',
       [
         normalizedEmail,
         await bcrypt.hash(password, 12),
         role,
         firstName,
         lastName,
-        tokenHash
+        tokenHash,
+        '2026-10-19'
       ]
     );
 
@@ -700,7 +705,9 @@ app.get('/api/shifts/:id',auth,asyncRoute(async(req,res)=>{
  if(!rows.length)return res.status(404).json({error:'Shift not found'});res.json({shift:rows[0]});
 }));
 app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
- await ensureShiftPublishingColumns; await ensureApplicationPreferencesColumn; await ensureApplicationRateNegotiation;
+ await ensureShiftPublishingColumns; await ensureApplicationPreferencesColumn; await ensureApplicationRateNegotiation; await ensureShiftContractColumns;
+ if(req.body?.contractAccepted!==true)return res.status(400).json({error:'You must agree to the shift contract before applying.'});
+ let contractSnapshot='';try{const parsed=JSON.parse(String(req.body?.contractSnapshot||''));if(!parsed||parsed.version!=='hyrz-shift-contract-v1')throw new Error();contractSnapshot=JSON.stringify(parsed);if(contractSnapshot.length>20000)throw new Error();}catch{return res.status(400).json({error:'A valid shift contract must be reviewed and accepted before applying.'});}
  const [s]=await db.execute('SELECT id,status,auto_approve,requirements,preferences,hourly_pay FROM shifts WHERE id=?',[req.params.id]);
  if(!s.length||s[0].status!=='open')return res.status(404).json({error:'Shift not available'});
  const requiredItems=Array.isArray(s[0].requirements)?s[0].requirements:(typeof s[0].requirements==='string'?JSON.parse(s[0].requirements||'[]'):[]);
@@ -714,13 +721,13 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  const [existing]=await db.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1',[req.params.id,req.user.id]);
  if(existing.length){
    if(['withdrawn','cancelled'].includes(existing[0].status)){
-     await db.execute('UPDATE applications SET status=?,cancellation_fee=0,confirmed_preferences=?,requested_hourly_rate=?,rate_message=?,rate_decision=?,negotiated_hourly_rate=NULL WHERE id=?',[nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,requestedRate===null?null:'pending',existing[0].id]);
+     await db.execute('UPDATE applications SET status=?,cancellation_fee=0,confirmed_preferences=?,requested_hourly_rate=?,rate_message=?,rate_decision=?,negotiated_hourly_rate=NULL,contract_accepted_at=UTC_TIMESTAMP(),contract_snapshot=? WHERE id=?',[nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,requestedRate===null?null:'pending',contractSnapshot,existing[0].id]);
      return res.status(200).json({id:existing[0].id,status:nextStatus});
    }
    return res.status(409).json({error:'Already applied'});
  }
  try {
- const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences,requested_hourly_rate,rate_message,rate_decision) VALUES(?,?,?,?,?,?,?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,requestedRate===null?null:'pending']);
+ const [r]=await db.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences,requested_hourly_rate,rate_message,rate_decision,contract_accepted_at,contract_snapshot) VALUES(?,?,?,?,?,?,?,?,UTC_TIMESTAMP(),?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,requestedRate===null?null:'pending',contractSnapshot]);
  res.status(201).json({id:r.insertId,status:nextStatus});
  }catch(e){if(e.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});throw e;}
 }));
