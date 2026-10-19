@@ -5477,3 +5477,13 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .worker-three-strikes-indicators span.is-used{background:#c95c4d}
 .worker-three-strikes-note{grid-column:1/-1;margin:0;color:#9a9c91;font-size:.75rem;line-height:1.4}
 @media(max-width:520px){.worker-three-strikes-card{padding:1rem;gap:.65rem}.worker-three-strikes-copy p{font-size:.88rem}.worker-three-strikes-count>strong{font-size:1.4rem}}
+
+
+/* Make requested-rate counter-offers unmistakable during employer review */
+.rate-counteroffer-review.applicant-rate-counteroffer{position:relative;margin-top:14px;padding:16px 18px 15px 20px;border:2px solid #c64f42;border-left:7px solid #b9362d;border-radius:12px;background:#fff0ed;box-shadow:0 3px 10px rgba(145,42,32,.10);color:#6d211c}
+.rate-counteroffer-review.applicant-rate-counteroffer:before{content:"RATE COUNTER-OFFER";display:inline-flex;align-items:center;margin:0 0 9px;padding:4px 8px;border-radius:5px;background:#b9362d;color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.09em}
+.rate-counteroffer-review.applicant-rate-counteroffer>strong{display:block;font-size:1.08rem;line-height:1.4;color:#7f211b}
+.rate-counteroffer-review.applicant-rate-counteroffer p{margin:9px 0;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.78);color:#4e302d}
+.rate-counteroffer-review.applicant-rate-counteroffer small{display:block;margin-top:8px;color:#7d4a45;font-weight:600}
+@media(prefers-reduced-motion:no-preference){.rate-counteroffer-review.applicant-rate-counteroffer{animation:counterofferAttention .45s ease-out 1}}
+@keyframes counterofferAttention{from{box-shadow:0 0 0 4px rgba(185,54,45,.18)}to{box-shadow:0 3px 10px rgba(145,42,32,.10)}}
