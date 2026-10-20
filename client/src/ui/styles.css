@@ -5638,3 +5638,28 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .app.worker .worker-inbox-panel .inbox-section-tabs>button{min-width:92px!important;min-height:38px!important;padding:10px 14px!important;background:#20241d!important;color:#f1f4eb!important;border:1px solid #3a4232!important;border-radius:8px!important}
 .app.worker .worker-inbox-panel .inbox-section-tabs>button.active{background:#b5f34a!important;border-color:#b5f34a!important;color:#17200e!important}
 @media(max-width:760px){.app.worker>main{padding:20px 16px 100px}.app.worker .worker-bottom-nav{gap:2px;padding-left:8px;padding-right:8px}.app.worker main:not(.page-dashboard) .job-tabs>button{min-width:0}}
+
+
+/* Invoices and checkouts use the same light compact subsection buttons as Employer Favourites. */
+.app.employer .employer-checkouts-panel .checkout-section-cards>button,
+.app.employer .employer-invoices-panel .checkout-section-cards>button,
+.app.worker .checkout-section-cards>button{
+ display:inline-flex!important;flex:0 1 auto!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;min-width:0!important;min-height:0!important;height:auto!important;aspect-ratio:auto!important;
+ padding:10px 16px!important;margin:0!important;background:#fff!important;color:#171916!important;
+ border:1px solid #e5e8e0!important;border-radius:8px!important;font-size:13px!important;font-weight:600!important;
+ line-height:1.3!important;text-align:center!important;white-space:normal!important;box-shadow:none!important;transform:none!important;
+}
+.app.employer .employer-checkouts-panel .checkout-section-cards>button:hover,
+.app.employer .employer-invoices-panel .checkout-section-cards>button:hover,
+.app.worker .checkout-section-cards>button:hover{
+ background:#f4f6ef!important;border-color:#cbd2c1!important;color:#171916!important;box-shadow:none!important;transform:none!important;
+}
+.app.employer .employer-checkouts-panel .checkout-section-cards>button.selected,
+.app.employer .employer-invoices-panel .checkout-section-cards>button.selected,
+.app.worker .checkout-section-cards>button.selected{
+ background:#edf6df!important;border-color:#d8e8c0!important;color:#35551a!important;box-shadow:none!important;
+}
+.app.employer .employer-checkouts-panel .checkout-section-cards>button:focus-visible,
+.app.employer .employer-invoices-panel .checkout-section-cards>button:focus-visible,
+.app.worker .checkout-section-cards>button:focus-visible{outline:2px solid #c6d8a8!important;outline-offset:3px}
