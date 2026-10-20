@@ -768,7 +768,7 @@ app.delete('/api/applications/:id',auth,allow('employer'),requireVerification,as
 app.post('/api/applications/:id/cancel',auth,allow('worker'),asyncRoute(async(req,res)=>{
  const [rows]=await db.execute("SELECT a.id,a.status,a.shift_id,s.starts_at FROM applications a JOIN shifts s ON s.id=a.shift_id WHERE a.id=? AND a.worker_id=? AND a.status IN ('pending','approved')",[req.params.id,req.user.id]);
  if(!rows.length)return res.status(404).json({error:'Active application not found'});
- const a=rows[0],within24Hours=(new Date(a.starts_at).getTime()-Date.now())<=24*60*60*1000;
+ const a=rows[0],timeUntilStart=new Date(a.starts_at).getTime()-Date.now(),within24Hours=timeUntilStart>=0&&timeUntilStart<=24*60*60*1000;
  if(a.status==='approved'&&within24Hours&&req.body?.confirmStrike!==true)return res.status(409).json({error:'Cancelling an approved shift within 24 hours will give you a strike. Do you want to continue?',strike:true});
  await db.execute("UPDATE applications SET status='withdrawn' WHERE id=? AND worker_id=?",[a.id,req.user.id]);
  if(a.status==='approved'&&within24Hours){
