@@ -3,6 +3,16 @@ import JOB_ROLE_GROUPS from '../../../shared/job-roles.json';
 const JOB_ROLES=JOB_ROLE_GROUPS.flatMap(([,roles])=>roles);
 const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n||0));
 export default function App(){
+ useEffect(()=>{
+  // Remove only a standalone brace accidentally rendered as visible text.
+  const root=document.getElementById('root');
+  if(!root)return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const stray=[];let node;
+  while((node=walker.nextNode()))if(node.nodeValue.trim()==='}')stray.push(node);
+  stray.forEach(textNode=>textNode.remove());
+ },[]);
+
 
  const [user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[shiftValidation,setShiftValidation]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
  const [pageHistory,setPageHistory]=useState([]);
