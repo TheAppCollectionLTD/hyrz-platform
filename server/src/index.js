@@ -387,6 +387,11 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
 app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{
  await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns]);
  const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
+ if(u[0]?.role==='worker'){
+  await db.query("CREATE TABLE IF NOT EXISTS worker_strikes (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,worker_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,shift_id BIGINT UNSIGNED NOT NULL,reason VARCHAR(255) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uniq_worker_strike_application (application_id))");
+  const [[strikeCount]]=await db.execute('SELECT COUNT(*) AS strikes FROM worker_strikes WHERE worker_id=?',[req.user.id]);
+  u[0].strikes=Math.min(3,Number(strikeCount?.strikes||0));
+ }
  res.json({user:u[0]});
 }));
 app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
@@ -773,6 +778,19 @@ app.post('/api/applications/:id/cancel',auth,allow('worker'),asyncRoute(async(re
  await audit(req,'application.cancelled','application',req.params.id,{shiftId:a.shift_id,wasApproved:a.status==='approved',within24Hours,strikeApplied:a.status==='approved'&&within24Hours});
  res.json({ok:true,strike:a.status==='approved'&&within24Hours});
 }));
+app.post('/api/applications/:id/no-show',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
+ await db.query("CREATE TABLE IF NOT EXISTS worker_strikes (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,worker_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,shift_id BIGINT UNSIGNED NOT NULL,reason VARCHAR(255) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uniq_worker_strike_application (application_id))");
+ const [rows]=await db.execute("SELECT a.id,a.worker_id,a.shift_id,a.status,s.ends_at FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=? AND b.owner_user_id=?",[req.params.id,req.user.id]);
+ if(!rows.length)return res.status(404).json({error:'Application not found'});
+ const a=rows[0];
+ if(a.status!=='approved')return res.status(409).json({error:'Only a worker confirmed for this shift can be recorded as a no-show.'});
+ if(!a.ends_at||new Date(a.ends_at).getTime()>Date.now())return res.status(409).json({error:'A no-show can only be recorded after the scheduled shift has ended.'});
+ const [insert]=await db.execute("INSERT IGNORE INTO worker_strikes(worker_id,application_id,shift_id,reason) VALUES(?,?,?,'Worker did not attend the confirmed shift')",[a.worker_id,a.id,a.shift_id]);
+ await audit(req,'worker.no_show_recorded','application',a.id,{shiftId:a.shift_id,strikeApplied:insert.affectedRows===1});
+ const [[count]]=await db.execute('SELECT COUNT(*) AS strikes FROM worker_strikes WHERE worker_id=?',[a.worker_id]);
+ res.json({ok:true,strikeApplied:insert.affectedRows===1,strikes:Math.min(3,Number(count?.strikes||0))});
+}));
+
 app.post('/api/checkouts',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
  const {shiftId,actualStart,actualEnd,breakMinutes=0,comment=''}=req.body;
  const [a]=await db.execute("SELECT a.id,s.hourly_pay FROM applications a JOIN shifts s ON s.id=a.shift_id WHERE a.shift_id=? AND a.worker_id=? AND a.status='approved'",[shiftId,req.user.id]);
