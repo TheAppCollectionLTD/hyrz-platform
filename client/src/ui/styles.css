@@ -5731,3 +5731,79 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .app.worker main:not(.page-dashboard) .job-tabs>button.selected{
  background:#edf6df!important;border-color:#d8e8c0!important;color:#35551a!important;
 }
+
+
+/* Hyrz visual polish: warmer canvas, richer accent colours and clearer semantic status colours. */
+:root{
+ --hyrz-ink:#202b3c;
+ --hyrz-muted:#697586;
+ --hyrz-canvas:#f5f7fb;
+ --hyrz-surface:#ffffff;
+ --hyrz-line:#e1e7ef;
+ --hyrz-lime:#c3f36b;
+ --hyrz-lime-ink:#30451a;
+ --hyrz-blue:#3559a8;
+ --hyrz-blue-soft:#edf3ff;
+ --hyrz-teal:#147d78;
+ --hyrz-teal-soft:#e8f7f4;
+ --hyrz-amber:#a85b12;
+ --hyrz-amber-soft:#fff4df;
+ --hyrz-red:#b93838;
+ --hyrz-red-soft:#fff0f0;
+ --hyrz-green:#287849;
+ --hyrz-green-soft:#eaf7ee;
+}
+body{background:var(--hyrz-canvas);color:var(--hyrz-ink)}
+.app.worker,.app.worker>main{background:var(--hyrz-canvas);color:var(--hyrz-ink)}
+.app.worker main .panel,.app.employer main .panel,.panel{
+ border-color:var(--hyrz-line);
+ box-shadow:0 8px 24px rgba(32,43,60,.045);
+}
+.app.worker main .panel p,.app.employer main .panel p{color:var(--hyrz-muted)}
+h1,h2,h3,h4,.panel h2,.panel h3{color:var(--hyrz-ink)}
+.eyebrow{color:#778398}
+.primary{background:var(--hyrz-lime);color:#253516;box-shadow:0 2px 0 rgba(48,69,26,.06)}
+.primary:hover{background:#b3e957}
+.secondary{background:#edf1f6;color:#344054;border:1px solid #e0e6ee}
+.secondary:hover{background:#e4eaf2}
+input:focus,select:focus,textarea:focus{outline:3px solid rgba(53,89,168,.15);border-color:#7896d5!important}
+button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outline-offset:2px}
+.app.worker .worker-bottom-nav{border-color:var(--hyrz-line);box-shadow:0 -8px 28px rgba(32,43,60,.055)}
+.app.worker .worker-bottom-nav button.active,.app.worker .worker-bottom-nav button:hover{background:#edf5df;color:#426b20}
+.app.worker main:not(.page-dashboard) .job-tabs>button,
+.app.employer main:not(.page-dashboard) .job-tabs>button,
+.app.worker main:not(.page-dashboard) .checkout-section-cards>button,
+.app.employer main:not(.page-dashboard) .checkout-section-cards>button{
+ border-color:#dfe5ed!important;background:#fff!important;color:#354052!important;
+ transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease;
+}
+.app.worker main:not(.page-dashboard) .job-tabs>button:hover,
+.app.employer main:not(.page-dashboard) .job-tabs>button:hover,
+.app.worker main:not(.page-dashboard) .checkout-section-cards>button:hover,
+.app.employer main:not(.page-dashboard) .checkout-section-cards>button:hover{
+ background:#f1f5fb!important;border-color:#b9c9e5!important;color:#294b8d!important;transform:translateY(-1px);
+}
+.app.worker main:not(.page-dashboard) .job-tabs>button.active,
+.app.worker main:not(.page-dashboard) .job-tabs>button.selected,
+.app.employer main:not(.page-dashboard) .job-tabs>button.active,
+.app.employer main:not(.page-dashboard) .job-tabs>button.selected,
+.app.worker main:not(.page-dashboard) .checkout-section-cards>button.selected,
+.app.employer main:not(.page-dashboard) .checkout-section-cards>button.selected{
+ background:#edf5df!important;border-color:#c9e5a5!important;color:#385a20!important;
+}
+.app.worker .worker-inbox-message{border-color:var(--hyrz-line)}
+.app.worker .worker-inbox-message:hover{background:#f8faff}
+.worker-three-strikes-indicators span.is-clear{color:var(--hyrz-green);background:var(--hyrz-green-soft)}
+.worker-three-strikes-indicators span.is-used{color:var(--hyrz-red);background:var(--hyrz-red-soft)}
+/* Semantic feedback colours are consistent and restrained across both workspaces. */
+.notice,.alert,.error,.form-error,[role="alert"]{border-radius:10px}
+.error,.form-error,.shift-publish-error{color:var(--hyrz-red)}
+.success,.status-success,.badge-success{color:var(--hyrz-green)}
+.warning,.status-warning,.badge-warning{color:var(--hyrz-amber)}
+.info,.status-info,.badge-info{color:var(--hyrz-blue)}
+.status,.pill{border-color:var(--hyrz-line)}
+.status.approved,.status.accepted,.status.paid,.status.filled,.status-success,.badge-success{background:var(--hyrz-green-soft);color:var(--hyrz-green);border-color:#ccebd6}
+.status.pending,.status.submitted,.status.open,.status-warning,.badge-warning{background:var(--hyrz-amber-soft);color:var(--hyrz-amber);border-color:#f4dfb7}
+.status.rejected,.status.declined,.status.cancelled,.status.disputed,.status-danger,.badge-danger{background:var(--hyrz-red-soft);color:var(--hyrz-red);border-color:#f3cccc}
+.status.info,.status-info,.badge-info{background:var(--hyrz-blue-soft);color:var(--hyrz-blue);border-color:#d5e1fb}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
