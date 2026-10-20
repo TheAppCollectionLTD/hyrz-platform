@@ -5575,3 +5575,38 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .shift-confirm-checklist label>span{flex:1}
 .terms-modal{max-height:85vh;overflow:auto}
 @media(max-width:560px){.shift-contract-document{padding:12px}.signup-terms-row{align-items:flex-start}}
+
+/* Shared employer/worker visual system: same light canvas, card surfaces, controls and subsections. */
+.worker{background:#f5f6f3;color:#171916}
+.worker main{color:#171916}
+.worker header h1{color:#171916}
+.worker .userpill{border-color:#e0e3dc;color:#34382f}
+.worker .panel,.worker .stat{background:#fff;border-color:#e2e5de;color:#171916}
+.worker .stat small,.worker .shiftmain small,.worker .row small{color:#73796d}
+.worker .shiftrow,.worker .row{border-color:#e5e7e1}
+.worker .shiftdate{background:#eef2e8;color:#3c4b2b}
+.worker .secondary{background:#f0f1ed;color:#252820;border-color:#dfe2da}
+.worker .status{background:#f0f1ed;color:#4d5149}
+.worker .status.approved{background:#eaf7d9;color:#3d611a}
+.worker .empty{color:#73796d}
+.worker footer{color:#959a90}
+.worker .eyebrow{color:#858a7f}
+.worker .sidebar{background:#10120f;color:#f4f6f1}
+.worker .sidebar nav button,.worker .sidebottom button{color:#aeb2a8}
+.worker .sidebar nav button.selected,.worker .sidebar nav button:hover{background:#252a20;color:#c5ff64}
+.worker button,.worker input,.worker select,.worker textarea{font-family:inherit}
+.worker .worker-section-links button,.worker .job-tabs-squares button{min-height:42px;padding:10px 14px;border-radius:9px;font-size:13px}
+.worker .worker-dashboard-stat{min-height:125px;padding:20px;border-radius:12px}
+.worker .worker-three-strikes-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px;margin:0 0 1rem;padding:12px 16px;border:1px solid #e2e5de;border-radius:12px;background:#fff;box-shadow:none}
+.worker .worker-three-strikes-copy .eyebrow{color:#858a7f}
+.worker .worker-three-strikes-copy h2{margin:0;font-size:15px;letter-spacing:0;color:#171916}
+.worker .worker-three-strikes-count{display:flex;flex-direction:row;align-items:baseline;gap:8px}
+.worker .worker-three-strikes-count>strong{font-size:14px;line-height:1.2;color:#171916}
+.worker .worker-three-strikes-count>strong span{font-size:12px;color:#73796d;font-weight:600}
+.worker .worker-three-strikes-count small{font-size:11px;color:#73796d}
+.worker .worker-three-strikes-indicators{display:flex;align-items:center;gap:8px;grid-column:auto;margin-left:auto}
+.worker .worker-three-strikes-indicators span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:14px;font-weight:800;line-height:1;background:transparent;color:#36813c}
+.worker .worker-three-strikes-indicators span.is-clear{color:#36813c;background:#edf7ed}
+.worker .worker-three-strikes-indicators span.is-used{color:#c93636;background:#fff0ef}
+.worker .worker-three-strikes-note{display:none}
+@media(max-width:520px){.worker .worker-three-strikes-card{padding:10px 12px}.worker .worker-three-strikes-indicators{margin-left:0}}
