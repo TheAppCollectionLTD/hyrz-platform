@@ -900,7 +900,7 @@ app.get('/api/checkouts/mine',auth,asyncRoute(async(req,res)=>{
  await ensureClockCheckoutColumns;
  if(req.user.role==='worker'){
   await db.execute(`INSERT INTO checkouts(shift_id,worker_id,actual_start,actual_end,break_minutes,worker_comment,gross_pay,platform_fee,status,is_test)
-   SELECT s.id,a.worker_id,s.starts_at,s.ends_at,0,'Automatically opened after scheduled shift end',ROUND(s.hourly_pay*GREATEST(0,TIMESTAMPDIFF(MINUTE,s.starts_at,s.ends_at))/60,2),ROUND(2*GREATEST(0,TIMESTAMPDIFF(MINUTE,s.starts_at,s.ends_at))/60,2),'open',0
+   SELECT s.id,a.worker_id,s.starts_at,s.ends_at,0,'Automatically opened after scheduled shift end',ROUND(s.hourly_pay*GREATEST(0,TIMESTAMPDIFF(MINUTE,s.starts_at,s.ends_at))/60,2),ROUND((CASE WHEN s.hourly_pay<=20 THEN 2 ELSE s.hourly_pay*0.10 END)*GREATEST(0,TIMESTAMPDIFF(MINUTE,s.starts_at,s.ends_at))/60,2),'open',0
    FROM applications a JOIN shifts s ON s.id=a.shift_id
    WHERE a.worker_id=? AND a.status='approved' AND s.ends_at<=NOW()
     AND NOT EXISTS(SELECT 1 FROM checkouts c WHERE c.shift_id=s.id AND c.worker_id=a.worker_id AND c.status IN ('open','submitted','approved','paid','completed','disputed'))`,[req.user.id]);
