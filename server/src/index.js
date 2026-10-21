@@ -75,6 +75,7 @@ const ensureUserAddressColumns = (async()=>{
   await addColumn('users','address_city VARCHAR(120) NULL','user address city');
   await addColumn('users','address_postcode VARCHAR(20) NULL','user address postcode');
 })();
+const ensureWorkerPhoneVisibilityColumn = addColumn('users','phone_visible_to_employers TINYINT(1) NOT NULL DEFAULT 0','worker phone visibility preference');
 const adminLoginNamesReady = createTable(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`,'administrator usernames');
 const ensureUniqueEmails = enqueueSchemaChange(async () => {
   const [duplicates] = await db.query("SELECT LOWER(TRIM(email)) AS normalized_email, COUNT(*) AS account_count FROM users GROUP BY LOWER(TRIM(email)) HAVING COUNT(*) > 1 LIMIT 1");
@@ -385,8 +386,8 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
 }));
 
 app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{
- await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns]);
- const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureWorkerPhoneVisibilityColumn]);
+ const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
  if(u[0]?.role==='worker'){
   await db.query("CREATE TABLE IF NOT EXISTS worker_strikes (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,worker_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,shift_id BIGINT UNSIGNED NOT NULL,reason VARCHAR(255) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uniq_worker_strike_application (application_id))");
   const [[strikeCount]]=await db.execute('SELECT COUNT(*) AS strikes FROM worker_strikes WHERE worker_id=?',[req.user.id]);
@@ -395,7 +396,7 @@ app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{
  res.json({user:u[0]});
 }));
 app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
- await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns]);
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureWorkerPhoneVisibilityColumn]);
  const firstName = String(req.body.firstName || '').trim();
  const lastName = String(req.body.lastName || '').trim();
  const phone = String(req.body.phone || '').trim();
@@ -418,7 +419,9 @@ app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
  if(req.body.addressPostcode!==undefined){updates.push('address_postcode=?');values.push(addressPostcode||null);}
  if(email!==undefined){updates.push('email=?');values.push(email);updates.push('email_verified_at=NULL');}
  if(updates.length){values.push(req.user.id);await db.execute('UPDATE users SET '+updates.join(', ')+' WHERE id=?',values);}
- const [rows] = await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
+ if(req.body.phone!==undefined){updates.push('phone=?');values.push(phone||null);}
+ if(req.user.role==='worker'&&req.body.phoneVisibleToEmployers!==undefined){updates.push('phone_visible_to_employers=?');values.push(req.body.phoneVisibleToEmployers?1:0);}
+ const [rows] = await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
  return res.json({ user: rows[0], emailVerificationRequired: email!==undefined });
 }));
 
@@ -511,7 +514,8 @@ app.put('/api/worker/availability',auth,asyncRoute(async(req,res)=>{
  res.json({ok:true,availability:{timings,minHourlyRate,minTotalPay,maxDistance,roles,shiftTypes,automatic:Boolean(req.body.automatic),employerMode,preferredEmployerIds}});
 }));
 app.get('/api/profile',auth,asyncRoute(async(req,res)=>{
- const [u]=await db.execute('SELECT id,email,role,first_name,last_name,phone FROM users WHERE id=?',[req.user.id]);
+ await ensureWorkerPhoneVisibilityColumn;
+ const [u]=await db.execute('SELECT id,email,role,first_name,last_name,phone,phone_visible_to_employers FROM users WHERE id=?',[req.user.id]);
  if(req.user.role==='worker'){const [p]=await db.execute('SELECT bio,skills,postcode,hourly_rate,right_to_work_status,availability FROM worker_profiles WHERE user_id=?',[req.user.id]);return res.json({user:u[0],profile:p[0]||{}});}
  res.json({user:u[0]});
 }));
@@ -739,10 +743,10 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  }catch(e){if(e.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});throw e;}
 }));
 app.get('/api/applications/mine',auth,asyncRoute(async(req,res)=>{
- await ensureApplicationRateNegotiation;
+ await Promise.all([ensureApplicationRateNegotiation,ensureWorkerPhoneVisibilityColumn]);
  const sql=req.user.role==='worker'
  ? `SELECT a.*,a.requested_hourly_rate AS requestedHourlyRate,a.rate_message AS rateMessage,a.rate_decision AS rateDecision,s.title,s.location,s.starts_at,s.ends_at,s.hourly_pay,b.name business_name FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.worker_id=? ORDER BY a.created_at DESC`
- : `SELECT a.*,a.requested_hourly_rate AS requestedHourlyRate,a.rate_message AS rateMessage,a.rate_decision AS rateDecision,s.title,s.starts_at,s.ends_at,s.hourly_pay,u.first_name,u.last_name,u.email,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS rating_count FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN users u ON u.id=a.worker_id JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY a.created_at DESC`;
+ : `SELECT a.*,a.requested_hourly_rate AS requestedHourlyRate,a.rate_message AS rateMessage,a.rate_decision AS rateDecision,s.title,s.starts_at,s.ends_at,s.hourly_pay,u.first_name,u.last_name,u.email,CASE WHEN COALESCE(u.phone_visible_to_employers,0)=1 THEN u.phone ELSE NULL END AS employer_visible_phone,wp.bio AS worker_bio,wp.skills AS worker_skills,wp.hourly_rate AS worker_hourly_rate,wp.availability AS worker_availability,wp.postcode AS worker_postcode,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS rating_count FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN users u ON u.id=a.worker_id LEFT JOIN worker_profiles wp ON wp.user_id=a.worker_id JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY a.created_at DESC`;
  const [rows]=await db.execute(sql,[req.user.id]);res.json({applications:rows});
 }));
 app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
