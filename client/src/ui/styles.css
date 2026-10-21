@@ -5868,3 +5868,21 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .admin-bottom-nav button:hover{background:#f2f4ee;color:#171916}
 .admin-bottom-nav button.selected{background:#171916;color:#fff}
 @media(max-width:600px){.app.admin>main{padding:22px 14px 28px}.app.admin .admin-console{padding:16px}.admin-bottom-nav{gap:4px;padding-left:8px;padding-right:8px}.admin-bottom-nav button{flex:1;min-width:0;padding:11px 6px;font-size:11px;gap:5px}}
+
+/* Clear opened/unopened states for the admin audit-action list */
+.app.admin .admin-action-status-summary{display:flex;align-items:center;flex-wrap:wrap;gap:12px 24px;padding:14px 16px;margin:0 0 18px;background:#f7f8f5;border:1px solid #e7e9e2;border-radius:10px}
+.admin-action-status-summary>div{display:flex;align-items:center;gap:8px;color:#454a41;font-size:12px}
+.admin-action-status-summary strong{font-size:15px;color:#171916;margin-right:3px}
+.admin-action-status-summary p{flex-basis:100%;margin:0;color:#73786e;font-size:11px;line-height:1.5}
+.admin-action-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.admin-action-status-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:700;white-space:nowrap}
+.admin-action-status-pill.opened{background:#edf4e8;color:#3f642c}
+.admin-action-status-pill.unopened{background:#fff1d9;color:#82520c}
+.admin-action-status-dot{display:inline-block;width:7px;height:7px;flex:0 0 7px;border-radius:50%}
+.admin-action-status-dot.opened{background:#5b8b3c}
+.admin-action-status-dot.unopened{background:#d38a19}
+.admin-action-record.is-unopened{border-left:3px solid #d38a19;padding-left:13px;background:linear-gradient(90deg,#fffaf0 0,transparent 36%)}
+.admin-action-record.is-opened{border-left:3px solid #cbd7c2;padding-left:13px}
+.admin-action-details{margin-top:10px}
+.admin-action-details summary{cursor:pointer;color:#596d47;font-size:11px;font-weight:700}
+.admin-action-details pre{margin-top:8px}
