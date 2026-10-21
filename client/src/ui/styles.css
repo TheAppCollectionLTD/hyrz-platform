@@ -6089,3 +6089,80 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .app.worker main .worker-todays-shift-card .worker-todays-shift-actions button{
   min-height:38px !important;
 }
+
+
+/* Final dashboard-matched treatment for Today's Shift and Upcoming Shifts on Jobs. */
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap{
+  display:block !important;
+  grid-template-columns:none !important;
+  width:100% !important;
+  max-width:100% !important;
+  margin:0 0 18px !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap>.worker-todays-shift-card{
+  width:100% !important;
+  max-width:100% !important;
+  min-height:0 !important;
+  height:auto !important;
+  padding:18px !important;
+  margin:0 !important;
+  background:#fffdfa !important;
+  color:#172b45 !important;
+  border:1px solid #e3d8c8 !important;
+  border-radius:12px !important;
+  box-shadow:0 2px 5px rgba(39,32,20,.04) !important;
+}
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap>.worker-todays-shift-card>small{
+  color:#66738a !important;
+}
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap>.worker-todays-shift-card>strong{
+  color:#172b45 !important;
+}
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap>.worker-todays-shift-card>span{
+  display:block !important;
+  color:#4c5b6d !important;
+}
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card{
+  display:block !important;
+  grid-template-columns:none !important;
+  width:100% !important;
+  max-width:100% !important;
+  margin:0 0 18px !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  gap:9px !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-height:0 !important;
+  height:auto !important;
+  padding:18px !important;
+  margin:0 !important;
+  text-align:left !important;
+  background:#fffdfa !important;
+  color:#172b45 !important;
+  border:1px solid #e3d8c8 !important;
+  border-radius:12px !important;
+  box-shadow:0 2px 5px rgba(39,32,20,.04) !important;
+}
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat small{
+  color:#66738a !important;
+}
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat strong{
+  color:#172b45 !important;
+  font-size:24px !important;
+}
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat span{
+  display:block !important;
+  color:#4c5b6d !important;
+}
