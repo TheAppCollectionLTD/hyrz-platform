@@ -386,8 +386,8 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
 }));
 
 app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{
- await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns]);
- const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureWorkerPhoneVisibilityColumn]);
+ const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
  if(u[0]?.role==='worker'){
   await db.query("CREATE TABLE IF NOT EXISTS worker_strikes (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,worker_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,shift_id BIGINT UNSIGNED NOT NULL,reason VARCHAR(255) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uniq_worker_strike_application (application_id))");
   const [[strikeCount]]=await db.execute('SELECT COUNT(*) AS strikes FROM worker_strikes WHERE worker_id=?',[req.user.id]);
@@ -400,6 +400,7 @@ app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
  const firstName = String(req.body.firstName || '').trim();
  const lastName = String(req.body.lastName || '').trim();
  const phone = String(req.body.phone || '').trim();
+ const phoneVisibleToEmployers = req.body.phoneVisibleToEmployers === undefined ? undefined : Boolean(req.body.phoneVisibleToEmployers);
  const addressLine1 = req.body.addressLine1 === undefined ? undefined : String(req.body.addressLine1 || '').trim();
  const addressCity = req.body.addressCity === undefined ? undefined : String(req.body.addressCity || '').trim();
  const addressPostcode = req.body.addressPostcode === undefined ? undefined : String(req.body.addressPostcode || '').trim().toUpperCase();
@@ -414,6 +415,8 @@ app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
  }
  const updates=[],values=[];
  if(req.body.profilePicture!==undefined){updates.push('profile_picture=?');values.push(profilePicture);}
+ if(req.body.phone!==undefined){updates.push('phone=?');values.push(phone||null);}
+ if(req.user.role==='worker'&&phoneVisibleToEmployers!==undefined){updates.push('phone_visible_to_employers=?');values.push(phoneVisibleToEmployers?1:0);}
  if(req.body.addressLine1!==undefined){updates.push('address_line_1=?');values.push(addressLine1||null);}
  if(req.body.addressCity!==undefined){updates.push('address_city=?');values.push(addressCity||null);}
  if(req.body.addressPostcode!==undefined){updates.push('address_postcode=?');values.push(addressPostcode||null);}
