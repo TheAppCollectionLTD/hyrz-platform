@@ -727,6 +727,9 @@ app.get('/api/shifts/:id',auth,asyncRoute(async(req,res)=>{
  if(!rows.length)return res.status(404).json({error:'Shift not found'});res.json({shift:rows[0]});
 }));
 app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
+ await db.query("CREATE TABLE IF NOT EXISTS worker_strikes (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,worker_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,shift_id BIGINT UNSIGNED NOT NULL,reason VARCHAR(255) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uniq_worker_strike_application (application_id))");
+ const [[strikeState]]=await db.execute('SELECT COUNT(*) AS strikes FROM worker_strikes WHERE worker_id=?',[req.user.id]);
+ if(Number(strikeState?.strikes||0)>=3)return res.status(403).json({error:'Your account has reached three strikes and cannot book more shifts. Please appeal your strikes through Contact Hyrz support and wait for an administrator review.'});
  await ensureShiftPublishingColumns; await ensureApplicationPreferencesColumn; await ensureApplicationRateNegotiation; await ensureShiftContractColumns;
  if(req.body?.contractAccepted!==true)return res.status(400).json({error:'You must agree to the shift contract before applying.'});
  let contractSnapshot='';try{const parsed=JSON.parse(String(req.body?.contractSnapshot||''));if(!parsed||parsed.version!=='hyrz-shift-contract-v1')throw new Error();contractSnapshot=JSON.stringify(parsed);if(contractSnapshot.length>20000)throw new Error();}catch{return res.status(400).json({error:'A valid shift contract must be reviewed and accepted before applying.'});}
