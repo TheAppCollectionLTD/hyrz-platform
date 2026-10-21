@@ -5918,3 +5918,12 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .admin-thread-reply{border-top:1px solid #e8eae4;padding:18px;margin:0;border-radius:0}
 .admin-thread-reply textarea{min-height:100px}
 @media(max-width:600px){.admin-chat-message{max-width:96%}.admin-inbox-open-message{padding:12px}}
+
+/* Inbox actions: separate message composition from role-targeted notifications */
+.admin-inbox-tools{margin-bottom:18px}
+.admin-inbox-tools button{font-weight:700}
+.admin-inbox-tools button.selected{background:#202b3c;color:#fff;border-color:#202b3c}
+.admin-message-form h3{margin:0 0 8px}
+.admin-message-form>p{color:#73786e;font-size:12px;line-height:1.6;margin:0 0 16px}
+.admin-message-form select{width:100%;min-height:42px;padding:10px 12px;border:1px solid #dedfd8;border-radius:8px;background:#fff;color:#22271f;font:inherit}
+.admin-message-form textarea{width:100%;min-height:110px;resize:vertical}
