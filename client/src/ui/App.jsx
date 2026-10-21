@@ -992,7 +992,9 @@ function WorkerTodaysShift({applications,checkouts,action,busy,onRefresh,setNoti
  const today=new Date();today.setHours(0,0,0,0);
  const todayKey=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
  const todays=(applications||[]).filter(a=>['approved','accepted','confirmed'].includes(String(a.status||'').toLowerCase())&&a.starts_at&&String(a.starts_at).slice(0,10)===todayKey).sort((a,b)=>new Date(a.starts_at)-new Date(b.starts_at));
- const shift=todays.find(a=>new Date(a.ends_at||a.starts_at)>=new Date())||todays[todays.length-1];
+ const scheduledShift=todays.find(a=>new Date(a.ends_at||a.starts_at)>=new Date())||todays[todays.length-1];
+ const testCheckout=(checkouts||[]).filter(c=>Boolean(c.is_test)&&String(c.status||'').toLowerCase()==='open'&&c.actual_start&&String(c.actual_start).slice(0,10)===todayKey).sort((a,b)=>Number(b.id)-Number(a.id))[0];
+ const shift=scheduledShift||(testCheckout?{id:testCheckout.shift_id,shift_id:testCheckout.shift_id,title:testCheckout.title||'Test shift',starts_at:testCheckout.actual_start,ends_at:testCheckout.actual_end,is_test:true}:null);
  const checkout=shift?(checkouts||[]).filter(c=>Number(c.shift_id)===Number(shift.shift_id||shift.shiftId||shift.id)&&String(c.status||'').toLowerCase()==='open').sort((a,b)=>Number(b.id)-Number(a.id))[0]:null;
  const clockedIn=Boolean(checkout?.clocked_in_at);
  const clockedOut=Boolean(checkout?.clocked_out_at);
