@@ -5821,3 +5821,24 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .worker-contact-editor .payment-preference-toggle span{display:grid;gap:.25rem}
 .worker-contact-editor .payment-preference-toggle small{line-height:1.45}
 @media(max-width:600px){.applicant-profile-details{padding:.8rem}.applicant-profile-actions button{min-height:40px}}
+
+
+/* Clickable applicant and approved-worker profile segments */
+.applicant-worker-segment{cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease}
+.applicant-worker-segment:hover,.applicant-worker-segment:focus-visible{outline:none;border-color:var(--hyrz-blue,#244b91);box-shadow:0 0 0 2px rgba(36,75,145,.12)}
+.applicant-worker-main{display:flex;align-items:flex-start;gap:.85rem;min-width:0;flex:1}
+.applicant-worker-avatar{width:58px;height:58px;flex:0 0 58px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--hyrz-green-soft,#edf2e7);color:var(--hyrz-green,#52683e);font-weight:800;font-size:1.1rem}
+.applicant-worker-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.applicant-worker-copy{display:flex;flex-direction:column;align-items:flex-start;gap:.3rem;min-width:0;flex:1}
+.applicant-worker-copy>strong{font-size:1rem}
+.applicant-worker-copy>small{overflow-wrap:anywhere}
+.applicant-worker-copy .applicant-profile-details{width:100%;box-sizing:border-box;cursor:auto}
+.applicant-profile-heading{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem}
+.applicant-profile-heading>img,.applicant-profile-initials{width:64px;height:64px;flex:0 0 64px;object-fit:cover;border-radius:12px}
+.applicant-profile-initials{display:flex;align-items:center;justify-content:center;background:var(--hyrz-green-soft,#edf2e7);color:var(--hyrz-green,#52683e);font-weight:800;font-size:1.2rem}
+.applicant-profile-heading h4{margin:0 0 .25rem}
+.applicant-profile-heading p{margin:0;font-weight:700}
+.filled-applicant-worker-segment{align-items:flex-start}
+.filled-applicant-worker-segment>.status{flex:0 0 auto;margin-top:.25rem}
+.filled-applicant-worker-segment>.actions{flex-wrap:wrap;align-items:center}
+@media(max-width:700px){.applicant-worker-main{gap:.65rem}.applicant-worker-avatar{width:48px;height:48px;flex-basis:48px}.filled-applicant-worker-segment{flex-wrap:wrap}.filled-applicant-worker-segment>.actions{width:100%;padding-left:calc(48px + .65rem)}}
