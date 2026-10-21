@@ -6293,3 +6293,23 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .workchat-reaction.selected{border-color:#8aa56b;background:#edf5df}
 .workchat-reaction span{font-size:11px;font-weight:750}
 .workchat-message-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+
+
+/* Only show the emoji picker after a message is selected. Existing reactions
+   remain visible as compact chips; the full picker stays hidden until click. */
+.workchat-reaction-picker{
+  padding:4px 6px;
+  border:1px solid #e5dacb;
+  border-radius:999px;
+  background:#fffdfa;
+  width:max-content;
+  max-width:100%;
+}
+.workchat-reaction-picker .workchat-reaction{
+  border-color:transparent;
+  background:transparent;
+}
+.workchat-reaction-picker .workchat-reaction:hover{
+  border-color:#e2d8ca;
+  background:#f7f0e5;
+}
