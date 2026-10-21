@@ -5948,3 +5948,34 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .admin-user-contact-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .admin-user-contact-actions button{white-space:normal}
 @media(max-width:600px){.admin-user-avatar{width:42px;height:42px;flex-basis:42px}.admin-user-identity{gap:9px}.admin-user-contact-actions button{flex:1}}
+
+
+/* Admin user directory: consistent card heights and aligned action rows. */
+.app.admin .admin-console .admin-record:has(.admin-user-contact-actions){
+  display:flex;flex-direction:column;min-height:202px;box-sizing:border-box;
+}
+.app.admin .admin-console .admin-record:has(.admin-user-contact-actions) .admin-record-head{
+  flex:1 0 auto;align-items:flex-start;gap:16px;
+}
+.app.admin .admin-console .admin-user-identity{align-items:flex-start;flex:1;min-width:0;}
+.app.admin .admin-console .admin-user-identity-copy{flex:1;min-width:0;overflow-wrap:anywhere;}
+.app.admin .admin-console .admin-user-contact-actions{
+  display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:wrap;margin-top:14px;width:100%;
+}
+.app.admin .admin-console .admin-user-contact-actions>button,
+.app.admin .admin-console .admin-user-contact-actions>.admin-record-actions>button{
+  min-height:38px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;box-sizing:border-box;
+}
+.app.admin .admin-console .admin-user-contact-actions>.admin-record-actions{
+  display:flex;flex-direction:row;align-items:center;gap:8px;flex-wrap:wrap;margin:0;
+}
+.app.admin .admin-console .admin-user-contact-actions>.admin-record-actions label{
+  display:flex;flex-direction:row;align-items:center;gap:8px;margin:0;font-size:11px;
+}
+.app.admin .admin-console .admin-user-contact-actions>.admin-record-actions select{min-height:38px;}
+@media(max-width:600px){
+  .app.admin .admin-console .admin-record:has(.admin-user-contact-actions){min-height:0;}
+  .app.admin .admin-console .admin-user-contact-actions{align-items:stretch;}
+  .app.admin .admin-console .admin-user-contact-actions>button,
+  .app.admin .admin-console .admin-user-contact-actions>.admin-record-actions>button{flex:1 1 145px;}
+}
