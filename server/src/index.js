@@ -418,9 +418,9 @@ app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
  if(req.body.addressCity!==undefined){updates.push('address_city=?');values.push(addressCity||null);}
  if(req.body.addressPostcode!==undefined){updates.push('address_postcode=?');values.push(addressPostcode||null);}
  if(email!==undefined){updates.push('email=?');values.push(email);updates.push('email_verified_at=NULL');}
- if(updates.length){values.push(req.user.id);await db.execute('UPDATE users SET '+updates.join(', ')+' WHERE id=?',values);}
  if(req.body.phone!==undefined){updates.push('phone=?');values.push(phone||null);}
  if(req.user.role==='worker'&&req.body.phoneVisibleToEmployers!==undefined){updates.push('phone_visible_to_employers=?');values.push(req.body.phoneVisibleToEmployers?1:0);}
+ if(updates.length){values.push(req.user.id);await db.execute('UPDATE users SET '+updates.join(', ')+' WHERE id=?',values);}
  const [rows] = await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
  return res.json({ user: rows[0], emailVerificationRequired: email!==undefined });
 }));
