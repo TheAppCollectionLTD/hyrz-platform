@@ -136,6 +136,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     db.query(`CREATE TABLE IF NOT EXISTS workchat_settings (workchat_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,disabled TINYINT(1) NOT NULL DEFAULT 0,updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP) ENGINE=InnoDB`),
     db.query(`CREATE TABLE IF NOT EXISTS workchat_admins (workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(workchat_id,user_id)) ENGINE=InnoDB`),
     db.query(`CREATE TABLE IF NOT EXISTS workchat_pins (message_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,workchat_id BIGINT UNSIGNED NOT NULL,pinned_by BIGINT UNSIGNED NOT NULL,pinned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,KEY idx_workchat_pins_chat(workchat_id,pinned_at)) ENGINE=InnoDB`),
+    db.query(`CREATE TABLE IF NOT EXISTS workchat_message_reactions (message_id BIGINT UNSIGNED NOT NULL,workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,emoji VARCHAR(16) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(message_id,user_id,emoji),KEY idx_workchat_reaction_chat(workchat_id,message_id)) ENGINE=InnoDB`),
     db.query(`CREATE TABLE IF NOT EXISTS employer_worker_favourites (employer_user_id BIGINT UNSIGNED NOT NULL,worker_user_id BIGINT UNSIGNED NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(employer_user_id,worker_user_id),KEY idx_employer_worker_favourites_worker(worker_user_id)) ENGINE=InnoDB`)
   ]);
   let workchatDeletionColumnsReady;
@@ -190,7 +191,9 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await db.execute('UPDATE workchat_participants SET last_read_at=NOW() WHERE workchat_id=? AND user_id=?',[id,req.user.id]);
     const [messages]=await db.execute(`SELECT m.id,m.workchat_id,m.sender_id,m.body,m.created_at,u.first_name sender_first_name,u.last_name sender_last_name,u.role sender_role,u.profile_picture sender_profile_picture,m.deleted_at,m.deleted_by,wp.pinned_at,wp.pinned_by FROM workchat_messages m JOIN users u ON u.id=m.sender_id LEFT JOIN workchat_pins wp ON wp.message_id=m.id AND wp.workchat_id=m.workchat_id WHERE m.workchat_id=? ORDER BY m.id ASC`,[id]);
     const [participants]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture,EXISTS(SELECT 1 FROM workchat_admins wa WHERE wa.workchat_id=p.workchat_id AND wa.user_id=p.user_id) AS is_admin FROM workchat_participants p JOIN users u ON u.id=p.user_id JOIN workchats w ON w.id=p.workchat_id WHERE p.workchat_id=? ORDER BY CASE WHEN p.user_id=w.employer_user_id THEN 0 WHEN EXISTS(SELECT 1 FROM workchat_admins wa2 WHERE wa2.workchat_id=p.workchat_id AND wa2.user_id=p.user_id) THEN 1 ELSE 2 END, p.added_at, u.first_name, u.last_name`,[id]);
-    res.json({workchat:chat,messages,participants:participants.map(p=>({...p,id:Number(p.id),name:[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email}))});
+    const [reactionRows]=await db.execute(`SELECT message_id,emoji,COUNT(*) AS count,GROUP_CONCAT(user_id) AS user_ids FROM workchat_message_reactions WHERE workchat_id=? GROUP BY message_id,emoji`,[id]);
+    const reactionsByMessage={};for(const row of reactionRows){((reactionsByMessage[row.message_id] ||= [])).push({emoji:row.emoji,count:Number(row.count),reacted_by_me:String(row.user_ids||'').split(',').includes(String(req.user.id))});}
+    res.json({workchat:chat,messages:messages.map(m=>({...m,reactions:reactionsByMessage[m.id]||[]})),participants:participants.map(p=>({...p,id:Number(p.id),name:[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email}))});
   }));
   app.post('/api/workchats/:id/messages',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await ensureGroupWorkchats;const id=Number(req.params.id),body=String(req.body.body||'').trim();if(!body||body.length>5000)return res.status(400).json({error:'Enter a message of 1-5000 characters.'});
@@ -200,7 +203,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   app.patch('/api/workchats/:id/messages/:messageId',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await ensureWorkchatMessageDeletionColumns();const id=Number(req.params.id),messageId=Number(req.params.messageId),body=String(req.body.body||'').trim(),chat=await getWorkchat(id,req.user.id);
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
-    if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can edit messages.'});
+    
     if(!body||body.length>5000)return res.status(400).json({error:'Enter a message of 1-5000 characters.'});
     const [messages]=await db.execute('SELECT sender_id,created_at,deleted_at FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
     if(!messages.length)return res.status(404).json({error:'Message not found in this workchat.'});
@@ -213,13 +216,26 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   app.delete('/api/workchats/:id/messages/:messageId',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await ensureWorkchatMessageDeletionColumns();const id=Number(req.params.id),messageId=Number(req.params.messageId),chat=await getWorkchat(id,req.user.id);
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
-    if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can delete messages.'});
+    
     const [messages]=await db.execute('SELECT id,deleted_at FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
     if(!messages.length)return res.status(404).json({error:'Message not found in this workchat.'});
     if(messages[0].deleted_at)return res.json({ok:true,alreadyDeleted:true});
+    if(Number(messages[0].sender_id)!==Number(req.user.id))return res.status(403).json({error:'You can only delete your own messages.'});
     await db.execute("UPDATE workchat_messages SET body='This message was deleted.',deleted_at=NOW(),deleted_by=? WHERE id=? AND workchat_id=?",[req.user.id,messageId,id]);
     await db.execute('DELETE FROM workchat_pins WHERE message_id=? AND workchat_id=?',[messageId,id]);
     await audit(req,'workchat.message.deleted','workchat',id,{messageId});res.json({ok:true,deleted:true});
+  }));
+  app.post('/api/workchats/:id/messages/:messageId/reactions',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureWorkchatMessageDeletionColumns();const id=Number(req.params.id),messageId=Number(req.params.messageId),emoji=String(req.body.emoji||'');
+    const allowed=['👍','❤️','😂','😮','😢','👏','🎉','🙏','🔥','👎'];
+    const chat=await getWorkchat(id,req.user.id);if(!chat)return res.status(404).json({error:'Workchat not found.'});
+    if(!allowed.includes(emoji))return res.status(400).json({error:'Choose a supported reaction.'});
+    const [messages]=await db.execute('SELECT id,deleted_at FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
+    if(!messages.length||messages[0].deleted_at)return res.status(404).json({error:'Message not found.'});
+    const [existing]=await db.execute('SELECT 1 FROM workchat_message_reactions WHERE message_id=? AND workchat_id=? AND user_id=? AND emoji=?',[messageId,id,req.user.id,emoji]);
+    if(existing.length)await db.execute('DELETE FROM workchat_message_reactions WHERE message_id=? AND workchat_id=? AND user_id=? AND emoji=?',[messageId,id,req.user.id,emoji]);
+    else await db.execute('INSERT INTO workchat_message_reactions(message_id,workchat_id,user_id,emoji) VALUES(?,?,?,?)',[messageId,id,req.user.id,emoji]);
+    await audit(req,'workchat.message.reaction','workchat',id,{messageId,emoji,removed:!!existing.length});res.json({ok:true});
   }));
   app.post('/api/workchats/:id/messages/:messageId/pin',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await ensureWorkchatMessageDeletionColumns();const id=Number(req.params.id),messageId=Number(req.params.messageId),chat=await getWorkchat(id,req.user.id);
