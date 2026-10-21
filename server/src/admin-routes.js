@@ -336,10 +336,11 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     else if(role!=='all'){sql+=' AND role=?';args.push(role);}
     const [recipients]=await db.execute(sql,args);
     if(!recipients.length)return res.status(404).json({error:'No active users matched this audience.'});
+    const broadcastKey='broadcast-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,14);
     const conn=await db.getConnection();
     try {
       await conn.beginTransaction();
-      for(const recipient of recipients)await conn.execute('INSERT INTO user_notifications(user_id,title,body,notification_type,sent_by) VALUES(?,?,?,\'admin_broadcast\',?)',[recipient.id,title.trim(),body.trim(),req.user.id]);
+      for(const recipient of recipients)await conn.execute('INSERT INTO user_notifications(user_id,title,body,notification_type,sent_by,broadcast_key) VALUES(?,?,?,\'admin_broadcast\',?,?)',[recipient.id,title.trim(),body.trim(),req.user.id,broadcastKey]);
       await conn.commit();
     } catch(e){await conn.rollback();throw e;} finally {conn.release();}
     await audit(req,'notification.broadcast_sent','user_notification',null,{audience,role:audience==='role'?role:null,userId:audience==='user'?Number(userId):null,recipientCount:recipients.length,title:title.trim()});
