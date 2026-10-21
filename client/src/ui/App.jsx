@@ -697,7 +697,7 @@ function adminActionMetadata(l) {
   const actorName=[l.admin_first_name,l.admin_last_name].filter(Boolean).join(' ');
   return [
     {label:'Audit record ID',value:l.id??'Not recorded'},
-    {label:'Action recorded',value:l.created_at?fmtDate(l.created_at):'Not recorded'},
+    {label:'Action recorded',value:l.created_at?new Date(l.created_at).toLocaleString('en-GB'):'Not recorded'},
     {label:'Administrator',value:actorName||l.admin_email||'Former or unavailable administrator'},
     {label:'Administrator email',value:l.admin_email||'Not recorded'},
     {label:'Administrator user ID',value:l.actor_id??'Not recorded'},
