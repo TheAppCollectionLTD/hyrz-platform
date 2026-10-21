@@ -17,6 +17,20 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
   ]).catch(err=>{console.error('Could not initialise worker identifier hashes:',err.message);throw err;});
 
+  const ensureUserNotifications = db.query(`CREATE TABLE IF NOT EXISTS user_notifications (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    body TEXT NOT NULL,
+    notification_type VARCHAR(50) NOT NULL DEFAULT 'admin_broadcast',
+    sent_by BIGINT UNSIGNED NULL,
+    read_at DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_user_notifications_user_created(user_id,created_at),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (sent_by) REFERENCES users(id) ON DELETE SET NULL
+  )`).catch(err=>{console.error('Could not initialise user notifications:',err.message);throw err;});
+
   const ensureMessageMeta = db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', subject VARCHAR(200) NULL, opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`).then(async()=>{try { await db.query('ALTER TABLE admin_message_meta ADD COLUMN subject VARCHAR(200) NULL'); } catch (e) { if (e.code !== 'ER_DUP_FIELDNAME') throw e; }}).catch(err => { console.error('Could not initialise admin message metadata:', err.message); throw err; });
 
   app.get('/api/admin/users', ...admin, asyncRoute(async (req, res) => {
@@ -271,6 +285,42 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     const [rows]=await db.execute(`SELECT m.*,u.email AS sender_email,u.role AS sender_role,u.first_name,u.last_name,meta.recipient_id,meta.category,meta.subject,meta.opened_by,meta.read_at,opener.email AS opened_by_email
       FROM messages m JOIN users u ON u.id=m.sender_id LEFT JOIN admin_message_meta meta ON meta.message_id=m.id LEFT JOIN users opener ON opener.id=meta.opened_by ORDER BY m.created_at DESC LIMIT 500`);
     res.json({messages:rows});
+  }));
+
+  app.get('/api/notifications/mine', auth, asyncRoute(async(req,res) => {
+    await ensureUserNotifications;
+    const [rows]=await db.execute('SELECT id,title,body,notification_type,read_at,created_at FROM user_notifications WHERE user_id=? ORDER BY created_at DESC LIMIT 100',[req.user.id]);
+    res.json({notifications:rows,unreadCount:rows.filter(n=>!n.read_at).length});
+  }));
+
+  app.patch('/api/notifications/:id/read', auth, asyncRoute(async(req,res) => {
+    await ensureUserNotifications;
+    const [result]=await db.execute('UPDATE user_notifications SET read_at=COALESCE(read_at,UTC_TIMESTAMP()) WHERE id=? AND user_id=?',[req.params.id,req.user.id]);
+    if(!result.affectedRows)return res.status(404).json({error:'Notification not found'});
+    res.json({ok:true});
+  }));
+
+  app.post('/api/admin/notifications/broadcast', ...admin, asyncRoute(async(req,res) => {
+    if(![1,2].includes(Number(req.user.admin_tier)))return res.status(403).json({error:'Only Tier 1 and Tier 2 administrators can send notifications.'});
+    const {audience='role',role,userId,title,body}=req.body||{};
+    if(typeof title!=='string'||!title.trim()||title.trim().length>200||typeof body!=='string'||!body.trim()||body.trim().length>5000)
+      return res.status(400).json({error:'A title and message (up to 5000 characters) are required.'});
+    if(audience==='user'&&!Number.isSafeInteger(Number(userId)))return res.status(400).json({error:'Choose a valid user ID.'});
+    if(audience==='role'&&!['admin','employer','worker','all'].includes(role))return res.status(400).json({error:'Choose admins, employers, workers, or all users.'});
+    await ensureUserNotifications;
+    let sql="SELECT id FROM users WHERE status='active'",args=[];
+    if(audience==='user'){sql+=' AND id=?';args.push(Number(userId));}
+    else if(role!=='all'){sql+=' AND role=?';args.push(role);}
+    const [recipients]=await db.execute(sql,args);
+    if(!recipients.length)return res.status(404).json({error:'No active users matched this audience.'});
+    const conn=await db.getConnection();
+    try {
+      await conn.beginTransaction();
+      for(const recipient of recipients)await conn.execute('INSERT INTO user_notifications(user_id,title,body,notification_type,sent_by) VALUES(?,?,?,\'admin_broadcast\',?)',[recipient.id,title.trim(),body.trim(),req.user.id]);
+      await conn.commit();
+    } catch(e){await conn.rollback();throw e;} finally {conn.release();}
+    await audit(req,'notification.broadcast_sent','user_notification',null,{audience,role:audience==='role'?role:null,userId:audience==='user'?Number(userId):null,recipientCount:recipients.length,title:title.trim()});
+    res.status(201).json({ok:true,recipientCount:recipients.length});
   }));
 
   app.post('/api/admin/messages', ...admin, asyncRoute(async(req,res) => {
