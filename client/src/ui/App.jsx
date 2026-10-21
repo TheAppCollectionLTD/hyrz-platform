@@ -670,6 +670,15 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
   try {
    const summary=await request('/admin/overview');setOverview(summary);
    const invoiceSummary=await request('/admin/invoices');setInvoices(invoiceSummary.invoices||[]);
+   // Keep every dashboard counter backed by current server data, regardless of which
+   // admin section is open. Previously these lists only loaded on their own tab, so
+   // the critical-info boxes misleadingly displayed zero until clicked.
+   const [inboxResult,actionsResult,disputesResult]=await Promise.allSettled([
+    request('/admin/inbox'),request('/admin/audit-logs'),request('/admin/disputes')
+   ]);
+   if(inboxResult.status==='fulfilled')setMessages(inboxResult.value.messages||[]);
+   if(actionsResult.status==='fulfilled')setLogs(actionsResult.value.logs||[]);
+   if(disputesResult.status==='fulfilled')setDisputes(disputesResult.value.disputes||[]);
    if(section==='USERS') {const r=await request('/admin/users');setUsers(r.users||[]);if(Number(user.admin_tier)<=2){const q=await request('/admin/verification-queue');setVerificationAccounts(q.accounts||[]);}}
    if(section==='INVOICES') { /* invoice list loaded above for the dashboard counters */ }
    if(section==='FINANCIAL REPORTS') {const r=await request('/admin/financial-reports');setFinancialReport(r);}
