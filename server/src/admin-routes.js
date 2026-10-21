@@ -365,6 +365,29 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     res.status(201).json({ok:true,id:result.insertId});
   }));
 
+  app.post('/api/admin/messages/:id/reply', ...admin, asyncRoute(async(req,res) => {
+    const body=typeof req.body?.body==='string'?req.body.body.trim():'';
+    if(!body||body.length>5000)return res.status(400).json({error:'Enter a reply of up to 5,000 characters.'});
+    await ensureMessageMeta;
+    const [rows]=await db.execute(`SELECT m.id,m.conversation_key,m.sender_id,meta.recipient_id,meta.category,meta.subject
+      FROM messages m LEFT JOIN admin_message_meta meta ON meta.message_id=m.id WHERE m.id=?`,[req.params.id]);
+    if(!rows.length)return res.status(404).json({error:'Conversation message not found.'});
+    const original=rows[0];
+    const participants=String(original.conversation_key||'').split(':').map(Number).filter(id=>Number.isSafeInteger(id)&&id>0);
+    const recipientId=participants.find(id=>id!==Number(req.user.id));
+    if(!recipientId)return res.status(400).json({error:'Could not identify the other participant in this conversation.'});
+    const [recipients]=await db.execute('SELECT id,role,status FROM users WHERE id=?',[recipientId]);
+    if(!recipients.length||recipients[0].status!=='active')return res.status(404).json({error:'The other participant is no longer an active account.'});
+    const category=recipients[0].role==='admin'?'admins':(['checkout_disputes','complaints','enquiries'].includes(original.category)?original.category:'enquiries');
+    const [result]=await db.execute('INSERT INTO messages(conversation_key,sender_id,body) VALUES(?,?,?)',[original.conversation_key,req.user.id,body]);
+    await db.execute('INSERT INTO admin_message_meta(message_id,recipient_id,category,subject) VALUES(?,?,?,?)',[result.insertId,recipientId,category,original.subject||null]);
+    await audit(req,'message.sent','message',result.insertId,{recipientId,category,replyToMessageId:Number(req.params.id),conversationKey:original.conversation_key});
+    const [thread]=await db.execute(`SELECT m.id,m.conversation_key,m.sender_id,m.body,m.created_at,u.email AS sender_email,u.role AS sender_role,u.first_name,u.last_name,meta.category,meta.subject,meta.recipient_id
+      FROM messages m JOIN users u ON u.id=m.sender_id LEFT JOIN admin_message_meta meta ON meta.message_id=m.id
+      WHERE m.conversation_key=? ORDER BY m.created_at ASC,m.id ASC`,[original.conversation_key]);
+    res.status(201).json({ok:true,id:result.insertId,messages:thread,conversationKey:original.conversation_key});
+  }));
+
   app.post('/api/admin/messages/:id/open', ...admin, asyncRoute(async(req,res) => {
     await ensureMessageMeta;
     const [rows]=await db.execute('SELECT id,conversation_key,sender_id FROM messages WHERE id=?',[req.params.id]);
