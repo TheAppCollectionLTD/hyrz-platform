@@ -386,8 +386,9 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     let userId;
     try {
       await conn.beginTransaction();
-      const [result]=await conn.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at) VALUES(?,?,'admin',?,'active',UTC_TIMESTAMP())",[email,hash,tier]);
+      const [result]=await conn.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at,public_user_id) VALUES(?,?,'admin',?,'active',UTC_TIMESTAMP(),?)",[email,hash,tier,'PENDING-'+crypto.randomBytes(12).toString('hex').toUpperCase()]);
       userId=result.insertId;
+      await conn.execute("UPDATE users SET public_user_id=CONCAT('HYRZ-',LPAD(?,8,'0')) WHERE id=?",[userId,userId]);
       await conn.commit();
     } catch(error) {
       try { await conn.rollback(); } catch (_) {}
@@ -395,7 +396,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
       throw error;
     } finally { conn.release(); }
     await audit(req,'admin.created','user',userId,{email,tier});
-    res.status(201).json({id:userId,email,tier});
+    res.status(201).json({id:userId,userId:'HYRZ-'+String(userId).padStart(8,'0'),email,tier});
   }));
 
   app.patch('/api/admin/admins/:id/tier', ...admin, asyncRoute(async(req,res) => {
