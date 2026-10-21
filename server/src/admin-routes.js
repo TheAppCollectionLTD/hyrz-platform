@@ -169,6 +169,21 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     res.json({ok:true,status:'pending_deletion',message:'Account access disabled and deletion recorded. Related financial and audit records are retained.'});
   }));
 
+  app.get('/api/admin/invoice-checkouts', ...admin, asyncRoute(async (req,res) => {
+    const [rows] = await db.execute(`
+      SELECT c.id AS checkout_id,c.status AS checkout_status,c.created_at,
+        s.title AS shift_title,s.starts_at,s.ends_at,
+        w.id AS worker_user_id,w.first_name AS worker_first_name,w.last_name AS worker_last_name,
+        b.name AS business_name
+      FROM checkouts c
+      JOIN shifts s ON s.id=c.shift_id
+      JOIN businesses b ON b.id=s.business_id
+      JOIN users w ON w.id=c.worker_id
+      ORDER BY c.created_at DESC LIMIT 500
+    `);
+    res.json({checkouts:rows});
+  }));
+
   app.get('/api/admin/invoices', ...admin, asyncRoute(async (req,res) => {
     const [rows] = await db.execute(`
       SELECT i.*, b.name AS business_name,b.company_number,b.postcode AS business_postcode,
