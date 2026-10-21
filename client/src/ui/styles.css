@@ -5849,3 +5849,22 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .filled-applicant-worker-segment>.status{flex:0 0 auto;margin-top:.25rem}
 .filled-applicant-worker-segment>.actions{flex-wrap:wrap;align-items:center}
 @media(max-width:700px){.applicant-worker-main{gap:.65rem}.applicant-worker-avatar{width:48px;height:48px;flex-basis:48px}.filled-applicant-worker-segment{flex-wrap:wrap}.filled-applicant-worker-segment>.actions{width:100%;padding-left:calc(48px + .65rem)}}
+
+/* Administrator workspace follows the worker/employer shell: no vertical sidebar,
+   a full-width content area, and persistent navigation along the bottom. */
+.app.admin{min-height:100vh;background:#f5f6f3;color:#171916;padding-bottom:88px}
+.app.admin>.sidebar{display:none!important}
+.app.admin>main{margin-left:0!important;width:100%;max-width:1700px;margin-right:auto;padding:36px clamp(20px,5vw,76px) 36px}
+.app.admin>main>header{color:#171916}
+.app.admin .admin-console{background:#fff;border:1px solid #e8eae4;border-radius:14px;padding:25px;margin-bottom:24px;box-shadow:none}
+.app.admin .admin-tabs{border-bottom:1px solid #eceee8}
+.app.admin .admin-tabs button{background:#f0f1ed;border-color:#e3e5df;color:#454a41;border-radius:8px;min-height:36px}
+.app.admin .admin-tabs button.selected{background:#171916;color:#fff;border-color:#171916}
+.app.admin .admin-overview-stats .stat{background:#fff;border:1px solid #e8eae4;border-radius:12px;padding:20px}
+.app.admin .admin-overview-stats .stat strong{font:700 30px Manrope,sans-serif}
+.admin-bottom-nav{position:fixed;z-index:100;inset:auto 0 0;display:flex;justify-content:center;align-items:stretch;gap:8px;padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:rgba(255,255,255,.97);border-top:1px solid #e5e7e1;box-shadow:0 -8px 24px rgba(20,25,15,.06);backdrop-filter:blur(12px)}
+.admin-bottom-nav button{display:flex;align-items:center;justify-content:center;gap:9px;min-width:140px;padding:12px 22px;border:1px solid transparent;border-radius:9px;background:transparent;color:#62685d;font:600 13px 'DM Sans',sans-serif;cursor:pointer}
+.admin-bottom-nav button span{font-size:17px;line-height:1}
+.admin-bottom-nav button:hover{background:#f2f4ee;color:#171916}
+.admin-bottom-nav button.selected{background:#171916;color:#fff}
+@media(max-width:600px){.app.admin>main{padding:22px 14px 28px}.app.admin .admin-console{padding:16px}.admin-bottom-nav{gap:4px;padding-left:8px;padding-right:8px}.admin-bottom-nav button{flex:1;min-width:0;padding:11px 6px;font-size:11px;gap:5px}}
