@@ -289,6 +289,19 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     res.status(201).json({ok:true,id:result.insertId});
   }));
 
+  app.post('/api/admin/messages/:id/open', ...admin, asyncRoute(async(req,res) => {
+    await ensureMessageMeta;
+    const [rows]=await db.execute('SELECT id,conversation_key,sender_id FROM messages WHERE id=?',[req.params.id]);
+    if(!rows.length)return res.status(404).json({error:'Message not found'});
+    // Acknowledge the message for the shared admin inbox and retain every open/reopen in audit history.
+    await db.execute('UPDATE admin_message_meta SET read_at=COALESCE(read_at,UTC_TIMESTAMP()),opened_by=? WHERE message_id=?',[req.user.id,req.params.id]);
+    await audit(req,'message.opened','message',req.params.id,{conversationKey:rows[0].conversation_key,reopened:!!req.body?.reopened});
+    const [thread]=await db.execute(`SELECT m.id,m.conversation_key,m.sender_id,m.body,m.created_at,u.email AS sender_email,u.role AS sender_role,u.first_name,u.last_name,meta.category,meta.subject,meta.recipient_id
+      FROM messages m JOIN users u ON u.id=m.sender_id LEFT JOIN admin_message_meta meta ON meta.message_id=m.id
+      WHERE m.conversation_key=? ORDER BY m.created_at ASC,m.id ASC`,[rows[0].conversation_key]);
+    res.json({messages:thread,conversationKey:rows[0].conversation_key});
+  }));
+
   app.patch('/api/admin/messages/:id/claim', ...admin, asyncRoute(async(req,res) => {
     await ensureMessageMeta;
     const [current]=await db.execute('SELECT opened_by FROM admin_message_meta WHERE message_id=?',[req.params.id]);
