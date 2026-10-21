@@ -374,11 +374,17 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     if(!rows.length)return res.status(404).json({error:'Conversation message not found.'});
     const original=rows[0];
     const participants=String(original.conversation_key||'').split(':').map(Number).filter(id=>Number.isSafeInteger(id)&&id>0);
-    const recipientId=participants.find(id=>id!==Number(req.user.id));
-    if(!recipientId)return res.status(400).json({error:'Could not identify the other participant in this conversation.'});
-    const [recipients]=await db.execute('SELECT id,role,status FROM users WHERE id=?',[recipientId]);
-    if(!recipients.length||recipients[0].status!=='active')return res.status(404).json({error:'The other participant is no longer an active account.'});
-    const category=recipients[0].role==='admin'?'admins':(['checkout_disputes','complaints','enquiries'].includes(original.category)?original.category:'enquiries');
+    if(!participants.length)return res.status(400).json({error:'Could not identify the participants in this conversation.'});
+    const placeholders=participants.map(()=>'?').join(',');
+    const [participantRows]=await db.execute(`SELECT id,role,status FROM users WHERE id IN (${placeholders})`,participants);
+    const currentIsParticipant=participants.includes(Number(req.user.id));
+    const recipient=currentIsParticipant
+      ? participantRows.find(person=>Number(person.id)!==Number(req.user.id))
+      : participantRows.find(person=>person.role!=='admin')||participantRows.find(person=>Number(person.id)!==Number(req.user.id));
+    if(!recipient)return res.status(400).json({error:'Could not identify the other participant in this conversation.'});
+    const recipientId=Number(recipient.id);
+    if(recipient.status!=='active')return res.status(404).json({error:'The other participant is no longer an active account.'});
+    const category=recipient.role==='admin'?'admins':(['checkout_disputes','complaints','enquiries'].includes(original.category)?original.category:'enquiries');
     const [result]=await db.execute('INSERT INTO messages(conversation_key,sender_id,body) VALUES(?,?,?)',[original.conversation_key,req.user.id,body]);
     await db.execute('INSERT INTO admin_message_meta(message_id,recipient_id,category,subject) VALUES(?,?,?,?)',[result.insertId,recipientId,category,original.subject||null]);
     await audit(req,'message.sent','message',result.insertId,{recipientId,category,replyToMessageId:Number(req.params.id),conversationKey:original.conversation_key});
