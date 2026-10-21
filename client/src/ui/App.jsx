@@ -331,7 +331,7 @@ async function authenticate(register) {
 <form onSubmit={e=>{e.preventDefault();authenticate(false)}}>
 <label>Email<input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)}/></label>
 <label>Password<input type="password" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/></label>
-<button className="primary" disabled={busy}>Sign in</button></form>
+{error&&<p className="shift-publish-feedback shift-publish-error" role="alert">{error}</p>}{notice&&<p className="shift-publish-feedback shift-publish-notice" role="status">{notice}</p>}<button className="primary" disabled={busy}>{busy?'Signing in…':'Sign in'}</button></form>
 </section>}
 
 {!user && page === 'checkEmail' && (
