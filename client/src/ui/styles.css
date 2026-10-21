@@ -5987,3 +5987,34 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   .app.admin .admin-console .admin-user-contact-actions>button,
   .app.admin .admin-console .admin-user-contact-actions>.admin-record-actions>button{flex:1 1 145px;}
 }
+
+/* Worker shift clocking and checkout review */
+.worker-todays-shift-wrap{margin:0 0 18px;}
+.worker-todays-shift-card{display:flex;flex-direction:column;align-items:flex-start;gap:9px;min-height:0;text-align:left;}
+.worker-todays-shift-card>strong{font-size:20px;line-height:1.25;}
+.worker-todays-shift-card>span{font-size:13px;line-height:1.45;white-space:normal;}
+.worker-todays-shift-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;}
+.worker-todays-shift-actions button{min-height:38px;}
+.checkout-record{display:flex;flex-direction:column;gap:12px;padding:18px;border:1px solid var(--border,#e7dfd2);border-radius:12px;background:#fffdfa;margin:10px 0;}
+.checkout-record-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.checkout-record-head>div{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.checkout-record-head small,.checkout-record>small{overflow-wrap:anywhere;color:var(--muted,#64748b);}
+.checkout-clock-times{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.checkout-clock-times>span{display:flex;flex-direction:column;gap:5px;padding:12px;border-radius:8px;background:#f7f7f3;font-size:13px;overflow-wrap:anywhere;}
+.checkout-clock-times strong{font-size:11px;text-transform:uppercase;letter-spacing:.05em;}
+.worker-checkout-controls{display:flex;flex-direction:column;align-items:flex-start;gap:12px;}
+.worker-checkout-controls form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;padding:16px;border-radius:10px;background:#f8f7f3;box-sizing:border-box;}
+.worker-checkout-controls form label{display:flex;flex-direction:column;gap:6px;min-width:0;}
+.worker-checkout-controls form label:nth-child(3),.worker-checkout-controls form label:nth-child(4),.worker-checkout-controls form button{grid-column:1/-1;}
+.worker-checkout-controls input,.worker-checkout-controls textarea{width:100%;min-width:0;box-sizing:border-box;}
+.checkout-test-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px;margin:14px 0;border:1px dashed var(--border,#d8cfc1);border-radius:10px;background:#fbf8f2;}
+.checkout-test-tools p{margin:0;font-size:13px;}
+.checkout-test-label{display:inline-flex;align-self:flex-start;padding:4px 8px;border-radius:5px;background:#f5ead7;color:#7b4b10;font-weight:700;}
+.checkout-clock-complete{font-size:13px;font-weight:700;}
+@media(max-width:600px){
+ .checkout-clock-times{grid-template-columns:1fr;}
+ .worker-checkout-controls form{grid-template-columns:1fr;}
+ .worker-checkout-controls form label,.worker-checkout-controls form button{grid-column:1;}
+ .checkout-record-head{align-items:flex-start;}
+ .checkout-test-tools{align-items:stretch;flex-direction:column;}
+}
