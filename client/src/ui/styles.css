@@ -5886,3 +5886,35 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .admin-action-details{margin-top:10px}
 .admin-action-details summary{cursor:pointer;color:#596d47;font-size:11px;font-weight:700}
 .admin-action-details pre{margin-top:8px}
+
+/* Admin inbox: unread first, explicit state colour, and a shared conversation view */
+.admin-inbox-category-tabs button{display:inline-flex;align-items:center;gap:8px}
+.admin-inbox-unread-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#e6e8e2;color:#4d5348;font-size:10px;font-weight:800}
+.admin-inbox-category-tabs button.selected .admin-inbox-unread-count{background:#fff;color:#171916}
+.admin-inbox-legend{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 14px;color:#686e63;font-size:11px}
+.admin-inbox-status-swatch{width:8px;height:8px;border-radius:50%;display:inline-block}
+.admin-inbox-status-swatch.unopened{background:#d64242;margin-left:7px}
+.admin-inbox-status-swatch.opened{background:#43834c;margin-left:12px}
+.admin-inbox-record{padding:0!important;margin:0 0 10px;border:1px solid #e8eae4!important;border-radius:10px;overflow:hidden}
+.admin-inbox-record.is-unopened{border-left:4px solid #d64242!important;background:#fff6f5}
+.admin-inbox-record.is-opened{border-left:4px solid #43834c!important;background:#f5faf4}
+.admin-inbox-open-message{display:block;width:100%;text-align:left;padding:15px 16px;background:transparent;border:0;color:inherit;cursor:pointer}
+.admin-inbox-open-message:hover{background:rgba(30,40,20,.035)}
+.admin-inbox-message-title{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.admin-inbox-open-message small{display:block;margin-top:6px;color:#6e7469;font-size:11px;line-height:1.5}
+.admin-inbox-open-message p{margin:10px 0;color:#34392f;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.admin-inbox-open-hint{font-size:11px;font-weight:700;color:#536d40}
+.admin-inbox-chat{border:1px solid #e6e8e1;border-radius:12px;overflow:hidden;background:#fff}
+.admin-inbox-chat-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px;border-bottom:1px solid #e8eae4;flex-wrap:wrap}
+.admin-inbox-chat-heading h3{margin:0;font-size:16px}
+.admin-inbox-chat-heading p{margin:5px 0 0;color:#777d72;font-size:11px}
+.admin-inbox-thread{display:flex;flex-direction:column;gap:12px;padding:18px;max-height:52vh;overflow-y:auto;background:#f8f9f6}
+.admin-chat-message{max-width:84%;padding:12px 14px;border-radius:11px;border:1px solid #e6e8e1;background:#fff;align-self:flex-start}
+.admin-chat-message.from-admin{align-self:flex-end;background:#eef4e9;border-color:#dce7d4}
+.admin-chat-message-meta{display:flex;flex-direction:column;gap:3px}
+.admin-chat-message-meta strong{font-size:11px}
+.admin-chat-message-meta small{font-size:10px;color:#72786d;overflow-wrap:anywhere}
+.admin-chat-message p{margin:9px 0 0;font-size:12px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.admin-thread-reply{border-top:1px solid #e8eae4;padding:18px;margin:0;border-radius:0}
+.admin-thread-reply textarea{min-height:100px}
+@media(max-width:600px){.admin-chat-message{max-width:96%}.admin-inbox-open-message{padding:12px}}
