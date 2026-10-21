@@ -65,6 +65,8 @@ function createTable(sql, label) {
   return enqueueSchemaChange(async () => { await db.query(sql); }, label);
 }
 const ensureProfilePictureColumn = addColumn('users','profile_picture LONGTEXT NULL','profile pictures');
+const ensurePublicUserIdColumn = addColumn('users','public_user_id VARCHAR(24) NULL','unique public user IDs');
+const ensurePublicUserIds = (async()=>{await ensurePublicUserIdColumn;await db.execute("UPDATE users SET public_user_id=CONCAT('HYRZ-',LPAD(id,8,'0')) WHERE public_user_id IS NULL OR public_user_id=''");try{await db.query('ALTER TABLE users ADD UNIQUE KEY uq_users_public_user_id (public_user_id)');}catch(error){if(error.code!=='ER_DUP_KEYNAME'&&error.code!=='ER_DUP_FIELDNAME')throw error;}})();
 const ensureSignupTermsColumns = (async()=>{await addColumn('users','terms_accepted_at DATETIME NULL','signup terms acceptance timestamp');await addColumn('users',"terms_version VARCHAR(40) NULL",'signup terms version');})();
 const ensureShiftContractColumns = (async()=>{await addColumn('applications','contract_accepted_at DATETIME NULL','shift contract acceptance timestamp');await addColumn('applications','contract_snapshot LONGTEXT NULL','accepted shift contract snapshot');})();
 const ensureShiftPublishingColumns = (async()=>{await addColumn('shifts',"shift_type VARCHAR(80) NOT NULL DEFAULT 'hospitality'",'shift type');await addColumn('shifts','requirements JSON NULL','shift requirements');await addColumn('shifts','perks JSON NULL','shift perks');await addColumn('shifts','preferences JSON NULL','shift preferences');})();
@@ -207,6 +209,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     if (blocked.length) return res.status(403).json({error:'This company registration number cannot be used to create a hyrz account. Please contact support if you believe this is an error.'});
   }
   await ensureSignupTermsColumns;
+  await ensurePublicUserIds;
   const rawToken = crypto.randomBytes(32).toString('hex');
   const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
 
@@ -216,7 +219,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     await conn.beginTransaction();
 
     const [result] = await conn.execute(
-      'INSERT INTO users (email,password_hash,role,first_name,last_name,email_verification_token_hash,email_verification_expires_at,terms_accepted_at,terms_version) VALUES (?,?,?,?,?,?,DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE),UTC_TIMESTAMP(),?)',
+      'INSERT INTO users (email,password_hash,role,first_name,last_name,email_verification_token_hash,email_verification_expires_at,terms_accepted_at,terms_version,public_user_id) VALUES (?,?,?,?,?,?,DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE),UTC_TIMESTAMP(),?,?)',
       [
         normalizedEmail,
         await bcrypt.hash(password, 12),
@@ -224,7 +227,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
         firstName,
         lastName,
         tokenHash,
-        '2026-10-19'
+        '2026-10-19',
+        'PENDING-' + crypto.randomBytes(12).toString('hex').toUpperCase()
       ]
     );
 
@@ -251,6 +255,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
       );
     }
 
+    await conn.execute("UPDATE users SET public_user_id=CONCAT('HYRZ-',LPAD(?,8,'0')) WHERE id=?",[result.insertId,result.insertId]);
     await conn.commit();
 
     try {
@@ -264,7 +269,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
 
     return res.status(201).json({
       message: 'Account created. Check your email for a verification link.',
-      email: normalizedEmail
+      email: normalizedEmail,
+      userId: 'HYRZ-' + String(result.insertId).padStart(8,'0')
     });
   } catch (error) {
     try { await conn.rollback(); } catch (_) {}
