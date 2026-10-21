@@ -30,6 +30,9 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (sent_by) REFERENCES users(id) ON DELETE SET NULL
   )`).catch(err=>{console.error('Could not initialise user notifications:',err.message);throw err;});
+  const ensureNotificationState = Promise.all([
+    db.query("ALTER TABLE user_notifications ADD COLUMN admin_state ENUM('sent','past','deleted') NOT NULL DEFAULT 'sent'").catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
+  ]).catch(err=>{console.error('Could not initialise notification archive:',err.message);throw err;});
 
   const ensureMessageMeta = db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', subject VARCHAR(200) NULL, opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`).then(async()=>{try { await db.query('ALTER TABLE admin_message_meta ADD COLUMN subject VARCHAR(200) NULL'); } catch (e) { if (e.code !== 'ER_DUP_FIELDNAME') throw e; }}).catch(err => { console.error('Could not initialise admin message metadata:', err.message); throw err; });
 
@@ -300,6 +303,25 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     res.json({ok:true});
   }));
 
+  app.get('/api/admin/notifications', ...admin, asyncRoute(async(req,res) => {
+    await ensureUserNotifications; await ensureNotificationState;
+    const state=['sent','past','deleted'].includes(req.query.state)?req.query.state:'sent';
+    const [rows]=await db.execute("SELECT MIN(n.id) AS id,n.title,n.body,n.sent_by,u.email AS sender_email,MIN(n.created_at) AS created_at,COUNT(*) AS recipient_count FROM user_notifications n LEFT JOIN users u ON u.id=n.sent_by WHERE n.notification_type='admin_broadcast' AND n.admin_state=? GROUP BY n.title,n.body,n.sent_by,u.email,DATE_FORMAT(n.created_at,'%Y-%m-%d %H:%i:%s') ORDER BY created_at DESC LIMIT 500",[state]);
+    res.json({notifications:rows});
+  }));
+
+  app.patch('/api/admin/notifications/:id/state', ...admin, asyncRoute(async(req,res) => {
+    await ensureUserNotifications; await ensureNotificationState;
+    const state=req.body?.state;
+    if(!['past','deleted'].includes(state))return res.status(400).json({error:'Choose past or deleted.'});
+    const [selected]=await db.execute("SELECT title,body,sent_by,created_at FROM user_notifications WHERE id=? AND notification_type='admin_broadcast' LIMIT 1",[req.params.id]);
+    if(!selected.length)return res.status(404).json({error:'Notification not found.'});
+    const n=selected[0];
+    const [result]=await db.execute("UPDATE user_notifications SET admin_state=? WHERE notification_type='admin_broadcast' AND title=? AND body=? AND sent_by <=> ? AND created_at=?",[state,n.title,n.body,n.sent_by,n.created_at]);
+    await audit(req,state==='deleted'?'notification.broadcast_deleted':'notification.broadcast_archived','user_notification',req.params.id,{title:n.title,recipientRows:result.affectedRows});
+    res.json({ok:true,updated:result.affectedRows});
+  }));
+
   app.post('/api/admin/notifications/broadcast', ...admin, asyncRoute(async(req,res) => {
     if(![1,2].includes(Number(req.user.admin_tier)))return res.status(403).json({error:'Only Tier 1 and Tier 2 administrators can send notifications.'});
     const {audience='role',role,userId,title,body}=req.body||{};
@@ -307,7 +329,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
       return res.status(400).json({error:'A title and message (up to 5000 characters) are required.'});
     if(audience==='user'&&!Number.isSafeInteger(Number(userId)))return res.status(400).json({error:'Choose a valid user ID.'});
     if(audience==='role'&&!['admin','employer','worker','all'].includes(role))return res.status(400).json({error:'Choose admins, employers, workers, or all users.'});
-    await ensureUserNotifications;
+    await ensureUserNotifications; await ensureNotificationState;
     let sql="SELECT id FROM users WHERE status='active'",args=[];
     if(audience==='user'){sql+=' AND id=?';args.push(Number(userId));}
     else if(role!=='all'){sql+=' AND role=?';args.push(role);}
