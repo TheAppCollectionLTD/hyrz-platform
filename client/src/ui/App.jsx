@@ -660,7 +660,7 @@ const ADMIN_ACTION_LABELS = {
 function humanizeAdminAction(value) {
   const key=String(value||'').trim();
   if(ADMIN_ACTION_LABELS[key]) return ADMIN_ACTION_LABELS[key];
-  return key.replace(/[._-]+/g,' ').replace(/\\b\\w/g,c=>c.toUpperCase()) || 'Administrative action';
+  return key.replace(/[._-]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase()) || 'Administrative action';
 }
 const ADMIN_DETAIL_LABELS = {
   reopened:'Conversation reopened',conversationKey:'Conversation reference',conversationId:'Conversation ID',messageId:'Message ID',message_id:'Message ID',
@@ -685,7 +685,7 @@ function readableAdminDetails(value) {
   const flatten=(obj,prefix='')=>Object.entries(obj).flatMap(([key,val])=>{
     const path=prefix?prefix+' · '+key:key;
     if(val&&typeof val==='object'&&!Array.isArray(val)) return flatten(val,path);
-    const label=ADMIN_DETAIL_LABELS[key]||key.replace(/([A-Z])/g,' $1').replace(/[._-]+/g,' ').replace(/^\\w/,x=>x.toUpperCase());
+    const label=ADMIN_DETAIL_LABELS[key]||key.replace(/([A-Z])/g,' $1').replace(/[._-]+/g,' ').replace(/^\w/,x=>x.toUpperCase());
     const display=Array.isArray(val)?val.map(item=>item&&typeof item==='object'?JSON.stringify(item):String(item)).join(', '):typeof val==='boolean'?(val?'Yes':'No'):val===null||val===undefined?'Not recorded':String(val);
     return [{label:prefix?path.replace(/([A-Z])/g,' $1').replace(/[._-]+/g,' '):label,value:display}];
   });
