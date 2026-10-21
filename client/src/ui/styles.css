@@ -6236,3 +6236,30 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   width:100% !important;
   text-align:center !important;
 }
+
+
+/* Keep worker section titles on the left and Sign out pinned to the top-right. */
+.app.worker>main>header.worker-page-header,
+.app.worker>main>header{
+  position:relative;
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:16px !important;
+  text-align:left !important;
+}
+.app.worker>main>header.worker-page-header>div,
+.app.worker>main>header>div{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  text-align:left !important;
+}
+.app.worker>main>header.worker-page-header h1,
+.app.worker>main>header h1{
+  text-align:left !important;
+}
+.app.worker>main>header .worker-signout{
+  flex:0 0 auto !important;
+  margin:0 0 0 auto !important;
+  align-self:flex-start !important;
+}
