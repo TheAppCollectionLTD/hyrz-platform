@@ -5926,3 +5926,60 @@ input:focus, select:focus, textarea:focus {
 .filled-applicant-worker-segment>.status{flex:0 0 auto;margin-top:.25rem}
 .filled-applicant-worker-segment>.actions{flex-wrap:wrap;align-items:center}
 @media(max-width:700px){.applicant-worker-main{gap:.65rem}.applicant-worker-avatar{width:48px;height:48px;flex-basis:48px}.filled-applicant-worker-segment{flex-wrap:wrap}.filled-applicant-worker-segment>.actions{width:100%;padding-left:calc(48px + .65rem)}}
+
+
+/* Admin console: use the same light, calm card language as worker and employer accounts. */
+.app.admin .admin-console,
+.app.admin main > .panel.admin-console,
+.admin-console{
+  background:#fff!important;
+  color:#17243a!important;
+  border:1px solid #e7dfd2!important;
+  border-radius:16px!important;
+  box-shadow:0 8px 24px rgba(31,39,51,.045)!important;
+}
+.admin-console .panel-head h2,
+.admin-console h2,.admin-console h3,.admin-console h4{color:#17243a!important}
+.admin-console p,.admin-console .muted{color:#68758a!important}
+.admin-console label{color:#25344c!important}
+.admin-console input,.admin-console select,.admin-console textarea{
+  background:#fffdfa!important;color:#17243a!important;border:1px solid #ded5c7!important;border-radius:9px!important;
+}
+.admin-console .secondary{background:#f0e8dc!important;color:#17243a!important;border:1px solid #e4d9c9!important}
+.admin-console .primary{background:#f5b63f!important;color:#17243a!important;border-color:#f5b63f!important}
+.admin-console .admin-tabs{gap:8px;margin:0 0 18px;padding:0 0 14px;border-bottom:1px solid #e8e0d4}
+.admin-console .admin-tabs button{
+  min-height:38px;padding:10px 13px;border:1px solid #e3d9ca;border-radius:9px;
+  background:#fffdfa;color:#24334c;font:700 11px 'DM Sans',sans-serif;letter-spacing:0;cursor:pointer;
+}
+.admin-console .admin-tabs button.selected{background:#17243a;color:#fff;border-color:#17243a}
+.admin-console .admin-overview-stats{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px!important;
+  width:100%;margin:18px 0 20px!important;
+}
+.admin-console .admin-overview-stats .admin-counter{
+  width:100%;min-width:0;min-height:112px;box-sizing:border-box;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:14px;
+  padding:16px!important;margin:0;border:1px solid #e7dfd2!important;border-radius:13px!important;
+  background:#fffdfa!important;color:#17243a!important;box-shadow:0 4px 14px rgba(31,39,51,.035)!important;
+  text-align:left;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s;
+}
+.admin-console .admin-overview-stats .admin-counter:hover{
+  border-color:#c7b89f!important;transform:translateY(-1px);box-shadow:0 7px 18px rgba(31,39,51,.08)!important;
+}
+.admin-console .admin-overview-stats .admin-counter:focus-visible{outline:3px solid #e5b34d;outline-offset:2px}
+.admin-console .admin-overview-stats .admin-counter small{
+  color:#68758a!important;font-size:10px;line-height:1.45;font-weight:700;letter-spacing:.55px;
+}
+.admin-console .admin-overview-stats .admin-counter strong{color:#17243a!important;font-size:30px;line-height:1}
+.admin-console .admin-record{border-bottom-color:#e8e0d4}
+.admin-console .admin-note{background:#f5f6f0;color:#5c6658}
+@media(max-width:900px){
+ .admin-console .admin-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+ .admin-console .admin-overview-stats{grid-template-columns:1fr;gap:8px!important}
+ .admin-console .admin-overview-stats .admin-counter{min-height:86px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+ .admin-console .admin-overview-stats .admin-counter small{grid-column:1}
+ .admin-console .admin-overview-stats .admin-counter strong{grid-column:2;grid-row:1/3;font-size:27px}
+}
