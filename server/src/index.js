@@ -814,16 +814,17 @@ app.post('/api/admin/test-checkouts/taylor',auth,allow('admin'),asyncRoute(async
  const worker=people[0];
  const [existing]=await db.execute("SELECT id,status FROM checkouts WHERE worker_id=? AND is_test=1 AND status='open' ORDER BY id DESC LIMIT 1",[worker.id]);
  if(existing.length)return res.json({ok:true,checkoutId:existing[0].id,alreadyExists:true,workerId:worker.id});
- const [shifts]=await db.execute(`SELECT s.id,s.starts_at,s.ends_at,s.hourly_pay
-   FROM applications a JOIN shifts s ON s.id=a.shift_id
-   WHERE a.worker_id=? AND a.status='approved'
-   ORDER BY s.ends_at DESC LIMIT 1`,[worker.id]);
- if(!shifts.length)return res.status(409).json({error:'Taylor Worker has no approved shift to attach a test checkout to. Approve a test shift for Taylor first.'});
+ const [shifts]=await db.execute(`SELECT s.id,s.hourly_pay FROM shifts s
+   LEFT JOIN applications a ON a.shift_id=s.id AND a.worker_id=? AND a.status='approved'
+   WHERE s.status<>'cancelled'
+   ORDER BY (a.id IS NOT NULL) DESC,s.ends_at DESC LIMIT 1`,[worker.id]);
+ if(!shifts.length)return res.status(409).json({error:'No shift exists to attach the Taylor Worker test checkout to.'});
  const shift=shifts[0];
- const duration=Math.max(0,Number((new Date(shift.ends_at)-new Date(shift.starts_at))/60000));
- const calc=calculatePay({hourlyPay:shift.hourly_pay,startsAt:shift.starts_at,endsAt:shift.ends_at,breakMinutes:0});
+ const start=new Date();
+ const end=new Date(start.getTime()+4*60*60*1000);
+ const calc=calculatePay({hourlyPay:shift.hourly_pay,startsAt:start,endsAt:end,breakMinutes:0});
  const [created]=await db.execute(`INSERT INTO checkouts(shift_id,worker_id,actual_start,actual_end,break_minutes,worker_comment,gross_pay,platform_fee,status,is_test)
-   VALUES(?,?,?,?,0,?,?,?,'open',1)`,[shift.id,worker.id,shift.starts_at,shift.ends_at,'Test checkout for clock-in / clock-out workflow',calc.grossPay,calc.platformFee]);
+   VALUES(?,?,NOW(),DATE_ADD(NOW(),INTERVAL 4 HOUR),0,?,?,?,'open',1)`,[shift.id,worker.id,'Test checkout for clock-in / clock-out workflow',calc.grossPay,calc.platformFee]);
  await audit(req,'checkout.test_created','checkout',created.insertId,{workerId:worker.id,shiftId:shift.id});
  res.status(201).json({ok:true,checkoutId:created.insertId,workerId:worker.id});
 }));
@@ -831,9 +832,15 @@ app.post('/api/checkouts/clock-in',auth,allow('worker'),asyncRoute(async(req,res
  await ensureClockCheckoutColumns;
  const shiftId=Number(req.body?.shiftId);
  if(!Number.isSafeInteger(shiftId)||shiftId<1)return res.status(400).json({error:'Choose a valid shift to clock in.'});
- const [approved]=await db.execute(`SELECT a.id,s.id AS shift_id,s.starts_at,s.ends_at,s.hourly_pay
+ let [approved]=await db.execute(`SELECT a.id,s.id AS shift_id,s.starts_at,s.ends_at,s.hourly_pay
    FROM applications a JOIN shifts s ON s.id=a.shift_id
    WHERE a.shift_id=? AND a.worker_id=? AND a.status='approved' LIMIT 1`,[shiftId,req.user.id]);
+ if(!approved.length){
+   const [testShift]=await db.execute(`SELECT s.id AS shift_id,s.starts_at,s.ends_at,s.hourly_pay
+     FROM checkouts c JOIN shifts s ON s.id=c.shift_id
+     WHERE c.shift_id=? AND c.worker_id=? AND c.is_test=1 AND c.status='open' LIMIT 1`,[shiftId,req.user.id]);
+   if(testShift.length)approved=testShift;
+ }
  if(!approved.length)return res.status(403).json({error:'You must have an approved application for this shift before clocking in.'});
  const [existing]=await db.execute("SELECT * FROM checkouts WHERE shift_id=? AND worker_id=? ORDER BY id DESC LIMIT 1",[shiftId,req.user.id]);
  if(existing.length&&['submitted','approved','paid','completed','disputed'].includes(String(existing[0].status||'').toLowerCase()))return res.status(409).json({error:'A checkout for this shift has already been submitted or processed.'});
@@ -865,6 +872,7 @@ app.post('/api/checkouts/:id/submit',auth,allow('worker'),asyncRoute(async(req,r
  if(!rows.length)return res.status(404).json({error:'Checkout not found.'});
  const checkout=rows[0];
  if(String(checkout.status).toLowerCase()!=='open')return res.status(409).json({error:'Only an open checkout can be submitted.'});
+ if(checkout.clocked_in_at&&!checkout.clocked_out_at)return res.status(400).json({error:'Please clock out before sending this checkout for approval.'});
  const startValue=String(actualStart).replace('T',' ').slice(0,19);
  const endValue=String(actualEnd).replace('T',' ').slice(0,19);
  const originalStart=checkout.clocked_in_at||checkout.scheduled_start;
@@ -897,7 +905,7 @@ app.get('/api/checkouts/mine',auth,asyncRoute(async(req,res)=>{
     AND NOT EXISTS(SELECT 1 FROM checkouts c WHERE c.shift_id=s.id AND c.worker_id=a.worker_id AND c.status IN ('open','submitted','approved','paid','completed','disputed'))`,[req.user.id]);
  }
  const sql=req.user.role==='worker'
- ? 'SELECT c.*,s.title,s.location FROM checkouts c JOIN shifts s ON s.id=c.shift_id WHERE c.worker_id=? ORDER BY c.created_at DESC'
+ ? 'SELECT c.*,s.title,s.location,s.starts_at,s.ends_at,s.hourly_pay FROM checkouts c JOIN shifts s ON s.id=c.shift_id WHERE c.worker_id=? ORDER BY c.created_at DESC'
  : `SELECT c.*,s.title,u.first_name,u.last_name FROM checkouts c JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=c.worker_id WHERE b.owner_user_id=? ORDER BY c.created_at DESC`;
  const [rows]=await db.execute(sql,[req.user.id]);res.json({checkouts:rows});
 }));
