@@ -106,7 +106,8 @@ const ensureWorkerAvailabilityTable = (async()=>{await createTable(`CREATE TABLE
 const ensureWorkerIdentifierColumns = (async()=>{
   await addColumn('worker_profiles','national_insurance_hash CHAR(64) NULL','worker National Insurance hash');
   await addColumn('worker_profiles','worker_permit_hash CHAR(64) NULL','worker permit hash');
-})();
+})()
+const ensureWorkerPhoneVisibilityColumn = addColumn('users','phone_visible_to_employers TINYINT(1) NOT NULL DEFAULT 0','worker phone visibility preference');;
 const audit = async (req, action, entityType, entityId, details={}) => {
   await db.execute('INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,details,ip_address) VALUES(?,?,?,?,?,?)',
     [req.user?.id || null, action, entityType, entityId || null, JSON.stringify(details), req.ip]);
@@ -739,10 +740,11 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  }catch(e){if(e.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});throw e;}
 }));
 app.get('/api/applications/mine',auth,asyncRoute(async(req,res)=>{
+ await ensureWorkerPhoneVisibilityColumn;
  await ensureApplicationRateNegotiation;
  const sql=req.user.role==='worker'
  ? `SELECT a.*,a.requested_hourly_rate AS requestedHourlyRate,a.rate_message AS rateMessage,a.rate_decision AS rateDecision,s.title,s.location,s.starts_at,s.ends_at,s.hourly_pay,b.name business_name FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.worker_id=? ORDER BY a.created_at DESC`
- : `SELECT a.*,a.requested_hourly_rate AS requestedHourlyRate,a.rate_message AS rateMessage,a.rate_decision AS rateDecision,s.title,s.starts_at,s.ends_at,s.hourly_pay,u.first_name,u.last_name,u.email,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS rating_count FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN users u ON u.id=a.worker_id JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY a.created_at DESC`;
+ : `SELECT a.*,a.requested_hourly_rate AS requestedHourlyRate,a.rate_message AS rateMessage,a.rate_decision AS rateDecision,s.title,s.starts_at,s.ends_at,s.hourly_pay,u.first_name,u.last_name,u.email,u.profile_picture AS worker_profile_picture,CASE WHEN COALESCE(u.phone_visible_to_employers,0)=1 THEN u.phone ELSE NULL END AS employer_visible_phone,wp.bio AS worker_bio,wp.skills AS worker_skills,wp.hourly_rate AS worker_hourly_rate,wp.availability AS worker_availability,wp.postcode AS worker_postcode,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=a.worker_id) AS rating_count FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN users u ON u.id=a.worker_id LEFT JOIN worker_profiles wp ON wp.user_id=a.worker_id JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY a.created_at DESC`;
  const [rows]=await db.execute(sql,[req.user.id]);res.json({applications:rows});
 }));
 app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
