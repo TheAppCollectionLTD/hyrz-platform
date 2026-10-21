@@ -877,8 +877,9 @@ app.post('/api/checkouts/:id/submit',auth,allow('worker'),asyncRoute(async(req,r
  const endValue=String(actualEnd).replace('T',' ').slice(0,19);
  const originalStart=checkout.clocked_in_at||checkout.scheduled_start;
  const originalEnd=checkout.clocked_out_at||checkout.scheduled_end;
- const changedStart=new Date(actualStart).getTime()!==new Date(originalStart).getTime();
- const changedEnd=new Date(actualEnd).getTime()!==new Date(originalEnd).getTime();
+ const minuteTimestamp=value=>{const stamp=new Date(value).getTime();return Number.isFinite(stamp)?Math.floor(stamp/60000)*60000:NaN;};
+ const changedStart=minuteTimestamp(actualStart)!==minuteTimestamp(originalStart);
+ const changedEnd=minuteTimestamp(actualEnd)!==minuteTimestamp(originalEnd);
  if((changedStart||changedEnd)&&(!String(reason).trim()||String(reason).trim().length<5))return res.status(400).json({error:'Please give a reason of at least 5 characters for changing your clock-in or clock-out times.'});
  let calc;try{calc=calculatePay({hourlyPay:checkout.hourly_pay,startsAt:actualStart,endsAt:actualEnd,breakMinutes:Number(breakMinutes)});}catch(e){return res.status(400).json({error:e.message});}
  await db.execute("UPDATE checkouts SET actual_start=?,actual_end=?,break_minutes=?,worker_comment=?,worker_adjustment_reason=?,gross_pay=?,platform_fee=?,status='submitted' WHERE id=?",
