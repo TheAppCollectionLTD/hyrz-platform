@@ -686,7 +686,7 @@ const ADMIN_DETAIL_LABELS = {
   totalCancellationFee:'Total cancellation fee (£)',wasApproved:'Was application approved',strikeApplied:'Strike applied',
   actualStart:'Actual shift start',actualEnd:'Actual shift end',breakMinutes:'Break duration (minutes)',counterGrossPay:'Counter-offer gross pay (£)',
   autoTopUpEnabled:'Automatic top-up enabled',autoPayEnabled:'Automatic invoice payment enabled',autoPayCadence:'Automatic payment schedule',
-  previousStatus:'Previous status',ip_address:'IP address'
+  ip_address:'IP address'
 };
 function readableAdminDetails(value) {
   let parsed=value;
