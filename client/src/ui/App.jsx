@@ -565,6 +565,7 @@ function AccountSettings({user,setUser,action,busy,setNotice,paymentMethods=[],s
  }
  return <section className="panel account-settings">
   <h2>{user.role==='worker'?'My profile':user.role==='employer'?'Business profile':'My profile'}</h2>
+  <p className="account-readonly-value" aria-label="Your unique user ID"><strong>User ID:</strong> {user.public_user_id||('HYRZ-'+String(user.id).padStart(8,'0'))}</p>
   <div className="profile-picture-editor">
    {profilePicture?<img className="profile-picture-preview" src={profilePicture} alt="Your profile" />:<div className="profile-picture-placeholder" aria-label="No profile photo"> {(firstName||user.email||'U').slice(0,1).toUpperCase()} </div>}
    <div><label>Profile picture<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={e=>{
