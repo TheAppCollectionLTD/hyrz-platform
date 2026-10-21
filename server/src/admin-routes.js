@@ -401,8 +401,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     if (Number(req.user.admin_tier)>2) return res.status(403).json({error:'Tier 3 administrators cannot create administrators'});
     if (![1,2,3].includes(tier) || (Number(req.user.admin_tier)===2 && tier!==3)) return res.status(403).json({error:'You cannot create an administrator at that tier'});
     if (!/^\S+@\S+\.\S+$/.test(email) || typeof password!=='string' || password.length<12) return res.status(400).json({error:'Enter a valid email and password of at least 12 characters'});
-    const emailConstraintReady = await ensureUniqueEmails;
-    if (!emailConstraintReady) return res.status(503).json({error:'Administrator creation is temporarily unavailable while duplicate email addresses are reviewed.'});
+    // Check the requested address directly; unrelated legacy duplicates should not block creation.
     const [existing]=await db.execute('SELECT id FROM users WHERE LOWER(TRIM(email))=? LIMIT 1',[email]);
     if(existing.length) return res.status(409).json({error:'This email address is already linked to an account. Please use a different email address.'});
     const hash=await bcrypt.hash(password,12);
