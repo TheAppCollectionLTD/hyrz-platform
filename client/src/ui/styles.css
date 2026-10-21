@@ -5807,3 +5807,17 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .status.rejected,.status.declined,.status.cancelled,.status.disputed,.status-danger,.badge-danger{background:var(--hyrz-red-soft);color:var(--hyrz-red);border-color:#f3cccc}
 .status.info,.status-info,.badge-info{background:var(--hyrz-blue-soft);color:var(--hyrz-blue);border-color:#d5e1fb}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* Employer applicant profiles and worker contact privacy */
+.applicant-profile-actions{margin:.45rem 0 .65rem;display:flex;gap:.5rem;flex-wrap:wrap}
+.applicant-profile-details{margin:.65rem 0;padding:1rem;border:1px solid var(--hyrz-line,var(--border,#ddd));border-radius:12px;background:var(--hyrz-surface-soft,#f7f8fb);color:var(--hyrz-ink,#18253b);min-width:0}
+.applicant-profile-details h4{margin:0 0 .65rem}
+.applicant-profile-details p{margin:.35rem 0;overflow-wrap:anywhere;line-height:1.45}
+.applicant-profile-details a{font-weight:700;color:var(--hyrz-blue,#244b91)}
+.worker-contact-editor{margin:1.25rem 0}
+.worker-contact-editor .payment-preference-toggle{display:flex;align-items:flex-start;gap:.7rem;padding:.85rem;border:1px solid var(--hyrz-line,var(--border,#ddd));border-radius:10px;background:var(--hyrz-surface-soft,#f7f8fb)}
+.worker-contact-editor .payment-preference-toggle input{margin-top:.2rem;flex:0 0 auto}
+.worker-contact-editor .payment-preference-toggle span{display:grid;gap:.25rem}
+.worker-contact-editor .payment-preference-toggle small{line-height:1.45}
+@media(max-width:600px){.applicant-profile-details{padding:.8rem}.applicant-profile-actions button{min-height:40px}}
