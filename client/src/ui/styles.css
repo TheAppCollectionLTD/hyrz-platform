@@ -6263,3 +6263,33 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   margin:0 0 0 auto !important;
   align-self:flex-start !important;
 }
+
+
+/* Workchat reactions: compact emoji chips beneath each message. */
+.workchat-reaction-row{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
+  margin:6px 0 2px;
+}
+.workchat-reaction{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-width:31px;
+  min-height:28px;
+  padding:3px 7px;
+  border:1px solid #e2d8ca;
+  border-radius:999px;
+  background:#fffdfa;
+  color:#172b45;
+  font:inherit;
+  font-size:13px;
+  cursor:pointer;
+}
+.workchat-reaction:hover{border-color:#b8a58e;background:#f7f0e5}
+.workchat-reaction.selected{border-color:#8aa56b;background:#edf5df}
+.workchat-reaction span{font-size:11px;font-weight:750}
+.workchat-message-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
