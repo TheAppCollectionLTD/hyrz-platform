@@ -1425,6 +1425,13 @@ footer .brand span {
 
 /* Administrator console */
 .admin-console{padding:22px;overflow:hidden}
+.admin-overview-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:0 0 22px}
+.admin-overview-stats .admin-counter{width:100%;min-width:0;min-height:104px;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;transition:border-color .16s ease,transform .16s ease,box-shadow .16s ease}
+.admin-overview-stats .admin-counter:hover{border-color:#c9d4bc;box-shadow:0 5px 18px rgba(23,25,22,.06);transform:translateY(-1px)}
+.admin-overview-stats .admin-counter:focus-visible{outline:2px solid #729e2c;outline-offset:3px}
+.admin-overview-stats .admin-counter small{line-height:1.5}
+@media(max-width:900px){.admin-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.admin-overview-stats{grid-template-columns:1fr}.admin-overview-stats .admin-counter{min-height:84px}}
 .admin-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid #eceee8}
 .admin-tabs button{border:1px solid #e1e4dc;background:#fff;color:#555b50;border-radius:7px;padding:9px 11px;font:700 10px 'DM Sans',sans-serif;letter-spacing:.35px;cursor:pointer}
 .admin-tabs button.selected{background:#171916;color:#fff;border-color:#171916}
