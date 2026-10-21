@@ -6209,3 +6209,30 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   color:#4c5b6d !important;
   white-space:normal !important;
 }
+
+
+/* Centre all copy in the worker Today's Shift and Upcoming Shifts cards. */
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap .worker-todays-shift-card{
+  align-items:center !important;
+  text-align:center !important;
+}
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap .worker-todays-shift-card>small,
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap .worker-todays-shift-card>strong,
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap .worker-todays-shift-card>span{
+  width:100% !important;
+  text-align:center !important;
+}
+.app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap .worker-todays-shift-actions{
+  justify-content:center !important;
+  width:100% !important;
+}
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat{
+  align-items:center !important;
+  text-align:center !important;
+}
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat small,
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat strong,
+.app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat span{
+  width:100% !important;
+  text-align:center !important;
+}
