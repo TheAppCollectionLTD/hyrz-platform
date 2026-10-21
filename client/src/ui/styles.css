@@ -5886,6 +5886,12 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .admin-action-details{margin-top:10px}
 .admin-action-details summary{cursor:pointer;color:#596d47;font-size:11px;font-weight:700}
 .admin-action-details pre{margin-top:8px}
+.admin-action-readable-details{display:grid;gap:7px;margin:9px 0 0}
+.admin-action-readable-details>div{display:grid;grid-template-columns:minmax(125px,190px) minmax(0,1fr);gap:10px;padding:8px 10px;border-radius:6px;background:#f6f7f3}
+.admin-action-readable-details dt{font-size:11px;font-weight:700;color:#596052}
+.admin-action-readable-details dd{margin:0;min-width:0;font-size:12px;color:#242820;overflow-wrap:anywhere}
+@media(max-width:560px){.admin-action-readable-details>div{grid-template-columns:1fr;gap:3px}}
+
 
 /* Admin inbox: unread first, explicit state colour, and a shared conversation view */
 .admin-inbox-category-tabs button{display:inline-flex;align-items:center;gap:8px}
