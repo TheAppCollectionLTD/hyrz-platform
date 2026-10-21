@@ -166,6 +166,24 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     res.json({invoices:rows});
   }));
 
+  app.post('/api/admin/invoices', ...admin, asyncRoute(async(req,res) => {
+    const checkoutId=Number(req.body.checkoutId);
+    const subtotal=Number(req.body.subtotal);
+    const platformFee=Number(req.body.platformFee);
+    const dueAt=String(req.body.dueAt||'').slice(0,10);
+    const reason=String(req.body.reason||'').trim();
+    if(!Number.isSafeInteger(checkoutId)||checkoutId<1||!Number.isFinite(subtotal)||subtotal<0||!Number.isFinite(platformFee)||platformFee<0||!/^\d{4}-\d{2}-\d{2}$/.test(dueAt)||reason.length<5)
+      return res.status(400).json({error:'Enter a valid checkout ID, non-negative amounts, due date and reason (at least 5 characters).'});
+    const [rows]=await db.execute(`SELECT c.id AS checkout_id,b.id AS business_id,s.id AS shift_id,s.title
+      FROM checkouts c JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id WHERE c.id=?`,[checkoutId]);
+    if(!rows.length)return res.status(404).json({error:'Checkout not found or it has no linked business.'});
+    const total=Number((subtotal+platformFee).toFixed(2));
+    const [result]=await db.execute("INSERT INTO invoices(business_id,checkout_id,subtotal,platform_fee,total,due_at,status) VALUES(?,?,?,?,?,?,'issued')",
+      [rows[0].business_id,checkoutId,subtotal.toFixed(2),platformFee.toFixed(2),total.toFixed(2),dueAt]);
+    await audit(req,'invoice.adhoc_created','invoice',result.insertId,{checkoutId,subtotal,platformFee,total,dueAt,reason});
+    res.status(201).json({ok:true,id:result.insertId,total,status:'issued'});
+  }));
+
   app.post('/api/admin/invoices/:id/send-reminder', ...admin, asyncRoute(async(req,res) => {
     const [rows]=await db.execute(`SELECT i.id,i.total,i.due_at,i.status,b.name AS business_name,
       s.title AS shift_title,u.email AS client_email,u.first_name AS client_first_name
@@ -183,9 +201,12 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   app.patch('/api/admin/invoices/:id/status', ...admin, asyncRoute(async(req,res) => {
     const status=req.body.status;
     if (!['issued','paid','overdue','void'].includes(status)) return res.status(400).json({error:'Invalid invoice status'});
+    const [existing]=await db.execute('SELECT id,status FROM invoices WHERE id=?',[req.params.id]);
+    if(!existing.length)return res.status(404).json({error:'Invoice not found'});
+    if(status==='void'&&['paid','void'].includes(existing[0].status))return res.status(400).json({error:'Paid or already void invoices cannot be voided.'});
+    if(status==='issued'&&existing[0].status==='paid')return res.status(400).json({error:'Paid invoices cannot be re-issued.'});
     const [result]=await db.execute('UPDATE invoices SET status=? WHERE id=?',[status,req.params.id]);
-    if (!result.affectedRows) return res.status(404).json({error:'Invoice not found'});
-    await audit(req,'invoice.status_changed','invoice',req.params.id,{status});
+    await audit(req,'invoice.status_changed','invoice',req.params.id,{previousStatus:existing[0].status,status});
     res.json({ok:true,status});
   }));
 
