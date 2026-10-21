@@ -324,11 +324,13 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   }));
 
   app.post('/api/admin/messages', ...admin, asyncRoute(async(req,res) => {
-    const { recipientId, category='enquiries', subject='', body }=req.body||{};
+    const { recipientId, category='enquiries', subject='', body, targetRole }=req.body||{};
     const categories=['checkout_disputes','complaints','enquiries','admins'];
     if (!Number.isSafeInteger(Number(recipientId)) || !categories.includes(category) || typeof subject!=='string' || subject.length>200 || typeof body!=='string' || body.trim().length<1 || body.length>5000) return res.status(400).json({error:'Recipient, category and message are required'});
     const [recipients]=await db.execute('SELECT id,role FROM users WHERE id=? AND status=\'active\'',[recipientId]);
     if (!recipients.length) return res.status(404).json({error:'Recipient not found'});
+    if(targetRole&&!['admin','employer','worker'].includes(targetRole))return res.status(400).json({error:'Choose admin, employer, or worker as the recipient role.'});
+    if(targetRole&&recipients[0].role!==targetRole)return res.status(400).json({error:'The selected user ID does not belong to the selected role.'});
     if (category==='admins' && recipients[0].role!=='admin') return res.status(400).json({error:'Admin messages must be sent to an administrator'});
     if (category!=='admins' && recipients[0].role==='admin') return res.status(400).json({error:'Choose the admin message category for administrator messages'});
     const conversationKey=[Number(req.user.id),Number(recipientId)].sort((a,b)=>a-b).join(':');
