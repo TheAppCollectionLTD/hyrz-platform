@@ -662,15 +662,29 @@ function AdminConsole({user,action,setNotice,setError,busy}) {
  async function refresh() {
   setLoading(true);setError('');
   try {
-   const summary=await request('/admin/overview');setOverview(summary);
-   const invoiceSummary=await request('/admin/invoices');setInvoices(invoiceSummary.invoices||[]);
-   if(section==='USERS') {const r=await request('/admin/users');setUsers(r.users||[]);if(Number(user.admin_tier)<=2){const q=await request('/admin/verification-queue');setVerificationAccounts(q.accounts||[]);}}
-   if(section==='INVOICES') { /* invoice list loaded above for the dashboard counters */ }
+   // Load the dashboard counters from their source datasets, not only after a tab has been opened.
+   const results=await Promise.allSettled([
+    request('/admin/overview'),
+    request('/admin/invoices'),
+    request('/admin/inbox'),
+    request('/admin/audit-logs'),
+    request('/admin/disputes')
+   ]);
+   const [summaryResult,invoiceResult,inboxResult,logsResult,disputesResult]=results;
+   if(summaryResult.status==='fulfilled')setOverview(summaryResult.value);
+   if(invoiceResult.status==='fulfilled')setInvoices(invoiceResult.value.invoices||[]);
+   if(inboxResult.status==='fulfilled')setMessages(inboxResult.value.messages||[]);
+   if(logsResult.status==='fulfilled')setLogs(logsResult.value.logs||[]);
+   if(disputesResult.status==='fulfilled')setDisputes(disputesResult.value.disputes||[]);
+   const failures=results.filter(r=>r.status==='rejected');
+   if(failures.length===results.length)throw failures[0].reason;
+   if(failures.length)setError('Some dashboard figures could not be refreshed. Please try Refresh again.');
+   if(section==='USERS') {
+    const r=await request('/admin/users');setUsers(r.users||[]);
+    if(Number(user.admin_tier)<=2){const q=await request('/admin/verification-queue');setVerificationAccounts(q.accounts||[]);}
+   }
    if(section==='FINANCIAL REPORTS') {const r=await request('/admin/financial-reports');setFinancialReport(r);}
-   if(section==='ADMIN ACTIONS') {const r=await request('/admin/audit-logs');setLogs(r.logs||[]);}
-   if(section==='CHECKOUT DISPUTES') {const r=await request('/admin/disputes');setDisputes(r.disputes||[]);}
-   if(section==='INBOX') {const r=await request('/admin/inbox');setMessages(r.messages||[]);}
-  } catch(e) {setError(e.message);}
+  } catch(e) {setError(e.message||'Could not refresh the administration dashboard.');}
   finally {setLoading(false);}
  }
  useEffect(()=>{refresh();},[section]);
