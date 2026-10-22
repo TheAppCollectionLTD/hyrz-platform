@@ -219,10 +219,11 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await ensureWorkchatMessageDeletionColumns();const id=Number(req.params.id),messageId=Number(req.params.messageId),chat=await getWorkchat(id,req.user.id);
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
     
-    const [messages]=await db.execute('SELECT id,deleted_at FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
+    const [messages]=await db.execute('SELECT id,sender_id,deleted_at FROM workchat_messages WHERE id=? AND workchat_id=?',[messageId,id]);
     if(!messages.length)return res.status(404).json({error:'Message not found in this workchat.'});
     if(messages[0].deleted_at)return res.json({ok:true,alreadyDeleted:true});
-    if(Number(messages[0].sender_id)!==Number(req.user.id))return res.status(403).json({error:'You can only delete your own messages.'});
+    const isWorkchatAdmin=await canManageWorkchat(chat,req.user.id);
+    if(Number(messages[0].sender_id)!==Number(req.user.id)&&!isWorkchatAdmin)return res.status(403).json({error:'You can only delete your own messages unless you are a workchat admin.'});
     await db.execute("UPDATE workchat_messages SET body='This message was deleted.',deleted_at=NOW(),deleted_by=? WHERE id=? AND workchat_id=?",[req.user.id,messageId,id]);
     await db.execute('DELETE FROM workchat_pins WHERE message_id=? AND workchat_id=?',[messageId,id]);
     await audit(req,'workchat.message.deleted','workchat',id,{messageId});res.json({ok:true,deleted:true});
