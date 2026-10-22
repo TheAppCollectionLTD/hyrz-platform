@@ -4359,8 +4359,8 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app .typing-dots i{width:5px;height:5px;border-radius:50%;background:#64748b;animation:workchat-pulse 1s infinite ease-in-out}
 .app .typing-dots i:nth-child(2){animation-delay:.15s}.app .typing-dots i:nth-child(3){animation-delay:.3s}
 @keyframes workchat-pulse{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
-.app .workchat-composer{display:flex;align-items:flex-end;gap:10px;padding:14px;border-top:1px solid #e7e0d5;background:#f8f5ef}
-.app .workchat-composer textarea{flex:1;min-width:0;resize:vertical;min-height:44px;max-height:140px;border:1px solid #d8dbe2;border-radius:9px;padding:11px;background:#fff;font:inherit;font-size:13px}
+.app .workchat-composer{display:flex;align-items:stretch;flex-wrap:wrap;gap:10px;padding:14px;border-top:1px solid #e7e0d5;background:#f8f5ef}
+.app .workchat-composer textarea{flex:1 1 70%;min-width:0;resize:vertical;min-height:110px;max-height:260px;border:1px solid #d8dbe2;border-radius:9px;padding:11px;background:#fff;font:inherit;font-size:13px}
 .app .workchat-composer button{min-height:44px;white-space:nowrap}
 .app .workchat-error{margin:10px 16px;color:#9b2c2c;font-size:12px}
 .app .worker-workchat-panel{width:min(100%,900px);margin:0 auto}
@@ -6315,6 +6315,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 }
 
 
+.app .workchat-composer .workchat-reply-preview{flex:1 0 100%;box-sizing:border-box;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid #d8c9b5;border-left:4px solid #b87535;border-radius:9px;background:#fffdf9;margin:0}
 .workchat-reply-preview{
   display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
   padding:9px 12px;margin:0 0 8px;border-left:3px solid #8aa56b;
