@@ -7215,3 +7215,74 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   #root .hyrz-footer-column:first-child { grid-column:auto; }
   #root .public-home-footer .public-footer-bottom { align-items:flex-start; flex-direction:column; gap:8px; }
 }
+
+
+/* Reference-matched footer: centred wordmark, then Follow us / Job roles / Useful links. */
+#root .public-home-footer.hyrz-reference-footer {
+  background:#061746 !important;
+  color:#f7f8fc !important;
+  padding:0 clamp(24px,5vw,74px) 22px !important;
+}
+#root .hyrz-reference-footer .hyrz-footer-brand-row {
+  min-height:220px;
+  display:flex;align-items:center;justify-content:center;
+  padding:35px 0 30px;
+  border-bottom:1px solid rgba(255,255,255,.14);
+}
+#root .hyrz-reference-footer .hyrz-footer-wordmark {
+  position:relative;display:flex;align-items:center;justify-content:center;
+  min-width:200px;min-height:100px;gap:12px;
+  padding:20px 25px;border:0;background:transparent;color:#fff;
+  font-size:clamp(22px,2.2vw,30px);font-weight:400;letter-spacing:.18em;cursor:pointer;
+}
+#root .hyrz-reference-footer .hyrz-footer-diamond {
+  position:absolute;left:50%;top:50%;width:72px;height:72px;
+  border:1px solid rgba(255,255,255,.55);transform:translate(-50%,-50%) rotate(45deg);
+  pointer-events:none;
+}
+#root .hyrz-reference-footer .hyrz-footer-wordmark:before,
+#root .hyrz-reference-footer .hyrz-footer-wordmark:after {
+  content:"";position:absolute;left:50%;top:50%;width:58px;height:58px;
+  border:1px solid rgba(255,255,255,.35);transform:translate(-50%,-50%) rotate(45deg);
+  pointer-events:none;
+}
+#root .hyrz-reference-footer .hyrz-footer-wordmark:after {width:86px;height:86px;border-color:rgba(255,255,255,.2)}
+#root .hyrz-reference-footer .hyrz-footer-columns {
+  display:grid;grid-template-columns:1.2fr .6fr .6fr;
+  gap:clamp(28px,6vw,90px);padding:36px 0 46px;
+}
+#root .hyrz-reference-footer .hyrz-footer-column {display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
+#root .hyrz-reference-footer .hyrz-footer-column h3 {
+  margin:0 0 10px;color:#ff2b8c !important;font-size:15px;font-weight:850;letter-spacing:.025em;
+}
+#root .hyrz-reference-footer .hyrz-footer-column p {max-width:320px;margin:8px 0;color:#f0f3fb;font-size:14px;line-height:1.7}
+#root .hyrz-reference-footer .hyrz-footer-column>span {margin:0;color:#e4e9f6 !important;font-size:14px;line-height:1.45}
+#root .hyrz-reference-footer .hyrz-footer-column>button {
+  padding:0;border:0;background:transparent;color:#e4e9f6 !important;
+  font-size:14px;line-height:1.5;text-align:left;cursor:pointer;
+}
+#root .hyrz-reference-footer .hyrz-footer-column>button:hover,
+#root .hyrz-reference-footer .hyrz-footer-column>button:focus-visible {color:#fff !important;text-decoration:underline;text-underline-offset:3px}
+#root .hyrz-reference-footer .hyrz-footer-socials {display:flex;align-items:center;gap:18px;margin:0 0 4px;color:#fff}
+#root .hyrz-reference-footer .hyrz-footer-socials span {display:inline-flex;align-items:center;justify-content:center;width:22px;height:24px;color:#fff;font-size:24px;font-weight:800;line-height:1}
+#root .hyrz-reference-footer .hyrz-footer-socials span:last-child {font-size:17px;letter-spacing:-1px}
+#root .hyrz-reference-footer .hyrz-footer-column .hyrz-footer-contact {
+  display:inline-flex;align-items:center;gap:14px;margin-top:4px;padding:9px 12px;
+  border:1px solid rgba(255,255,255,.5);border-radius:2px;color:#fff !important;font-weight:700;
+}
+#root .hyrz-reference-footer .public-footer-bottom {
+  display:flex;justify-content:space-between !important;align-items:center;gap:16px;
+  padding-top:18px;border-top:1px solid rgba(255,255,255,.25) !important;
+  color:#cbd5ec !important;font-size:11px;
+}
+@media(max-width:760px) {
+ #root .hyrz-reference-footer .hyrz-footer-columns {grid-template-columns:1fr 1fr;gap:30px 24px}
+ #root .hyrz-reference-footer .hyrz-footer-column:first-child {grid-column:1/-1}
+ #root .hyrz-reference-footer .hyrz-footer-brand-row {min-height:175px}
+}
+@media(max-width:480px) {
+ #root .public-home-footer.hyrz-reference-footer {padding-left:22px !important;padding-right:22px !important}
+ #root .hyrz-reference-footer .hyrz-footer-columns {grid-template-columns:1fr;gap:26px}
+ #root .hyrz-reference-footer .hyrz-footer-column:first-child {grid-column:auto}
+ #root .hyrz-reference-footer .public-footer-bottom {align-items:flex-start;flex-direction:column;gap:8px}
+}
