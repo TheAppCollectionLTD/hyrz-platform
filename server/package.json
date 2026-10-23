@@ -5,10 +5,12 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
+    "dev:test": "node scripts/run-local-test.js",
     "start": "node src/index.js",
     "test": "node --test",
     "bootstrap:owner": "node src/bootstrap-owner.js",
     "test:integration": "node scripts/admin-journeys.integration.js",
+    "setup:test": "node scripts/setup-test-db.js",
     "seed:test-accounts": "node scripts/seed-test-accounts.js"
   },
   "dependencies": {
