@@ -274,8 +274,9 @@ async function authenticate(register) {
   <div className="public-about-content">
     <h1 id="public-about-title">Built by people who know the realities of hospitality.</h1>
     <p>We're a team of former bartenders, waiters, hospitality managers and supervisors. We've experienced the pressure of busy services, the challenge of staff turnover, and how hard it can be to get staffing levels right.</p>
-    <p>Overstaffing can leave workers competing for too few hours. Understaffing puts teams under pressure and can compromise the service guests deserve. We believe neither should be the norm.</p>
-    <p>Hyrz is built to help employers find the people they need when they need them, while giving workers more choice over when and where they work. Better-matched shifts can mean stronger teams, fairer access to hours and better experiences for guests.</p>
+    <p>That experience is where Hyrz began—but hospitality is not where we stop. We offer flexible work opportunities across multiple industries, including hospitality and bars, festivals and events, warehouse and logistics, office and administration, hotels and catering, and other sectors.</p>
+    <p>Overstaffing can leave workers competing for too few hours. Understaffing puts teams under pressure and can compromise the service customers deserve, whatever the industry. We believe better staffing should work for everyone.</p>
+    <p>Hyrz helps employers find people when they need them, while giving workers more choice over when and where they work. Our hospitality roots shape our understanding of staffing challenges, and our platform is built to support a wider range of roles and workplaces.</p>
   </div>
 </section>
 <div className="work-carousel">
