@@ -60,7 +60,7 @@ If the browser fills in old credentials automatically, replace both fields with 
 
 - **`Invalid email or password`:** run `npm run setup:test` from `server`, then make sure the API was started with `npm run dev:test` (not `npm run dev`). Use one of the exact test accounts above.
 - **Database permission/access error:** the MySQL account in `server/.env` must be able to use `hyrz_test`. The setup script reports the underlying database error.
-- **`Failed to fetch`:** check that the API terminal is running on port 4000 and that the client uses `VITE_API_URL=http://localhost:4000/api` (the default in `client/src/api.js`).
+- **`Failed to fetch`:** check that the test API terminal is running on port 4001 and that the client was started with `VITE_API_URL=http://localhost:4001/api`.
 - **Email verification:** the seeder marks these fictional test accounts as verified so local sign-in does not require email delivery.
 
 These accounts and credentials are for local development only. Never deploy them or use them against a production database.
