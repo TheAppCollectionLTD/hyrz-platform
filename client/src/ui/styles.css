@@ -6632,3 +6632,71 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   position:relative;
   z-index:1;
 }
+
+
+/* Homepage About Us: prominent, accessible and consistent with Hyrz's monochrome palette. */
+#root .public-home-nav .public-about-trigger {
+  border:0 !important;
+  background:transparent !important;
+  color:#fff !important;
+  padding:12px 4px;
+  font:inherit;
+  font-size:13px;
+  font-weight:650;
+  cursor:pointer;
+}
+#root .public-home-nav .public-about-trigger:hover,
+#root .public-home-nav .public-about-trigger:focus-visible {
+  color:#d4d4d4 !important;
+  text-decoration:underline;
+  text-underline-offset:4px;
+}
+#root .public-about-section {
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:minmax(140px,.55fr) minmax(0,1.45fr);
+  gap:clamp(28px,6vw,100px);
+  align-items:start;
+  padding:clamp(44px,7vw,94px) clamp(28px,6vw,92px);
+  background:#f5f5f5 !important;
+  color:#111 !important;
+  border-bottom:1px solid #d4d4d4;
+  scroll-margin-top:76px;
+}
+#root .public-about-kicker {
+  padding-top:10px;
+  color:#525252 !important;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:2.2px;
+}
+#root .public-about-content { max-width:850px; }
+#root .public-about-content h1 {
+  max-width:780px;
+  margin:0 0 26px;
+  color:#000 !important;
+  font-size:clamp(32px,4.2vw,58px);
+  font-weight:800;
+  line-height:1.08;
+  letter-spacing:-1.8px;
+}
+#root .public-about-content p {
+  max-width:780px;
+  margin:0 0 16px;
+  color:#404040 !important;
+  font-size:clamp(15px,1.35vw,18px);
+  line-height:1.8;
+}
+#root .public-about-content p:last-child { margin-bottom:0; }
+@media(max-width:760px) {
+  #root .public-about-section {
+    grid-template-columns:1fr;
+    gap:16px;
+    padding:40px 24px;
+    scroll-margin-top:68px;
+  }
+  #root .public-about-kicker { padding-top:0; }
+  #root .public-about-content h1 { font-size:clamp(32px,8vw,44px); letter-spacing:-1px; }
+  #root .public-about-content p { font-size:15px; line-height:1.75; }
+  #root .public-home-nav .public-about-trigger { font-size:12px; }
+}
