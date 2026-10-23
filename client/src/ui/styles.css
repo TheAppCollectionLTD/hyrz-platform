@@ -7215,3 +7215,97 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   #root .hyrz-footer-column:first-child { grid-column:auto; }
   #root .public-home-footer .public-footer-bottom { align-items:flex-start; flex-direction:column; gap:8px; }
 }
+
+/* Realistic iPhone 16-style hyrz app preview for the public download section. */
+#root .download-app-section {
+  grid-template-columns:minmax(0,1fr) minmax(390px,.95fr) !important;
+  min-height:520px !important;
+  background:#f7f7f7 !important;
+  color:#111 !important;
+}
+#root .download-app-copy { background:#f7f7f7 !important; }
+#root .download-app-copy h2 { color:#111 !important; }
+#root .download-app-copy h2 em { color:#555 !important; }
+#root .download-app-visual {
+  position:relative !important;
+  min-height:520px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  background:radial-gradient(ellipse at 50% 48%,#e9e9e9 0,#f7f7f7 53%,#f7f7f7 100%) !important;
+}
+#root .download-app-visual .app-visual-orbit {
+  position:absolute !important;
+  border:1px solid #dedede !important;
+  border-radius:50% !important;
+  pointer-events:none !important;
+}
+#root .download-app-visual .orbit-one { width:470px !important;height:470px !important; }
+#root .download-app-visual .orbit-two { width:370px !important;height:370px !important; }
+#root .download-app-visual .app-visual-phone {
+  position:relative !important;
+  width:286px !important;
+  height:535px !important;
+  min-height:0 !important;
+  padding:7px !important;
+  display:block !important;
+  overflow:hidden !important;
+  border:2px solid #777 !important;
+  border-radius:49px !important;
+  background:linear-gradient(115deg,#f9f9f9 0%,#161616 7%,#444 12%,#111 18%,#171717 86%,#777 95%,#e5e5e5 100%) !important;
+  box-shadow:0 30px 65px #0003, inset 0 0 0 1px #000 !important;
+  transform:rotate(-7deg) !important;
+}
+#root .app-visual-screen {
+  position:relative !important;
+  height:100% !important;
+  width:100% !important;
+  overflow:hidden !important;
+  border-radius:39px !important;
+  padding:18px 13px 9px !important;
+  background:#080808 !important;
+  color:#fff !important;
+  font-family:Inter,system-ui,-apple-system,sans-serif !important;
+  box-sizing:border-box !important;
+}
+#root .app-visual-status { display:flex !important;justify-content:space-between !important;align-items:center !important;padding:0 8px !important;height:16px !important;font-size:9px !important;font-weight:800 !important; }
+#root .app-visual-status-icons { font-size:9px !important;letter-spacing:1px !important; }
+#root .app-visual-dynamic-island { position:absolute !important;top:8px !important;left:50% !important;transform:translateX(-50%) !important;width:91px !important;height:24px !important;border-radius:20px !important;background:#000 !important;box-shadow:0 0 0 1px #161616 !important; }
+#root .app-visual-appbar { display:flex !important;justify-content:space-between !important;align-items:center !important;margin:17px 3px 16px !important; }
+#root .app-visual-appbar>strong { font-size:25px !important;letter-spacing:-1.5px !important;font-weight:900 !important;color:#fff !important; }
+#root .app-visual-avatar { width:26px !important;height:26px !important;display:grid !important;place-items:center !important;border-radius:50% !important;background:#eee !important;color:#111 !important;font-size:11px !important;font-weight:800 !important; }
+#root .app-visual-screen-title { font-size:21px !important;line-height:1.1 !important;font-weight:850 !important;letter-spacing:-.6px !important;margin:0 2px 12px !important;color:#fff !important; }
+#root .app-visual-screen-title>span { display:block !important;margin-top:5px !important;font-size:9px !important;font-weight:450 !important;letter-spacing:0 !important;color:#aaa !important; }
+#root .app-visual-search { display:flex !important;align-items:center !important;gap:8px !important;padding:10px 11px !important;margin-bottom:10px !important;border:1px solid #414141 !important;border-radius:13px !important;background:#1b1b1b !important;color:#fff !important;font-size:17px !important; }
+#root .app-visual-search>span { font-size:9px !important;color:#aaa !important; }
+#root .app-visual-filters { display:flex !important;gap:5px !important;margin:0 0 18px !important; }
+#root .app-visual-filters>span { padding:7px 8px !important;border-radius:16px !important;background:#252525 !important;color:#ddd !important;font-size:8px !important;white-space:nowrap !important; }
+#root .app-visual-filters>span.is-active { background:#fff !important;color:#111 !important;font-weight:800 !important; }
+#root .app-visual-list-heading { display:flex !important;justify-content:space-between !important;align-items:center !important;margin:0 2px 9px !important;font-size:12px !important;font-weight:800 !important;color:#fff !important; }
+#root .app-visual-list-heading>span { font-size:8px !important;color:#ccc !important;font-weight:500 !important; }
+#root .app-visual-job { padding:11px 10px 10px !important;margin-bottom:8px !important;border-radius:14px !important;background:#f7f7f7 !important;color:#111 !important;box-shadow:0 3px 10px #0002 !important; }
+#root .app-visual-job-top { display:flex !important;align-items:center !important;gap:8px !important; }
+#root .app-visual-job-icon { display:grid !important;place-items:center !important;flex:0 0 29px !important;width:29px !important;height:29px !important;border-radius:9px !important;background:#e6e6e6 !important;color:#111 !important;font-size:11px !important;font-weight:900 !important; }
+#root .app-visual-job-top>span:nth-child(2) { display:flex !important;flex-direction:column !important;gap:3px !important;min-width:0 !important; }
+#root .app-visual-job-top strong { font-size:10px !important;line-height:1.1 !important;color:#111 !important; }
+#root .app-visual-job-top small { font-size:7px !important;color:#666 !important; }
+#root .app-visual-job-top>b { margin-left:auto !important;font-size:9px !important;white-space:nowrap !important;color:#111 !important; }
+#root .app-visual-job-meta { margin-top:10px !important;font-size:8px !important;color:#444 !important; }
+#root .app-visual-job-tag { display:inline-block !important;margin-top:8px !important;padding:4px 7px !important;border-radius:7px !important;background:#e9e9e9 !important;color:#333 !important;font-size:7px !important; }
+#root .app-visual-job-bottom { display:flex !important;justify-content:space-between !important;align-items:center !important;margin-top:9px !important;font-size:9px !important;font-weight:800 !important;color:#111 !important; }
+#root .app-visual-job-bottom>span { font-size:8px !important; }
+#root .app-visual-tabbar { position:absolute !important;left:7px !important;right:7px !important;bottom:4px !important;display:flex !important;justify-content:space-around !important;align-items:center !important;padding:8px 0 3px !important;border-top:1px solid #333 !important;background:#080808 !important; }
+#root .app-visual-tabbar>span { display:flex !important;flex-direction:column !important;align-items:center !important;gap:3px !important;color:#999 !important;font-size:14px !important;line-height:1 !important; }
+#root .app-visual-tabbar>span.active { color:#fff !important; }
+#root .app-visual-tabbar small { font-size:6px !important;color:inherit !important; }
+@media(max-width:760px) {
+  #root .download-app-section { grid-template-columns:1fr !important; }
+  #root .download-app-visual { min-height:550px !important; }
+  #root .download-app-visual .app-visual-phone { width:265px !important;height:500px !important; }
+}
+@media(max-width:380px) {
+  #root .download-app-visual { min-height:510px !important; }
+  #root .download-app-visual .app-visual-phone { width:238px !important;height:460px !important; }
+  #root .app-visual-screen { padding:16px 10px 8px !important; }
+}
