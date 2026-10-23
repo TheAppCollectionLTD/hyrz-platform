@@ -25,6 +25,47 @@ This is a development MVP foundation, not a certified production staffing/paymen
    ```
 5. Open the Vite URL shown in the terminal (normally http://localhost:5173).
 
+## Local test accounts
+
+For local testing, use a separate database named `hyrz_test`. The test-account seeder intentionally refuses to run against any other database.
+
+From the repository root, create the database (if it does not already exist):
+
+```bash
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS hyrz_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+Configure `server/.env` with the credentials for that database. In particular, set `DB_NAME=hyrz_test`, and set `DB_USER` and `DB_PASSWORD` to a MySQL account that can create and update tables in that database. Then initialise and seed it:
+
+```bash
+mysql -u root -p hyrz_test < server/db/schema.sql
+cd server
+npm install
+npm run seed:test-accounts
+npm run dev
+```
+
+In a second terminal, start the client:
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Use these **fictional local-only accounts** to test sign-in:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Worker | `test.worker@hyrz.local` | `HyrzTestWorker!2026` |
+| Employer | `test.employer@hyrz.local` | `HyrzTestEmployer!2026` |
+| Worker (second account) | `test.worker2@hyrz.local` | `HyrzTestWorker2!2026` |
+| Employer (second account) | `test.employer2@hyrz.local` | `HyrzTestEmployer2!2026` |
+
+If the sign-in page has an old email or password filled in by your browser, replace it with one of the test accounts above. An email such as `worker.test@hyrz.invalid` is not one of the seeded test accounts. Do not use these accounts on a production database.
+
+For a fuller step-by-step guide, see [server/LOCAL_TESTING.md](server/LOCAL_TESTING.md).
+
 ## Seed an administrator
 Register normally through the API/UI, then manually promote that user's `role` to `admin` and set `admin_tier` to `1` in your local database:
 ```sql
