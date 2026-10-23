@@ -6555,3 +6555,18 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app-store-placeholder { background:#000 !important; color:#fff !important; border-color:#000 !important; }
 #root .app-store-placeholder .store-symbol { color:#fff !important; }
 #root .app-store-placeholder small { color:#d4d4d4 !important; }
+
+
+/* Keep the Hyrz wordmark clean: no grey button/background highlight. */
+#root .public-home-nav .public-home-logo,
+#root .public-home-nav .public-home-logo:hover,
+#root .public-home-nav .public-home-logo:focus,
+#root .public-home-nav .public-home-logo:focus-visible,
+#root .public-home-nav .public-home-logo:active {
+  background:transparent !important;
+  color:#fff !important;
+  border:0 !important;
+  outline:none !important;
+  box-shadow:none !important;
+}
+#root .public-home-nav .public-home-logo span { background:transparent !important; }
