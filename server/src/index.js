@@ -356,7 +356,7 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
   const [rows] = await db.execute(
     `SELECT u.id,u.email,u.password_hash,u.role,u.admin_tier,u.status,u.first_name,u.last_name,u.email_verified_at
      FROM users u LEFT JOIN admin_login_names n ON n.user_id=u.id
-     WHERE u.email=? OR (u.role='admin' AND n.username=?) LIMIT 1`,
+     WHERE LOWER(TRIM(u.email))=? OR (u.role='admin' AND n.username=?) LIMIT 1`,
     [identifier.toLowerCase(), identifier]
   );
 
