@@ -6570,3 +6570,22 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   box-shadow:none !important;
 }
 #root .public-home-nav .public-home-logo span { background:transparent !important; }
+
+
+/* One clean row of footer navigation links, without duplicate heading/link rows. */
+#root .public-footer-links {
+  display:flex; align-items:center; justify-content:flex-start;
+  flex-wrap:wrap; gap:clamp(24px,5vw,64px);
+  padding:18px 0 28px;
+}
+#root .public-footer-links button {
+  padding:0; border:0; background:transparent; color:#fff;
+  font:inherit; font-size:13px; font-weight:650; cursor:pointer;
+}
+#root .public-footer-links button:hover,
+#root .public-footer-links button:focus-visible {
+  color:#d4d4d4; text-decoration:underline;
+}
+@media(max-width:600px) {
+  #root .public-footer-links { gap:20px; padding-bottom:22px; }
+}
