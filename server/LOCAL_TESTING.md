@@ -31,17 +31,17 @@ cd ~/Downloads/hyrz-platform-build/hyrz-platform/server
 npm run dev:test
 ```
 
-This starts the API with `DB_NAME=hyrz_test` for this process only. It leaves the `DB_NAME` setting in `server/.env` unchanged.
+This starts the API with `DB_NAME=hyrz_test` for this process only, on `http://localhost:4001`. It leaves the `DB_NAME` setting in `server/.env` unchanged and avoids conflicts with a normal development API already using port 4000.
 
 In terminal 2:
 
 ```bash
 cd ~/Downloads/hyrz-platform-build/hyrz-platform/client
 npm install
-npm run dev
+VITE_API_URL=http://localhost:4001/api npm run dev
 ```
 
-Open the Vite address shown by the client, normally `http://localhost:5173`. The API normally listens on `http://localhost:4000`.
+Open the Vite address shown by the client (usually `http://localhost:5173`, or `http://localhost:5174` if port 5173 is occupied). The test API listens on `http://localhost:4001`.
 
 For normal development against your configured database, the existing `npm run dev` command is unchanged. Use `npm run dev:test` when testing with these test accounts.
 
