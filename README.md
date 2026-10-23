@@ -27,22 +27,21 @@ This is a development MVP foundation, not a certified production staffing/paymen
 
 ## Local test accounts
 
-For local testing, use a separate database named `hyrz_test`. The test-account seeder intentionally refuses to run against any other database.
+Local test accounts use a dedicated `hyrz_test` database. You do not need to edit the existing `server/.env` or change its normal `DB_NAME` value. The setup and test-server commands explicitly target `hyrz_test` and leave the normal `hyrz` database alone.
 
-From the repository root, create the database (if it does not already exist):
+From the repository root, run:
+
+```bash
+cd server
+npm install
+npm run setup:test
+npm run dev:test
+```
+
+The MySQL user in `server/.env` must have permission to create/update tables and records in `hyrz_test`. The setup command creates the schema and seeds the fictional test accounts. If `hyrz_test` does not exist, create it with a MySQL administrator first:
 
 ```bash
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS hyrz_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-```
-
-Configure `server/.env` with the credentials for that database. In particular, set `DB_NAME=hyrz_test`, and set `DB_USER` and `DB_PASSWORD` to a MySQL account that can create and update tables in that database. Then initialise and seed it:
-
-```bash
-mysql -u root -p hyrz_test < server/db/schema.sql
-cd server
-npm install
-npm run seed:test-accounts
-npm run dev
 ```
 
 In a second terminal, start the client:
@@ -62,10 +61,9 @@ Use these **fictional local-only accounts** to test sign-in:
 | Worker (second account) | `test.worker2@hyrz.local` | `HyrzTestWorker2!2026` |
 | Employer (second account) | `test.employer2@hyrz.local` | `HyrzTestEmployer2!2026` |
 
-If the sign-in page has an old email or password filled in by your browser, replace it with one of the test accounts above. An email such as `worker.test@hyrz.invalid` is not one of the seeded test accounts. Do not use these accounts on a production database.
+If the sign-in page has an old email or password filled in by your browser, replace it with one of the test accounts above. An email such as `worker.test@hyrz.invalid` is not a seeded test account. Do not use these accounts on a production database.
 
-For a fuller step-by-step guide, see [server/LOCAL_TESTING.md](server/LOCAL_TESTING.md).
-
+For troubleshooting and details, see [server/LOCAL_TESTING.md](server/LOCAL_TESTING.md).
 ## Seed an administrator
 Register normally through the API/UI, then manually promote that user's `role` to `admin` and set `admin_tier` to `1` in your local database:
 ```sql
