@@ -1,73 +1,51 @@
 # Local testing and sign-in
 
-This guide is for running hyrz locally with fictional test users. It does not create accounts in production and it does not bypass authentication.
+This guide runs hyrz locally against a dedicated fictional test database without changing the database name in your existing `.env` file.
 
-## 1. Create a dedicated test database
+## 1. Check local prerequisites
 
-From the repository root:
+You need Node.js 20+, npm, and MySQL running. The credentials in `server/.env` must have permission to create/update tables and records in a database named `hyrz_test`. Keep this file private; never commit it.
 
-```bash
-mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS hyrz_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-```
+The setup command below reads the existing local database credentials, targets only `hyrz_test`, creates the schema if needed, and seeds fictional test users. It does not seed or modify the normal `hyrz` database.
 
-Enter your local MySQL root password when prompted. If your MySQL setup uses a different administrative account, substitute that account.
+## 2. Set up the test database and accounts
 
-## 2. Configure the API
-
-Create `server/.env` from `server/.env.example` if you do not already have one:
+After pulling the latest `admin-journeys` branch, run:
 
 ```bash
-cp server/.env.example server/.env
-```
-
-Edit `server/.env` and set the local MySQL credentials and test database:
-
-```dotenv
-PORT=4000
-CLIENT_ORIGIN=http://localhost:5173
-JWT_SECRET=replace-with-a-long-random-secret-at-least-32-characters
-JWT_EXPIRES_IN=8h
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_NAME=hyrz_test
-DB_USER=your_mysql_user
-DB_PASSWORD=your_mysql_password
-```
-
-Replace the example database username and password with your local values. Keep `server/.env` private; it should not be committed to Git.
-
-## 3. Initialise and seed the database
-
-From the repository root, run:
-
-```bash
-mysql -u root -p hyrz_test < server/db/schema.sql
-cd server
+cd ~/Downloads/hyrz-platform-build/hyrz-platform/server
 npm install
-npm run seed:test-accounts
+npm run setup:test
 ```
 
-The seed command checks that `DB_NAME` is exactly `hyrz_test` and refuses to run against another database. It creates or refreshes four fictional test accounts and marks their email addresses as verified so the local sign-in flow can be tested without an email provider.
+The script uses the host, port, username, and password from your existing `server/.env`, but explicitly connects to `hyrz_test`. It creates the schema and seeds the four test accounts. It fails safely if it cannot connect or lacks database permissions. You do not need to edit `server/.env` or load it as a shell script.
 
-## 4. Start the API and client
+If setup reports an access/permission error, grant the MySQL user named in `server/.env` access to `hyrz_test` using your local MySQL administrator account. Do not change the app's normal `DB_NAME=hyrz` setting just to seed test users.
+
+## 3. Start the API and client
 
 In terminal 1:
 
 ```bash
 cd ~/Downloads/hyrz-platform-build/hyrz-platform/server
-npm run dev
+npm run dev:test
 ```
+
+This starts the API with `DB_NAME=hyrz_test` for this process only. It leaves the `DB_NAME` setting in `server/.env` unchanged.
 
 In terminal 2:
 
 ```bash
 cd ~/Downloads/hyrz-platform-build/hyrz-platform/client
+npm install
 npm run dev
 ```
 
-Open the local Vite address shown by the client, normally `http://localhost:5173`. The API should be listening on `http://localhost:4000`.
+Open the Vite address shown by the client, normally `http://localhost:5173`. The API normally listens on `http://localhost:4000`.
 
-## 5. Sign in with a seeded test account
+For normal development against your configured database, the existing `npm run dev` command is unchanged. Use `npm run dev:test` when testing with these test accounts.
+
+## 4. Sign in with a seeded test account
 
 | Role | Email | Password |
 | --- | --- | --- |
@@ -78,13 +56,11 @@ Open the local Vite address shown by the client, normally `http://localhost:5173
 
 If the browser fills in old credentials automatically, replace both fields with the exact values above. For example, `worker.test@hyrz.invalid` is not a seeded account and will correctly be rejected.
 
-The API now compares email addresses case-insensitively and trims surrounding whitespace. It still requires a real account and the correct password; it does not provide a login bypass.
-
 ## Troubleshooting
 
-- **`Invalid email or password`:** confirm the account is seeded in the database named in `server/.env`, and use the exact test credentials above.
+- **`Invalid email or password`:** run `npm run setup:test` from `server`, then make sure the API was started with `npm run dev:test` (not `npm run dev`). Use one of the exact test accounts above.
+- **Database permission/access error:** the MySQL account in `server/.env` must be able to use `hyrz_test`. The setup script reports the underlying database error.
 - **`Failed to fetch`:** check that the API terminal is running on port 4000 and that the client uses `VITE_API_URL=http://localhost:4000/api` (the default in `client/src/api.js`).
-- **Database connection error:** confirm MySQL is running and `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` match your local setup.
-- **Seeder refuses to run:** check that `server/.env` has `DB_NAME=hyrz_test`. This guard is deliberate to protect your normal development database and production data.
+- **Email verification:** the seeder marks these fictional test accounts as verified so local sign-in does not require email delivery.
 
 These accounts and credentials are for local development only. Never deploy them or use them against a production database.
