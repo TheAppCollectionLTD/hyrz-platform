@@ -6847,3 +6847,58 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   #root .how-work-steps li { grid-template-columns:27px minmax(0,1fr); column-gap:10px; }
   #root .how-work-steps li::before { width:27px; height:27px; }
 }
+
+
+/* Three-part introduction carousel: About Hyrz, worker journey, employer journey. */
+#root .public-intro-carousel {
+  display:block;
+  padding:clamp(24px,4vw,54px) clamp(24px,6vw,92px) clamp(36px,5vw,68px);
+  background:#f5f5f5;
+  color:#111;
+  border-bottom:1px solid #d4d4d4;
+  scroll-margin-top:76px;
+}
+#root .public-intro-topline { display:flex; justify-content:space-between; align-items:center; max-width:1320px; margin:0 auto 22px; }
+#root .public-intro-counter { font-size:12px; font-weight:800; letter-spacing:1.5px; }
+#root .public-intro-counter span { color:#777; font-weight:500; }
+#root .public-intro-controls { display:flex; gap:8px; }
+#root .public-intro-controls button { width:42px; height:42px; border:1px solid #bdbdbd; border-radius:50%; background:#fff; color:#111; font-size:20px; cursor:pointer; transition:background .18s,color .18s; }
+#root .public-intro-controls button:hover { background:#111; color:#fff; }
+#root .public-intro-tabs { display:flex; gap:8px; flex-wrap:wrap; max-width:1320px; margin:0 auto 26px; padding-bottom:18px; border-bottom:1px solid #d4d4d4; }
+#root .public-intro-tabs button { border:1px solid #c8c8c8; border-radius:999px; background:transparent; color:#333; padding:11px 17px; font-size:12px; font-weight:750; cursor:pointer; }
+#root .public-intro-tabs button.active, #root .public-intro-tabs button:hover { background:#000; border-color:#000; color:#fff; }
+#root .public-intro-slide { max-width:1320px; min-height:440px; margin:0 auto; display:flex; align-items:flex-start; animation:publicIntroFade .24s ease-out; }
+#root .public-intro-copy { width:100%; max-width:940px; margin-left:auto; }
+#root .public-intro-copy .public-about-kicker { padding:0; margin:7px 0 18px; color:#555; font-size:11px; font-weight:800; letter-spacing:2.2px; }
+#root .public-intro-copy h1 { max-width:850px; margin:0 0 24px; color:#000; font-size:clamp(34px,4.2vw,60px); line-height:1.06; letter-spacing:-1.8px; font-weight:800; }
+#root .public-intro-copy p { max-width:850px; margin:0 0 14px; color:#404040; font-size:clamp(15px,1.2vw,17px); line-height:1.75; }
+#root .public-intro-copy .public-intro-lead { font-size:clamp(16px,1.4vw,19px); margin-bottom:24px; }
+#root .public-intro-steps { list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 34px; counter-reset:intro-step; }
+#root .public-intro-steps li { position:relative; counter-increment:intro-step; padding:16px 0 16px 46px; border-top:1px solid #d4d4d4; min-height:90px; }
+#root .public-intro-steps li:before { content:counter(intro-step,decimal-leading-zero); position:absolute; left:0; top:18px; width:30px; height:30px; display:grid; place-items:center; border:1px solid #bcbcbc; border-radius:50%; font-size:10px; font-weight:800; }
+#root .public-intro-steps strong, #root .public-intro-steps span { display:block; }
+#root .public-intro-steps strong { margin:0 0 5px; font-size:14px; color:#111; }
+#root .public-intro-steps span { color:#555; font-size:13px; line-height:1.6; }
+#root .public-intro-cta { display:inline-flex; gap:22px; align-items:center; margin-top:24px; padding:14px 19px; border:1px solid #000; border-radius:3px; background:#000; color:#fff; font-size:13px; font-weight:750; cursor:pointer; }
+#root .public-intro-cta:hover { background:#333; }
+#root .public-intro-bottom { max-width:1320px; margin:32px auto 0; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+#root .public-intro-bottom > span { color:#666; font-size:10px; letter-spacing:1.6px; font-weight:800; }
+#root .public-intro-bottom > span b { margin:0 5px; color:#999; }
+#root .public-intro-dots { display:flex; align-items:center; gap:7px; }
+#root .public-intro-dots button { width:8px; height:8px; padding:0; border:0; border-radius:99px; background:#bdbdbd; cursor:pointer; transition:width .18s,background .18s; }
+#root .public-intro-dots button.active { width:28px; background:#111; }
+@keyframes publicIntroFade { from { opacity:.55; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+@media(max-width:760px) {
+ #root .public-intro-carousel { padding:24px 20px 34px; }
+ #root .public-intro-topline { margin-bottom:18px; }
+ #root .public-intro-tabs { gap:7px; margin-bottom:20px; }
+ #root .public-intro-tabs button { padding:9px 12px; font-size:11px; }
+ #root .public-intro-slide { min-height:0; }
+ #root .public-intro-copy { margin:0; }
+ #root .public-intro-copy h1 { font-size:clamp(32px,8vw,44px); letter-spacing:-1px; }
+ #root .public-intro-steps { grid-template-columns:1fr; }
+ #root .public-intro-steps li { min-height:0; }
+ #root .public-intro-bottom { margin-top:26px; align-items:flex-start; }
+ #root .public-intro-bottom > span { font-size:9px; text-align:right; }
+}
+@media(prefers-reduced-motion:reduce) { #root .public-intro-slide { animation:none; } }
