@@ -285,7 +285,7 @@ async function authenticate(register) {
   <div className="public-intro-slide" key={publicIntroSlide} aria-live="polite">
     {publicIntroSlide===0?<div className="public-intro-copy">
       <div className="public-about-kicker">ABOUT HYRZ</div>
-      <h1>Built by people who know the realities of hospitality.</h1>
+      <h1>Built by people who understand work and management.</h1>
       <p>We're a team of former bartenders, waiters, hospitality managers and supervisors. We've experienced the pressure of busy services, the challenge of staff turnover, and how hard it can be to get staffing levels right.</p>
       <p>That experience is where Hyrz began—but hospitality is not where we stop. We offer flexible work opportunities across multiple industries, including hospitality and bars, festivals and events, warehouse and logistics, office and administration, hotels and catering, and other sectors.</p>
       <p>Overstaffing can leave workers competing for too few hours. Understaffing puts teams under pressure and can compromise the service customers deserve, whatever the industry. We believe better staffing should work for everyone.</p>
