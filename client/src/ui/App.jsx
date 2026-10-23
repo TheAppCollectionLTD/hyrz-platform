@@ -373,12 +373,35 @@ async function authenticate(register) {
  <div className="download-app-visual" role="img" aria-label="Hyrz mobile app preview"><div className="app-visual-orbit orbit-one"></div><div className="app-visual-orbit orbit-two"></div><div className="app-visual-phone"><div className="app-visual-speaker"></div><div className="app-visual-logo">hyrz</div><div className="app-visual-shift-label">MOBILE APP</div><strong>Hyrz on the go</strong><small>iOS &amp; Android</small><div className="app-visual-pay">APP LAUNCHING SOON<small>iOS and Android</small></div><div className="app-visual-confirm">Hyrz, wherever you work.</div></div></div>
  </section>
 <footer className="public-home-footer">
-  <nav className="public-footer-links" aria-label="Footer">
-   <button type="button" onClick={()=>navigateTo('chooseRole')}>Get started</button>
-   <button type="button" onClick={()=>navigateTo('login')}>Sign in</button>
-   <button type="button" onClick={()=>{setPublicContactOpen(true);setPublicContactSent(false);setPublicContactError('')}}>Contact us</button>
-  </nav>
-  <div className="public-footer-bottom"><span>© {new Date().getFullYear()} Hyrz. All rights reserved.</span></div>
+  <div className="hyrz-footer-brand-row">
+   <button type="button" className="hyrz-footer-wordmark" onClick={()=>navigateTo('home')} aria-label="Hyrz home">hyrz</button>
+   <p>Flexible work. Reliable staffing.</p>
+  </div>
+  <div className="hyrz-footer-columns">
+   <section className="hyrz-footer-column">
+    <h3>GET IN TOUCH</h3>
+    <p>Questions about finding work or staffing your business? We’re here to help.</p>
+    <button type="button" className="hyrz-footer-contact" onClick={()=>{setPublicContactOpen(true);setPublicContactSent(false);setPublicContactError('')}}>Contact Hyrz <span aria-hidden="true">→</span></button>
+   </section>
+   <section className="hyrz-footer-column">
+    <h3>OPPORTUNITIES</h3>
+    <span>Hospitality &amp; bars</span>
+    <span>Hotels &amp; catering</span>
+    <span>Warehousing &amp; logistics</span>
+    <span>Office &amp; administration</span>
+    <span>Retail &amp; customer service</span>
+    <span>Festivals &amp; events</span>
+   </section>
+   <section className="hyrz-footer-column">
+    <h3>USEFUL LINKS</h3>
+    <button type="button" onClick={()=>navigateTo('chooseRole')}>Get started</button>
+    <button type="button" onClick={()=>navigateTo('login')}>Sign in</button>
+    <button type="button" onClick={()=>{setPublicIntroSlide(0);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>About us</button>
+    <button type="button" onClick={()=>{setPublicIntroSlide(1);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>How we work · Workers</button>
+    <button type="button" onClick={()=>{setPublicIntroSlide(2);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>How we work · Employers</button>
+   </section>
+  </div>
+  <div className="public-footer-bottom"><span>© {new Date().getFullYear()} Hyrz. All rights reserved.</span><span>Built around the way people work.</span></div>
  </footer>
  {publicContactOpen&&<div className="public-contact-backdrop" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setPublicContactOpen(false)}}><section className="public-contact-modal" role="dialog" aria-modal="true" aria-labelledby="public-contact-title"><div className="public-contact-heading"><div><span className="eyebrow">WE'RE HERE TO HELP</span><h2 id="public-contact-title">Contact Hyrz</h2><p>Send our team a message and we'll get back to you.</p></div><button type="button" className="textbutton" aria-label="Close contact form" onClick={()=>setPublicContactOpen(false)}>✕</button></div>{publicContactSent?<div className="public-contact-success" role="status"><h3>Thanks for getting in touch.</h3><p>Your message has been submitted.</p><button type="button" className="primary" onClick={()=>setPublicContactOpen(false)}>Close</button></div>:<form className="public-contact-form" onSubmit={submitPublicContact}><label htmlFor="public-contact-email">Email address</label><input id="public-contact-email" type="email" required maxLength="254" value={publicContactEmail} onChange={e=>setPublicContactEmail(e.target.value)} placeholder="you@example.com"/><label htmlFor="public-contact-message">Message</label><textarea id="public-contact-message" required minLength="5" maxLength="5000" rows="6" value={publicContactMessage} onChange={e=>setPublicContactMessage(e.target.value)} placeholder="How can we help?"/>{publicContactError&&<p className="public-contact-error" role="alert">{publicContactError}</p>}<button type="submit" className="primary" disabled={publicContactSending}>{publicContactSending?'Sending…':'Send message'}</button></form>}</section></div>}
  </section>}
