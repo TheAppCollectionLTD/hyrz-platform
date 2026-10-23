@@ -388,7 +388,7 @@ async function authenticate(register) {
     <span>Hospitality &amp; bars</span><span>Chef &amp; kitchen</span><span>Food service</span><span>Hotels &amp; catering</span><span>Warehouse &amp; logistics</span><span>Office &amp; administration</span><span>Retail &amp; customer service</span><span>Festivals &amp; events</span>
    </section>
    <section className="hyrz-footer-column">
-    <h3>USEFUL LINKS</h3>
+    <h3>EXPLORE HYRZ</h3>
     <button type="button" onClick={()=>navigateTo('chooseRole')}>Get started</button><button type="button" onClick={()=>navigateTo('login')}>Sign in</button>
     <button type="button" onClick={()=>{setPublicIntroSlide(0);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>About us</button>
     <button type="button" onClick={()=>{setPublicIntroSlide(1);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>How we work · Workers</button>
