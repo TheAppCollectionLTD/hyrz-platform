@@ -6942,3 +6942,140 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  #root .public-app-icon { width:29px; height:29px; min-height:29px; padding:5px; }
  #root .public-app-icon svg { width:16px; height:16px; }
 }
+
+
+/* Refined monochrome app-download section */
+#root .download-app-section {
+  position:relative !important;
+  grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr) !important;
+  min-height:430px !important;
+  background:#f7f7f7 !important;
+  border:0 !important;
+  border-top:1px solid #e5e5e5 !important;
+  color:#111 !important;
+}
+#root .download-app-copy {
+  align-items:flex-start !important;
+  justify-content:center !important;
+  padding:clamp(36px,6.2vw,92px) !important;
+  background:#f7f7f7 !important;
+}
+#root .download-app-eyebrow {
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:9px !important;
+  color:#555 !important;
+  font-size:10px !important;
+  letter-spacing:2.2px !important;
+}
+#root .download-app-eyebrow::before {
+  content:"" !important;
+  width:22px !important;
+  height:2px !important;
+  background:#111 !important;
+  display:inline-block !important;
+}
+#root .download-app-copy h2 {
+  max-width:480px !important;
+  margin:22px 0 16px !important;
+  font-size:clamp(36px,4.5vw,58px) !important;
+  line-height:1.02 !important;
+  letter-spacing:-2.2px !important;
+  font-weight:750 !important;
+  color:#111 !important;
+}
+#root .download-app-copy h2 em { color:#555 !important; font-style:normal !important; }
+#root .download-app-copy>p {
+  max-width:430px !important;
+  margin:0 0 28px !important;
+  color:#555 !important;
+  font-size:15px !important;
+  line-height:1.75 !important;
+}
+#root .download-app-actions {
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:10px !important;
+  margin-bottom:14px !important;
+}
+#root .app-store-placeholder {
+  min-width:172px !important;
+  min-height:58px !important;
+  padding:10px 16px !important;
+  gap:12px !important;
+  border:1px solid #111 !important;
+  border-radius:9px !important;
+  background:#111 !important;
+  color:#fff !important;
+  opacity:1 !important;
+  box-shadow:none !important;
+}
+#root .app-store-placeholder .store-symbol {
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:24px !important;
+  font-size:23px !important;
+  color:#fff !important;
+}
+#root .app-store-placeholder span:last-child { gap:3px !important; }
+#root .app-store-placeholder small {
+  color:#cfcfcf !important;
+  font-size:8px !important;
+  letter-spacing:1.3px !important;
+  line-height:1.2 !important;
+}
+#root .app-store-placeholder strong { color:#fff !important; font-size:15px !important; line-height:1.2 !important; }
+#root .download-app-note { max-width:430px !important; color:#777 !important; font-size:11px !important; line-height:1.6 !important; }
+#root .download-app-visual {
+  min-height:430px !important;
+  background:#111 !important;
+  background-image:radial-gradient(ellipse at 50% 48%,#343434 0,#1b1b1b 42%,#080808 78%) !important;
+}
+#root .app-visual-orbit { border-color:#ffffff20 !important; }
+#root .app-visual-phone {
+  width:clamp(218px,23vw,270px) !important;
+  min-height:350px !important;
+  padding:44px 25px 25px !important;
+  border:1.5px solid #111 !important;
+  border-radius:35px !important;
+  background:#fafafa !important;
+  color:#111 !important;
+  box-shadow:0 30px 80px #0008 !important;
+  transform:rotate(3deg) !important;
+}
+#root .app-visual-speaker { top:17px !important; width:45px !important; height:5px !important; border-radius:10px !important; background:#111 !important; }
+#root .app-visual-logo { color:#111 !important; font-size:29px !important; letter-spacing:-1.5px !important; }
+#root .app-visual-shift-label { margin-top:26px !important; color:#666 !important; letter-spacing:1.8px !important; font-size:9px !important; }
+#root .app-visual-phone>strong { display:block !important; margin-top:10px !important; color:#111 !important; font-size:24px !important; line-height:1.1 !important; letter-spacing:-.7px !important; }
+#root .app-visual-phone>small { color:#666 !important; }
+#root .app-visual-pay {
+  margin-top:23px !important;
+  padding:15px 13px !important;
+  border:1px solid #e3e3e3 !important;
+  border-radius:12px !important;
+  background:#ededed !important;
+  color:#222 !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:1px !important;
+}
+#root .app-visual-pay small { display:block !important; margin-top:6px !important; color:#666 !important; font-size:11px !important; font-weight:500 !important; letter-spacing:0 !important; }
+#root .app-visual-confirm {
+  margin-top:12px !important;
+  padding:12px 10px !important;
+  border-radius:9px !important;
+  background:#111 !important;
+  color:#fff !important;
+  text-align:center !important;
+  font-size:11px !important;
+  font-weight:650 !important;
+}
+@media(max-width:760px) {
+  #root .download-app-section { grid-template-columns:1fr !important; }
+  #root .download-app-copy { padding:38px 25px !important; }
+  #root .download-app-visual { min-height:370px !important; }
+  #root .app-visual-phone { width:225px !important; min-height:320px !important; }
+  #root .download-app-actions { width:100% !important; }
+  #root .app-store-placeholder { flex:1 1 145px !important; min-width:0 !important; }
+}
