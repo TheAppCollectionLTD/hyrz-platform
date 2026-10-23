@@ -6332,3 +6332,135 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   border-radius:5px;background:#f0ebe2;color:#172b45;text-align:left;cursor:pointer;
 }
 .workchat-quoted-message span{font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+
+
+/* ==========================================================
+   HYRZ MONOCHROME THEME — black, white and neutral greys only
+   Visual-only overrides; preserve layout and existing behaviour.
+   ========================================================== */
+:root {
+  color-scheme: light;
+  --hyrz-black: #000;
+  --hyrz-white: #fff;
+  --hyrz-grey-50: #fafafa;
+  --hyrz-grey-100: #f4f4f4;
+  --hyrz-grey-200: #e5e5e5;
+  --hyrz-grey-300: #d4d4d4;
+  --hyrz-grey-500: #737373;
+  --hyrz-grey-700: #404040;
+  --hyrz-grey-900: #171717;
+}
+html, body, #root { background:#fff; color:#111; }
+.app { background:#fff; color:#111; }
+.app:not(.worker) main { color:#111; }
+.app main { background:transparent; }
+.app .sidebar { background:#000 !important; color:#fff !important; border-color:#262626 !important; }
+.app .brand, .app .brand-mark { color:#fff !important; }
+.app .brand span, .app .green, .app .live,
+.app .hero-copy h2 em, .app .carousel-overlay h2 em,
+.app .welcome-panel .brand-mark span { color:inherit !important; }
+.app .tag, .app .sidebar nav button, .app .sidebottom button { color:#d4d4d4 !important; }
+.app .sidebar nav button.selected,
+.app .sidebar nav button:hover,
+.app .sidebottom button:hover { background:#292929 !important; color:#fff !important; }
+.app .eyebrow, .app .userpill, .app .pill { color:#525252 !important; }
+.app .pill { background:#f5f5f5 !important; border:1px solid #d4d4d4 !important; }
+.app .hero-card { background:#000 !important; color:#fff !important; }
+.app .hero-card .card-top,
+.app .hero-card .mini-shift small { color:#d4d4d4 !important; }
+.app .panel, .app .stat, .app .admin-record,
+.app .role-card, .app .checkout-record,
+.app .admin-create-admin-form, .app .admin-inbox-chat,
+.app .admin-inbox-open-message, .app .admin-thread-reply {
+  background:#fff !important; color:#111 !important; border-color:#d4d4d4 !important;
+  box-shadow:none !important;
+}
+.app .panel, .app .stat, .app .role-card { border-radius:10px; }
+.app .primary, .app .shiftpay button, .app .row button,
+.app button.primary, .app .worker-todays-shift-actions button,
+.app .admin-inbox-tools button.selected,
+.app .admin-user-role-tabs button.selected,
+.app .admin-user-status-tabs button.selected {
+  background:#000 !important; color:#fff !important; border:1px solid #000 !important;
+  box-shadow:none !important;
+}
+.app .primary:hover, .app .shiftpay button:hover, .app .row button:hover,
+.app button.primary:hover { background:#333 !important; color:#fff !important; }
+.app .secondary, .app .textbutton, .app .role-card b {
+  background:#fff !important; color:#111 !important; border:1px solid #a3a3a3 !important;
+}
+.app .secondary:hover, .app .textbutton:hover { background:#f4f4f4 !important; color:#000 !important; }
+.app input, .app select, .app textarea,
+.app .admin-message-form select {
+  background:#fff !important; color:#111 !important; border-color:#a3a3a3 !important;
+  box-shadow:none !important;
+}
+.app input:focus, .app select:focus, .app textarea:focus {
+  border-color:#000 !important; outline:2px solid #737373 !important; outline-offset:1px;
+}
+.app label { color:#262626 !important; }
+.app .shiftdate, .app .status, .app .checkout-test-label,
+.app .worker-dashboard-stat, .app .worker-todays-shift-card {
+  background:#f5f5f5 !important; color:#171717 !important; border-color:#d4d4d4 !important;
+}
+.app .status.approved, .app .status.paid, .app .status.rejected,
+.app .status.disputed, .app .status.overdue,
+.app .alert, .app .alert.error, .app .alert.success {
+  background:#f5f5f5 !important; color:#171717 !important; border:1px solid #a3a3a3 !important;
+}
+.app .status::before { filter:grayscale(1); }
+.app .shiftmain small, .app .row small, .app .stat small,
+.app .empty, .app footer, .app .muted,
+.app .admin-inbox-chat-heading p, .app .admin-chat-message-meta small,
+.app .admin-chat-message-meta small, .app .admin-user-avatar {
+  color:#525252 !important;
+}
+.app .shiftrow, .app .row, .app .mini-shift,
+.app .admin-inbox-chat-heading, .app .admin-thread-reply,
+.app .admin-user-role-tabs { border-color:#d4d4d4 !important; }
+.app .worker { background:#fff !important; color:#111 !important; }
+.app.worker, .app.worker main, .app.worker main header h1 {
+  background:#fff !important; color:#111 !important;
+}
+.app.worker .sidebar { background:#000 !important; color:#fff !important; }
+.app.worker .panel, .app.worker .stat, .app.worker .worker-dashboard-stat,
+.app.worker .worker-todays-shift-card, .app.worker .checkout-record {
+  background:#fff !important; color:#111 !important; border-color:#d4d4d4 !important;
+}
+.app.worker .shiftmain small, .app.worker .row small,
+.app.worker .stat small, .app.worker .worker-todays-shift-card small,
+.app.worker .worker-todays-shift-card span { color:#525252 !important; }
+.app.worker .shiftdate { background:#f5f5f5 !important; color:#111 !important; }
+.app.worker .secondary { background:#fff !important; color:#111 !important; border-color:#a3a3a3 !important; }
+.app .workchat-reaction, .app .workchat-reaction-picker,
+.app .workchat-reply-preview, .app .workchat-quoted-message,
+.app .admin-chat-message, .app .admin-chat-message.from-admin {
+  background:#f5f5f5 !important; color:#111 !important; border-color:#d4d4d4 !important;
+}
+.app .workchat-reaction.selected { background:#e5e5e5 !important; color:#000 !important; border-color:#737373 !important; }
+.app .workchat-reply-preview, .app .workchat-quoted-message { border-left-color:#737373 !important; }
+.app .admin-inbox-thread { background:#fafafa !important; }
+.app .admin-chat-message.from-admin { align-self:flex-end; background:#e5e5e5 !important; }
+.app .auth-layout, .app.auth-layout, .app .auth-layout { background:#fff !important; color:#111 !important; }
+.app .auth-layout::before, .app .work-carousel::before { filter:grayscale(1) !important; }
+.app .auth-layout::after { color:#fff !important; }
+.app .auth-layout > main, .app.auth-layout > main,
+.app .auth-welcome, .app .welcome-panel, .app .role-selection { background:#fff !important; color:#111 !important; }
+.app .work-carousel { background:#000 !important; color:#fff !important; }
+.app .work-carousel::after {
+  background:linear-gradient(0deg,rgba(0,0,0,.88),rgba(0,0,0,.08) 85%) !important;
+}
+.app .carousel-overlay h2 em { color:#fff !important; }
+.app .carousel-overlay p, .app .welcome-panel > p,
+.app .role-selection > p, .app .role-card span { color:#525252 !important; }
+.app .role-card:hover { border-color:#737373 !important; box-shadow:none !important; }
+.app .welcome-panel .brand-mark { color:#000 !important; }
+.app .welcome-panel .brand-mark span { display:none !important; }
+.app .admin-user-avatar { background:#f5f5f5 !important; color:#111 !important; border-color:#d4d4d4 !important; }
+.app a { color:inherit; }
+.app a:hover { color:#404040; }
+.app hr { border-color:#d4d4d4 !important; }
+.app svg { filter:grayscale(1); }
+@media (prefers-reduced-motion: reduce) {
+  .app .auth-layout::before, .app .work-carousel::before { animation:none !important; }
+}
