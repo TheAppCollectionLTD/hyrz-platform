@@ -6464,3 +6464,50 @@ html, body, #root { background:#fff; color:#111; }
 @media (prefers-reduced-motion: reduce) {
   .app .auth-layout::before, .app .work-carousel::before { animation:none !important; }
 }
+
+
+/* Monochrome public landing page and shared site chrome (specificity fix). */
+html, body, #root, #root > * { background-color:#fff; color:#111; }
+#root header, #root nav, #root .navbar, #root .site-header,
+#root .landing-header, #root .topbar, #root .public-nav {
+  background:#000 !important; color:#fff !important; border-color:#000 !important;
+}
+#root header a, #root nav a, #root header button, #root nav button,
+#root .navbar a, #root .site-header a, #root .landing-header a,
+#root .topbar a, #root .public-nav a { color:#fff !important; }
+#root header button, #root nav button, #root .navbar button,
+#root .site-header button, #root .landing-header button,
+#root .topbar button, #root .public-nav button {
+  background:#000 !important; color:#fff !important; border-color:#fff !important;
+}
+#root header button:hover, #root nav button:hover { background:#333 !important; }
+#root .auth-welcome, #root .welcome-panel, #root .role-selection,
+#root .auth, #root .panel, #root main { background:#fff !important; color:#111 !important; }
+#root .work-carousel, #root .carousel-overlay { color:#fff !important; }
+#root .work-carousel::before { filter:grayscale(1) !important; }
+#root .work-carousel::after {
+  background:linear-gradient(0deg,rgba(0,0,0,.88),rgba(0,0,0,.10) 85%) !important;
+}
+#root .carousel-overlay h1, #root .carousel-overlay h2,
+#root .carousel-overlay h3, #root .carousel-overlay p,
+#root .carousel-overlay strong, #root .carousel-overlay em { color:#fff !important; }
+#root .carousel-overlay .pill, #root .welcome-panel .pill,
+#root .auth-welcome .pill { background:#fff !important; color:#111 !important; border-color:#fff !important; }
+#root button, #root input[type="submit"], #root input[type="button"] {
+  accent-color:#000;
+}
+#root button:not(.textbutton):not(.secondary):not(.workchat-reaction):not(.workchat-quoted-message) {
+  box-shadow:none !important;
+}
+#root .primary, #root .cta, #root .header-cta, #root .signup-button,
+#root .sign-up-button, #root .btn-primary, #root .button-primary,
+#root a.primary, #root a.cta {
+  background:#000 !important; color:#fff !important; border-color:#000 !important;
+}
+#root .hero-copy h2 em, #root .carousel-overlay h2 em,
+#root .welcome-panel .brand-mark span, #root .green, #root .live { color:inherit !important; }
+#root .hero-copy h2 em { color:#111 !important; }
+#root a { text-decoration-color:currentColor; }
+#root input, #root select, #root textarea { accent-color:#000; }
+#root .status, #root .alert, #root .badge, #root .tag,
+#root .chip, #root .pill { background:#f5f5f5 !important; color:#111 !important; border-color:#d4d4d4 !important; }
