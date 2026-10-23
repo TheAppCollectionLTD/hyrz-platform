@@ -290,6 +290,7 @@ async function authenticate(register) {
       <p>That experience is where Hyrz began—but hospitality is not where we stop. We offer flexible work opportunities across multiple industries, including hospitality and bars, festivals and events, warehouse and logistics, office and administration, hotels and catering, and other sectors.</p>
       <p>Overstaffing can leave workers competing for too few hours. Understaffing puts teams under pressure and can compromise the service customers deserve, whatever the industry. We believe better staffing should work for everyone.</p>
       <p>Hyrz helps employers find people when they need them, while giving workers more choice over when and where they work. Our hospitality roots shape our understanding of staffing challenges, and our platform is built to support a wider range of roles and workplaces.</p>
+      <p><strong>Less repetitive admin, more time for the work that matters.</strong> Hyrz includes automation tools designed to make shift planning and matching more efficient. Workers can set their availability and preferences—such as roles, shift types, dates and times, minimum rates and travel distance—so matching can be guided by the work they are genuinely able and willing to take. Employers can publish shifts with clear requirements and use matching and workflow tools to help organise staffing, applications and attendance. Automation supports the process; users remain responsible for reviewing the details, making appropriate decisions and meeting their obligations.</p>
     </div>:publicIntroSlide===1?<div className="public-intro-copy public-intro-how">
       <div className="public-about-kicker">YOUR WORK, YOUR WAY</div>
       <h1>How Hyrz works for workers.</h1>
@@ -297,8 +298,8 @@ async function authenticate(register) {
       <ol className="public-intro-steps">
         <li><strong>Create your profile</strong><span>Tell us about your experience, skills and the roles you want to work in.</span></li>
         <li><strong>Get verified</strong><span>Complete the identity and eligibility checks requested by Hyrz. Verification helps build trust and supports applicable legal and compliance requirements.</span></li>
-        <li><strong>Set your availability</strong><span>Choose when you can work, preferred shift types, travel distance and minimum rates.</span></li>
-        <li><strong>Find suitable shifts</strong><span>Review location, hours, pay, requirements and the shift contract before applying.</span></li>
+        <li><strong>Set your availability and matching preferences</strong><span>Choose the dates and times you can work, roles, shift types, travel distance and minimum rates. If you enable availability automation and confirm your settings, Hyrz can use those preferences to help identify suitable shift matches across your confirmed availability. Keep your settings up to date and only confirm times you can genuinely work.</span></li>
+        <li><strong>Review suitable shifts</strong><span>Matching tools can reduce repetitive searching by helping surface opportunities that fit your preferences. Before applying or accepting, check the location, hours, pay, requirements and shift contract so you understand the commitment.</span></li>
         <li><strong>Get confirmed and prepare</strong><span>Follow your application status and keep track of upcoming commitments.</span></li>
         <li><strong>Work and track payment</strong><span>Manage check-ins and check-outs, review recorded hours and follow your shift payments.</span></li>
       </ol>
@@ -310,9 +311,9 @@ async function authenticate(register) {
       <ol className="public-intro-steps">
         <li><strong>Set up your business profile</strong><span>Add your business details so workers know who is offering the shift.</span></li>
         <li><strong>Verify your identity and business</strong><span>Complete the identity and business checks requested by Hyrz to support trust and applicable legal and compliance obligations.</span></li>
-        <li><strong>Publish a shift</strong><span>Set the role, date, hours, pay rate, number of workers, required skills and any perks or preferences.</span></li>
-        <li><strong>Review applicants</strong><span>Compare applications and select workers who best match your requirements.</span></li>
-        <li><strong>Manage shifts and attendance</strong><span>Track filled and unfilled shifts, communicate with workers and review attendance records.</span></li>
+        <li><strong>Publish a well-defined shift</strong><span>Set the role, date, hours, pay rate, number of workers, required skills and any perks or preferences. Clear details help matching tools identify workers whose stated availability and preferences are a closer fit.</span></li>
+        <li><strong>Use matching tools to streamline staffing</strong><span>Use the platform's matching and workflow tools to help organise suitable applicants and reduce repetitive administration. Review worker details and applications and make the final selection based on the shift's requirements.</span></li>
+        <li><strong>Coordinate shifts and attendance</strong><span>Keep filled and unfilled shifts organised, communicate with workers and review attendance and recorded hours in one workflow.</span></li>
         <li><strong>Manage invoices and payments</strong><span>Follow invoices and account activity from your dashboard.</span></li>
       </ol>
       <button type="button" className="public-intro-cta" onClick={()=>{setRole('employer');setShowHowItWorks(false);navigateTo('register')}}>Create an employer account <span aria-hidden="true">→</span></button>
