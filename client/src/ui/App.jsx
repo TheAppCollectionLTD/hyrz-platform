@@ -372,24 +372,30 @@ async function authenticate(register) {
  <div className="download-app-copy"><span className="download-app-eyebrow">HYRZ FOR YOUR PHONE</span><h2>Take Hyrz <em>with you.</em></h2><p>Get the Hyrz app on your phone. Download links will be available here as soon as the apps launch.</p><div className="download-app-actions"><div className="app-store-placeholder" aria-label="App Store download coming soon"><span className="store-symbol">●</span><span><small>COMING SOON</small><strong>App Store</strong></span></div><div className="app-store-placeholder" aria-label="Google Play download coming soon"><span className="store-symbol">▶</span><span><small>COMING SOON</small><strong>Google Play</strong></span></div></div><small className="download-app-note">iOS and Android download links will appear here when available.</small></div>
  <div className="download-app-visual" role="img" aria-label="Hyrz mobile app preview"><div className="app-visual-orbit orbit-one"></div><div className="app-visual-orbit orbit-two"></div><div className="app-visual-phone"><div className="app-visual-speaker"></div><div className="app-visual-logo">hyrz</div><div className="app-visual-shift-label">MOBILE APP</div><strong>Hyrz on the go</strong><small>iOS &amp; Android</small><div className="app-visual-pay">APP LAUNCHING SOON<small>iOS and Android</small></div><div className="app-visual-confirm">Hyrz, wherever you work.</div></div></div>
  </section>
-<footer className="public-home-footer hyrz-reference-footer">
+<footer className="public-home-footer">
   <div className="hyrz-footer-brand-row">
-   <button type="button" className="hyrz-footer-wordmark" onClick={()=>navigateTo('home')} aria-label="Hyrz home"><span className="hyrz-footer-diamond" aria-hidden="true"></span><span>H Y R Z</span></button>
+   <button type="button" className="hyrz-footer-wordmark" onClick={()=>navigateTo('home')} aria-label="Hyrz home">hyrz</button>
+   <p>Flexible work. Reliable staffing.</p>
   </div>
   <div className="hyrz-footer-columns">
    <section className="hyrz-footer-column">
-    <h3>FOLLOW US</h3>
-    <div className="hyrz-footer-socials" aria-label="Social media"><span aria-label="Instagram" title="Instagram">◎</span><span aria-label="Facebook" title="Facebook">f</span><span aria-label="LinkedIn" title="LinkedIn">in</span></div>
-    <p>Flexible work. Reliable staffing.</p>
+    <h3>GET IN TOUCH</h3>
+    <p>Questions about finding work or staffing your business? We’re here to help.</p>
     <button type="button" className="hyrz-footer-contact" onClick={()=>{setPublicContactOpen(true);setPublicContactSent(false);setPublicContactError('')}}>Contact Hyrz <span aria-hidden="true">→</span></button>
    </section>
    <section className="hyrz-footer-column">
-    <h3>JOB ROLES</h3>
-    <span>Hospitality &amp; bars</span><span>Chef &amp; kitchen</span><span>Food service</span><span>Hotels &amp; catering</span><span>Warehouse &amp; logistics</span><span>Office &amp; administration</span><span>Retail &amp; customer service</span><span>Festivals &amp; events</span>
+    <h3>OPPORTUNITIES</h3>
+    <span>Hospitality &amp; bars</span>
+    <span>Hotels &amp; catering</span>
+    <span>Warehousing &amp; logistics</span>
+    <span>Office &amp; administration</span>
+    <span>Retail &amp; customer service</span>
+    <span>Festivals &amp; events</span>
    </section>
    <section className="hyrz-footer-column">
-    <h3>EXPLORE HYRZ</h3>
-    <button type="button" onClick={()=>navigateTo('chooseRole')}>Get started</button><button type="button" onClick={()=>navigateTo('login')}>Sign in</button>
+    <h3>USEFUL LINKS</h3>
+    <button type="button" onClick={()=>navigateTo('chooseRole')}>Get started</button>
+    <button type="button" onClick={()=>navigateTo('login')}>Sign in</button>
     <button type="button" onClick={()=>{setPublicIntroSlide(0);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>About us</button>
     <button type="button" onClick={()=>{setPublicIntroSlide(1);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>How we work · Workers</button>
     <button type="button" onClick={()=>{setPublicIntroSlide(2);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>How we work · Employers</button>
