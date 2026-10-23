@@ -6902,3 +6902,43 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  #root .public-intro-bottom > span { font-size:9px; text-align:right; }
 }
 @media(prefers-reduced-motion:reduce) { #root .public-intro-slide { animation:none; } }
+
+
+/* Give the About / How we work carousel its own full-width row. */
+#root .auth-welcome > .public-intro-carousel {
+  grid-column:1 / -1;
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+#root .public-intro-topline,
+#root .public-intro-tabs,
+#root .public-intro-slide,
+#root .public-intro-bottom { width:100%; box-sizing:border-box; }
+#root .public-intro-copy { max-width:1080px; margin-left:auto; margin-right:auto; }
+#root .public-intro-copy h1,
+#root .public-intro-copy p { max-width:1000px; }
+#root .public-intro-steps { max-width:1100px; }
+#root .public-home-nav { background:#000; color:#fff; }
+#root .public-home-nav nav { display:flex; align-items:center; }
+#root .public-app-downloads { display:flex; align-items:center; gap:8px; margin-left:clamp(0px,1vw,12px); }
+#root .public-app-icon {
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  min-height:34px; padding:7px 9px; border:1px solid #666; border-radius:5px;
+  background:#111; color:#fff; cursor:default; opacity:1;
+}
+#root .public-app-icon:disabled { opacity:1; }
+#root .public-app-icon svg { display:block; width:17px; height:17px; fill:currentColor; flex:none; }
+#root .public-app-icon-label { font-size:10px; line-height:1; font-weight:700; white-space:nowrap; }
+@media(max-width:900px) {
+ #root .public-app-icon-label { display:none; }
+ #root .public-app-icon { width:34px; height:34px; padding:7px; }
+ #root .public-home-nav { gap:10px; }
+}
+@media(max-width:600px) {
+ #root .public-home-nav { padding-left:14px; padding-right:14px; gap:7px; }
+ #root .public-home-nav nav { gap:7px; }
+ #root .public-app-downloads { gap:4px; margin:0; }
+ #root .public-app-icon { width:29px; height:29px; min-height:29px; padding:5px; }
+ #root .public-app-icon svg { width:16px; height:16px; }
+}
