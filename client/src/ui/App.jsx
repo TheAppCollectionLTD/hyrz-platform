@@ -5,7 +5,7 @@ const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).
 export default function App(){
 
 
- const [user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[shiftValidation,setShiftValidation]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
+ const [publicIntroSlide,setPublicIntroSlide]=useState(0),const [user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[shiftValidation,setShiftValidation]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
  const [pageHistory,setPageHistory]=useState([]);
  const [publicContactOpen,setPublicContactOpen]=useState(false),[publicContactEmail,setPublicContactEmail]=useState(''),[publicContactMessage,setPublicContactMessage]=useState(''),[publicContactSending,setPublicContactSending]=useState(false),[publicContactSent,setPublicContactSent]=useState(false),[publicContactError,setPublicContactError]=useState('');
  async function submitPublicContact(e){e.preventDefault();setPublicContactError('');setPublicContactSending(true);try{await request('/public-contact',{method:'POST',body:JSON.stringify({email:publicContactEmail.trim(),message:publicContactMessage.trim()})});setPublicContactSent(true);setPublicContactMessage('');}catch(err){setPublicContactError(err.message||'We could not send your message. Please try again.');}finally{setPublicContactSending(false)}}
@@ -269,14 +269,60 @@ async function authenticate(register) {
  {!user&&page==='home'&&<section className="auth-welcome">
 <header className="public-home-nav"><button className="public-home-logo" onClick={()=>navigateTo('home')} aria-label="hyrz home">hyrz</button><nav><button type="button" className="public-about-trigger" onClick={()=>document.getElementById('about-us')?.scrollIntoView({behavior:'smooth',block:'start'})}>About us</button><button type="button" className="public-how-work-trigger" onClick={()=>setShowHowItWorks(v=>!v)}>How we work <span>⌄</span></button><button type="button" className="public-nav-signin" onClick={()=>navigateTo('login')}>Sign in</button><button type="button" className="public-nav-signup" onClick={()=>navigateTo('chooseRole')}>Sign up</button></nav>{showHowItWorks&&<div className="public-how-work-panel"><div className="how-work-tabs"><button type="button" aria-pressed={howWorkAudience==='worker'} className={howWorkAudience==='worker'?'selected':''} onClick={()=>setHowWorkAudience('worker')}>For workers</button><button type="button" aria-pressed={howWorkAudience==='employer'} className={howWorkAudience==='employer'?'selected':''} onClick={()=>setHowWorkAudience('employer')}>For employers</button></div>{howWorkAudience==='worker'?<div className="how-work-detail"><span className="how-work-eyebrow">YOUR WORK, YOUR WAY</span><h3>How Hyrz works for workers</h3><p className="how-work-summary">Find shifts that fit your availability, understand what you’re agreeing to, and keep your work organised in one place.</p><ol className="how-work-steps"><li><strong>Create your profile</strong><span>Set up your account and tell us about your experience, skills and the roles you want to work in.</span></li><li><strong>Get verified</strong><span>Complete the identity and eligibility checks requested by Hyrz. Verification helps build trust, supports responsible platform use and helps meet applicable legal and compliance requirements. Only describe yourself as verified once your checks are complete.</span></li><li><strong>Set your availability and preferences</strong><span>Choose when you can work, preferred shift types, travel distance and minimum rates that suit you.</span></li><li><strong>Find the right shifts</strong><span>Browse opportunities, check the location, hours, pay, requirements and shift contract, then apply to shifts that work for you.</span></li><li><strong>Get confirmed and prepare</strong><span>Follow your application status, review shift details and keep track of your upcoming commitments.</span></li><li><strong>Work, record hours and get paid</strong><span>Use your account to manage check-ins and check-outs, review recorded hours and follow your shift payments.</span></li></ol><button type="button" className="public-how-work-cta" onClick={()=>{setRole('worker');setShowHowItWorks(false);navigateTo('register')}}>Create a worker account <span aria-hidden="true">→</span></button></div>:<div className="how-work-detail"><span className="how-work-eyebrow">STAFFING, MADE CLEARER</span><h3>How Hyrz works for employers</h3><p className="how-work-summary">Plan your staffing needs, reach suitable workers and manage shifts and payments with a clearer process from start to finish.</p><ol className="how-work-steps"><li><strong>Set up your business profile</strong><span>Create an employer account and add your business details so workers know who is offering the shift.</span></li><li><strong>Verify your identity and business</strong><span>Complete the identity and business verification checks requested by Hyrz. These checks help demonstrate that your organisation is genuine, support trust between workers and employers, and help meet applicable legal and compliance obligations. Verification is only confirmed when the checks have actually been completed.</span></li><li><strong>Publish the shift you need covered</strong><span>Set the role, date, start and finish times, pay rate, number of workers, required skills and any useful perks or preferences.</span></li><li><strong>Review applicants and choose your team</strong><span>Compare applications and worker details, then select the people who best match your requirements. Matching tools can help you manage the process.</span></li><li><strong>Keep shifts and attendance organised</strong><span>Track published, unfilled and filled shifts, communicate with workers, and review check-in and check-out records and submitted hours.</span></li><li><strong>Manage invoices and payments</strong><span>Follow invoices and account activity from your dashboard so shift administration stays organised alongside day-to-day operations.</span></li></ol><button type="button" className="public-how-work-cta" onClick={()=>{setRole('employer');setShowHowItWorks(false);navigateTo('register')}}>Create an employer account <span aria-hidden="true">→</span></button></div>}</div>}
 </header>
-<section className="public-about-section" id="about-us" aria-labelledby="public-about-title">
-  <div className="public-about-kicker">ABOUT HYRZ</div>
-  <div className="public-about-content">
-    <h1 id="public-about-title">Built by people who know the realities of hospitality.</h1>
-    <p>We're a team of former bartenders, waiters, hospitality managers and supervisors. We've experienced the pressure of busy services, the challenge of staff turnover, and how hard it can be to get staffing levels right.</p>
-    <p>That experience is where Hyrz began—but hospitality is not where we stop. We offer flexible work opportunities across multiple industries, including hospitality and bars, festivals and events, warehouse and logistics, office and administration, hotels and catering, and other sectors.</p>
-    <p>Overstaffing can leave workers competing for too few hours. Understaffing puts teams under pressure and can compromise the service customers deserve, whatever the industry. We believe better staffing should work for everyone.</p>
-    <p>Hyrz helps employers find people when they need them, while giving workers more choice over when and where they work. Our hospitality roots shape our understanding of staffing challenges, and our platform is built to support a wider range of roles and workplaces.</p>
+<section className="public-intro-carousel" aria-label="About Hyrz and how it works">
+  <div className="public-intro-topline">
+    <span className="public-intro-counter">0{publicIntroSlide+1} <span>/ 03</span></span>
+    <div className="public-intro-controls" aria-label="Carousel controls">
+      <button type="button" onClick={()=>setPublicIntroSlide(i=>(i+2)%3)} aria-label="Previous slide">←</button>
+      <button type="button" onClick={()=>setPublicIntroSlide(i=>(i+1)%3)} aria-label="Next slide">→</button>
+    </div>
+  </div>
+  <div className="public-intro-tabs" role="group" aria-label="Choose a section">
+    <button type="button" className={publicIntroSlide===0?'active':''} aria-pressed={publicIntroSlide===0} onClick={()=>setPublicIntroSlide(0)}>About us</button>
+    <button type="button" className={publicIntroSlide===1?'active':''} aria-pressed={publicIntroSlide===1} onClick={()=>setPublicIntroSlide(1)}>How we work · Workers</button>
+    <button type="button" className={publicIntroSlide===2?'active':''} aria-pressed={publicIntroSlide===2} onClick={()=>setPublicIntroSlide(2)}>How we work · Employers</button>
+  </div>
+  <div className="public-intro-slide" key={publicIntroSlide} aria-live="polite">
+    {publicIntroSlide===0?<div className="public-intro-copy">
+      <div className="public-about-kicker">ABOUT HYRZ</div>
+      <h1>Built by people who know the realities of hospitality.</h1>
+      <p>We're a team of former bartenders, waiters, hospitality managers and supervisors. We've experienced the pressure of busy services, the challenge of staff turnover, and how hard it can be to get staffing levels right.</p>
+      <p>That experience is where Hyrz began—but hospitality is not where we stop. We offer flexible work opportunities across multiple industries, including hospitality and bars, festivals and events, warehouse and logistics, office and administration, hotels and catering, and other sectors.</p>
+      <p>Overstaffing can leave workers competing for too few hours. Understaffing puts teams under pressure and can compromise the service customers deserve, whatever the industry. We believe better staffing should work for everyone.</p>
+      <p>Hyrz helps employers find people when they need them, while giving workers more choice over when and where they work. Our hospitality roots shape our understanding of staffing challenges, and our platform is built to support a wider range of roles and workplaces.</p>
+    </div>:publicIntroSlide===1?<div className="public-intro-copy public-intro-how">
+      <div className="public-about-kicker">YOUR WORK, YOUR WAY</div>
+      <h1>How Hyrz works for workers.</h1>
+      <p className="public-intro-lead">Find shifts that fit your availability, understand what you're agreeing to, and keep your work organised in one place.</p>
+      <ol className="public-intro-steps">
+        <li><strong>Create your profile</strong><span>Tell us about your experience, skills and the roles you want to work in.</span></li>
+        <li><strong>Get verified</strong><span>Complete the identity and eligibility checks requested by Hyrz. Verification helps build trust and supports applicable legal and compliance requirements.</span></li>
+        <li><strong>Set your availability</strong><span>Choose when you can work, preferred shift types, travel distance and minimum rates.</span></li>
+        <li><strong>Find suitable shifts</strong><span>Review location, hours, pay, requirements and the shift contract before applying.</span></li>
+        <li><strong>Get confirmed and prepare</strong><span>Follow your application status and keep track of upcoming commitments.</span></li>
+        <li><strong>Work and track payment</strong><span>Manage check-ins and check-outs, review recorded hours and follow your shift payments.</span></li>
+      </ol>
+      <button type="button" className="public-intro-cta" onClick={()=>{setRole('worker');setShowHowItWorks(false);navigateTo('register')}}>Create a worker account <span aria-hidden="true">→</span></button>
+    </div>:<div className="public-intro-copy public-intro-how">
+      <div className="public-about-kicker">STAFFING, MADE CLEARER</div>
+      <h1>How Hyrz works for employers.</h1>
+      <p className="public-intro-lead">Plan staffing needs, reach suitable workers and manage shifts through a clearer process.</p>
+      <ol className="public-intro-steps">
+        <li><strong>Set up your business profile</strong><span>Add your business details so workers know who is offering the shift.</span></li>
+        <li><strong>Verify your identity and business</strong><span>Complete the identity and business checks requested by Hyrz to support trust and applicable legal and compliance obligations.</span></li>
+        <li><strong>Publish a shift</strong><span>Set the role, date, hours, pay rate, number of workers, required skills and any perks or preferences.</span></li>
+        <li><strong>Review applicants</strong><span>Compare applications and select workers who best match your requirements.</span></li>
+        <li><strong>Manage shifts and attendance</strong><span>Track filled and unfilled shifts, communicate with workers and review attendance records.</span></li>
+        <li><strong>Manage invoices and payments</strong><span>Follow invoices and account activity from your dashboard.</span></li>
+      </ol>
+      <button type="button" className="public-intro-cta" onClick={()=>{setRole('employer');setShowHowItWorks(false);navigateTo('register')}}>Create an employer account <span aria-hidden="true">→</span></button>
+    </div>}
+  </div>
+  <div className="public-intro-bottom">
+    <div className="public-intro-dots" aria-label="Choose carousel slide">
+      {[0,1,2].map(i=><button key={i} type="button" className={publicIntroSlide===i?'active':''} aria-label={['About us','How we work for workers','How we work for employers'][i]} aria-pressed={publicIntroSlide===i} onClick={()=>setPublicIntroSlide(i)} />)}
+    </div>
+    <span>ABOUT HYRZ <b>·</b> HOW WE WORK</span>
   </div>
 </section>
 <div className="work-carousel">
