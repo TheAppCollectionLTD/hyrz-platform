@@ -6801,6 +6801,7 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   font-weight:850;
 }
 #root .how-work-steps li strong {
+  grid-column:2;
   display:block;
   margin:1px 0 4px;
   color:#111 !important;
@@ -6808,6 +6809,7 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   line-height:1.45;
 }
 #root .how-work-steps li span {
+  grid-column:2;
   display:block;
   color:#555 !important;
   font-size:12px;
