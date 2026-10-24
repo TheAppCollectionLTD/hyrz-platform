@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { hashIdentifier } = require('./identifier-hash');
+const { normalizePostcode, extractPostcode, distanceMiles, lookupPostcodeCoordinates } = require('./postcode-distance');
 const { Resend } = require('resend');
 
 const resend = process.env.RESEND_API_KEY
@@ -727,17 +728,30 @@ app.get('/api/shifts/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
  res.json({shifts:rows});
 }));
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
- await ensureProfilePictureColumn;
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureBusinessAddressColumns]);
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
- let sql=`SELECT s.*,b.name AS business_name,u.profile_picture AS employer_profile_picture,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
+ let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
  const args=[];
  if(from){sql+=' AND s.starts_at>=?';args.push(from);}
  if(to){sql+=' AND s.starts_at<=?';args.push(to);}
  if(search){sql+=' AND (s.title LIKE ? OR s.description LIKE ? OR s.location LIKE ?)';args.push(`%${search}%`,`%${search}%`,`%${search}%`);}
  if(postcode){sql+=' AND s.location LIKE ?';args.push(`%${postcode}%`);}
  sql+=' ORDER BY s.starts_at LIMIT 200';
- const [rows]=await db.execute(sql,args);res.json({shifts:rows});
+ const [rows]=await db.execute(sql,args);
+ if(req.user.role!=='worker')return res.json({shifts:rows});
+ const [[profile]]=await db.execute(`SELECT COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id WHERE u.id=?`,[req.user.id]);
+ const workerPostcode=normalizePostcode(profile?.postcode);
+ if(!workerPostcode)return res.json({shifts:rows.map(row=>({...row,distance_miles:null}))});
+ const postcodes=[workerPostcode,...rows.map(row=>extractPostcode(row.location)||normalizePostcode(row.employer_postcode))];
+ const coordinates=await lookupPostcodeCoordinates(postcodes);
+ const origin=coordinates.get(workerPostcode)||null;
+ const shifts=rows.map(row=>{
+  const destinationPostcode=extractPostcode(row.location)||normalizePostcode(row.employer_postcode);
+  const destination=coordinates.get(destinationPostcode)||null;
+  return {...row,distance_miles:distanceMiles(origin,destination)};
+ });
+ res.json({shifts});
 }));
 app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
  await ensureShiftPublishingColumns;
