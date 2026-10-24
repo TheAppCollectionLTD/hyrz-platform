@@ -258,6 +258,7 @@ async function submitPasswordReset(e){
  if(resetPasswordValue!==resetPasswordConfirm){setError('Your new passwords do not match.');return;}
  await action(async()=>{
   const result=await request('/auth/password-reset/confirm',{method:'POST',body:JSON.stringify({token:passwordResetToken,newPassword:resetPasswordValue})});
+  localStorage.removeItem('hyrz_token');
   setPasswordResetToken('');setResetPasswordValue('');setResetPasswordConfirm('');
   setNotice(result.message||'Your password has been reset. You can now sign in.');
   navigateTo('login');
