@@ -130,6 +130,19 @@ async function main() {
     assert.equal(resolved.status,200,JSON.stringify(resolved.data));
     const [invoices]=await db.execute('SELECT id FROM invoices WHERE checkout_id=?',[checkout.insertId]);assert.equal(invoices.length,1);
   });
+  await check('Employer favourites and worker search return active workers',async()=>{
+    const activeFavouriteWorkerId=await addUser({email:'favourite-worker@test.hyrz.invalid',ni:'QQ246810F'});
+    employerId=await addUser({email:'employer@test.hyrz.invalid',role:'employer',company:'TEST-COMPANY-123'});
+    const employerToken=await login('employer@test.hyrz.invalid');
+    const added=await api('/employer/workers/'+activeFavouriteWorkerId+'/favourite',{token:employerToken,method:'POST'});
+    assert.equal(added.status,200,JSON.stringify(added.data));
+    const favourites=await api('/employer/workers/favourites',{token:employerToken});
+    assert.equal(favourites.status,200,JSON.stringify(favourites.data));
+    assert.ok(favourites.data.workers.some(worker=>Number(worker.id)===Number(activeFavouriteWorkerId)&&worker.isFavourite===true),'Favourite workers should load from the dedicated favourites endpoint.');
+    const search=await api('/employer/workers/search?q=favourite-worker%40test.hyrz.invalid',{token:employerToken});
+    assert.equal(search.status,200,JSON.stringify(search.data));
+    assert.ok(search.data.workers.some(worker=>Number(worker.id)===Number(activeFavouriteWorkerId)),'Search by email should return the active worker.');
+  });
   await check('Employer company block prevents repeat registration',async()=>{
     employerId=await addUser({email:'employer@test.hyrz.invalid',role:'employer',company:'TEST-COMPANY-123'});
     const blocked=await api('/admin/users/'+employerId+'/status',{token:ownerToken,method:'PATCH',body:{status:'blocked'}});
