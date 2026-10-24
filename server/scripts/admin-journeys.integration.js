@@ -157,6 +157,21 @@ async function main() {
     const removed=await api('/shift-templates/'+saved.data.template.id,{token:employerToken,method:'DELETE'});
     assert.equal(removed.status,200,JSON.stringify(removed.data));
   });
+  await check('Shift publishing rejects invalid dates, rates and shift types',async()=>{
+    const publisherId=await addUser({email:'shift-validation-employer@test.hyrz.invalid',role:'employer',company:'SHIFT-VALIDATION-123'});
+    const publisherToken=await login('shift-validation-employer@test.hyrz.invalid');
+    const start=new Date(Date.now()+48*60*60*1000);
+    const end=new Date(start.getTime()+4*60*60*1000);
+    const baseShift={title:'Bartender - Standard',description:'A test shift for validation.',location:'London',startsAt:start.toISOString().slice(0,19),endsAt:end.toISOString().slice(0,19),breakMinutes:0,hourlyPay:15,slots:1,autoApprove:false,shiftType:'hospitality',requirements:[],perks:[],preferences:[]};
+    const lowPay=await api('/shifts',{token:publisherToken,method:'POST',body:{...baseShift,hourlyPay:7.99}});
+    assert.equal(lowPay.status,400,'Pay below the configured platform floor must be rejected.');
+    const badType=await api('/shifts',{token:publisherToken,method:'POST',body:{...baseShift,shiftType:'made-up-type'}});
+    assert.equal(badType.status,400,'Unrecognized shift types must be rejected.');
+    const badDate=await api('/shifts',{token:publisherToken,method:'POST',body:{...baseShift,startsAt:'not-a-date'}});
+    assert.equal(badDate.status,400,'Malformed shift dates must be rejected.');
+    const valid=await api('/shifts',{token:publisherToken,method:'POST',body:baseShift});
+    assert.equal(valid.status,201,JSON.stringify(valid.data));
+  });
   await check('Employer cannot approve more workers than a shift has positions',async()=>{
     const capacityWorkerOne=await addUser({email:'capacity-worker-one@test.hyrz.invalid',ni:'QQ101010A'});
     const capacityWorkerTwo=await addUser({email:'capacity-worker-two@test.hyrz.invalid',ni:'QQ202020B'});
