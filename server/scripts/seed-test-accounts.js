@@ -96,12 +96,38 @@ async function main() {
       console.log('Ready: ' + account.role + ' ' + email);
     }
 
+
+    // Create a predictable Tier 1 owner exclusively in the isolated test database.
+    await conn.query(`CREATE TABLE IF NOT EXISTS admin_login_names (
+      user_id BIGINT UNSIGNED PRIMARY KEY,
+      username VARCHAR(80) NOT NULL UNIQUE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`);
+    const ownerEmail = 'test.owner@hyrz.local';
+    const ownerPasswordHash = await bcrypt.hash('Test-Only-Password-2026!', 12);
+    const [existingOwner] = await conn.execute('SELECT id, role FROM users WHERE LOWER(TRIM(email))=? LIMIT 1', [ownerEmail]);
+    let ownerId;
+    if (existingOwner.length) {
+      if (existingOwner[0].role !== 'admin') {
+        throw new Error('Existing test owner email has the wrong account role: ' + ownerEmail);
+      }
+      ownerId = existingOwner[0].id;
+      await conn.execute("UPDATE users SET password_hash=?, admin_tier=1, status='active', email_verified_at=COALESCE(email_verified_at, UTC_TIMESTAMP()) WHERE id=?", [ownerPasswordHash, ownerId]);
+    } else {
+      const [createdOwner] = await conn.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at,first_name,last_name) VALUES(?,?,'admin',1,'active',UTC_TIMESTAMP(),'Test','Owner')", [ownerEmail, ownerPasswordHash]);
+      ownerId = createdOwner.insertId;
+    }
+    await conn.execute('INSERT INTO admin_login_names(user_id,username) VALUES(?,?) ON DUPLICATE KEY UPDATE username=VALUES(username)', [ownerId, 'SimsonH']);
+    console.log('Ready: Tier 1 test owner ' + ownerEmail);
+
     await conn.commit();
     console.log('Test accounts are ready in hyrz_test. These are fictional accounts for local testing only.');
     console.log('Worker 1:   test.worker@hyrz.local / HyrzTestWorker!2026');
     console.log('Employer 1: test.employer@hyrz.local / HyrzTestEmployer!2026');
     console.log('Worker 2:   test.worker2@hyrz.local / HyrzTestWorker2!2026');
     console.log('Employer 2: test.employer2@hyrz.local / HyrzTestEmployer2!2026');
+    console.log('Test admin (integration tests only): test.owner@hyrz.local / Test-Only-Password-2026!');
   } catch (error) {
     await conn.rollback();
     throw error;
