@@ -746,7 +746,7 @@ app.get('/api/employer/workers/favourites',auth,allow('employer'),asyncRoute(asy
 }));
 app.post('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;const workerId=Number(req.params.workerId);
- const [rows]=await db.execute('SELECT id FROM users WHERE id=? AND role=\'worker\'',[workerId]);
+ const [rows]=await db.execute('SELECT id FROM users WHERE id=? AND role=\'worker\' AND status=\'active\'',[workerId]);
  if(!rows.length)return res.status(404).json({error:'Worker not found.'});
  await db.execute('INSERT IGNORE INTO employer_worker_favourites(employer_user_id,worker_user_id) VALUES(?,?)',[req.user.id,workerId]);res.json({ok:true,favourite:true});
 }));
