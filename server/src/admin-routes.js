@@ -503,7 +503,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     if (typeof newPassword!=='string'||newPassword.length<12) return res.status(400).json({error:'New password must be at least 12 characters'});
     const [rows]=await db.execute('SELECT password_hash FROM users WHERE id=?',[req.user.id]);
     if (!rows.length || !await bcrypt.compare(String(currentPassword||''),rows[0].password_hash)) return res.status(400).json({error:'Current password is incorrect'});
-    await db.execute('UPDATE users SET password_hash=? WHERE id=?',[await bcrypt.hash(newPassword,12),req.user.id]);
+    await db.execute('UPDATE users SET password_hash=?,session_version=session_version+1 WHERE id=?',[await bcrypt.hash(newPassword,12),req.user.id]);
     await audit(req,'admin.password_changed','user',req.user.id);
     res.json({ok:true});
   }));
