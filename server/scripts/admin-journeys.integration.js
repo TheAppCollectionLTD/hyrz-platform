@@ -276,7 +276,7 @@ async function main() {
   await check('Administrator password can be changed and used to sign in',async()=>{
     const changed=await api('/admin/change-password',{token:tier3Token,method:'POST',body:{currentPassword:'Test-Only-Password-2026!',newPassword:'Changed-Only-Password-2026!'}});
     assert.equal(changed.status,200,JSON.stringify(changed.data));
-    const loginChanged=await api('/auth/login',{method:'POST',body:{email:'testTier3',password:'Changed-Only-Password-2026!'}});
+    const loginChanged=await api('/auth/login',{method:'POST',body:{email:'tier3@test.hyrz.invalid',password:'Changed-Only-Password-2026!'}});
     assert.equal(loginChanged.status,200,JSON.stringify(loginChanged.data));
     const revokedSession=await api('/auth/me',{token:tier3Token});
     assert.equal(revokedSession.status,401,'Changing a password must invalidate previously issued sessions.');
