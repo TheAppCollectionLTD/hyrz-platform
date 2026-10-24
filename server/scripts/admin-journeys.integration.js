@@ -61,6 +61,12 @@ async function main() {
     const newLogin=await api('/auth/login',{method:'POST',body:{email:'password-reset-worker@test.hyrz.invalid',password:'Reset-Only-Password-2026!'}});
     assert.equal(newLogin.status,200,JSON.stringify(newLogin.data));
   });
+  await check('Administrator accounts without a valid tier cannot use admin APIs',async()=>{
+    await addUser({email:'invalid-tier-admin@test.hyrz.invalid',role:'admin'});
+    const invalidTierToken=await login('invalid-tier-admin@test.hyrz.invalid');
+    const response=await api('/admin/admins',{token:invalidTierToken,method:'POST',body:{email:'forbidden-tier-admin@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:3}});
+    assert.equal(response.status,403,'An admin with a missing tier must not be able to create another administrator.');
+  });
   await check('Tier 1 creates Tier 2 administrator',async()=>{
     const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier2@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:2}});
     assert.equal(r.status,201,JSON.stringify(r.data));tier2Id=r.data.id;
