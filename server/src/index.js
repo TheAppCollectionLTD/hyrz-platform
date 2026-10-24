@@ -19,8 +19,18 @@ const resend = process.env.RESEND_API_KEY
 const app = express();
 app.use(helmet());
 
+const allowedClientOrigins = new Set(String(process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+  .split(',').map(origin => origin.trim()).filter(Boolean));
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin(origin, callback) {
+    // Native clients and same-origin requests may not send an Origin header.
+    // Permit arbitrary localhost ports for local Vite sessions, but require an
+    // explicit CLIENT_ORIGIN allow-list for deployed browser frontends.
+    if (!origin || allowedClientOrigins.has(origin) || /^https?:\\/\\/(localhost|127\\.0\\.0\\.1):\\d+$/.test(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, false);
+  }
 }));
 
 app.use(express.json({ limit: '1mb' }));
