@@ -769,7 +769,7 @@ app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(asy
  await ensureShiftPublishingColumns;
  const {title,description,location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false,shiftType='hospitality',requirements=[],perks=[],preferences=[]}=req.body||{};
  const allowedShiftTypes=new Set(['hospitality','warehouse','retail','events','office','cleaning','care','construction','driving','other']);
- const validDateTime=value=>typeof value==='string'&&/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$/.test(value)&&Number.isFinite(new Date(value).getTime());
+ const validDateTime=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value)&&Number.isFinite(new Date(value).getTime());
  const startDate=validDateTime(startsAt)?new Date(startsAt):null;
  const endDate=validDateTime(endsAt)?new Date(endsAt):null;
  const pay=Number(hourlyPay),workerSlots=Number(slots),breakMins=Number(breakMinutes);
