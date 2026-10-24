@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 const assert = require('node:assert/strict');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 const { hashIdentifier } = require('../src/identifier-hash');
 
-const base = process.env.TEST_API_URL || 'http://127.0.0.1:4000/api';
+const base = process.env.TEST_API_URL || 'http://127.0.0.1:4001/api';
 const db = mysql.createPool({host:process.env.DB_HOST||'127.0.0.1',port:Number(process.env.DB_PORT||3306),database:process.env.DB_NAME,user:process.env.DB_USER,password:process.env.DB_PASSWORD,timezone:'Z',dateStrings:true});
 const checks=[];
 async function check(name, fn) {
@@ -32,9 +34,8 @@ async function login(identifier) {
   assert.equal(r.status,200,JSON.stringify(r.data));return r.data.token;
 }
 async function main() {
-  const ownerEmail=process.env.OWNER_EMAIL;
-  assert.ok(ownerEmail,'OWNER_EMAIL must be set for integration tests');
-  const ownerToken=await login('SimsonH');
+  const ownerEmail=process.env.OWNER_EMAIL || 'test.owner@hyrz.local';
+  const ownerToken=await login(ownerEmail);
   let tier2Id,tier3Id,tier3bId,workerId,employerId,checkoutId,disputeId;
   await check('Tier 1 creates Tier 2 administrator',async()=>{
     const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier2@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:2}});
