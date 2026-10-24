@@ -26,7 +26,7 @@ app.use(cors({
     // Native clients and same-origin requests may not send an Origin header.
     // Permit arbitrary localhost ports for local Vite sessions, but require an
     // explicit CLIENT_ORIGIN allow-list for deployed browser frontends.
-    if (!origin || allowedClientOrigins.has(origin) || /^https?:\\/\\/(localhost|127\\.0\\.0\\.1):\\d+$/.test(origin)) {
+    if (!origin || allowedClientOrigins.has(origin) || /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
       return callback(null, true);
     }
     return callback(null, false);
