@@ -37,6 +37,12 @@ async function main() {
   const ownerEmail=process.env.OWNER_EMAIL || 'test.owner@hyrz.local';
   const ownerToken=await login(ownerEmail);
   let tier2Id,tier3Id,tier3bId,workerId,employerId,checkoutId,disputeId;
+  await check('Password reset rejects invalid or expired tokens and short passwords',async()=>{
+    const invalidToken=await api('/auth/password-reset/confirm',{method:'POST',body:{token:'not-a-valid-reset-token',newPassword:'Valid-Long-Password-2026!'}});
+    assert.equal(invalidToken.status,400);
+    const shortPassword=await api('/auth/password-reset/confirm',{method:'POST',body:{token:'a'.repeat(64),newPassword:'short'}});
+    assert.equal(shortPassword.status,400);
+  });
   await check('Tier 1 creates Tier 2 administrator',async()=>{
     const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier2@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:2}});
     assert.equal(r.status,201,JSON.stringify(r.data));tier2Id=r.data.id;
