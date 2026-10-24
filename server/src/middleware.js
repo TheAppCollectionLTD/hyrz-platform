@@ -15,7 +15,7 @@ async function auth(req, res, next) {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
 
     const [rows] = await db.execute(
-      `SELECT id, email, role, admin_tier, status, email_verified_at
+      `SELECT id, email, role, admin_tier, status, email_verified_at, session_version
        FROM users
        WHERE id = ?`,
       [payload.sub]
@@ -25,6 +25,10 @@ async function auth(req, res, next) {
       return res.status(401).json({
         error: 'Account unavailable'
       });
+    }
+
+    if (Number(payload.sv || 0) !== Number(rows[0].session_version || 0)) {
+      return res.status(401).json({ error: 'Session expired. Please sign in again.' });
     }
 
     req.user = rows[0];
