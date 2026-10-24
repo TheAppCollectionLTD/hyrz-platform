@@ -14,7 +14,7 @@ This is a development MVP foundation, not a certified production staffing/paymen
 
 ## Setup
 1. Create a MySQL database and user, then run `mysql -u YOUR_USER -p YOUR_DATABASE < server/db/schema.sql`.
-2. Copy `server/.env.example` to `server/.env` and configure database credentials and a long random `JWT_SECRET`.
+2. Copy `server/.env.example` to `server/.env` and configure database credentials, a long random `JWT_SECRET`, and a separate stable `IDENTIFIER_HASH_SECRET` (keep the latter unchanged so existing identifier hashes remain comparable).
 3. In one terminal:
    ```bash
    cd server && npm install && npm run dev
