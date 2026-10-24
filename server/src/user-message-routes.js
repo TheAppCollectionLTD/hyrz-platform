@@ -1,6 +1,6 @@
 const { auth, allow } = require('./middleware');
 
-module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn, ensureEmployerWorkerFavourites }) {
+module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn }) {
   // Share the API's schema queue so this metadata migration cannot race the
   // user/profile migrations performed during server startup.
   const ensureMeta = enqueueSchemaChange(async () => {
@@ -164,7 +164,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     return rows.length>0;
   }
   app.get('/api/workchats/mine',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
-    await ensureGroupWorkchats;
+    await Promise.all([ensureGroupWorkchats,ensureProfilePictureColumn]);
     const [rows]=await db.execute(`SELECT w.id,w.name,w.status,w.created_at,w.last_message_at,COALESCE(ws.disabled,0) disabled,
       (SELECT COUNT(*) FROM workchat_participants p2 WHERE p2.workchat_id=w.id) participant_count,
       (SELECT COUNT(*) FROM workchat_messages m JOIN workchat_participants me ON me.workchat_id=w.id AND me.user_id=? WHERE m.workchat_id=w.id AND m.sender_id<>? AND m.created_at>COALESCE(me.last_read_at,'1970-01-01')) unread_count,
@@ -191,7 +191,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await audit(req,'workchat.created','workchat',id,{participantCount:ids.length});res.status(201).json({workchatId:id});
   }));
   app.get('/api/workchats/:id/messages',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
-    await ensureWorkchatMessageDeletionColumns();const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);if(!chat)return res.status(404).json({error:'Workchat not found.'});
+    await Promise.all([ensureWorkchatMessageDeletionColumns(),ensureProfilePictureColumn]);const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);if(!chat)return res.status(404).json({error:'Workchat not found.'});
     await db.execute('UPDATE workchat_participants SET last_read_at=NOW() WHERE workchat_id=? AND user_id=?',[id,req.user.id]);
     const [messages]=await db.execute(`SELECT m.id,m.workchat_id,m.sender_id,m.body,m.created_at,u.first_name sender_first_name,u.last_name sender_last_name,u.role sender_role,u.profile_picture sender_profile_picture,m.deleted_at,m.deleted_by,m.reply_to_message_id,reply.body AS reply_body,reply.deleted_at AS reply_deleted_at,replyUser.first_name AS reply_sender_first_name,replyUser.last_name AS reply_sender_last_name,wp.pinned_at,wp.pinned_by FROM workchat_messages m JOIN users u ON u.id=m.sender_id LEFT JOIN workchat_messages reply ON reply.id=m.reply_to_message_id AND reply.workchat_id=m.workchat_id LEFT JOIN users replyUser ON replyUser.id=reply.sender_id LEFT JOIN workchat_pins wp ON wp.message_id=m.id AND wp.workchat_id=m.workchat_id WHERE m.workchat_id=? ORDER BY m.id ASC`,[id]);
     const [participants]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture,EXISTS(SELECT 1 FROM workchat_admins wa WHERE wa.workchat_id=p.workchat_id AND wa.user_id=p.user_id) AS is_admin FROM workchat_participants p JOIN users u ON u.id=p.user_id JOIN workchats w ON w.id=p.workchat_id WHERE p.workchat_id=? ORDER BY CASE WHEN p.user_id=w.employer_user_id THEN 0 WHEN EXISTS(SELECT 1 FROM workchat_admins wa2 WHERE wa2.workchat_id=p.workchat_id AND wa2.user_id=p.user_id) THEN 1 ELSE 2 END, p.added_at, u.first_name, u.last_name`,[id]);
