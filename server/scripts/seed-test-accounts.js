@@ -98,12 +98,6 @@ async function main() {
 
 
     // Create a predictable Tier 1 owner exclusively in the isolated test database.
-    await conn.query(`CREATE TABLE IF NOT EXISTS admin_login_names (
-      user_id BIGINT UNSIGNED PRIMARY KEY,
-      username VARCHAR(80) NOT NULL UNIQUE,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    )`);
     const ownerEmail = 'test.owner@hyrz.local';
     const ownerPasswordHash = await bcrypt.hash('Test-Only-Password-2026!', 12);
     const [existingOwner] = await conn.execute('SELECT id, role FROM users WHERE LOWER(TRIM(email))=? LIMIT 1', [ownerEmail]);
