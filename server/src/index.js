@@ -579,7 +579,7 @@ app.post('/api/auth/change-password', auth, asyncRoute(async (req, res) => {
     return res.status(400).json({ error: 'Your current password is incorrect.' });
   }
   const passwordHash = await bcrypt.hash(newPassword, 12);
-  await db.execute('UPDATE users SET password_hash=? WHERE id=?', [passwordHash, req.user.id]);
+  await db.execute('UPDATE users SET password_hash=?,session_version=session_version+1 WHERE id=?', [passwordHash, req.user.id]);
   return res.json({ ok: true, message: 'Password changed successfully.' });
 }));
 
