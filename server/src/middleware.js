@@ -105,12 +105,14 @@ async function requireVerification(req, res, next) {
 }
 
 function allow(...roles) {
-  return (req, res, next) =>
-    roles.includes(req.user?.role)
+  return (req, res, next) => {
+    if (req.user?.role === 'admin' && ![1,2,3].includes(Number(req.user.admin_tier))) {
+      return res.status(403).json({ error: 'Administrator tier is not configured. Contact the Tier 1 owner.' });
+    }
+    return roles.includes(req.user?.role)
       ? next()
-      : res.status(403).json({
-          error: 'Insufficient permissions'
-        });
+      : res.status(403).json({ error: 'Insufficient permissions' });
+  };
 }
 
 function adminTier(maxTier) {
