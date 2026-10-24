@@ -147,7 +147,11 @@ async function main() {
     assert.equal(saved.data.template.shift.slots,undefined);
     assert.equal(saved.data.template.shift.startsAt,undefined);
     const list=await api('/shift-templates/mine',{token:employerToken});
-    assert.ok(list.data.templates.some(item=>Number(item.id)===Number(saved.data.template.id)));
+    const loadedTemplate=list.data.templates.find(item=>Number(item.id)===Number(saved.data.template.id));
+    assert.ok(loadedTemplate,'The saved template should persist in the employer template list.');
+    assert.equal(loadedTemplate.shift.slots,undefined,'The stored template must not contain headcount.');
+    assert.equal(loadedTemplate.shift.startsAt,undefined,'The stored template must not contain dates.');
+    assert.equal(loadedTemplate.shift.description,undefined,'The stored template should only contain role, type and rate.');
     const removed=await api('/shift-templates/'+saved.data.template.id,{token:employerToken,method:'DELETE'});
     assert.equal(removed.status,200,JSON.stringify(removed.data));
   });
