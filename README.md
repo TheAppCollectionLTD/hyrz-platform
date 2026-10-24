@@ -12,7 +12,30 @@ This is a development MVP foundation, not a certified production staffing/paymen
 - MySQL 8+
 - npm
 
-## Setup
+## Quick local setup on Ubuntu
+
+For a fresh local development setup on Ubuntu, from the repository root run:
+
+```bash
+bash scripts/setup-local-ubuntu.sh
+```
+
+The script creates the isolated `hyrz_test` database, makes a local MySQL account with access only to that test database, generates local secrets, installs server/client dependencies, and seeds fictional test accounts. It requires Ubuntu's local MySQL administrator access via `sudo mysql`. If `server/.env` already exists, it makes a timestamped backup before writing local settings. It does not reset or modify the normal `hyrz` database. Email delivery is not configured by this local script.
+
+After setup, open two terminals:
+
+```bash
+cd server && npm run dev:test
+```
+
+```bash
+cd client && npm run dev:test
+```
+
+Open the Vite URL shown in the client terminal (usually http://localhost:5173). For the test login credentials, see [server/LOCAL_TESTING.md](server/LOCAL_TESTING.md).
+
+## Manual development setup
+
 1. Create a MySQL database and user, then run `mysql -u YOUR_USER -p YOUR_DATABASE < server/db/schema.sql`.
 2. Copy `server/.env.example` to `server/.env` and configure database credentials, a long random `JWT_SECRET`, and a separate stable `IDENTIFIER_HASH_SECRET` (keep the latter unchanged so existing identifier hashes remain comparable).
 3. In one terminal:
@@ -99,4 +122,5 @@ Employer platform fee per hour is £2 for hourly pay up to and including £20, a
 Use the tracked [launch-readiness checklist](docs/launch-readiness.md) to follow implementation, verification and external launch blockers.
 
 ## Before production
+
 Add and verify: email verification and password reset; rate limiting and CSRF strategy; robust validation; full authorization review; privacy retention/deletion workflow; identity/right-to-work provider; email/SMS provider; payment provider with marketplace/payout compliance review; accounting/tax/legal review; automated migrations/backups; logging/monitoring; load/security testing; mobile apps.
