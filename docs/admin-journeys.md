@@ -21,6 +21,7 @@ Use your real owner email and a unique password. This command only works if the 
 - Worker National Insurance and permit identifiers are stored as one-way SHA-256 hashes for block-list comparisons. Do not add raw identifiers to logs.
 - Account deletion currently disables access and records a deletion request while retaining related audit and financial history. It is not a physical purge.
 - Referral commission entries are manually recorded by Tier 1; the commission rate and referral attribution rules have not been automated.
+- Password reset uses one-time, 30-minute tokens; it requires a configured email provider and a public `APP_URL`. The link and token flow still needs an end-to-end delivery test in a configured staging environment.
 - Automated CI covers syntax checks, existing server tests and the client build. A configured MySQL environment is still required for full end-to-end admin workflow testing.
 
 ## Browser smoke-test checklist
