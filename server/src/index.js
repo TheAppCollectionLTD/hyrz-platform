@@ -607,31 +607,9 @@ app.delete('/api/worker/employers/:businessId/favourite',auth,allow('worker'),as
  await ensureWorkerEmployerFavourites;
  await db.execute('DELETE FROM worker_employer_favourites WHERE worker_user_id=? AND business_id=?',[req.user.id,Number(req.params.businessId)]);res.json({ok:true,favourite:false});
 }));
-async function lookupPostcodeCoordinates(postcodes){
- const normalized=[...new Set(postcodes.map(p=>String(p||'').trim().toUpperCase()).filter(Boolean))];
- if(!normalized.length)return {};
- const result={};
- // postcodes.io bulk lookups accept at most 100 postcodes per request.
- for(let i=0;i<normalized.length;i+=100){
-  const batch=normalized.slice(i,i+100);
-  const response=await fetch('https://api.postcodes.io/postcodes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({postcodes:batch})});
-  if(!response.ok)throw new Error('Postcode location lookup is temporarily unavailable. Please try again.');
-  const data=await response.json();
-  for(const item of data.result||[]){if(item.result)result[String(item.query||'').toUpperCase()]={lat:item.result.latitude,lon:item.result.longitude};}
- }
- return result;
-}
-function distanceMiles(a,b){
- const radians=value=>value*Math.PI/180;const dLat=radians(b.lat-a.lat),dLon=radians(b.lon-a.lon);
- const h=Math.sin(dLat/2)**2+Math.cos(radians(a.lat))*Math.cos(radians(b.lat))*Math.sin(dLon/2)**2;
- return 3958.8*2*Math.atan2(Math.sqrt(h),Math.sqrt(Math.max(0,1-h)));
-}
 app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;
  const q=String(req.query.q||'').trim();
- const [employers]=await db.execute('SELECT postcode FROM businesses WHERE owner_user_id=? ORDER BY id DESC LIMIT 1',[req.user.id]);
- const [userAddress]=await db.execute('SELECT address_postcode FROM users WHERE id=?',[req.user.id]);
- const employerPostcode=String(employers[0]?.postcode||userAddress[0]?.address_postcode||'').trim().toUpperCase();
  const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.profile_picture,
  COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode,
  EXISTS(SELECT 1 FROM employer_worker_favourites f WHERE f.employer_user_id=? AND f.worker_user_id=u.id) AS is_favourite
@@ -639,24 +617,9 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  WHERE u.role='worker' AND u.status='active'
  AND (?='' OR LOWER(CONCAT_WS(' ',u.first_name,u.last_name)) LIKE LOWER(?) OR LOWER(u.email) LIKE LOWER(?))
  ORDER BY u.first_name,u.last_name LIMIT 1000`,[req.user.id,q,'%'+q+'%','%'+q+'%']);
- // Location data is informative only in worker search. Do not hide active workers
- // from favourites, inbox, or workchat search because they are far away or have
- // incomplete postcodes; distance filtering belongs in shift-matching flows.
- let coordinates={};
- try {
-  coordinates=await lookupPostcodeCoordinates([...(employerPostcode?[employerPostcode]:[]),...rows.map(row=>row.postcode)]);
- } catch(error) {
-  console.error('Employer worker search postcode lookup failed:',error.message);
- }
- const origin=employerPostcode?coordinates[employerPostcode]:null;
- const workers=rows.map(row=>{
-  const point=coordinates[String(row.postcode||'').trim().toUpperCase()];
-  const locationVerified=Boolean(origin&&point);
-  const distance=locationVerified?Math.round(distanceMiles(origin,point)*10)/10:null;
-  return {...row,distanceMiles:distance,locationVerified,isFavourite:Boolean(row.is_favourite)};
- })
- .sort((a,b)=>{if(a.locationVerified!==b.locationVerified)return a.locationVerified?-1:1;if(a.distanceMiles==null)return a.first_name.localeCompare(b.first_name);if(b.distanceMiles==null)return -1;return a.distanceMiles-b.distanceMiles;});
- res.json({workers,matched:workers.filter(w=>w.locationVerified).length,locationUnverified:workers.filter(w=>!w.locationVerified).length,employerLocationVerified:Boolean(origin),searchTerm:q});
+ // Keep search fast and complete: finding workers by name/email must not depend on an external postcode service.
+ const workers=rows.map(row=>({...row,isFavourite:Boolean(row.is_favourite)}));
+ res.json({workers,searchTerm:q});
 }));
 app.get('/api/employer/workers/favourites',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;
