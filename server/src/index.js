@@ -650,11 +650,13 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
 }));
 app.get('/api/employer/workers/favourites',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;
- const [workers]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email
+ const [workers]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.profile_picture,
+ COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode
  FROM employer_worker_favourites f JOIN users u ON u.id=f.worker_user_id
+ LEFT JOIN worker_profiles wp ON wp.user_id=u.id
  WHERE f.employer_user_id=? AND u.role='worker' AND u.status='active'
  ORDER BY u.first_name,u.last_name`,[req.user.id]);
- res.json({workers});
+ res.json({workers:workers.map(worker=>({...worker,isFavourite:true}))});
 }));
 app.post('/api/employer/workers/:workerId/favourite',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;const workerId=Number(req.params.workerId);
