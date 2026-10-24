@@ -29,7 +29,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   }));
 
   app.get('/api/messages/mine', auth, asyncRoute(async(req,res) => {
-    await ensureMeta;
+    await ensureAdminMessageMeta;
     const [messages]=await db.execute(`SELECT m.id,m.body,m.created_at,m.sender_id,meta.category,meta.subject,meta.read_at,meta.recipient_id,
       sender.email AS sender_email,sender.role AS sender_role,recipient.email AS recipient_email,recipient.role AS recipient_role
       FROM messages m JOIN admin_message_meta meta ON meta.message_id=m.id
