@@ -178,6 +178,24 @@ async function main() {
     const valid=await api('/shifts',{token:publisherToken,method:'POST',body:baseShift});
     assert.equal(valid.status,201,JSON.stringify(valid.data));
   });
+  await check('Automatic shift approval respects the worker capacity',async()=>{
+    const autoWorkerOne=await addUser({email:'auto-capacity-one@test.hyrz.invalid',ni:'QQ303030C'});
+    const autoWorkerTwo=await addUser({email:'auto-capacity-two@test.hyrz.invalid',ni:'QQ404040D'});
+    const autoEmployer=await addUser({email:'auto-capacity-employer@test.hyrz.invalid',role:'employer',company:'AUTO-CAPACITY-123'});
+    const employerToken=await login('auto-capacity-employer@test.hyrz.invalid');
+    const workerOneToken=await login('auto-capacity-one@test.hyrz.invalid');
+    const workerTwoToken=await login('auto-capacity-two@test.hyrz.invalid');
+    const [businessRows]=await db.execute('SELECT id FROM businesses WHERE owner_user_id=?',[autoEmployer]);
+    const [shift]=await db.execute("INSERT INTO shifts(business_id,created_by,title,location,starts_at,ends_at,hourly_pay,slots,auto_approve,status) VALUES(?,?,'Bartender - Standard','London',DATE_ADD(UTC_TIMESTAMP(),INTERVAL 2 DAY),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 5 HOUR),15,1,1,'open')",[businessRows[0].id,autoEmployer]);
+    const applicationBody={contractAccepted:true,contractSnapshot:JSON.stringify({version:'hyrz-shift-contract-v1'}),confirmedRequirements:true,confirmedPreferences:[]};
+    const first=await api('/shifts/'+shift.insertId+'/apply',{token:workerOneToken,method:'POST',body:applicationBody});
+    assert.equal(first.status,201,JSON.stringify(first.data));
+    assert.equal(first.data.status,'approved');
+    const second=await api('/shifts/'+shift.insertId+'/apply',{token:workerTwoToken,method:'POST',body:applicationBody});
+    assert.equal(second.status,409,JSON.stringify(second.data));
+    const [approved]=await db.execute("SELECT COUNT(*) AS total FROM applications WHERE shift_id=? AND status='approved'",[shift.insertId]);
+    assert.equal(Number(approved[0].total),1);
+  });
   await check('Employer cannot approve more workers than a shift has positions',async()=>{
     const capacityWorkerOne=await addUser({email:'capacity-worker-one@test.hyrz.invalid',ni:'QQ101010A'});
     const capacityWorkerTwo=await addUser({email:'capacity-worker-two@test.hyrz.invalid',ni:'QQ202020B'});
