@@ -156,6 +156,32 @@ async function main() {
     const removed=await api('/shift-templates/'+saved.data.template.id,{token:employerToken,method:'DELETE'});
     assert.equal(removed.status,200,JSON.stringify(removed.data));
   });
+  await check('Workchat replies quote the original message and enforce delete permissions',async()=>{
+    const workchatWorkerId=await addUser({email:'workchat-worker@test.hyrz.invalid',ni:'QQ135790G'});
+    await addUser({email:'workchat-employer@test.hyrz.invalid',role:'employer',company:'WORKCHAT-EMPLOYER-123'});
+    const employerToken=await login('workchat-employer@test.hyrz.invalid');
+    const workerToken=await login('workchat-worker@test.hyrz.invalid');
+    const favourite=await api('/employer/workers/'+workchatWorkerId+'/favourite',{token:employerToken,method:'POST'});
+    assert.equal(favourite.status,200,JSON.stringify(favourite.data));
+    const created=await api('/workchats',{token:employerToken,method:'POST',body:{name:'Reply permissions test',participantIds:[workchatWorkerId]}});
+    assert.equal(created.status,201,JSON.stringify(created.data));
+    const workchatId=created.data.workchatId;
+    const initialLoad=await api('/workchats/'+workchatId+'/messages',{token:employerToken});
+    assert.equal(initialLoad.status,200,JSON.stringify(initialLoad.data));
+    const first=await api('/workchats/'+workchatId+'/messages',{token:employerToken,method:'POST',body:{body:'Can you confirm the start time?'}});
+    assert.equal(first.status,201,JSON.stringify(first.data));
+    const reply=await api('/workchats/'+workchatId+'/messages',{token:workerToken,method:'POST',body:{body:'Yes, I will arrive at nine.',replyToMessageId:first.data.id}});
+    assert.equal(reply.status,201,JSON.stringify(reply.data));
+    const history=await api('/workchats/'+workchatId+'/messages',{token:workerToken});
+    assert.equal(history.status,200,JSON.stringify(history.data));
+    const replyMessage=history.data.messages.find(message=>Number(message.id)===Number(reply.data.id));
+    assert.equal(Number(replyMessage.reply_to_message_id),Number(first.data.id));
+    assert.equal(replyMessage.reply_body,'Can you confirm the start time?');
+    const forbiddenDelete=await api('/workchats/'+workchatId+'/messages/'+first.data.id,{token:workerToken,method:'DELETE'});
+    assert.equal(forbiddenDelete.status,403,'A worker must not delete another participant’s message.');
+    const ownDelete=await api('/workchats/'+workchatId+'/messages/'+reply.data.id,{token:workerToken,method:'DELETE'});
+    assert.equal(ownDelete.status,200,JSON.stringify(ownDelete.data));
+  });
   await check('Employer company block prevents repeat registration',async()=>{
     employerId=await addUser({email:'employer@test.hyrz.invalid',role:'employer',company:'TEST-COMPANY-123'});
     const blocked=await api('/admin/users/'+employerId+'/status',{token:ownerToken,method:'PATCH',body:{status:'blocked'}});
