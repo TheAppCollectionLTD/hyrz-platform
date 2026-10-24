@@ -621,7 +621,7 @@ app.delete('/api/worker/employers/:businessId/favourite',auth,allow('worker'),as
  await db.execute('DELETE FROM worker_employer_favourites WHERE worker_user_id=? AND business_id=?',[req.user.id,Number(req.params.businessId)]);res.json({ok:true,favourite:false});
 }));
 app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(req,res)=>{
- await ensureEmployerWorkerFavourites;
+ await Promise.all([ensureEmployerWorkerFavourites,ensureProfilePictureColumn,ensureUserAddressColumns]);
  const q=String(req.query.q||'').trim();
  const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.profile_picture,
  COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode,
@@ -635,7 +635,7 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  res.json({workers,searchTerm:q});
 }));
 app.get('/api/employer/workers/favourites',auth,allow('employer'),asyncRoute(async(req,res)=>{
- await ensureEmployerWorkerFavourites;
+ await Promise.all([ensureEmployerWorkerFavourites,ensureProfilePictureColumn,ensureUserAddressColumns]);
  const [workers]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.profile_picture,
  COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode
  FROM employer_worker_favourites f JOIN users u ON u.id=f.worker_user_id
@@ -654,7 +654,7 @@ app.delete('/api/employer/workers/:workerId/favourite',auth,allow('employer'),as
  await ensureEmployerWorkerFavourites;await db.execute('DELETE FROM employer_worker_favourites WHERE employer_user_id=? AND worker_user_id=?',[req.user.id,Number(req.params.workerId)]);res.json({ok:true,favourite:false});
 }));
 app.get('/api/employer/workers/past',auth,allow('employer'),asyncRoute(async(req,res)=>{
- await ensureEmployerWorkerFavourites;
+ await Promise.all([ensureEmployerWorkerFavourites,ensureProfilePictureColumn]);
  const [rows]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,MAX(u.profile_picture) AS profile_picture,wp.postcode,
  GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR ', ') AS roles,
  MAX(s.starts_at) AS last_shift,
