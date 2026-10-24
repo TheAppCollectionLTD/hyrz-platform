@@ -38,7 +38,7 @@ In terminal 2:
 ```bash
 cd ~/Downloads/hyrz-platform-build/hyrz-platform/client
 npm install
-VITE_API_URL=http://localhost:4001/api npm run dev
+npm run dev:test
 ```
 
 Open the Vite address shown by the client (usually `http://localhost:5173`, or `http://localhost:5174` if port 5173 is occupied). The test API listens on `http://localhost:4001`.
