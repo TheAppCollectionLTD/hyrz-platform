@@ -2,22 +2,31 @@ const { auth, allow, adminTier } = require('./middleware');
 const bcrypt = require('bcryptjs');
 const { hashIdentifier } = require('./identifier-hash');
 
-module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails }) {
+module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta }) {
   const admin = [auth, allow('admin')];
-  const ensureBlockedIdentifiers = db.query(`CREATE TABLE IF NOT EXISTS blocked_identifiers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL, identifier_hash CHAR(64) NOT NULL, blocked_user_id BIGINT UNSIGNED NULL, created_by BIGINT UNSIGNED NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash), FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL)`).catch(err=>{console.error('Could not initialise blocked identifiers:',err.message);throw err;});
-  const ensureCheckoutCounterColumns = Promise.all([
-    db.query('ALTER TABLE checkouts ADD COLUMN employer_comment TEXT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-    db.query('ALTER TABLE checkouts ADD COLUMN counter_start DATETIME NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-    db.query('ALTER TABLE checkouts ADD COLUMN counter_end DATETIME NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-    db.query('ALTER TABLE checkouts ADD COLUMN counter_break_minutes INT NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-    db.query('ALTER TABLE checkouts ADD COLUMN counter_gross_pay DECIMAL(10,2) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
-  ]).catch(err=>{console.error('Could not initialise checkout counter-offer fields:',err.message);throw err;});
-  const ensureWorkerIdentifierColumns = Promise.all([
-    db.query('ALTER TABLE worker_profiles ADD COLUMN national_insurance_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-    db.query('ALTER TABLE worker_profiles ADD COLUMN worker_permit_hash CHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
-  ]).catch(err=>{console.error('Could not initialise worker identifier hashes:',err.message);throw err;});
-
-  const ensureUserNotifications = db.query(`CREATE TABLE IF NOT EXISTS user_notifications (
+  const ensureBlockedIdentifiers = createTable(`CREATE TABLE IF NOT EXISTS blocked_identifiers (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    identifier_type ENUM('company_number','national_insurance','worker_permit') NOT NULL,
+    identifier_hash CHAR(64) NOT NULL,
+    blocked_user_id BIGINT UNSIGNED NULL,
+    created_by BIGINT UNSIGNED NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_blocked_identifier(identifier_type,identifier_hash),
+    FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+  )`,'blocked identifiers');
+  const ensureCheckoutCounterColumns = (async()=>{
+    await addColumn('checkouts','employer_comment TEXT NULL','checkout employer comment');
+    await addColumn('checkouts','counter_start DATETIME NULL','checkout counter start');
+    await addColumn('checkouts','counter_end DATETIME NULL','checkout counter end');
+    await addColumn('checkouts','counter_break_minutes INT NULL','checkout counter break');
+    await addColumn('checkouts','counter_gross_pay DECIMAL(10,2) NULL','checkout counter gross pay');
+  })();
+  const ensureWorkerIdentifierColumns = (async()=>{
+    await addColumn('worker_profiles','national_insurance_hash CHAR(64) NULL','worker National Insurance hash');
+    await addColumn('worker_profiles','worker_permit_hash CHAR(64) NULL','worker permit hash');
+  })();
+  const ensureUserNotifications = createTable(`CREATE TABLE IF NOT EXISTS user_notifications (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
     title VARCHAR(200) NOT NULL,
@@ -29,15 +38,15 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     INDEX idx_user_notifications_user_created(user_id,created_at),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (sent_by) REFERENCES users(id) ON DELETE SET NULL
-  )`).catch(err=>{console.error('Could not initialise user notifications:',err.message);throw err;});
-  const ensureNotificationState = Promise.all([
-    db.query("ALTER TABLE user_notifications ADD COLUMN admin_state ENUM('sent','past','deleted') NOT NULL DEFAULT 'sent'").catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;}),
-    db.query('ALTER TABLE user_notifications ADD COLUMN broadcast_key VARCHAR(64) NULL').catch(e=>{if(e.code!=='ER_DUP_FIELDNAME')throw e;})
-  ]).catch(err=>{console.error('Could not initialise notification archive:',err.message);throw err;});
-
-  const ensureMessageMeta = db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', subject VARCHAR(200) NULL, opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`).then(async()=>{try { await db.query('ALTER TABLE admin_message_meta ADD COLUMN subject VARCHAR(200) NULL'); } catch (e) { if (e.code !== 'ER_DUP_FIELDNAME') throw e; }}).catch(err => { console.error('Could not initialise admin message metadata:', err.message); throw err; });
+  )`,'user notifications');
+  const ensureNotificationState = (async()=>{
+    await ensureUserNotifications;
+    await addColumn('user_notifications',"admin_state ENUM('sent','past','deleted') NOT NULL DEFAULT 'sent'",'notification archive state');
+    await addColumn('user_notifications','broadcast_key VARCHAR(64) NULL','notification broadcast key');
+  })();
 
   app.get('/api/admin/users', ...admin, asyncRoute(async (req, res) => {
+    await ensureProfilePictureColumn;
     const { role, status } = req.query;
     const args = [];
     let where = [];
@@ -103,7 +112,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     res.json({ok:true,status});
   }));
 
-  const ensureReferralCommissions = db.query(`CREATE TABLE IF NOT EXISTS referral_commissions (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, referrer_user_id BIGINT UNSIGNED NOT NULL, referred_user_id BIGINT UNSIGNED NOT NULL, amount DECIMAL(10,2) NOT NULL, status ENUM('pending','approved','paid','cancelled') NOT NULL DEFAULT 'pending', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, paid_at DATETIME NULL, UNIQUE KEY uq_referral_pair(referrer_user_id,referred_user_id), FOREIGN KEY (referrer_user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (referred_user_id) REFERENCES users(id) ON DELETE CASCADE)`).catch(err=>{console.error('Could not initialise referral commission ledger:',err.message);throw err;});
+  const ensureReferralCommissions = createTable(`CREATE TABLE IF NOT EXISTS referral_commissions (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, referrer_user_id BIGINT UNSIGNED NOT NULL, referred_user_id BIGINT UNSIGNED NOT NULL, amount DECIMAL(10,2) NOT NULL, status ENUM('pending','approved','paid','cancelled') NOT NULL DEFAULT 'pending', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, paid_at DATETIME NULL, UNIQUE KEY uq_referral_pair(referrer_user_id,referred_user_id), FOREIGN KEY (referrer_user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (referred_user_id) REFERENCES users(id) ON DELETE CASCADE)`, 'referral commission ledger');
 
   app.get('/api/admin/financial-reports', ...admin, asyncRoute(async(req,res) => {
     if (Number(req.user.admin_tier)!==1) return res.status(403).json({error:'Financial reports are available to Tier 1 administrators only'});
@@ -302,7 +311,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   }));
 
   app.get('/api/admin/inbox', ...admin, asyncRoute(async(req,res) => {
-    await ensureMessageMeta;
+    await ensureAdminMessageMeta;
     const [rows]=await db.execute(`SELECT m.*,u.email AS sender_email,u.role AS sender_role,u.first_name,u.last_name,meta.recipient_id,meta.category,meta.subject,meta.opened_by,meta.read_at,opener.email AS opened_by_email
       FROM messages m JOIN users u ON u.id=m.sender_id LEFT JOIN admin_message_meta meta ON meta.message_id=m.id LEFT JOIN users opener ON opener.id=meta.opened_by ORDER BY m.created_at DESC LIMIT 500`);
     res.json({messages:rows});
