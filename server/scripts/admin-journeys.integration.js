@@ -34,8 +34,7 @@ async function login(identifier) {
   assert.equal(r.status,200,JSON.stringify(r.data));return r.data.token;
 }
 async function main() {
-  const ownerEmail=process.env.OWNER_EMAIL || 'test.owner@hyrz.local';
-  const ownerToken=await login(ownerEmail);
+  const ownerToken=await login('test.owner@hyrz.local');
   let tier2Id,tier3Id,tier3bId,workerId,employerId,checkoutId,disputeId;
   await check('Tier 1 creates Tier 2 administrator',async()=>{
     const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier2@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:2}});
