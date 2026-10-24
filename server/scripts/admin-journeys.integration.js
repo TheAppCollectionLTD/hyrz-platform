@@ -157,6 +157,20 @@ async function main() {
     const removed=await api('/shift-templates/'+saved.data.template.id,{token:employerToken,method:'DELETE'});
     assert.equal(removed.status,200,JSON.stringify(removed.data));
   });
+  await check('Employer cannot approve more workers than a shift has positions',async()=>{
+    const capacityWorkerOne=await addUser({email:'capacity-worker-one@test.hyrz.invalid',ni:'QQ101010A'});
+    const capacityWorkerTwo=await addUser({email:'capacity-worker-two@test.hyrz.invalid',ni:'QQ202020B'});
+    const capacityEmployer=await addUser({email:'capacity-employer@test.hyrz.invalid',role:'employer',company:'CAPACITY-EMPLOYER-123'});
+    const employerToken=await login('capacity-employer@test.hyrz.invalid');
+    const [businessRows]=await db.execute('SELECT id FROM businesses WHERE owner_user_id=?',[capacityEmployer]);
+    const [shift]=await db.execute("INSERT INTO shifts(business_id,created_by,title,location,starts_at,ends_at,hourly_pay,slots,status) VALUES(?,?,'Capacity test shift','London',DATE_ADD(UTC_TIMESTAMP(),INTERVAL 2 DAY),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 27 HOUR),15,1,'open')",[businessRows[0].id,capacityEmployer]);
+    await db.execute("INSERT INTO applications(shift_id,worker_id,status) VALUES(?,?,'approved')",[shift.insertId,capacityWorkerOne]);
+    const [pending]=await db.execute("INSERT INTO applications(shift_id,worker_id,status) VALUES(?,?,'pending')",[shift.insertId,capacityWorkerTwo]);
+    const response=await api('/applications/'+pending.insertId,{token:employerToken,method:'PATCH',body:{status:'approved'}});
+    assert.equal(response.status,409,JSON.stringify(response.data));
+    const [rows]=await db.execute('SELECT status FROM applications WHERE id=?',[pending.insertId]);
+    assert.equal(rows[0].status,'pending','A full shift must not overbook its worker slots.');
+  });
   await check('Workchat replies quote the original message and enforce delete permissions',async()=>{
     const workchatWorkerId=await addUser({email:'workchat-worker@test.hyrz.invalid',ni:'QQ135790G'});
     await addUser({email:'workchat-employer@test.hyrz.invalid',role:'employer',company:'WORKCHAT-EMPLOYER-123'});
