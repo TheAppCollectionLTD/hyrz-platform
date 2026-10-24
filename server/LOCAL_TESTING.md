@@ -54,7 +54,7 @@ cd ~/Downloads/hyrz-platform-build/hyrz-platform/server
 npm run test:integration
 ```
 
-The integration-test runner explicitly targets `hyrz_test` and `http://127.0.0.1:4001/api`; it does not use the normal development database. `npm run setup:test` seeds a fictional Tier 1 owner used by the integration tests. The integration suite creates test records, so rerun `npm run setup:test` and reset the test database if a previous run left duplicate fixture records.
+The integration-test runner explicitly targets `hyrz_test` and `http://127.0.0.1:4001/api`; it does not use the normal development database. `npm run setup:test` seeds a fictional Tier 1 owner used by the integration tests. The integration suite creates test records and is intended to run against a clean `hyrz_test` database. Re-seeding alone does not remove records from an earlier integration run; if a run has already created fixtures, reset only the `hyrz_test` database before running the suite again.
 
 
 ## 5. Sign in with a seeded test account
