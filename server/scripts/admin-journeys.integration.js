@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 const { hashIdentifier } = require('../src/identifier-hash');
@@ -42,6 +43,20 @@ async function main() {
     assert.equal(invalidToken.status,400);
     const shortPassword=await api('/auth/password-reset/confirm',{method:'POST',body:{token:'a'.repeat(64),newPassword:'short'}});
     assert.equal(shortPassword.status,400);
+  });
+  await check('Password reset consumes its token once and revokes old sessions',async()=>{
+    const resetUserId=await addUser({email:'password-reset-worker@test.hyrz.invalid',ni:'QQ505050E'});
+    const oldToken=await login('password-reset-worker@test.hyrz.invalid');
+    const rawResetToken=crypto.randomBytes(32).toString('hex');
+    const tokenHash=crypto.createHash('sha256').update(rawResetToken).digest('hex');
+    await db.execute('INSERT INTO password_reset_tokens(user_id,token_hash,expires_at) VALUES(?,?,DATE_ADD(UTC_TIMESTAMP(),INTERVAL 30 MINUTE))',[resetUserId,tokenHash]);
+    const reset=await api('/auth/password-reset/confirm',{method:'POST',body:{token:rawResetToken,newPassword:'Reset-Only-Password-2026!'}});
+    assert.equal(reset.status,200,JSON.stringify(reset.data));
+    assert.equal((await api('/auth/me',{token:oldToken})).status,401,'Password reset must revoke old sessions.');
+    const reuse=await api('/auth/password-reset/confirm',{method:'POST',body:{token:rawResetToken,newPassword:'Reset-Only-Password-2026!'}});
+    assert.equal(reuse.status,400,'A reset token must not be reusable.');
+    const newLogin=await api('/auth/login',{method:'POST',body:{email:'password-reset-worker@test.hyrz.invalid',password:'Reset-Only-Password-2026!'}});
+    assert.equal(newLogin.status,200,JSON.stringify(newLogin.data));
   });
   await check('Tier 1 creates Tier 2 administrator',async()=>{
     const r=await api('/admin/admins',{token:ownerToken,method:'POST',body:{email:'tier2@test.hyrz.invalid',password:'Test-Only-Password-2026!',tier:2}});
