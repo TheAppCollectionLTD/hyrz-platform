@@ -7,6 +7,7 @@ export default function App(){
 
  const [publicIntroSlide,setPublicIntroSlide]=useState(0),[user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[shiftValidation,setShiftValidation]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
  const [pageHistory,setPageHistory]=useState([]);
+ const [passwordResetToken,setPasswordResetToken]=useState(''),[resetPasswordValue,setResetPasswordValue]=useState(''),[resetPasswordConfirm,setResetPasswordConfirm]=useState('');
  const [publicContactOpen,setPublicContactOpen]=useState(false),[publicContactEmail,setPublicContactEmail]=useState(''),[publicContactMessage,setPublicContactMessage]=useState(''),[publicContactSending,setPublicContactSending]=useState(false),[publicContactSent,setPublicContactSent]=useState(false),[publicContactError,setPublicContactError]=useState('');
  async function submitPublicContact(e){e.preventDefault();setPublicContactError('');setPublicContactSending(true);try{await request('/public-contact',{method:'POST',body:JSON.stringify({email:publicContactEmail.trim(),message:publicContactMessage.trim()})});setPublicContactSent(true);setPublicContactMessage('');}catch(err){setPublicContactError(err.message||'We could not send your message. Please try again.');}finally{setPublicContactSending(false)}}
  const [workchatSection,setWorkchatSection]=useState('current');
@@ -152,6 +153,14 @@ const [shift,setShift]=useState({title:'',description:'',shiftType:localStorage.
 
  useEffect(() => {
   const params = new URLSearchParams(window.location.search);
+  const resetToken = params.get('reset-password');
+  if (resetToken) {
+    setPasswordResetToken(resetToken);
+    navigateTo('resetPassword');
+    window.history.replaceState({}, '', window.location.pathname);
+    return;
+  }
+
   const verificationToken = params.get('verify-email');
 
   if (verificationToken) {
@@ -230,6 +239,29 @@ async function authenticate(register) {
     await load();
     setPageHistory([]);setPage(d.user?.role==='admin'?'admin':d.user?.role==='worker'?'jobs':'workchats');
   });
+}
+
+async function requestPasswordReset(e){
+ e?.preventDefault?.();
+ const address=String(email||'').trim();
+ if(!address){setError('Enter your email address first.');return;}
+ await action(async()=>{
+  const result=await request('/auth/password-reset/request',{method:'POST',body:JSON.stringify({email:address})});
+  setNotice(result.message||'If an active account exists for that email, a password reset link will be sent.');
+  navigateTo('passwordResetSent');
+ });
+}
+
+async function submitPasswordReset(e){
+ e?.preventDefault?.();
+ if(resetPasswordValue.length<12){setError('Choose a password of at least 12 characters.');return;}
+ if(resetPasswordValue!==resetPasswordConfirm){setError('Your new passwords do not match.');return;}
+ await action(async()=>{
+  const result=await request('/auth/password-reset/confirm',{method:'POST',body:JSON.stringify({token:passwordResetToken,newPassword:resetPasswordValue})});
+  setPasswordResetToken('');setResetPasswordValue('');setResetPasswordConfirm('');
+  setNotice(result.message||'Your password has been reset. You can now sign in.');
+  navigateTo('login');
+ });
 }
 
  async function persistShiftTemplate(name, source=shift, requirements=shiftRequirements, start=postStartTime, end=postEndTime){
@@ -461,6 +493,30 @@ async function authenticate(register) {
 <label>Email<input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)}/></label>
 <label>Password<input type="password" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/></label>
 {error&&<p className="shift-publish-feedback shift-publish-error" role="alert">{error}</p>}{notice&&<p className="shift-publish-feedback shift-publish-notice" role="status">{notice}</p>}<button className="primary" disabled={busy}>{busy?'Signing in…':'Sign in'}</button></form>
+<button type="button" className="textbutton" onClick={()=>{setError('');setNotice('');navigateTo('forgotPassword')}}>Forgot your password?</button>
+</section>}
+
+{!user && page==='forgotPassword'&&<section className="panel auth">
+<button type="button" className="textbutton" onClick={()=>navigateTo('login')}>← Back to sign in</button>
+<h2>Reset your password</h2><p>Enter the email address linked to your Hyrz account. If an active account exists, we’ll send a reset link.</p>
+<form onSubmit={requestPasswordReset}>
+<label>Email<input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)}/></label>
+{error&&<p className="shift-publish-feedback shift-publish-error" role="alert">{error}</p>}{notice&&<p className="shift-publish-feedback shift-publish-notice" role="status">{notice}</p>}
+<button className="primary" disabled={busy}>{busy?'Sending…':'Send reset link'}</button>
+</form>
+</section>}
+
+{!user && page==='passwordResetSent'&&<section className="panel auth"><h2>Check your email</h2><p>{notice||'If an active account exists for that email, a password reset link will be sent.'}</p><p>The reset link expires after 30 minutes and can only be used once.</p><button className="primary" onClick={()=>navigateTo('login')}>Back to sign in</button></section>}
+
+{!user && page==='resetPassword'&&<section className="panel auth">
+<h2>Choose a new password</h2><p>Use at least 12 characters. The reset link can only be used once.</p>
+<form onSubmit={submitPasswordReset}>
+<label>New password<input type="password" required minLength={12} maxLength={200} autoComplete="new-password" value={resetPasswordValue} onChange={e=>setResetPasswordValue(e.target.value)}/></label>
+<label>Confirm new password<input type="password" required minLength={12} maxLength={200} autoComplete="new-password" value={resetPasswordConfirm} onChange={e=>setResetPasswordConfirm(e.target.value)}/></label>
+{error&&<p className="shift-publish-feedback shift-publish-error" role="alert">{error}</p>}{notice&&<p className="shift-publish-feedback shift-publish-notice" role="status">{notice}</p>}
+<button className="primary" disabled={busy||!passwordResetToken}>{busy?'Resetting…':'Reset password'}</button>
+</form>
+<button type="button" className="textbutton" onClick={()=>navigateTo('login')}>Back to sign in</button>
 </section>}
 
 {!user && page === 'checkEmail' && (
