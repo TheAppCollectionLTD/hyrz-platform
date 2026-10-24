@@ -75,6 +75,7 @@ Do not expose this operation in a public API.
 - `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`
 - `GET/PUT /api/profile`
 - `GET/POST /api/shifts`, `GET /api/shifts/:id`, `POST /api/shifts/:id/apply`
+- `GET /api/shift-templates/mine`, `POST /api/shift-templates`, `DELETE /api/shift-templates/:id` (employer-owned reusable templates; role, shift type, hourly rate and times only)
 - `GET /api/applications/mine`, `PATCH /api/applications/:id`
 - `POST /api/checkouts`, `GET /api/checkouts/mine`, `PATCH /api/checkouts/:id/review`
 - `POST /api/ratings`, `GET /api/ratings/shift/:shiftId`
