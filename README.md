@@ -94,5 +94,9 @@ For the first Tier 1 owner, use the guarded bootstrap command described in [docs
 ## Pricing rules
 Employer platform fee per hour is £2 for hourly pay up to and including £20, and 10% of hourly pay above £20. Invoice terms are 14 days. Pricing is calculated in code; payment capture/payout is intentionally not enabled. Referral rules conflict in the original brief and should remain disabled until the rule is confirmed.
 
+## Launch readiness
+
+Use the tracked [launch-readiness checklist](docs/launch-readiness.md) to follow implementation, verification and external launch blockers.
+
 ## Before production
 Add and verify: email verification and password reset; rate limiting and CSRF strategy; robust validation; full authorization review; privacy retention/deletion workflow; identity/right-to-work provider; email/SMS provider; payment provider with marketplace/payout compliance review; accounting/tax/legal review; automated migrations/backups; logging/monitoring; load/security testing; mobile apps.
