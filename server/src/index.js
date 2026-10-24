@@ -767,9 +767,19 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
 }));
 app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
  await ensureShiftPublishingColumns;
- const {title,description,location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false,shiftType='hospitality',requirements=[],perks=[],preferences=[]}=req.body;
- if(!title||!VALID_JOB_ROLES.has(title)) return res.status(400).json({error:'Choose a job role from the approved role list.'});
- if(!startsAt||!endsAt||new Date(endsAt)<=new Date(startsAt)||Number(hourlyPay)<8||Number(slots)<1||Number(breakMinutes)<0||!Array.isArray(requirements)||requirements.length>10||requirements.some(x=>typeof x!=='string'||x.trim().length>250)||!Array.isArray(perks)||perks.length>10||perks.some(x=>typeof x!=='string'||x.trim().length>250)||!Array.isArray(preferences)||preferences.length>10||preferences.some(x=>typeof x!=='string'||x.trim().length>250)) return res.status(400).json({error:'Invalid shift details. Hourly pay must be at least £8.00'});
+ const {title,description,location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false,shiftType='hospitality',requirements=[],perks=[],preferences=[]}=req.body||{};
+ const allowedShiftTypes=new Set(['hospitality','warehouse','retail','events','office','cleaning','care','construction','driving','other']);
+ const validDateTime=value=>typeof value==='string'&&/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$/.test(value)&&Number.isFinite(new Date(value).getTime());
+ const startDate=validDateTime(startsAt)?new Date(startsAt):null;
+ const endDate=validDateTime(endsAt)?new Date(endsAt):null;
+ const pay=Number(hourlyPay),workerSlots=Number(slots),breakMins=Number(breakMinutes);
+ const durationMinutes=startDate&&endDate?(endDate.getTime()-startDate.getTime())/60000:0;
+ const validList=value=>Array.isArray(value)&&value.length<=10&&value.every(item=>typeof item==='string'&&item.trim().length<=250);
+ if(typeof title!=='string'||!VALID_JOB_ROLES.has(title)) return res.status(400).json({error:'Choose a job role from the approved role list.'});
+ if(typeof shiftType!=='string'||!allowedShiftTypes.has(shiftType))return res.status(400).json({error:'Choose a valid shift type.'});
+ if(typeof description!=='undefined'&&description!==null&&(typeof description!=='string'||description.length>5000))return res.status(400).json({error:'Shift description must be 5,000 characters or fewer.'});
+ if(typeof location!=='undefined'&&location!==null&&(typeof location!=='string'||location.trim().length>255))return res.status(400).json({error:'Shift location must be 255 characters or fewer.'});
+ if(!startDate||!endDate||durationMinutes<=0||durationMinutes>72*60||!Number.isFinite(pay)||pay<8||pay>500||!Number.isInteger(workerSlots)||workerSlots<1||workerSlots>500||!Number.isInteger(breakMins)||breakMins<0||breakMins>=durationMinutes||!validList(requirements)||!validList(perks)||!validList(preferences)||typeof autoApprove!=='boolean')return res.status(400).json({error:'Invalid shift details. Check dates, times, hourly pay (£8–£500), worker count, break duration and optional lists.'});
  const [bs]=await db.execute('SELECT id, address_line_1, city FROM businesses WHERE owner_user_id=?',[req.user.id]);
  if(!bs.length)return res.status(400).json({error:'Business profile missing'});
  const shiftLocation=String(location||[bs[0].address_line_1,bs[0].city].filter(Boolean).join(', ')||'Location to be confirmed').trim();
