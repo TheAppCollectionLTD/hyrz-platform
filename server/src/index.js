@@ -81,6 +81,7 @@ function createTable(sql, label) {
   return enqueueSchemaChange(async () => { await db.query(sql); }, label);
 }
 const ensureProfilePictureColumn = addColumn('users','profile_picture LONGTEXT NULL','profile pictures');
+const ensureSessionVersionColumn = addColumn('users','session_version INT UNSIGNED NOT NULL DEFAULT 0','session version');
 const ensurePublicUserIdColumn = addColumn('users','public_user_id VARCHAR(24) NULL','unique public user IDs');
 const ensurePublicUserIds = enqueueSchemaChange(async()=>{
   await db.execute("UPDATE users SET public_user_id=CONCAT('HYRZ-',LPAD(id,8,'0')) WHERE public_user_id IS NULL OR public_user_id=''");
@@ -188,6 +189,7 @@ const audit = async (req, action, entityType, entityId, details={}) => {
   await db.execute('INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,details,ip_address) VALUES(?,?,?,?,?,?)',
     [req.user?.id || null, action, entityType, entityId || null, JSON.stringify(details), req.ip]);
 };
+app.use('/api', (req,res,next)=>ensureSessionVersionColumn.then(()=>next()).catch(next));
 app.get('/api/health', asyncRoute(async(req,res)=>{ await db.query('SELECT 1'); res.json({ok:true,service:'hyrz-api'}); }));
 
 
@@ -467,7 +469,7 @@ app.post('/api/auth/password-reset/confirm', passwordResetLimiter, asyncRoute(as
   const [used]=await conn.execute('UPDATE password_reset_tokens SET used_at=UTC_TIMESTAMP() WHERE id=? AND used_at IS NULL AND expires_at>UTC_TIMESTAMP()',[rows[0].id]);
   if(used.affectedRows!==1){await conn.rollback();return res.status(400).json({error:'This password reset link is invalid or expired.'});}
   const hash=await bcrypt.hash(newPassword,12);
-  await conn.execute('UPDATE users SET password_hash=? WHERE id=?',[hash,userId]);
+  await conn.execute('UPDATE users SET password_hash=?,session_version=session_version+1 WHERE id=?',[hash,userId]);
   await conn.execute('UPDATE password_reset_tokens SET used_at=COALESCE(used_at,UTC_TIMESTAMP()) WHERE user_id=? AND used_at IS NULL',[userId]);
   await conn.commit();
  } catch(error) {
@@ -477,10 +479,10 @@ app.post('/api/auth/password-reset/confirm', passwordResetLimiter, asyncRoute(as
  return res.json({message:'Your password has been reset. You can now sign in with your new password.'});
 }));
 app.post('/api/auth/login', asyncRoute(async (req, res) => {
-  await adminLoginNamesReady;
+  await Promise.all([adminLoginNamesReady,ensureSessionVersionColumn]);
   const identifier = String(req.body.email || req.body.username || '').trim();
   const [rows] = await db.execute(
-    `SELECT u.id,u.email,u.password_hash,u.role,u.admin_tier,u.status,u.first_name,u.last_name,u.email_verified_at
+    `SELECT u.id,u.email,u.password_hash,u.role,u.admin_tier,u.status,u.first_name,u.last_name,u.email_verified_at,u.session_version
      FROM users u LEFT JOIN admin_login_names n ON n.user_id=u.id
      WHERE LOWER(TRIM(u.email))=? OR (u.role='admin' AND n.username=?) LIMIT 1`,
     [identifier.toLowerCase(), identifier]
@@ -505,7 +507,7 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
   }
 
   const token = jwt.sign(
-    { sub: user.id },
+    { sub: user.id, sv: Number(user.session_version || 0) },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || '8h' }
   );
