@@ -189,6 +189,16 @@ CREATE TABLE IF NOT EXISTS admin_message_meta (
  FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE,
  FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL
 );
+CREATE TABLE IF NOT EXISTS shift_templates (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ employer_user_id BIGINT UNSIGNED NOT NULL,
+ name VARCHAR(120) NOT NULL,
+ template_data JSON NOT NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ KEY idx_shift_templates_owner (employer_user_id,created_at),
+ CONSTRAINT fk_shift_templates_employer FOREIGN KEY (employer_user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS referral_commissions (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  referrer_user_id BIGINT UNSIGNED NOT NULL,
