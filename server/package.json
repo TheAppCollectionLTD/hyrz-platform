@@ -11,7 +11,8 @@
     "bootstrap:owner": "node src/bootstrap-owner.js",
     "test:integration": "node scripts/run-integration-test.js",
     "setup:test": "node scripts/setup-test-db.js",
-    "seed:test-accounts": "node scripts/seed-test-accounts.js"
+    "seed:test-accounts": "node scripts/seed-test-accounts.js",
+    "reset:test": "node scripts/reset-test-db.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
