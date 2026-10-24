@@ -25,7 +25,7 @@
 - [x] Add password-reset request/confirm endpoints, hashed one-time tokens, 30-minute expiry, request limits and client screens.
 - [ ] Configure the email provider and public `APP_URL`, then test password-reset email delivery and token reuse/expiry in staging.
 - [ ] Verify email-delivery configuration, token expiry and resend/rate-limit behavior in a deployed environment.
-- [ ] Confirm session invalidation behavior after password changes, blocking and deactivation.
+- [x] Revoke previously issued sessions after password changes/resets using a per-user session version; integration coverage asserts old tokens are rejected.
 - [ ] Perform dependency, secret-leak, XSS, CSRF and API security reviews.
 - [ ] Confirm privacy retention, account data export and deletion/purge processes with legal advice.
 
