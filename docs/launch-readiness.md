@@ -22,7 +22,8 @@
 - [x] Case-insensitive email uniqueness migration and duplicate-email guard.
 - [x] Hash worker/company identifiers for block-list matching rather than storing raw values in the block list.
 - [ ] Complete a route-by-route authorization review, including ownership checks and concurrent update behavior.
-- [ ] Add secure password-reset flow with expiring one-time tokens and configured email delivery.
+- [x] Add password-reset request/confirm endpoints, hashed one-time tokens, 30-minute expiry, request limits and client screens.
+- [ ] Configure the email provider and public `APP_URL`, then test password-reset email delivery and token reuse/expiry in staging.
 - [ ] Verify email-delivery configuration, token expiry and resend/rate-limit behavior in a deployed environment.
 - [ ] Confirm session invalidation behavior after password changes, blocking and deactivation.
 - [ ] Perform dependency, secret-leak, XSS, CSRF and API security reviews.
