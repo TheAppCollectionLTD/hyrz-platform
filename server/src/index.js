@@ -742,7 +742,7 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  if(req.user.role!=='worker')return res.json({shifts:rows.map(({employer_postcode,...shift})=>shift)});
  const [[profile]]=await db.execute(`SELECT COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id WHERE u.id=?`,[req.user.id]);
  const workerPostcode=normalizePostcode(profile?.postcode);
- if(!workerPostcode)return res.json({shifts:rows.map(row=>({...row,distance_miles:null}))});
+ if(!workerPostcode)return res.json({shifts:rows.map(({employer_postcode,...shift})=>({...shift,distance_miles:null}))});
  const postcodes=[workerPostcode,...rows.map(row=>extractPostcode(row.location)||normalizePostcode(row.employer_postcode))];
  const coordinates=await lookupPostcodeCoordinates(postcodes);
  const origin=coordinates.get(workerPostcode)||null;
