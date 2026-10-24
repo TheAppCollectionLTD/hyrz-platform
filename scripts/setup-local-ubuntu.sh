@@ -17,12 +17,18 @@ if ! command -v mysql >/dev/null 2>&1; then
   echo "MySQL client is missing. Install MySQL 8+ and try again."
   exit 1
 fi
+if ! command -v openssl >/dev/null 2>&1; then
+  echo "OpenSSL is required to generate local secrets."
+  exit 1
+fi
 if ! systemctl is-active --quiet mysql; then
   echo "Starting MySQL..."
   sudo systemctl start mysql
 fi
 
-DB_PASSWORD="$(openssl rand -hex 24)"
+# Include upper/lowercase letters, digits, and a symbol to satisfy common
+# MySQL validate_password policies while retaining high random entropy.
+DB_PASSWORD="HyrzLocal-Aa9!$(openssl rand -hex 24)"
 JWT_SECRET="$(openssl rand -hex 48)"
 IDENTIFIER_HASH_SECRET="$(openssl rand -hex 48)"
 DB_USER="hyrz_local"
