@@ -57,6 +57,11 @@ function enqueueSchemaChange(task, label) {
 }
 function addColumn(table, definition, label) {
   return enqueueSchemaChange(async () => {
+    // Avoid acquiring a metadata lock on every server start when the column
+    // already exists. This is especially important for larger tables such as users.
+    const column = String(definition).trim().split(/\s+/, 1)[0];
+    const [existing] = await db.query('SHOW COLUMNS FROM ' + table + ' LIKE ?', [column]);
+    if (existing.length) return;
     try { await db.query('ALTER TABLE ' + table + ' ADD COLUMN ' + definition); }
     catch (error) { if (error.code !== 'ER_DUP_FIELDNAME') throw error; }
   }, label);
