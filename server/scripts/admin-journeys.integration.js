@@ -142,6 +142,14 @@ async function main() {
     const search=await api('/employer/workers/search?q=favourite-worker%40test.hyrz.invalid',{token:employerToken});
     assert.equal(search.status,200,JSON.stringify(search.data));
     assert.ok(search.data.workers.some(worker=>Number(worker.id)===Number(activeFavouriteWorkerId)),'Search by email should return the active worker.');
+    const saved=await api('/shift-templates',{token:employerToken,method:'POST',body:{name:'Night Bartender',shift:{title:'Bartender',shiftType:'hospitality',hourlyPay:15,slots:8,startsAt:'ignored',endsAt:'ignored'},startTime:'20:00',endTime:'02:00'}});
+    assert.equal(saved.status,201,JSON.stringify(saved.data));
+    assert.equal(saved.data.template.shift.slots,undefined);
+    assert.equal(saved.data.template.shift.startsAt,undefined);
+    const list=await api('/shift-templates/mine',{token:employerToken});
+    assert.ok(list.data.templates.some(item=>Number(item.id)===Number(saved.data.template.id)));
+    const removed=await api('/shift-templates/'+saved.data.template.id,{token:employerToken,method:'DELETE'});
+    assert.equal(removed.status,200,JSON.stringify(removed.data));
   });
   await check('Employer company block prevents repeat registration',async()=>{
     employerId=await addUser({email:'employer@test.hyrz.invalid',role:'employer',company:'TEST-COMPANY-123'});
