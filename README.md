@@ -64,12 +64,20 @@ Use these **fictional local-only accounts** to test sign-in:
 If the sign-in page has an old email or password filled in by your browser, replace it with one of the test accounts above. An email such as `worker.test@hyrz.invalid` is not a seeded test account. Do not use these accounts on a production database.
 
 For troubleshooting and details, see [server/LOCAL_TESTING.md](server/LOCAL_TESTING.md).
-## Seed an administrator
-Register normally through the API/UI, then manually promote that user's `role` to `admin` and set `admin_tier` to `1` in your local database:
-```sql
-UPDATE users SET role='admin', admin_tier=1 WHERE email='your-email@example.com';
+
+### Reset the test database and run integration checks
+
+To remove old fixtures and start from a clean, fictional test database, run the following from `server`:
+
+```bash
+npm run reset:test
 ```
-Do not expose this operation in a public API.
+
+**This permanently drops and recreates tables in `hyrz_test` only.** Do not use the reset command against any database containing real or valuable data. Start the API with `npm run dev:test`, then run `npm run test:integration` in another server terminal. The client must be started separately with `cd client && npm run dev:test`.
+
+## Seed an administrator
+
+For the first Tier 1 owner, use the guarded bootstrap command described in [docs/admin-journeys.md](docs/admin-journeys.md). It requires a unique email, a private password of at least 12 characters and a database with no existing administrator. Do not manually promote accounts with SQL or expose administrator promotion through a public API.
 
 ## Implemented API routes
 - `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`
