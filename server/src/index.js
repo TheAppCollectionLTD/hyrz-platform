@@ -155,6 +155,20 @@ const ensureShiftTemplates = createTable(`CREATE TABLE IF NOT EXISTS shift_templ
   KEY idx_shift_templates_owner (employer_user_id,created_at),
   CONSTRAINT fk_shift_templates_employer FOREIGN KEY (employer_user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB`,'shift templates');
+const passwordResetTokensReady = createTable(
+ 'CREATE TABLE IF NOT EXISTS password_reset_tokens (' +
+ 'id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, ' +
+ 'user_id BIGINT UNSIGNED NOT NULL, ' +
+ 'token_hash CHAR(64) NOT NULL UNIQUE, ' +
+ 'expires_at DATETIME NOT NULL, ' +
+ 'used_at DATETIME NULL, ' +
+ 'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, ' +
+ 'KEY idx_password_reset_user_created (user_id,created_at), ' +
+ 'KEY idx_password_reset_expiry (expires_at), ' +
+ 'FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE' +
+ ') ENGINE=InnoDB',
+ 'password reset tokens'
+);
 const ensureAdminMessageMeta = (async()=>{
   await createTable(`CREATE TABLE IF NOT EXISTS admin_message_meta (
     message_id BIGINT UNSIGNED PRIMARY KEY,
@@ -404,6 +418,64 @@ app.post('/api/auth/resend-verification', asyncRoute(async (req, res) => {
   return res.json({ message: genericMessage });
 }));
 
+const passwordResetLimiter = rateLimit({ windowMs: 60 * 60 * 1000, limit: 5, standardHeaders: true, legacyHeaders: false });
+app.post('/api/auth/password-reset/request', passwordResetLimiter, asyncRoute(async(req,res)=>{
+ const genericMessage='If an active account exists for that email, a password reset link will be sent.';
+ if(!resend||!process.env.EMAIL_FROM||!process.env.APP_URL)return res.status(503).json({error:'Password reset email is not configured. Please contact Hyrz support.'});
+ const email=String(req.body?.email||'').trim().toLowerCase();
+ if(!/^\S+@\S+\.\S+$/.test(email))return res.json({message:genericMessage});
+ await passwordResetTokensReady;
+ const [users]=await db.execute("SELECT id,email,first_name FROM users WHERE LOWER(TRIM(email))=? AND status='active' LIMIT 1",[email]);
+ if(!users.length)return res.json({message:genericMessage});
+ const user=users[0];
+ const [recent]=await db.execute('SELECT COUNT(*) AS count FROM password_reset_tokens WHERE user_id=? AND created_at>DATE_SUB(UTC_TIMESTAMP(),INTERVAL 1 HOUR)',[user.id]);
+ if(Number(recent[0]?.count||0)>=3)return res.json({message:genericMessage});
+ const rawToken=crypto.randomBytes(32).toString('hex');
+ const tokenHash=crypto.createHash('sha256').update(rawToken).digest('hex');
+ await db.execute('UPDATE password_reset_tokens SET used_at=UTC_TIMESTAMP() WHERE user_id=? AND used_at IS NULL',[user.id]);
+ await db.execute('INSERT INTO password_reset_tokens(user_id,token_hash,expires_at) VALUES(?,?,DATE_ADD(UTC_TIMESTAMP(),INTERVAL 30 MINUTE))',[user.id,tokenHash]);
+ const link=new URL('/',process.env.APP_URL);
+ link.searchParams.set('reset-password',rawToken);
+ try {
+  const result=await resend.emails.send({
+   from:process.env.EMAIL_FROM,
+   to:user.email,
+   subject:'Reset your Hyrz password',
+   html:'<p>Hello '+String(user.first_name||'there').replace(/[&<>"]/g,'')+',</p><p>We received a request to reset your Hyrz password.</p><p><a href="'+link.toString()+'">Reset my password</a></p><p>This link expires in 30 minutes and can only be used once. If you did not request this, you can ignore this email.</p>'
+  });
+  if(result.error)throw new Error(result.error.message||'Email delivery failed');
+ } catch(error) {
+  await db.execute('UPDATE password_reset_tokens SET used_at=UTC_TIMESTAMP() WHERE token_hash=?',[tokenHash]);
+  console.error('Password reset email failed:',error.message);
+  return res.status(503).json({error:'The password reset email could not be sent. Please try again later.'});
+ }
+ return res.json({message:genericMessage});
+}));
+app.post('/api/auth/password-reset/confirm', passwordResetLimiter, asyncRoute(async(req,res)=>{
+ const rawToken=req.body?.token;
+ const newPassword=req.body?.newPassword;
+ if(typeof rawToken!=='string'||!/^[a-f0-9]{64}$/i.test(rawToken))return res.status(400).json({error:'This password reset link is invalid or expired.'});
+ if(typeof newPassword!=='string'||newPassword.length<12||newPassword.length>200)return res.status(400).json({error:'Choose a password between 12 and 200 characters.'});
+ await passwordResetTokensReady;
+ const tokenHash=crypto.createHash('sha256').update(rawToken).digest('hex');
+ const conn=await db.getConnection();
+ try {
+  await conn.beginTransaction();
+  const [rows]=await conn.execute("SELECT t.id,t.user_id FROM password_reset_tokens t JOIN users u ON u.id=t.user_id WHERE t.token_hash=? AND t.used_at IS NULL AND t.expires_at>UTC_TIMESTAMP() AND u.status='active' LIMIT 1 FOR UPDATE",[tokenHash]);
+  if(!rows.length){await conn.rollback();return res.status(400).json({error:'This password reset link is invalid or expired.'});}
+  const userId=rows[0].user_id;
+  const [used]=await conn.execute('UPDATE password_reset_tokens SET used_at=UTC_TIMESTAMP() WHERE id=? AND used_at IS NULL AND expires_at>UTC_TIMESTAMP()',[rows[0].id]);
+  if(used.affectedRows!==1){await conn.rollback();return res.status(400).json({error:'This password reset link is invalid or expired.'});}
+  const hash=await bcrypt.hash(newPassword,12);
+  await conn.execute('UPDATE users SET password_hash=? WHERE id=?',[hash,userId]);
+  await conn.execute('UPDATE password_reset_tokens SET used_at=COALESCE(used_at,UTC_TIMESTAMP()) WHERE user_id=? AND used_at IS NULL',[userId]);
+  await conn.commit();
+ } catch(error) {
+  try{await conn.rollback();}catch(_){}
+  throw error;
+ } finally {conn.release();}
+ return res.json({message:'Your password has been reset. You can now sign in with your new password.'});
+}));
 app.post('/api/auth/login', asyncRoute(async (req, res) => {
   await adminLoginNamesReady;
   const identifier = String(req.body.email || req.body.username || '').trim();
