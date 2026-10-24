@@ -71,7 +71,14 @@ function createTable(sql, label) {
 }
 const ensureProfilePictureColumn = addColumn('users','profile_picture LONGTEXT NULL','profile pictures');
 const ensurePublicUserIdColumn = addColumn('users','public_user_id VARCHAR(24) NULL','unique public user IDs');
-const ensurePublicUserIds = enqueueSchemaChange(async()=>{await db.execute("UPDATE users SET public_user_id=CONCAT('HYRZ-',LPAD(id,8,'0')) WHERE public_user_id IS NULL OR public_user_id=''");try{await db.query('ALTER TABLE users ADD UNIQUE KEY uq_users_public_user_id (public_user_id)');}catch(error){if(error.code!=='ER_DUP_KEYNAME'&&error.code!=='ER_DUP_FIELDNAME')throw error;}},'backfill unique public user IDs');
+const ensurePublicUserIds = enqueueSchemaChange(async()=>{
+  await db.execute("UPDATE users SET public_user_id=CONCAT('HYRZ-',LPAD(id,8,'0')) WHERE public_user_id IS NULL OR public_user_id=''");
+  const [indexes]=await db.query("SHOW INDEX FROM users WHERE Key_name = ?",['uq_users_public_user_id']);
+  if(!indexes.length){
+    try{await db.query('ALTER TABLE users ADD UNIQUE KEY uq_users_public_user_id (public_user_id)');}
+    catch(error){if(error.code!=='ER_DUP_KEYNAME'&&error.code!=='ER_DUP_FIELDNAME')throw error;}
+  }
+},'backfill unique public user IDs');
 const ensureSignupTermsColumns = (async()=>{await addColumn('users','terms_accepted_at DATETIME NULL','signup terms acceptance timestamp');await addColumn('users',"terms_version VARCHAR(40) NULL",'signup terms version');})();
 const ensureShiftContractColumns = (async()=>{await addColumn('applications','contract_accepted_at DATETIME NULL','shift contract acceptance timestamp');await addColumn('applications','contract_snapshot LONGTEXT NULL','accepted shift contract snapshot');})();
 const ensureShiftPublishingColumns = (async()=>{await addColumn('shifts',"shift_type VARCHAR(80) NOT NULL DEFAULT 'hospitality'",'shift type');await addColumn('shifts','requirements JSON NULL','shift requirements');await addColumn('shifts','perks JSON NULL','shift perks');await addColumn('shifts','preferences JSON NULL','shift preferences');})();
@@ -91,10 +98,16 @@ const ensureUniqueEmails = enqueueSchemaChange(async () => {
     return false;
   }
   await db.query('UPDATE users SET email=LOWER(TRIM(email)) WHERE email<>LOWER(TRIM(email))');
-  try { await db.query("ALTER TABLE users ADD COLUMN email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED"); }
-  catch (error) { if (error.code !== 'ER_DUP_FIELDNAME') throw error; }
-  try { await db.query('ALTER TABLE users ADD UNIQUE KEY uq_users_email_normalized (email_normalized)'); }
-  catch (error) { if (error.code !== 'ER_DUP_KEYNAME') throw error; }
+  const [emailColumns] = await db.query("SHOW COLUMNS FROM users LIKE 'email_normalized'");
+  if (!emailColumns.length) {
+    try { await db.query("ALTER TABLE users ADD COLUMN email_normalized VARCHAR(254) GENERATED ALWAYS AS (LOWER(TRIM(email))) STORED"); }
+    catch (error) { if (error.code !== 'ER_DUP_FIELDNAME') throw error; }
+  }
+  const [emailIndexes] = await db.query("SHOW INDEX FROM users WHERE Key_name = ?", ['uq_users_email_normalized']);
+  if (!emailIndexes.length) {
+    try { await db.query('ALTER TABLE users ADD UNIQUE KEY uq_users_email_normalized (email_normalized)'); }
+    catch (error) { if (error.code !== 'ER_DUP_KEYNAME') throw error; }
+  }
   return true;
 },'case-insensitive email uniqueness');
 const ensureBusinessAddressColumns = (async()=>{
