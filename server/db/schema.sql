@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
  first_name VARCHAR(100) NULL,
  last_name VARCHAR(100) NULL,
  phone VARCHAR(40) NULL,
+ profile_picture LONGTEXT NULL,
  status ENUM('active','blocked','pending_deletion') NOT NULL DEFAULT 'active',
  email_verified_at DATETIME NULL,
  email_verification_token_hash CHAR(64) NULL,
