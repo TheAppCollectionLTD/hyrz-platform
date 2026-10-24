@@ -144,6 +144,21 @@ const ensureShiftTemplates = createTable(`CREATE TABLE IF NOT EXISTS shift_templ
   KEY idx_shift_templates_owner (employer_user_id,created_at),
   CONSTRAINT fk_shift_templates_employer FOREIGN KEY (employer_user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB`,'shift templates');
+const ensureAdminMessageMeta = (async()=>{
+  await createTable(`CREATE TABLE IF NOT EXISTS admin_message_meta (
+    message_id BIGINT UNSIGNED PRIMARY KEY,
+    recipient_id BIGINT UNSIGNED NOT NULL,
+    category VARCHAR(40) NOT NULL DEFAULT 'enquiries',
+    subject VARCHAR(200) NULL,
+    opened_by BIGINT UNSIGNED NULL,
+    read_at DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE,
+    FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL
+  )`,'admin message metadata');
+  await addColumn('admin_message_meta','subject VARCHAR(200) NULL','admin message subject');
+})();
 const audit = async (req, action, entityType, entityId, details={}) => {
   await db.execute('INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,details,ip_address) VALUES(?,?,?,?,?,?)',
     [req.user?.id || null, action, entityType, entityId || null, JSON.stringify(details), req.ip]);
@@ -1048,8 +1063,8 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
  else {sql+=' JOIN checkouts c ON c.id=d.checkout_id JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=?';args=[req.user.id];}
  sql+=' ORDER BY d.created_at DESC';const [rows]=await db.execute(sql,args);res.json({disputes:rows});
 }));
-require('./user-message-routes')(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn });
-require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails });
+require('./user-message-routes')(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta });
+require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta });
 
 app.get('/api/admin/overview',auth,allow('admin'),asyncRoute(async(req,res)=>{
  const [[users]]=await db.query('SELECT COUNT(*) count FROM users');
