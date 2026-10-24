@@ -847,11 +847,39 @@ app.get('/api/applications/mine',auth,asyncRoute(async(req,res)=>{
  const [rows]=await db.execute(sql,[req.user.id]);res.json({applications:rows});
 }));
 app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
- await ensureApplicationRateNegotiation;const acceptRequestedRate=req.body?.acceptRequestedRate===true;
- const status=req.body.status;if(!['approved','rejected'].includes(status))return res.status(400).json({error:'Invalid status'});
- const [rows]=await db.execute('SELECT a.id,a.shift_id FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=? AND b.owner_user_id=?',[req.params.id,req.user.id]);
- if(!rows.length)return res.status(404).json({error:'Application not found'});
- const [applicationRows]=await db.execute('SELECT requested_hourly_rate FROM applications WHERE id=?',[req.params.id]);const requested=applicationRows[0]?.requested_hourly_rate;if(acceptRequestedRate&&(!requested||status!=='approved'))return res.status(400).json({error:'This application has no rate counter-offer to accept.'});if(acceptRequestedRate){await db.execute("UPDATE applications SET status='approved',rate_decision='accepted',negotiated_hourly_rate=requested_hourly_rate WHERE id=?",[req.params.id]);}else{await db.execute("UPDATE applications SET status=?,rate_decision=CASE WHEN requested_hourly_rate IS NOT NULL THEN 'declined' ELSE rate_decision END WHERE id=?",[status,req.params.id]);}await audit(req,acceptRequestedRate?'application.rate_counter_accepted':'application.'+status,'application',req.params.id,{requestedHourlyRate:requested||null,acceptRequestedRate});res.json({ok:true});
+ await ensureApplicationRateNegotiation;
+ const acceptRequestedRate=req.body?.acceptRequestedRate===true;
+ const status=req.body.status;
+ if(!['approved','rejected'].includes(status))return res.status(400).json({error:'Invalid status'});
+ const conn=await db.getConnection();
+ let auditDetails;
+ try {
+  await conn.beginTransaction();
+  const [rows]=await conn.execute('SELECT a.id,a.status AS application_status,a.shift_id,a.requested_hourly_rate,s.slots FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=? AND b.owner_user_id=? FOR UPDATE',[req.params.id,req.user.id]);
+  if(!rows.length){await conn.rollback();return res.status(404).json({error:'Application not found'});}
+  const application=rows[0];
+  const requested=application.requested_hourly_rate;
+  if(acceptRequestedRate&&(!requested||status!=='approved')){await conn.rollback();return res.status(400).json({error:'This application has no rate counter-offer to accept.'});}
+  if(status==='approved'&&application.application_status!=='approved'){
+   const [counts]=await conn.execute("SELECT COUNT(*) AS approved_count FROM applications WHERE shift_id=? AND status='approved'",[application.shift_id]);
+   if(Number(counts[0]?.approved_count||0)>=Number(application.slots||1)){
+    await conn.rollback();
+    return res.status(409).json({error:'This shift has no remaining worker positions. Increase the worker count or choose another applicant.'});
+   }
+  }
+  if(acceptRequestedRate){
+   await conn.execute("UPDATE applications SET status='approved',rate_decision='accepted',negotiated_hourly_rate=requested_hourly_rate WHERE id=?",[req.params.id]);
+  }else{
+   await conn.execute("UPDATE applications SET status=?,rate_decision=CASE WHEN requested_hourly_rate IS NOT NULL THEN 'declined' ELSE rate_decision END WHERE id=?",[status,req.params.id]);
+  }
+  auditDetails={requestedHourlyRate:requested||null,acceptRequestedRate,previousStatus:application.application_status,status};
+  await conn.commit();
+ } catch(error) {
+  try{await conn.rollback();}catch(_){}
+  throw error;
+ } finally {conn.release();}
+ await audit(req,acceptRequestedRate?'application.rate_counter_accepted':'application.'+status,'application',req.params.id,auditDetails);
+ res.json({ok:true});
 }));
 app.delete('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
  await ensureApplicationCancellationFee;
