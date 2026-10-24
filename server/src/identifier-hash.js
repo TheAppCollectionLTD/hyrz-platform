@@ -9,7 +9,7 @@ function hashIdentifier(value) {
   if (!normalized) return null;
   const secret = process.env.IDENTIFIER_HASH_SECRET;
   if (!secret || String(secret).length < 16) {
-    throw new Error('IDENTIFIER_HASH_SECRET or a sufficiently strong JWT_SECRET is required for identifier hashing');
+    throw new Error('Set a separate, stable IDENTIFIER_HASH_SECRET of at least 16 characters for identifier hashing.');
   }
   return crypto.createHmac('sha256', secret).update(normalized).digest('hex');
 }
