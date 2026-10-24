@@ -898,6 +898,30 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  const confirmedPreferencesJson=JSON.stringify(confirmedPreferences);
  const requestedRate=req.body?.requestedHourlyRate==null||req.body.requestedHourlyRate===''?null:Number(req.body.requestedHourlyRate);const rateMessage=String(req.body?.rateMessage||'').trim();if(requestedRate!==null&&(!Number.isFinite(requestedRate)||requestedRate<Number(s[0].hourly_pay||8)||requestedRate>500))return res.status(400).json({error:'A counter-offer must be at least the advertised hourly rate and no more than £500 per hour.'});if(rateMessage.length>1000)return res.status(400).json({error:'The optional message must be 1,000 characters or fewer.'});
  const nextStatus=requestedRate!==null?'pending':(s[0].auto_approve?'approved':'pending');
+ if(nextStatus==='approved'){
+  const conn=await db.getConnection();
+  try{
+   await conn.beginTransaction();
+   const [lockedShifts]=await conn.execute('SELECT id,status,slots FROM shifts WHERE id=? FOR UPDATE',[req.params.id]);
+   if(!lockedShifts.length||lockedShifts[0].status!=='open'){await conn.rollback();return res.status(404).json({error:'Shift not available'});}
+   const [existingApprovedFlow]=await conn.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1 FOR UPDATE',[req.params.id,req.user.id]);
+   if(existingApprovedFlow.length&&!['withdrawn','cancelled'].includes(existingApprovedFlow[0].status)){await conn.rollback();return res.status(409).json({error:'Already applied'});}
+   const [counts]=await conn.execute("SELECT COUNT(*) AS approved_count FROM applications WHERE shift_id=? AND status='approved'",[req.params.id]);
+   if(Number(counts[0]?.approved_count||0)>=Number(lockedShifts[0].slots||1)){await conn.rollback();return res.status(409).json({error:'This shift has no remaining worker positions.'});}
+   if(existingApprovedFlow.length){
+    await conn.execute('UPDATE applications SET status=?,cancellation_fee=0,confirmed_preferences=?,requested_hourly_rate=?,rate_message=?,rate_decision=NULL,negotiated_hourly_rate=NULL,contract_accepted_at=UTC_TIMESTAMP(),contract_snapshot=? WHERE id=?',[nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,contractSnapshot,existingApprovedFlow[0].id]);
+    await conn.commit();
+    return res.status(200).json({id:existingApprovedFlow[0].id,status:nextStatus});
+   }
+   const [created]=await conn.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences,requested_hourly_rate,rate_message,rate_decision,contract_accepted_at,contract_snapshot) VALUES(?,?,?,?,?,?,?,UTC_TIMESTAMP(),?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,null,contractSnapshot]);
+   await conn.commit();
+   return res.status(201).json({id:created.insertId,status:nextStatus});
+  }catch(error){
+   try{await conn.rollback();}catch(_){}
+   if(error.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});
+   throw error;
+  }finally{conn.release();}
+ }
  const [existing]=await db.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1',[req.params.id,req.user.id]);
  if(existing.length){
    if(['withdrawn','cancelled'].includes(existing[0].status)){
