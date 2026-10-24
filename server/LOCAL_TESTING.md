@@ -45,7 +45,19 @@ Open the Vite address shown by the client (usually `http://localhost:5173`, or `
 
 For normal development against your configured database, the existing `npm run dev` command is unchanged. Use `npm run dev:test` when testing with these test accounts.
 
-## 4. Sign in with a seeded test account
+## 4. Run the integration checks
+
+Keep the test API running in terminal 1, then open a third terminal:
+
+```bash
+cd ~/Downloads/hyrz-platform-build/hyrz-platform/server
+npm run test:integration
+```
+
+The integration-test runner explicitly targets `hyrz_test` and `http://127.0.0.1:4001/api`; it does not use the normal development database. `npm run setup:test` seeds a fictional Tier 1 owner used by the integration tests. The integration suite creates test records, so rerun `npm run setup:test` and reset the test database if a previous run left duplicate fixture records.
+
+
+## 5. Sign in with a seeded test account
 
 | Role | Email | Password |
 | --- | --- | --- |
