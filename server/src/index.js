@@ -739,6 +739,7 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  if(postcode){sql+=' AND s.location LIKE ?';args.push(`%${postcode}%`);}
  sql+=' ORDER BY s.starts_at LIMIT 200';
  const [rows]=await db.execute(sql,args);
+ if(!rows.length)return res.json({shifts:[]});
  if(req.user.role!=='worker')return res.json({shifts:rows.map(({employer_postcode,...shift})=>shift)});
  const [[profile]]=await db.execute(`SELECT COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id WHERE u.id=?`,[req.user.id]);
  const workerPostcode=normalizePostcode(profile?.postcode);
