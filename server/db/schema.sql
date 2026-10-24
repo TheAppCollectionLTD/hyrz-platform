@@ -189,6 +189,17 @@ CREATE TABLE IF NOT EXISTS admin_message_meta (
  FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE,
  FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL
 );
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ user_id BIGINT UNSIGNED NOT NULL,
+ token_hash CHAR(64) NOT NULL UNIQUE,
+ expires_at DATETIME NOT NULL,
+ used_at DATETIME NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ KEY idx_password_reset_user_created (user_id,created_at),
+ KEY idx_password_reset_expiry (expires_at),
+ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS shift_templates (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  employer_user_id BIGINT UNSIGNED NOT NULL,
