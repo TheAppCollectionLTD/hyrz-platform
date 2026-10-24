@@ -47,6 +47,9 @@ async function main() {
   await check('Password reset consumes its token once and revokes old sessions',async()=>{
     const resetUserId=await addUser({email:'password-reset-worker@test.hyrz.invalid',ni:'QQ505050E'});
     const oldToken=await login('password-reset-worker@test.hyrz.invalid');
+    // Wait for the startup migration before writing the fixture token directly.
+    const warmup=await api('/auth/password-reset/confirm',{method:'POST',body:{token:'f'.repeat(64),newPassword:'Reset-Only-Password-2026!'}});
+    assert.equal(warmup.status,400);
     const rawResetToken=crypto.randomBytes(32).toString('hex');
     const tokenHash=crypto.createHash('sha256').update(rawResetToken).digest('hex');
     await db.execute('INSERT INTO password_reset_tokens(user_id,token_hash,expires_at) VALUES(?,?,DATE_ADD(UTC_TIMESTAMP(),INTERVAL 30 MINUTE))',[resetUserId,tokenHash]);
