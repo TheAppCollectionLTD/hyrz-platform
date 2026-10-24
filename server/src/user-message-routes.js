@@ -1,24 +1,30 @@
 const { auth, allow } = require('./middleware');
 
-module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit }) {
-  // Initialise support-message metadata once, avoiding unconditional ALTER TABLE calls.
-  // Running ALTER on every server start can deadlock when another app instance or migration
-  // is touching the same table. Re-check the schema and retry transient lock conflicts.
-  const ensureMeta = (async()=>{
-    await db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (message_id BIGINT UNSIGNED PRIMARY KEY, recipient_id BIGINT UNSIGNED NOT NULL, category VARCHAR(40) NOT NULL DEFAULT 'enquiries', subject VARCHAR(200) NULL, opened_by BIGINT UNSIGNED NULL, read_at DATETIME NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE, FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL)`);
-    for(let attempt=0;attempt<4;attempt++){
-      const [columns]=await db.query("SHOW COLUMNS FROM admin_message_meta LIKE 'subject'");
-      if(columns.length)return;
-      try{
+module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn }) {
+  // Share the API's schema queue so this metadata migration cannot race the
+  // user/profile migrations performed during server startup.
+  const ensureMeta = enqueueSchemaChange(async () => {
+    await db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (
+      message_id BIGINT UNSIGNED PRIMARY KEY,
+      recipient_id BIGINT UNSIGNED NOT NULL,
+      category VARCHAR(40) NOT NULL DEFAULT 'enquiries',
+      subject VARCHAR(200) NULL,
+      opened_by BIGINT UNSIGNED NULL,
+      read_at DATETIME NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE,
+      FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL
+    )`);
+    const [columns] = await db.query("SHOW COLUMNS FROM admin_message_meta LIKE 'subject'");
+    if (!columns.length) {
+      try {
         await db.query('ALTER TABLE admin_message_meta ADD COLUMN subject VARCHAR(200) NULL');
-        return;
-      }catch(e){
-        if(e.code==='ER_DUP_FIELDNAME')return;
-        if(!['ER_LOCK_DEADLOCK','ER_LOCK_WAIT_TIMEOUT'].includes(e.code)||attempt===3)throw e;
-        await new Promise(resolve=>setTimeout(resolve,150*(attempt+1)));
+      } catch (error) {
+        if (error.code !== 'ER_DUP_FIELDNAME') throw error;
       }
     }
-  })();
+  }, 'admin message metadata');
 
   app.post('/api/messages', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
     const category=String(req.body.category||'enquiries');
@@ -143,12 +149,9 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   async function ensureWorkchatMessageDeletionColumns(){
     if(!workchatDeletionColumnsReady)workchatDeletionColumnsReady=(async()=>{
       await ensureGroupWorkchats;
-      const [deletedAtColumns]=await db.query("SHOW COLUMNS FROM workchat_messages LIKE 'deleted_at'");
-      if(!deletedAtColumns.length)await db.query('ALTER TABLE workchat_messages ADD COLUMN deleted_at DATETIME NULL');
-      const [deletedByColumns]=await db.query("SHOW COLUMNS FROM workchat_messages LIKE 'deleted_by'");
-      if(!deletedByColumns.length)await db.query('ALTER TABLE workchat_messages ADD COLUMN deleted_by BIGINT UNSIGNED NULL');
-      const [replyColumns]=await db.query("SHOW COLUMNS FROM workchat_messages LIKE 'reply_to_message_id'");
-      if(!replyColumns.length)await db.query('ALTER TABLE workchat_messages ADD COLUMN reply_to_message_id BIGINT UNSIGNED NULL');
+      await addColumn('workchat_messages','deleted_at DATETIME NULL','workchat message deleted_at');
+      await addColumn('workchat_messages','deleted_by BIGINT UNSIGNED NULL','workchat message deleted_by');
+      await addColumn('workchat_messages','reply_to_message_id BIGINT UNSIGNED NULL','workchat message replies');
     })();
     await workchatDeletionColumnsReady;
   }
