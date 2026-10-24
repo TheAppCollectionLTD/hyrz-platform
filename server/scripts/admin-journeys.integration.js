@@ -141,6 +141,7 @@ async function main() {
     assert.ok(favourites.data.workers.some(worker=>Number(worker.id)===Number(activeFavouriteWorkerId)&&worker.isFavourite===true),'Favourite workers should load from the dedicated favourites endpoint.');
     const search=await api('/employer/workers/search?q=favourite-worker%40test.hyrz.invalid',{token:employerToken});
     assert.equal(search.status,200,JSON.stringify(search.data));
+    assert.equal(search.data.radiusMiles,undefined,'Worker search must not hide active workers behind a distance radius.');
     assert.ok(search.data.workers.some(worker=>Number(worker.id)===Number(activeFavouriteWorkerId)),'Search by email should return the active worker.');
     const saved=await api('/shift-templates',{token:employerToken,method:'POST',body:{name:'Night Bartender',shift:{title:'Bartender',shiftType:'hospitality',hourlyPay:15,slots:8,startsAt:'ignored',endsAt:'ignored'},startTime:'20:00',endTime:'02:00'}});
     assert.equal(saved.status,201,JSON.stringify(saved.data));
