@@ -629,9 +629,9 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  WHERE u.role='worker' AND u.status='active'
  AND (?='' OR LOWER(CONCAT_WS(' ',u.first_name,u.last_name)) LIKE LOWER(?) OR LOWER(u.email) LIKE LOWER(?))
  ORDER BY u.first_name,u.last_name LIMIT 1000`,[req.user.id,q,'%'+q+'%','%'+q+'%']);
- // Do not fail the entire search if the employer or worker has not saved a postcode.
- // Show those workers explicitly as location-unverified; only apply the 10-mile filter
- // where both ends of the distance calculation can actually be verified.
+ // Location data is informative only in worker search. Do not hide active workers
+ // from favourites, inbox, or workchat search because they are far away or have
+ // incomplete postcodes; distance filtering belongs in shift-matching flows.
  let coordinates={};
  try {
   coordinates=await lookupPostcodeCoordinates([...(employerPostcode?[employerPostcode]:[]),...rows.map(row=>row.postcode)]);
@@ -645,9 +645,8 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
   const distance=locationVerified?Math.round(distanceMiles(origin,point)*10)/10:null;
   return {...row,distanceMiles:distance,locationVerified,isFavourite:Boolean(row.is_favourite)};
  })
- .filter(row=>!row.locationVerified||row.distanceMiles<=10)
  .sort((a,b)=>{if(a.locationVerified!==b.locationVerified)return a.locationVerified?-1:1;if(a.distanceMiles==null)return a.first_name.localeCompare(b.first_name);if(b.distanceMiles==null)return -1;return a.distanceMiles-b.distanceMiles;});
- res.json({workers,radiusMiles:10,matched:workers.filter(w=>w.locationVerified).length,locationUnverified:workers.filter(w=>!w.locationVerified).length,employerLocationVerified:Boolean(origin),searchTerm:q});
+ res.json({workers,matched:workers.filter(w=>w.locationVerified).length,locationUnverified:workers.filter(w=>!w.locationVerified).length,employerLocationVerified:Boolean(origin),searchTerm:q});
 }));
 app.get('/api/employer/workers/favourites',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureEmployerWorkerFavourites;
