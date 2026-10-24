@@ -1022,7 +1022,7 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
  else {sql+=' JOIN checkouts c ON c.id=d.checkout_id JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=?';args=[req.user.id];}
  sql+=' ORDER BY d.created_at DESC';const [rows]=await db.execute(sql,args);res.json({disputes:rows});
 }));
-require('./user-message-routes')(app, { db, asyncRoute, audit });
+require('./user-message-routes')(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn });
 require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails });
 
 app.get('/api/admin/overview',auth,allow('admin'),asyncRoute(async(req,res)=>{
