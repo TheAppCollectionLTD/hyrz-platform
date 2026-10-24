@@ -59,7 +59,7 @@
 ## 5. Legal, verification and payments
 
 - [ ] Obtain legal review of worker/employer terms, cancellation fees, contracts, privacy notice, cookies and data-processing terms.
-- [ ] Verify UK minimum-wage rules and effective dates; determine worker age/apprentice eligibility and prevent illegal shift rates.
+- [ ] Verify UK minimum-wage rules and effective dates; determine worker age/apprentice eligibility and prevent illegal shift rates. The official rates effective 1 April 2026 are £12.71 (21+), £10.85 (18–20), and £8.00 (under 18 and qualifying apprentices); see https://www.gov.uk/national-minimum-wage-rates. The current API floor is £8.00, so this is a launch blocker until age/apprentice eligibility or a safer universal floor is implemented.
 - [ ] Integrate and validate an identity/right-to-work verification provider; do not treat seeded test verification as real verification.
 - [ ] Integrate company verification and any role-specific qualifications (for example, regulated security/care roles).
 - [ ] Select and integrate a regulated marketplace payment provider and payout flow, including KYC/KYB, refunds, chargebacks, reconciliation and safeguarding/compliance obligations.
