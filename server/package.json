@@ -9,7 +9,7 @@
     "start": "node src/index.js",
     "test": "node --test",
     "bootstrap:owner": "node src/bootstrap-owner.js",
-    "test:integration": "node scripts/admin-journeys.integration.js",
+    "test:integration": "node scripts/run-integration-test.js",
     "setup:test": "node scripts/setup-test-db.js",
     "seed:test-accounts": "node scripts/seed-test-accounts.js"
   },
