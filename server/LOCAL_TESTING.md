@@ -18,7 +18,9 @@ npm install
 npm run setup:test
 ```
 
-The script uses the host, port, username, and password from your existing `server/.env`, but explicitly connects to `hyrz_test`. It creates the schema and seeds the four test accounts. It fails safely if it cannot connect or lacks database permissions. You do not need to edit `server/.env` or load it as a shell script.
+The script uses the host, port, username, and password from your existing `server/.env`, but explicitly connects to `hyrz_test`. It creates the schema and seeds the fictional test accounts, including a Tier 1 owner for integration tests. It fails safely if it cannot connect or lacks database permissions. You do not need to edit `server/.env` or load it as a shell script.
+
+To start from a completely clean test database before a fresh integration run, use `npm run reset:test` instead of `npm run setup:test`. **This drops all tables and data in `hyrz_test` only.** Never point this reset script at a database containing real or valuable data.
 
 If setup reports an access/permission error, grant the MySQL user named in `server/.env` access to `hyrz_test` using your local MySQL administrator account. Do not change the app's normal `DB_NAME=hyrz` setting just to seed test users.
 
@@ -47,14 +49,14 @@ For normal development against your configured database, the existing `npm run d
 
 ## 4. Run the integration checks
 
-Keep the test API running in terminal 1, then open a third terminal:
+For a clean repeatable run, first run `npm run reset:test` from `server` (it recreates the isolated test database and all fictional accounts). Keep the test API running in terminal 1, then open a third terminal:
 
 ```bash
 cd ~/Downloads/hyrz-platform-build/hyrz-platform/server
 npm run test:integration
 ```
 
-The integration-test runner explicitly targets `hyrz_test` and `http://127.0.0.1:4001/api`; it does not use the normal development database. `npm run setup:test` seeds a fictional Tier 1 owner used by the integration tests. The integration suite creates test records and is intended to run against a clean `hyrz_test` database. Re-seeding alone does not remove records from an earlier integration run; if a run has already created fixtures, reset only the `hyrz_test` database before running the suite again.
+The integration-test runner explicitly targets `hyrz_test` and `http://127.0.0.1:4001/api`; it does not use the normal development database. `npm run setup:test` seeds a fictional Tier 1 owner used by the integration tests. The integration suite creates test records. Run `npm run reset:test` before each fresh integration run to remove fixtures from earlier runs.
 
 
 ## 5. Sign in with a seeded test account
