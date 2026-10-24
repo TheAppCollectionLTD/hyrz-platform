@@ -712,6 +712,7 @@ app.get('/api/shifts/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
  res.json({shifts:rows});
 }));
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
+ await ensureProfilePictureColumn;
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
  let sql=`SELECT s.*,b.name AS business_name,u.profile_picture AS employer_profile_picture,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
