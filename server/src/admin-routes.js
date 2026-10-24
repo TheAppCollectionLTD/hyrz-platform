@@ -384,7 +384,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     if (category==='admins' && recipients[0].role!=='admin') return res.status(400).json({error:'Admin messages must be sent to an administrator'});
     if (category!=='admins' && recipients[0].role==='admin') return res.status(400).json({error:'Choose the admin message category for administrator messages'});
     const conversationKey=[Number(req.user.id),Number(recipientId)].sort((a,b)=>a-b).join(':');
-    await ensureMessageMeta;
+    await ensureAdminMessageMeta;
     const [result]=await db.execute('INSERT INTO messages(conversation_key,sender_id,body) VALUES(?,?,?)',[conversationKey,req.user.id,body.trim()]);
     await db.execute('INSERT INTO admin_message_meta(message_id,recipient_id,category,subject) VALUES(?,?,?,?)',[result.insertId,Number(recipientId),category,subject.trim()||null]);
     res.status(201).json({ok:true,id:result.insertId});
@@ -393,7 +393,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   app.post('/api/admin/messages/:id/reply', ...admin, asyncRoute(async(req,res) => {
     const body=typeof req.body?.body==='string'?req.body.body.trim():'';
     if(!body||body.length>5000)return res.status(400).json({error:'Enter a reply of up to 5,000 characters.'});
-    await ensureMessageMeta;
+    await ensureAdminMessageMeta;
     const [rows]=await db.execute(`SELECT m.id,m.conversation_key,m.sender_id,meta.recipient_id,meta.category,meta.subject
       FROM messages m LEFT JOIN admin_message_meta meta ON meta.message_id=m.id WHERE m.id=?`,[req.params.id]);
     if(!rows.length)return res.status(404).json({error:'Conversation message not found.'});
@@ -419,7 +419,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   }));
 
   app.post('/api/admin/messages/:id/open', ...admin, asyncRoute(async(req,res) => {
-    await ensureMessageMeta;
+    await ensureAdminMessageMeta;
     const [rows]=await db.execute('SELECT id,conversation_key,sender_id FROM messages WHERE id=?',[req.params.id]);
     if(!rows.length)return res.status(404).json({error:'Message not found'});
     // Acknowledge the message for the shared admin inbox and retain every open/reopen in audit history.
@@ -432,7 +432,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   }));
 
   app.patch('/api/admin/messages/:id/claim', ...admin, asyncRoute(async(req,res) => {
-    await ensureMessageMeta;
+    await ensureAdminMessageMeta;
     const [current]=await db.execute('SELECT opened_by FROM admin_message_meta WHERE message_id=?',[req.params.id]);
     if (!current.length) return res.status(404).json({error:'Message not found'});
     if (current[0].opened_by && Number(current[0].opened_by)!==Number(req.user.id)) return res.status(409).json({error:'This issue is already being handled by another administrator'});
@@ -442,7 +442,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   }));
 
   app.patch('/api/admin/messages/:id/read', ...admin, asyncRoute(async(req,res) => {
-    await ensureMessageMeta;
+    await ensureAdminMessageMeta;
     const [result]=await db.execute('UPDATE admin_message_meta SET read_at=UTC_TIMESTAMP() WHERE message_id=? AND recipient_id=?',[req.params.id,req.user.id]);
     if (!result.affectedRows) return res.status(404).json({error:'Message not found for this administrator'});
     await audit(req,'message.read','message',req.params.id);
