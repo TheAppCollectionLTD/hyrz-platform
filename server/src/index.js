@@ -121,6 +121,16 @@ const ensureWorkerIdentifierColumns = (async()=>{
   await addColumn('worker_profiles','national_insurance_hash CHAR(64) NULL','worker National Insurance hash');
   await addColumn('worker_profiles','worker_permit_hash CHAR(64) NULL','worker permit hash');
 })();
+const ensureShiftTemplates = createTable(`CREATE TABLE IF NOT EXISTS shift_templates (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  employer_user_id BIGINT UNSIGNED NOT NULL,
+  name VARCHAR(120) NOT NULL,
+  template_data JSON NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  KEY idx_shift_templates_owner (employer_user_id,created_at),
+  CONSTRAINT fk_shift_templates_employer FOREIGN KEY (employer_user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB`,'shift templates');
 const audit = async (req, action, entityType, entityId, details={}) => {
   await db.execute('INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,details,ip_address) VALUES(?,?,?,?,?,?)',
     [req.user?.id || null, action, entityType, entityId || null, JSON.stringify(details), req.ip]);
@@ -682,6 +692,44 @@ app.get('/api/employer/workers/past',auth,allow('employer'),asyncRoute(async(req
  GROUP BY u.id,u.first_name,u.last_name,u.email,wp.postcode
  ORDER BY last_shift DESC`,[req.user.id,req.user.id]);
  res.json({workers:rows.map(row=>({...row,isFavourite:Boolean(row.is_favourite)}))});
+}));
+app.get('/api/shift-templates/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
+ await ensureShiftTemplates;
+ const [rows]=await db.execute('SELECT id,name,template_data,created_at FROM shift_templates WHERE employer_user_id=? ORDER BY created_at DESC,id DESC',[req.user.id]);
+ const templates=rows.map(row=>{
+  let data=row.template_data;
+  if(typeof data==='string'){try{data=JSON.parse(data)}catch{data={}}}
+  return {id:Number(row.id),name:row.name,shift:data?.shift||{},startTime:data?.startTime||'09:00',endTime:data?.endTime||'17:00',createdAt:row.created_at};
+ });
+ res.json({templates});
+}));
+app.post('/api/shift-templates',auth,allow('employer'),asyncRoute(async(req,res)=>{
+ await ensureShiftTemplates;
+ const name=String(req.body?.name||'').trim();
+ const title=String(req.body?.shift?.title||'').trim();
+ const shiftType=String(req.body?.shift?.shiftType||'').trim();
+ const hourlyPay=Number(req.body?.shift?.hourlyPay);
+ const startTime=String(req.body?.startTime||'');
+ const endTime=String(req.body?.endTime||'');
+ const allowedShiftTypes=new Set(['hospitality','warehouse','retail','events','office','cleaning','care','construction','driving','other']);
+ const validTime=value=>/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+ if(!name||name.length>120)return res.status(400).json({error:'Template name is required and must be 120 characters or fewer.'});
+ if(!title||title.length>180)return res.status(400).json({error:'Choose a valid job role for this template.'});
+ if(!allowedShiftTypes.has(shiftType))return res.status(400).json({error:'Choose a valid shift type for this template.'});
+ if(!Number.isFinite(hourlyPay)||hourlyPay<8||hourlyPay>500)return res.status(400).json({error:'Template hourly pay must be between £8.00 and £500.00.'});
+ if(!validTime(startTime)||!validTime(endTime)||startTime===endTime)return res.status(400).json({error:'Choose valid start and end times that are different.'});
+ // Templates deliberately persist only role, shift type, rate and times—not shift dates or headcount.
+ const templateData=JSON.stringify({shift:{title,shiftType,hourlyPay:String(hourlyPay)},startTime,endTime});
+ const [result]=await db.execute('INSERT INTO shift_templates(employer_user_id,name,template_data) VALUES(?,?,?)',[req.user.id,name,templateData]);
+ res.status(201).json({template:{id:Number(result.insertId),name,shift:{title,shiftType,hourlyPay:String(hourlyPay)},startTime,endTime,createdAt:new Date().toISOString()}});
+}));
+app.delete('/api/shift-templates/:id',auth,allow('employer'),asyncRoute(async(req,res)=>{
+ await ensureShiftTemplates;
+ const id=Number(req.params.id);
+ if(!Number.isInteger(id)||id<1)return res.status(400).json({error:'Choose a valid shift template.'});
+ const [result]=await db.execute('DELETE FROM shift_templates WHERE id=? AND employer_user_id=?',[id,req.user.id]);
+ if(!result.affectedRows)return res.status(404).json({error:'Shift template not found.'});
+ res.json({ok:true,deleted:true});
 }));
 app.get('/api/shifts/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
  const [rows]=await db.execute('SELECT s.*,b.owner_user_id AS employer_id,b.name AS business_name FROM shifts s JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY s.starts_at DESC',[req.user.id]);
