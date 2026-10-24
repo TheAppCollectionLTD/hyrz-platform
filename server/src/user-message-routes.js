@@ -1,6 +1,6 @@
 const { auth, allow } = require('./middleware');
 
-module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn }) {
+module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn, ensureEmployerWorkerFavourites }) {
   // Share the API's schema queue so this metadata migration cannot race the
   // user/profile migrations performed during server startup.
   const ensureMeta = enqueueSchemaChange(async () => {
@@ -143,7 +143,6 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     db.query(`CREATE TABLE IF NOT EXISTS workchat_admins (workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(workchat_id,user_id)) ENGINE=InnoDB`),
     db.query(`CREATE TABLE IF NOT EXISTS workchat_pins (message_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,workchat_id BIGINT UNSIGNED NOT NULL,pinned_by BIGINT UNSIGNED NOT NULL,pinned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,KEY idx_workchat_pins_chat(workchat_id,pinned_at)) ENGINE=InnoDB`),
     db.query(`CREATE TABLE IF NOT EXISTS workchat_message_reactions (message_id BIGINT UNSIGNED NOT NULL,workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,emoji VARCHAR(16) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(message_id,user_id,emoji),KEY idx_workchat_reaction_chat(workchat_id,message_id)) ENGINE=InnoDB`),
-    db.query(`CREATE TABLE IF NOT EXISTS employer_worker_favourites (employer_user_id BIGINT UNSIGNED NOT NULL,worker_user_id BIGINT UNSIGNED NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(employer_user_id,worker_user_id),KEY idx_employer_worker_favourites_worker(worker_user_id)) ENGINE=InnoDB`)
   ]);
   let workchatDeletionColumnsReady;
   async function ensureWorkchatMessageDeletionColumns(){
@@ -178,7 +177,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     res.json({workchats:rows.map(w=>({...w,id:Number(w.id),participant_count:Number(w.participant_count||0),unread_count:Number(w.unread_count||0),participants:members[w.id]||[]}))});
   }));
   app.post('/api/workchats',auth,allow('employer'),asyncRoute(async(req,res)=>{
-    await ensureGroupWorkchats;const name=String(req.body.name||'').trim();
+    await ensureGroupWorkchats;await ensureEmployerWorkerFavourites;const name=String(req.body.name||'').trim();
     const ids=[...new Set((Array.isArray(req.body.participantIds)?req.body.participantIds:[]).map(Number).filter(x=>Number.isInteger(x)&&x>0))];
     if(!name||name.length>100)return res.status(400).json({error:'Workchat name is required (maximum 100 characters).'});
     if(!ids.length)return res.status(400).json({error:'Choose at least one worker to add to this workchat.'});
