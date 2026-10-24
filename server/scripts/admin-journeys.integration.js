@@ -132,8 +132,8 @@ async function main() {
   });
   await check('Employer favourites and worker search return active workers',async()=>{
     const activeFavouriteWorkerId=await addUser({email:'favourite-worker@test.hyrz.invalid',ni:'QQ246810F'});
-    employerId=await addUser({email:'employer@test.hyrz.invalid',role:'employer',company:'TEST-COMPANY-123'});
-    const employerToken=await login('employer@test.hyrz.invalid');
+    await addUser({email:'favourite-employer@test.hyrz.invalid',role:'employer',company:'FAVOURITE-EMPLOYER-123'});
+    const employerToken=await login('favourite-employer@test.hyrz.invalid');
     const added=await api('/employer/workers/'+activeFavouriteWorkerId+'/favourite',{token:employerToken,method:'POST'});
     assert.equal(added.status,200,JSON.stringify(added.data));
     const favourites=await api('/employer/workers/favourites',{token:employerToken});
