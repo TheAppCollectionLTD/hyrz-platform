@@ -186,7 +186,7 @@ async function main() {
     const workerOneToken=await login('auto-capacity-one@test.hyrz.invalid');
     const workerTwoToken=await login('auto-capacity-two@test.hyrz.invalid');
     const [businessRows]=await db.execute('SELECT id FROM businesses WHERE owner_user_id=?',[autoEmployer]);
-    const [shift]=await db.execute("INSERT INTO shifts(business_id,created_by,title,location,starts_at,ends_at,hourly_pay,slots,auto_approve,status) VALUES(?,?,'Bartender - Standard','London',DATE_ADD(UTC_TIMESTAMP(),INTERVAL 2 DAY),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 5 HOUR),15,1,1,'open')",[businessRows[0].id,autoEmployer]);
+    const [shift]=await db.execute("INSERT INTO shifts(business_id,created_by,title,location,starts_at,ends_at,hourly_pay,slots,auto_approve,status) VALUES(?,?,'Bartender - Standard','London',DATE_ADD(UTC_TIMESTAMP(),INTERVAL 2 DAY),DATE_ADD(UTC_TIMESTAMP(),INTERVAL 53 HOUR),15,1,1,'open')",[businessRows[0].id,autoEmployer]);
     const applicationBody={contractAccepted:true,contractSnapshot:JSON.stringify({version:'hyrz-shift-contract-v1'}),confirmedRequirements:true,confirmedPreferences:[]};
     const first=await api('/shifts/'+shift.insertId+'/apply',{token:workerOneToken,method:'POST',body:applicationBody});
     assert.equal(first.status,201,JSON.stringify(first.data));
