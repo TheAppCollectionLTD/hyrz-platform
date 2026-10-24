@@ -44,12 +44,12 @@ The MySQL user in `server/.env` must have permission to create/update tables and
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS hyrz_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 ```
 
-In a second terminal, start the client:
+In a second terminal, start the client in test mode so it connects to the API on port 4001:
 
 ```bash
 cd client
 npm install
-npm run dev
+npm run dev:test
 ```
 
 Use these **fictional local-only accounts** to test sign-in:
