@@ -279,7 +279,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     res.json({ok:true,status:'past'});
   }));
   app.get('/api/workchats/:id/available-participants',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
-    await ensureGroupWorkchats;const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);
+    await ensureGroupWorkchats;await ensureEmployerWorkerFavourites;const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
     if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can manage participants.'});
     const q=String(req.query.q||'').trim(),like='%'+q+'%';
@@ -289,7 +289,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     res.json({participants:rows.map(p=>({...p,id:Number(p.id),name:[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email}))});
   }));
   app.post('/api/workchats/:id/participants',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
-    await ensureGroupWorkchats;const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id),userId=Number(req.body.userId);
+    await ensureGroupWorkchats;await ensureEmployerWorkerFavourites;const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id),userId=Number(req.body.userId);
     if(!chat)return res.status(404).json({error:'Workchat not found.'});
     if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only workchat admins can manage participants.'});
     const [users]=await db.execute("SELECT id,role FROM users WHERE id=? AND status='active' AND role IN ('worker','employer')",[userId]);
