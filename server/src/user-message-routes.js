@@ -1,30 +1,9 @@
 const { auth, allow } = require('./middleware');
 
-module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, enqueueSchemaChange, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn }) {
+module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta }) {
   // Share the API's schema queue so this metadata migration cannot race the
   // user/profile migrations performed during server startup.
-  const ensureMeta = enqueueSchemaChange(async () => {
-    await db.query(`CREATE TABLE IF NOT EXISTS admin_message_meta (
-      message_id BIGINT UNSIGNED PRIMARY KEY,
-      recipient_id BIGINT UNSIGNED NOT NULL,
-      category VARCHAR(40) NOT NULL DEFAULT 'enquiries',
-      subject VARCHAR(200) NULL,
-      opened_by BIGINT UNSIGNED NULL,
-      read_at DATETIME NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (message_id) REFERENCES messages(id) ON DELETE CASCADE,
-      FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE,
-      FOREIGN KEY (opened_by) REFERENCES users(id) ON DELETE SET NULL
-    )`);
-    const [columns] = await db.query("SHOW COLUMNS FROM admin_message_meta LIKE 'subject'");
-    if (!columns.length) {
-      try {
-        await db.query('ALTER TABLE admin_message_meta ADD COLUMN subject VARCHAR(200) NULL');
-      } catch (error) {
-        if (error.code !== 'ER_DUP_FIELDNAME') throw error;
-      }
-    }
-  }, 'admin message metadata');
+
 
   app.post('/api/messages', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
     const category=String(req.body.category||'enquiries');
@@ -32,7 +11,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const body=String(req.body.body||'').trim();
     if (!['checkout_disputes','complaints','enquiries'].includes(category)) return res.status(400).json({error:'Choose a valid message subject category'});
     if (subject.length<2||subject.length>200||body.length<1||body.length>5000) return res.status(400).json({error:'Subject must be 2-200 characters and message 1-5000 characters'});
-    await ensureMeta;
+    await ensureAdminMessageMeta;
     let recipientId=Number(req.body.recipientId)||0;
     if (recipientId) {
       const [admins]=await db.execute("SELECT id FROM users WHERE id=? AND role='admin' AND status='active'",[recipientId]);
