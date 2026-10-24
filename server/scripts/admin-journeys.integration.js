@@ -278,6 +278,8 @@ async function main() {
     assert.equal(changed.status,200,JSON.stringify(changed.data));
     const loginChanged=await api('/auth/login',{method:'POST',body:{email:'testTier3',password:'Changed-Only-Password-2026!'}});
     assert.equal(loginChanged.status,200,JSON.stringify(loginChanged.data));
+    const revokedSession=await api('/auth/me',{token:tier3Token});
+    assert.equal(revokedSession.status,401,'Changing a password must invalidate previously issued sessions.');
   });
   await db.end();
   if(checks.some(c=>!c.ok)){console.error(JSON.stringify(checks,null,2));process.exitCode=1;}
