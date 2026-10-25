@@ -7761,3 +7761,48 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  #root .app:is(.worker,.employer,.admin) .admin-bottom-nav{display:flex!important;position:fixed!important;z-index:100;left:0;right:0;bottom:0;min-width:0;gap:4px;padding:7px 7px calc(7px + env(safe-area-inset-bottom))}
  #root .app:is(.worker,.employer,.admin) .admin-bottom-nav button{min-width:0!important;flex:1!important;padding:8px 3px!important;font-size:10px!important}
 }
+
+
+/* Layout correction after visual review: desktop worker/admin rail was still
+   disabled by older shell rules, leaving a blank gutter and narrow dashboard. */
+@media(min-width:761px){
+ #root .app:is(.worker,.admin)>.sidebar{
+  display:flex!important;position:fixed!important;inset:0 auto 0 0!important;
+  width:218px!important;height:100vh!important;overflow-y:auto!important;
+  z-index:100!important;flex-direction:column!important;
+ }
+ #root .app:is(.worker,.admin)>main{
+  display:block!important;margin:0 0 0 218px!important;
+  width:calc(100% - 218px)!important;max-width:none!important;
+  padding:24px clamp(18px,2.1vw,34px) 42px!important;
+ }
+ #root .app.worker main>header,
+ #root .app.admin main>header{
+  width:100%!important;max-width:none!important;margin:0 0 22px!important;
+ }
+ #root .app.worker main>.today-shift-card,
+ #root .app.worker main>.worker-three-strikes-card{
+  width:100%!important;max-width:none!important;
+ }
+ #root .app.worker main>.worker-dashboard-critical,
+ #root .app.worker main>.worker-dashboard-sections,
+ #root .app.worker main>.dashboard-sections,
+ #root .app.worker main>.worker-dashboard-grid{
+  width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;
+ }
+}
+@media(max-width:760px){
+ #root .app:is(.worker,.admin)>.sidebar{display:flex!important}
+ #root .app:is(.worker,.admin)>main{margin:0!important;width:100%!important}
+}
+
+/* Ensure desktop dashboard cards use the available canvas instead of a narrow
+   centered column; retain compact, stacked behaviour on phones. */
+#root .app.worker main .worker-dashboard-sections,
+#root .app.worker main .dashboard-sections,
+#root .app.worker main .worker-dashboard-grid{
+ max-width:none!important;width:100%!important;
+}
+#root .app.worker main .worker-dashboard-sections>div,
+#root .app.worker main .dashboard-sections>div,
+#root .app.worker main .worker-dashboard-grid>div{min-width:0}
