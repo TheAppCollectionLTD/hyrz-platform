@@ -7633,3 +7633,47 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  background:none!important;color:#334155!important;
  -webkit-text-fill-color:#334155!important;opacity:1!important;
 }
+
+
+/* High-contrast text across every Hyrz form control, including dark search fields. */
+#root .app input,
+#root .app textarea,
+#root .app select{
+ color:#111827!important;
+ -webkit-text-fill-color:#111827!important;
+ caret-color:#111827!important;
+}
+#root .app input::placeholder,
+#root .app textarea::placeholder{
+ color:#475569!important;
+ -webkit-text-fill-color:#475569!important;
+ opacity:1!important;
+}
+#root .app.worker .find-shifts-search input,
+#root .app.worker .find-shifts-panel .find-shifts-search input,
+#root .app.worker input.search,
+#root .app.worker input[placeholder*="Search role"],
+#root .app.worker input[placeholder*="Search employer"]{
+ background-color:#111b29!important;
+ color:#ffffff!important;
+ -webkit-text-fill-color:#ffffff!important;
+ caret-color:#ffffff!important;
+ border:2px solid #64748b!important;
+}
+#root .app.worker .find-shifts-search input::placeholder,
+#root .app.worker .find-shifts-panel .find-shifts-search input::placeholder,
+#root .app.worker input.search::placeholder,
+#root .app.worker input[placeholder*="Search role"]::placeholder,
+#root .app.worker input[placeholder*="Search employer"]::placeholder{
+ color:#dbeafe!important;
+ -webkit-text-fill-color:#dbeafe!important;
+ opacity:1!important;
+}
+#root .app button,
+#root .app a,
+#root .app label,
+#root .app .eyebrow,
+#root .app .empty,
+#root .app .empty-result-message{
+ text-shadow:none!important;
+}
