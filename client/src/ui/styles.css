@@ -7315,7 +7315,6 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
    HYRZ GLASSMORPHISM REDESIGN — Worker / Employer / Admin
    Visual layer only: preserve existing React routes and actions.
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 :root{
  --hz-bg:#07101e;--hz-bg2:#0a1730;--hz-glass:rgba(14,29,52,.76);
  --hz-glass-strong:rgba(11,23,42,.91);--hz-glass-soft:rgba(34,58,92,.42);
