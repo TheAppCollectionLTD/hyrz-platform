@@ -8149,3 +8149,70 @@ body{background:var(--hyrz-cream);color:var(--hyrz-ink)}
 .app.employer .employer-direct-inbox .inbox-chatbox{
   background:#fffdf9;border-color:var(--hyrz-border);
 }
+
+
+/* Public-facing Hyrz pages: apply the same teal/coral/cream identity.
+   Make the navigation full-bleed across the viewport instead of boxed inside
+   the centered welcome content wrapper. */
+#root .auth-welcome{background:var(--hyrz-cream);color:var(--hyrz-ink)}
+#root .public-home-nav{
+  position:absolute!important;
+  left:calc(50% - 50vw)!important;
+  right:auto!important;
+  width:100vw!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  background:var(--hyrz-teal)!important;
+  color:#fff!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+#root .public-home-logo,#root .public-home-logo span{color:#fff!important}
+#root .public-home-nav .public-how-work-trigger span{color:#ffd0c9!important}
+#root .public-home-nav .public-nav-signup{
+  background:var(--hyrz-coral)!important;
+  border-color:var(--hyrz-coral)!important;
+  color:#243238!important;
+}
+#root .public-home-nav .public-nav-signup:hover{background:#ff958a!important;border-color:#ff958a!important}
+#root .public-home-nav .public-app-icon{
+  background:transparent!important;
+  border-color:#8acfc2!important;
+  color:#fff!important;
+}
+#root .public-home-nav .public-app-icon-label{color:#fff!important}
+#root .public-intro-carousel,
+#root .public-about-section{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important;border-color:var(--hyrz-border)!important}
+#root .public-about-kicker{color:var(--hyrz-teal)!important}
+#root .public-about-content h1,#root .public-about-content h2,
+#root .public-about-content h3{color:var(--hyrz-ink)!important}
+#root .public-intro-carousel button,
+#root .public-intro-carousel .public-intro-tab{
+  border-color:#c5dcd5!important;
+}
+#root .public-intro-carousel button.active,
+#root .public-intro-carousel .public-intro-tab.active{
+  background:var(--hyrz-teal)!important;
+  border-color:var(--hyrz-teal)!important;
+  color:#fff!important;
+}
+#root .public-intro-carousel button:not(.active),
+#root .public-intro-carousel .public-intro-tab:not(.active){
+  background:#fff!important;color:var(--hyrz-teal)!important;
+}
+#root .public-how-work-panel,#root .how-work-panel{
+  background:#fffdf9!important;color:var(--hyrz-ink)!important;border-color:var(--hyrz-border)!important;
+}
+#root .how-work-tabs button.selected{
+  background:var(--hyrz-teal)!important;border-color:var(--hyrz-teal)!important;color:#fff!important;
+}
+#root .public-about-section p,#root .public-about-section li{color:#3f5153!important}
+#root .download-app-section{background:var(--hyrz-teal)!important;color:#fff!important;border-color:var(--hyrz-teal)!important}
+#root .download-app-copy{background:transparent!important;color:#fff!important}
+#root .download-app-eyebrow,#root .download-app-copy h2 em,
+#root .download-app-copy>p,#root .download-app-note{color:#d4f3eb!important}
+#root .download-app-visual{background:radial-gradient(circle at 70% 20%,#25afa0 0,#155e63 45%,#123e42 85%)!important}
+@media(max-width:760px){
+  #root .public-home-nav{left:calc(50% - 50vw)!important;width:100vw!important}
+}
