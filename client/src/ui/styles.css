@@ -7614,17 +7614,22 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app.worker main .empty:empty{display:none!important}
 
 
-/* Empty lists should be a simple readable message, never a dark placeholder card. */
+/* Empty results are plain inline copy: no panel, fill, border, minimum height or shadow. */
+#root .app.worker main .find-shifts-panel .empty-result-message,
 #root .app.worker main .empty-result-message{
- display:block!important;min-height:0!important;width:100%!important;max-width:none!important;
- box-sizing:border-box!important;margin:14px 0 0!important;padding:14px 0!important;
- background:transparent!important;background-color:transparent!important;
+ display:block!important;position:static!important;min-height:0!important;height:auto!important;
+ width:100%!important;max-width:none!important;box-sizing:border-box!important;
+ margin:12px 0 0!important;padding:0 0 8px!important;
+ background:none!important;background-color:transparent!important;background-image:none!important;
  color:#334155!important;-webkit-text-fill-color:#334155!important;
- border:0!important;border-radius:0!important;box-shadow:none!important;
- text-align:center!important;font-size:13px!important;font-weight:600!important;
- opacity:1!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;outline:0!important;
+ text-align:center!important;font-size:13px!important;font-weight:600!important;opacity:1!important;
 }
+#root .app.worker main .find-shifts-panel .empty-result-message::before,
+#root .app.worker main .find-shifts-panel .empty-result-message::after,
+#root .app.worker main .empty-result-message::before,
+#root .app.worker main .empty-result-message::after{content:none!important;display:none!important}
 #root .app.worker main .empty-result-message *{
- background:transparent!important;color:#334155!important;
+ background:none!important;color:#334155!important;
  -webkit-text-fill-color:#334155!important;opacity:1!important;
 }
