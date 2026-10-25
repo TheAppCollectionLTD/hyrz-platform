@@ -7677,3 +7677,53 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app .empty-result-message{
  text-shadow:none!important;
 }
+
+
+/* Strong, consistent contrast for the fixed bottom navigation labels and icons. */
+#root .app .worker-bottom-nav,
+#root .app .employer-bottom-nav,
+#root .app .admin-bottom-nav{
+ background:#05080D!important;
+ border-top:2px solid #334155!important;
+ box-shadow:0 -8px 24px rgba(0,0,0,.24)!important;
+}
+#root .app .worker-bottom-nav button,
+#root .app .employer-bottom-nav button,
+#root .app .admin-bottom-nav button{
+ color:#FFFFFF!important;
+ -webkit-text-fill-color:#FFFFFF!important;
+ background:transparent!important;
+ opacity:1!important;
+ text-shadow:none!important;
+ font-weight:750!important;
+}
+#root .app .worker-bottom-nav button span,
+#root .app .employer-bottom-nav button span,
+#root .app .admin-bottom-nav button span,
+#root .app .worker-bottom-nav button small,
+#root .app .employer-bottom-nav button small,
+#root .app .admin-bottom-nav button small{
+ color:#FFFFFF!important;
+ -webkit-text-fill-color:#FFFFFF!important;
+ opacity:1!important;
+ font-weight:750!important;
+}
+#root .app .worker-bottom-nav button.active,
+#root .app .employer-bottom-nav button.active,
+#root .app .admin-bottom-nav button.selected,
+#root .app .worker-bottom-nav button:hover,
+#root .app .employer-bottom-nav button:hover,
+#root .app .admin-bottom-nav button:hover{
+ background:#26351F!important;
+ color:#D9FF8A!important;
+ -webkit-text-fill-color:#D9FF8A!important;
+}
+#root .app .worker-bottom-nav button.active span,
+#root .app .worker-bottom-nav button.active small,
+#root .app .employer-bottom-nav button.active span,
+#root .app .employer-bottom-nav button.active small,
+#root .app .admin-bottom-nav button.selected span,
+#root .app .admin-bottom-nav button.selected small{
+ color:#D9FF8A!important;
+ -webkit-text-fill-color:#D9FF8A!important;
+}
