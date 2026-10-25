@@ -7434,3 +7434,20 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app.worker main>header.worker-page-header .worker-greeting-subtitle{
  opacity:1!important;
 }
+
+
+/* Hard contrast override requested: page header titles on light app surfaces must be black. */
+#root .app.worker main>header h1,
+#root .app.worker main>header h1 *,
+#root .app.worker main>header .eyebrow,
+#root .app.worker main>header p,
+#root .app.worker main>header small {
+ color:#000!important;
+ -webkit-text-fill-color:#000!important;
+ opacity:1!important;
+ text-shadow:none!important;
+}
+#root .app.worker main>header,
+#root .app.worker main>header>div {
+ background:transparent!important;
+}
