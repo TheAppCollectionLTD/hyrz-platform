@@ -7434,3 +7434,78 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app.worker main>header.worker-page-header .worker-greeting-subtitle{
  opacity:1!important;
 }
+
+
+/* Persistent readability / contrast pass — keep the restored original design.
+   Light surfaces use dark text; dark navigation and primary actions keep light text. */
+#root .app.worker main,
+#root .app.worker main :is(section,article,.panel,.card,.stat,.shift-card,.shiftrow,.row,
+.find-shifts-panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,
+.worker-dashboard-sections,.dashboard-sections,.worker-dashboard-grid){
+ color:#17243a;
+}
+#root .app.worker main :is(h1,h2,h3,h4,h5,p,span,div,label,strong,b,small,li,dt,dd,td,th,a){
+ text-shadow:none!important;
+}
+#root .app.worker main :is(h1,h2,h3,h4,h5,strong,b,label,th,dt){
+ color:#14213a!important;-webkit-text-fill-color:#14213a!important;opacity:1!important;
+}
+#root .app.worker main :is(p,span,small,li,dd,td,.muted,.eyebrow,.description,.helper-text){
+ color:#40536e;-webkit-text-fill-color:#40536e;opacity:1;
+}
+#root .app.worker main :is(section,article,.panel,.card,.stat,.shift-card,.shiftrow,.row,
+.find-shifts-panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,
+.worker-dashboard-sections,.dashboard-sections,.worker-dashboard-grid,
+.rolling-shift-calendar,.rolling-calendar,.calendar-strip,.empty){
+ background-color:#fff!important;color:#17243a!important;
+}
+#root .app.worker main :is(section,article,.panel,.card,.stat,.shift-card,.shiftrow,.row,
+.find-shifts-panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,
+.worker-dashboard-sections,.dashboard-sections,.worker-dashboard-grid,
+.rolling-shift-calendar,.rolling-calendar,.calendar-strip,.empty) :is(h1,h2,h3,h4,h5,p,span,div,label,strong,b,small,li,button:not(.primary),a){
+ color:#17243a!important;-webkit-text-fill-color:#17243a;opacity:1!important;
+}
+#root .app.worker main :is(input,select,textarea){
+ color:#17243a!important;-webkit-text-fill-color:#17243a!important;
+ background:#fff!important;border-color:#aebbd0!important;opacity:1!important;
+}
+#root .app.worker main :is(input,select,textarea)::placeholder{
+ color:#5d6c82!important;-webkit-text-fill-color:#5d6c82!important;opacity:1!important;
+}
+#root .app.worker main select option{color:#17243a!important;background:#fff!important}
+#root .app.worker main :is(button.primary,.primary,.shift-card .shiftpay button){
+ color:#fff!important;-webkit-text-fill-color:#fff!important;
+}
+#root .app.worker main :is(button:disabled,[aria-disabled="true"]){
+ opacity:1!important;color:#596981!important;-webkit-text-fill-color:#596981!important;
+}
+#root .app.worker main>header h1,
+#root .app.worker main>header h1 *,
+#root .app.worker main>header .eyebrow,
+#root .app.worker main>header p,
+#root .app.worker main>header small{
+ color:#14213a!important;-webkit-text-fill-color:#14213a!important;opacity:1!important;
+}
+#root .app.worker .sidebar{color:#17243a}
+#root .app.worker .sidebar nav button:not(.selected){color:#344762!important}
+#root .app.worker .sidebar nav button.selected{color:#fff!important}
+#root .app.worker .sidebar .brand{color:#14213a!important}
+
+/* Admin pages: readable body text and forms without changing the existing layout. */
+#root .app.admin main :is(h1,h2,h3,h4,h5,strong,b,label,th){
+ color:#14213a!important;-webkit-text-fill-color:#14213a!important;opacity:1!important;
+}
+#root .app.admin main :is(p,small,li,td,.muted,.eyebrow,.description){
+ color:#40536e;-webkit-text-fill-color:#40536e;opacity:1;
+}
+#root .app.admin main :is(input,select,textarea){
+ color:#17243a!important;-webkit-text-fill-color:#17243a!important;
+ background:#fff!important;border-color:#aebbd0!important;opacity:1!important;
+}
+#root .app.admin main :is(input,select,textarea)::placeholder{
+ color:#5d6c82!important;-webkit-text-fill-color:#5d6c82!important;opacity:1!important;
+}
+#root .app.admin main :is(button.primary,.primary){color:#fff!important;-webkit-text-fill-color:#fff!important}
+#root .app :is(button,a,input,select,textarea,[tabindex]):focus-visible{
+ outline:2px solid #286cff!important;outline-offset:2px!important;
+}
