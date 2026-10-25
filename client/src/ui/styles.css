@@ -8162,3 +8162,116 @@ body {
  #root .app.worker main .worker-section-links.job-tabs-squares { gap:8px !important; }
  #root .app.worker main .worker-section-links.job-tabs-squares button { min-height:62px !important; font-size:11px !important; padding:10px 5px !important; }
 }
+
+/* Dashboard composition rebuilt around the Design 2 reference: opportunity search,
+   seven-day strip, compact shift cards and a full-height desktop navigation rail. */
+#root .app.worker main .worker-dashboard-available {
+ width:100% !important; min-width:0 !important; margin:0 0 22px !important;
+ padding:0 !important; background:transparent !important; border:0 !important; box-shadow:none !important;
+}
+#root .app.worker main .worker-dashboard-section-heading {
+ display:flex !important; align-items:center !important; justify-content:space-between !important;
+ gap:16px !important; margin:0 0 14px !important;
+}
+#root .app.worker main .worker-dashboard-section-heading h2 {
+ margin:5px 0 0 !important; color:#f5f7fb !important; font-size:21px !important;
+ font-weight:750 !important; letter-spacing:-.55px !important;
+}
+#root .app.worker main .worker-dashboard-section-heading .eyebrow {
+ color:#71869c !important; font-size:10px !important; font-weight:800 !important; letter-spacing:1.7px !important;
+}
+#root .app.worker main .worker-dashboard-view-all {
+ border:0 !important; background:transparent !important; color:#66b3ff !important;
+ padding:8px 4px !important; font-weight:700 !important; cursor:pointer !important;
+}
+#root .app.worker main .worker-dashboard-search {
+ display:grid !important; grid-template-columns:minmax(0,1fr) auto auto !important;
+ align-items:center !important; gap:9px !important; margin:0 0 12px !important;
+}
+#root .app.worker main .worker-dashboard-search input {
+ min-width:0 !important; width:100% !important; height:43px !important; box-sizing:border-box !important;
+ padding:0 14px !important; border-radius:11px !important; background:#0c1723 !important;
+ color:#f5f7fb !important; border:1px solid #2a3e53 !important; font-size:12px !important;
+}
+#root .app.worker main .worker-dashboard-search button {
+ min-height:42px !important; padding:0 15px !important; white-space:nowrap !important; font-size:12px !important;
+}
+#root .app.worker main .worker-dashboard-search button.primary {
+ background:linear-gradient(115deg,#7137e8,#9252ff) !important; border-color:#9b70ff !important;
+}
+#root .app.worker main .worker-dashboard-date-strip {
+ display:grid !important; grid-template-columns:repeat(7,minmax(0,1fr)) !important; gap:8px !important;
+ margin:0 0 14px !important; padding:0 !important; background:transparent !important; border:0 !important;
+}
+#root .app.worker main .worker-dashboard-date-strip button {
+ display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important;
+ gap:4px !important; min-width:0 !important; min-height:62px !important; padding:8px 4px !important;
+ border:1px solid #263b50 !important; border-radius:11px !important; background:#101d2b !important;
+ color:#9eb2c8 !important; box-shadow:none !important;
+}
+#root .app.worker main .worker-dashboard-date-strip button small { color:#91a2b5 !important; font-size:10px !important; }
+#root .app.worker main .worker-dashboard-date-strip button strong { color:#f5f7fb !important; font-size:15px !important; }
+#root .app.worker main .worker-dashboard-date-strip button span { color:#91a2b5 !important; font-size:10px !important; }
+#root .app.worker main .worker-dashboard-date-strip button.selected {
+ background:linear-gradient(145deg,#0c75df,#155bbd) !important; border-color:#3a9aff !important;
+ box-shadow:0 5px 16px rgba(8,105,220,.22) !important;
+}
+#root .app.worker main .worker-dashboard-date-strip button.selected :is(small,strong,span) { color:#fff !important; }
+#root .app.worker main .worker-dashboard-shift-list {
+ display:flex !important; flex-direction:column !important; gap:10px !important;
+}
+#root .app.worker main .worker-dashboard-shift {
+ display:grid !important; grid-template-columns:64px minmax(0,1fr) auto !important;
+ align-items:center !important; gap:14px !important; min-width:0 !important;
+ padding:14px !important; border-radius:14px !important;
+ background:linear-gradient(145deg,#111f2e,#0c1722) !important;
+ border:1px solid #263b50 !important; box-shadow:0 8px 20px rgba(0,0,0,.17) !important;
+}
+#root .app.worker main .worker-dashboard-shift-art {
+ display:flex !important; align-items:center !important; justify-content:center !important;
+ width:64px !important; height:64px !important; border-radius:10px !important;
+ color:#d5eaff !important; background:linear-gradient(145deg,#1b3c5b,#14253a) !important;
+ border:1px solid #2d4e6b !important; font-size:24px !important; font-weight:800 !important;
+}
+#root .app.worker main .worker-dashboard-shift-details { min-width:0 !important; }
+#root .app.worker main .worker-dashboard-shift-details h3 {
+ margin:0 0 5px !important; color:#f5f7fb !important; font-size:14px !important; font-weight:750 !important;
+}
+#root .app.worker main .worker-dashboard-shift-details p {
+ margin:0 0 6px !important; color:#a2b5c9 !important; font-size:11px !important; line-height:1.4 !important;
+}
+#root .app.worker main .worker-dashboard-shift-details>span {
+ color:#8298ae !important; font-size:10px !important; line-height:1.5 !important;
+}
+#root .app.worker main .worker-dashboard-shift-action {
+ display:flex !important; flex-direction:column !important; align-items:flex-end !important; gap:10px !important;
+}
+#root .app.worker main .worker-dashboard-shift-action>strong {
+ color:#dceaff !important; font-size:14px !important; white-space:nowrap !important;
+}
+#root .app.worker main .worker-dashboard-shift-action>strong small {
+ margin-left:3px !important; color:#91a2b5 !important; font-size:10px !important; font-weight:500 !important;
+}
+#root .app.worker main .worker-dashboard-shift-action button {
+ min-height:34px !important; padding:0 12px !important; white-space:nowrap !important;
+ font-size:11px !important; background:linear-gradient(115deg,#7b3ff2,#9557ff) !important;
+ border:1px solid #a27aff !important; color:#fff !important; border-radius:9px !important;
+}
+#root .app.worker main .worker-dashboard-no-shifts {
+ padding:24px !important; text-align:center !important; color:#91a2b5 !important;
+ background:#0d1926 !important; border:1px dashed #30465c !important; border-radius:13px !important; font-size:12px !important;
+}
+#root .app.worker main .worker-section-nav { margin-top:22px !important; }
+@media(max-width:760px) {
+ #root .app.worker main .worker-dashboard-search { grid-template-columns:minmax(0,1fr) auto !important; gap:7px !important; }
+ #root .app.worker main .worker-dashboard-search input { grid-column:1/-1 !important; }
+ #root .app.worker main .worker-dashboard-search button { padding:0 11px !important; }
+ #root .app.worker main .worker-dashboard-date-strip { gap:5px !important; }
+ #root .app.worker main .worker-dashboard-date-strip button { min-height:55px !important; border-radius:9px !important; }
+ #root .app.worker main .worker-dashboard-date-strip button small,
+ #root .app.worker main .worker-dashboard-date-strip button span { font-size:9px !important; }
+ #root .app.worker main .worker-dashboard-shift { grid-template-columns:48px minmax(0,1fr) !important; gap:10px !important; padding:11px !important; }
+ #root .app.worker main .worker-dashboard-shift-art { width:48px !important; height:54px !important; font-size:19px !important; }
+ #root .app.worker main .worker-dashboard-shift-action { grid-column:2 !important; flex-direction:row !important; align-items:center !important; justify-content:space-between !important; width:100% !important; }
+ #root .app.worker main .worker-dashboard-shift-action button { min-height:32px !important; }
+}
