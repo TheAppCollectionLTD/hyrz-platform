@@ -8468,3 +8468,40 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
   #root .app .workchat-conversation-title{gap:9px!important}
   #root .app .workchat-photo-upload input{width:160px!important}
 }
+
+
+/* Compact requirements and perks shown directly on shift cards. */
+#root .app .shift-card-extras{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));
+  gap:10px;
+  margin:12px 0 14px;
+}
+#root .app .shift-card-extra{
+  min-width:0;
+  padding:11px 13px;
+  border:1px solid #d8e7df;
+  border-radius:10px;
+  background:#f5faf6;
+  color:#172b38;
+}
+#root .app .shift-card-extra>strong{
+  display:block;
+  margin:0 0 7px;
+  color:#155e63;
+  font-size:12px;
+  font-weight:800;
+}
+#root .app .shift-card-extra ul{
+  margin:0;
+  padding-left:18px;
+  display:grid;
+  gap:4px;
+}
+#root .app .shift-card-extra li{
+  font-size:12px;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+#root .app .shift-card-perks{background:#fff8e9;border-color:#f0dfb6}
+#root .app .shift-card-perks>strong{color:#8a5a12}
