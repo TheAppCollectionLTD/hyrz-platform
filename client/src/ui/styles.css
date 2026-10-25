@@ -8000,3 +8000,37 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   .app.employer .employer-direct-inbox .direct-thread-heading button{width:100%}
   .app.employer .employer-direct-inbox .direct-message-compose button{width:100%}
 }
+
+
+/* Final cleanup: inbox section tabs are standalone controls, not a boxed tab bar. */
+.app.employer .employer-direct-inbox .employer-inbox-tabs{
+  display:flex !important;
+  align-items:center;
+  justify-content:flex-start;
+  flex-wrap:wrap;
+  gap:14px !important;
+  margin:20px 0 28px !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+.app.employer .employer-direct-inbox .employer-inbox-tabs button{
+  flex:0 0 auto !important;
+  width:auto;
+  min-width:132px;
+  min-height:44px;
+  margin:0 !important;
+  padding:12px 20px !important;
+  border:1px solid #d8d0c1 !important;
+  border-radius:9px !important;
+  background:#fffdf8 !important;
+  color:#394332 !important;
+  box-shadow:none !important;
+}
+.app.employer .employer-direct-inbox .employer-inbox-tabs button.active{
+  border-color:#1e281b !important;
+  background:#1e281b !important;
+  color:#fff !important;
+}
