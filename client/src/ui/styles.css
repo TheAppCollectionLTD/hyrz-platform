@@ -7408,3 +7408,29 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app.worker main .find-shifts-panel select:focus-visible {
  outline:2px solid #8ab4ff!important;outline-offset:2px!important;
 }
+
+
+/* Fix low-contrast page titles on ALL worker routes (not only dashboard). */
+#root .app.worker main>header:not(.worker-page-header),
+#root .app.worker main>header:not(.worker-page-header)>div{
+ color:#17253b!important;background:transparent!important;box-shadow:none!important;
+ border-color:transparent!important;
+}
+#root .app.worker main>header:not(.worker-page-header) h1,
+#root .app.worker main>header:not(.worker-page-header) h1 *,
+#root .app.worker main>header:not(.worker-page-header) h2{
+ color:#17253b!important;background:transparent!important;
+ -webkit-text-fill-color:#17253b!important;opacity:1!important;
+}
+#root .app.worker main>header:not(.worker-page-header) .eyebrow{
+ color:#586b84!important;-webkit-text-fill-color:#586b84!important;opacity:1!important;
+}
+#root .app.worker main>header:not(.worker-page-header) p,
+#root .app.worker main>header:not(.worker-page-header) small{
+ color:#52647b!important;-webkit-text-fill-color:#52647b!important;opacity:1!important;
+}
+#root .app.worker main>header.worker-page-header h1,
+#root .app.worker main>header.worker-page-header .eyebrow,
+#root .app.worker main>header.worker-page-header .worker-greeting-subtitle{
+ opacity:1!important;
+}
