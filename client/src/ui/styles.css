@@ -7509,3 +7509,80 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app :is(button,a,input,select,textarea,[tabindex]):focus-visible{
  outline:2px solid #286cff!important;outline-offset:2px!important;
 }
+
+
+/* Hyrz palette 2 — Midnight Navy & Neon.
+   This is a colour-only theme layer: existing layouts, routes and controls remain intact. */
+:root{
+ --hyrz-bg:#08111F;--hyrz-surface:#111E32;--hyrz-raised:#1B2B45;
+ --hyrz-purple:#8B5CF6;--hyrz-cyan:#22D3EE;--hyrz-text:#F8FAFC;
+ --hyrz-muted:#CBD5E1;--hyrz-border:#34465F;--hyrz-green:#34D399;
+ --hyrz-amber:#FBBF24;--hyrz-red:#FB7185;
+}
+html,body,#root{background:var(--hyrz-bg)!important;color:var(--hyrz-text)}
+#root .app,
+#root .app.worker,
+#root .app.employer,
+#root .app.admin{
+ background:var(--hyrz-bg)!important;color:var(--hyrz-text)!important;
+}
+#root .app main{background:transparent!important;color:var(--hyrz-text)!important}
+#root .app main :is(h1,h2,h3,h4,h5,h6,strong,b,th,dt){
+ color:var(--hyrz-text)!important;-webkit-text-fill-color:var(--hyrz-text)!important;opacity:1!important;
+}
+#root .app main :is(p,li,dd,td,label,small,.muted,.eyebrow,.description,.helper-text,.subtitle,.hint){
+ color:var(--hyrz-muted)!important;-webkit-text-fill-color:var(--hyrz-muted)!important;opacity:1!important;
+}
+#root .app main :is(section,article,.panel,.card,.stat,.shift-card,.shiftrow,.row,
+.dashboard-sections,.worker-dashboard-sections,.worker-dashboard-grid,
+.find-shifts-panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,
+.rolling-shift-calendar,.rolling-calendar,.calendar-strip,.empty,
+.admin-console,.employer-card,.worker-card,.modal-card,.dialog,.settings-card){
+ background:var(--hyrz-surface)!important;color:var(--hyrz-text)!important;
+ border-color:var(--hyrz-border)!important;box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+#root .app main :is(section,article,.panel,.card,.stat,.shift-card,.shiftrow,.row,
+.dashboard-sections,.worker-dashboard-sections,.worker-dashboard-grid,
+.find-shifts-panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,
+.rolling-shift-calendar,.rolling-calendar,.calendar-strip,.empty,
+.admin-console,.employer-card,.worker-card,.modal-card,.dialog,.settings-card)
+:is(h1,h2,h3,h4,h5,h6,strong,b,label,span,p,small,li,a,div,td,th){
+ -webkit-text-fill-color:var(--hyrz-text);
+}
+#root .app main :is(input,select,textarea){
+ color:var(--hyrz-text)!important;-webkit-text-fill-color:var(--hyrz-text)!important;
+ background:var(--hyrz-raised)!important;border:1px solid #526681!important;opacity:1!important;
+}
+#root .app main :is(input,select,textarea)::placeholder{
+ color:#CBD5E1!important;-webkit-text-fill-color:#CBD5E1!important;opacity:1!important;
+}
+#root .app main select option{color:var(--hyrz-text)!important;background:var(--hyrz-raised)!important}
+#root .app :is(.sidebar,.bottom-nav,.mobile-nav,.worker-bottom-nav){
+ background:#060D18!important;color:var(--hyrz-text)!important;border-color:var(--hyrz-border)!important;
+}
+#root .app .sidebar :is(a,button,.brand,.brand-mark,.nav-link){color:var(--hyrz-muted)!important}
+#root .app .sidebar :is(a,button).selected,
+#root .app .sidebar :is(a,button)[aria-current="page"]{
+ background:linear-gradient(100deg,#6D28D9,#2563EB)!important;color:#fff!important;
+}
+#root .app main :is(button.primary,.primary,.btn-primary,.apply-button,.publish-button,
+button[type="submit"],.selected-tab){
+ background:linear-gradient(110deg,#7C3AED,#4F46E5)!important;
+ border-color:#8B5CF6!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
+}
+#root .app main :is(button.secondary,.btn-secondary,.tab,button:not(.primary):not([type="submit"])){
+ border-color:var(--hyrz-border);
+}
+#root .app main :is(button.secondary,.btn-secondary,.tab,button:not(.primary):not([type="submit"])){
+ color:var(--hyrz-text)!important;-webkit-text-fill-color:var(--hyrz-text)!important;
+}
+#root .app main :is(.success,.status-success,.badge-success,.confirmed){color:#34D399!important;-webkit-text-fill-color:#34D399!important}
+#root .app main :is(.warning,.status-warning,.badge-warning,.pending){color:#FBBF24!important;-webkit-text-fill-color:#FBBF24!important}
+#root .app main :is(.danger,.error,.status-error,.badge-danger,.rejected){color:#FDA4AF!important;-webkit-text-fill-color:#FDA4AF!important}
+#root .app main :is(.today,.active-date,.selected-date,[aria-pressed="true"]){
+ border-color:var(--hyrz-cyan)!important;
+}
+#root .app :is(button,a,input,select,textarea,[tabindex]):focus-visible{
+ outline:2px solid var(--hyrz-cyan)!important;outline-offset:2px!important;
+}
+#root .app main :is(.eyebrow,.section-kicker){color:#A5B4FC!important;-webkit-text-fill-color:#A5B4FC!important}
