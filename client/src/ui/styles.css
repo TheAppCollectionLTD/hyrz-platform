@@ -7525,3 +7525,40 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app.worker main header button[title*="Sign out" i] *{
  color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;opacity:1!important;
 }
+
+
+/* Dashboard section shortcuts: remove the enclosing parent panel and let
+   three large tiles span the full available horizontal space. */
+#root .app.worker main .worker-section-nav{
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ padding:0!important;margin:22px 0 0!important;width:100%!important;max-width:none!important;
+}
+#root .app.worker main .worker-section-nav>h2,
+#root .app.worker main .worker-section-nav>h3{
+ margin:0 0 14px!important;
+}
+#root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ width:100%!important;max-width:none!important;gap:14px!important;
+ margin:0!important;padding:0!important;
+}
+#root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;min-width:0!important;max-width:none!important;min-height:126px!important;
+ box-sizing:border-box!important;margin:0!important;padding:20px!important;
+ background:#FFFFFF!important;color:#111827!important;
+ -webkit-text-fill-color:#111827!important;border:1px solid #CBD5E1!important;
+ border-radius:13px!important;box-shadow:0 3px 10px rgba(15,23,42,.06)!important;
+ font-size:15px!important;font-weight:750!important;
+}
+#root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button *{
+ color:#111827!important;-webkit-text-fill-color:#111827!important;opacity:1!important;
+}
+@media(max-width:760px){
+ #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;
+ }
+ #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button{
+  min-height:92px!important;padding:14px!important;font-size:14px!important;
+ }
+}
