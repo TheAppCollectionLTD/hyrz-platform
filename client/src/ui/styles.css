@@ -7509,3 +7509,19 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  }
  #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button{width:100%!important}
 }
+
+
+/* Sign-out must remain legible on the light worker dashboard header. */
+#root .app.worker main header .worker-signout,
+#root .app.worker main header button[aria-label*="Sign out" i],
+#root .app.worker main header button[title*="Sign out" i],
+#root .app.worker main header button{
+ color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;
+ background:#142238!important;border:1px solid #142238!important;
+ opacity:1!important;text-shadow:none!important;
+}
+#root .app.worker main header .worker-signout *,
+#root .app.worker main header button[aria-label*="Sign out" i] *,
+#root .app.worker main header button[title*="Sign out" i] *{
+ color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;opacity:1!important;
+}
