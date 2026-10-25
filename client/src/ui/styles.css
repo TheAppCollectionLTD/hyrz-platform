@@ -7434,3 +7434,78 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app.worker main>header.worker-page-header .worker-greeting-subtitle{
  opacity:1!important;
 }
+
+
+/* Readability + horizontal space pass on the restored light design. */
+#root .app.worker main,
+#root .app.worker main :is(h1,h2,h3,h4,h5,h6,strong,b,label,th,dt){
+ color:#111827!important;-webkit-text-fill-color:#111827!important;opacity:1!important;
+}
+#root .app.worker main :is(p,span,div,small,li,td,dd,a,.muted,.eyebrow,.description,.helper-text){
+ color:#273449;-webkit-text-fill-color:#273449;opacity:1;
+}
+#root .app.worker main :is(.panel,.stat,.worker-dashboard-stat,.worker-todays-shift-card,
+.worker-three-strikes-card,.worker-section-nav,.worker-section-links,.empty-state,
+.upcoming-shifts-dashboard-card,.checkout-record){
+ background:#FFFFFF!important;color:#111827!important;border-color:#CBD5E1!important;
+}
+#root .app.worker main :is(.panel,.stat,.worker-dashboard-stat,.worker-todays-shift-card,
+.worker-three-strikes-card,.worker-section-nav,.worker-section-links,.empty-state,
+.upcoming-shifts-dashboard-card,.checkout-record) :is(h1,h2,h3,h4,h5,h6,strong,b,label,span,p,small,li,a,div){
+ color:#111827!important;-webkit-text-fill-color:#111827!important;opacity:1!important;
+}
+#root .app.worker main :is(.eyebrow,.muted,.description,.helper-text,.worker-three-strikes-count small){
+ color:#374151!important;-webkit-text-fill-color:#374151!important;opacity:1!important;
+}
+#root .app.worker main :is(input,select,textarea){
+ color:#111827!important;-webkit-text-fill-color:#111827!important;background:#FFFFFF!important;
+ border:1px solid #9CA3AF!important;opacity:1!important;
+}
+#root .app.worker main :is(input,select,textarea)::placeholder{
+ color:#4B5563!important;-webkit-text-fill-color:#4B5563!important;opacity:1!important;
+}
+#root .app.worker main :is(button.primary,.primary,button[type="submit"]){
+ color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;
+}
+#root .app.worker main :is(button.secondary,.secondary){
+ color:#111827!important;-webkit-text-fill-color:#111827!important;background:#FFFFFF!important;
+ border-color:#9CA3AF!important;
+}
+/* Desktop dashboard cards and section tiles should use the full available width. */
+@media(min-width:761px){
+ #root .app.worker>main{width:100%!important;max-width:none!important}
+ #root .app.worker main .worker-todays-shift-wrap,
+ #root .app.worker main .worker-three-strikes-card,
+ #root .app.worker main .stats.worker-dashboard-stats,
+ #root .app.worker main .worker-section-nav{
+  width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important;
+  box-sizing:border-box!important;
+ }
+ #root .app.worker main .stats.worker-dashboard-stats{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:stretch!important;gap:14px!important;
+ }
+ #root .app.worker main .stats.worker-dashboard-stats .worker-dashboard-stat{
+  width:100%!important;min-width:0!important;max-width:none!important;box-sizing:border-box!important;
+ }
+ #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  width:100%!important;gap:12px!important;
+ }
+ #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button{
+  width:100%!important;min-width:0!important;min-height:96px!important;box-sizing:border-box!important;
+ }
+}
+@media(max-width:760px){
+ #root .app.worker main .stats.worker-dashboard-stats{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  width:100%!important;gap:10px!important;
+ }
+ #root .app.worker main .stats.worker-dashboard-stats .worker-dashboard-stat{
+  width:100%!important;min-width:0!important;box-sizing:border-box!important;
+ }
+ #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%!important;
+ }
+ #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button{width:100%!important}
+}
