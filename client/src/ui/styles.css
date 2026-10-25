@@ -7612,3 +7612,19 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  }
 }
 #root .app.worker main .empty:empty{display:none!important}
+
+
+/* Empty lists should be a simple readable message, never a dark placeholder card. */
+#root .app.worker main .empty-result-message{
+ display:block!important;min-height:0!important;width:100%!important;max-width:none!important;
+ box-sizing:border-box!important;margin:14px 0 0!important;padding:14px 0!important;
+ background:transparent!important;background-color:transparent!important;
+ color:#334155!important;-webkit-text-fill-color:#334155!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ text-align:center!important;font-size:13px!important;font-weight:600!important;
+ opacity:1!important;
+}
+#root .app.worker main .empty-result-message *{
+ background:transparent!important;color:#334155!important;
+ -webkit-text-fill-color:#334155!important;opacity:1!important;
+}
