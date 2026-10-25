@@ -7358,3 +7358,53 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  #root .app.worker main>header.worker-page-header .worker-greeting-subtitle{font-size:12px!important}
  #root .app.worker main>header.worker-page-header .worker-signout{padding:8px 10px!important;font-size:11px!important}
 }
+
+
+/* Accessibility contrast pass: worker pages contain some legacy light/dark surfaces. */
+#root .app.worker main>header.worker-page-header h1,
+#root .app.worker main>header.worker-page-header h1 * { color:#f5f7fb!important; }
+#root .app.worker main>header:not(.worker-page-header) h1 { color:#f5f7fb!important; }
+#root .app.worker main .eyebrow { color:#a9b9ce!important; }
+#root .app.worker main p,
+#root .app.worker main .muted,
+#root .app.worker main small { color:#c0cad8; }
+#root .app.worker main .panel,
+#root .app.worker main .stat,
+#root .app.worker main .find-shifts-panel,
+#root .app.worker main .find-shifts-panel .panel,
+#root .app.worker main .find-shifts-panel section {
+ color:#edf2f9!important;
+}
+#root .app.worker main .find-shifts-panel .panel,
+#root .app.worker main .find-shifts-panel .rolling-shift-calendar,
+#root .app.worker main .find-shifts-panel .rolling-calendar,
+#root .app.worker main .find-shifts-panel .calendar-strip {
+ background:#111b29!important;
+ border-color:#344257!important;
+}
+#root .app.worker main .find-shifts-panel .rolling-shift-calendar *,
+#root .app.worker main .find-shifts-panel .rolling-calendar *,
+#root .app.worker main .find-shifts-panel .calendar-strip * { color:#e7edf7; }
+#root .app.worker main .find-shifts-panel input,
+#root .app.worker main .find-shifts-panel select,
+#root .app.worker main .find-shifts-panel textarea {
+ color:#f4f7fc!important;background:#101a28!important;border-color:#46566d!important;
+}
+#root .app.worker main .find-shifts-panel input::placeholder,
+#root .app.worker main .find-shifts-panel textarea::placeholder { color:#a9b8cc!important;opacity:1; }
+#root .app.worker main .find-shifts-panel button:not(.primary):not(.selected) {
+ color:#e6edf7;
+}
+#root .app.worker main .find-shifts-panel .empty {
+ color:#b9c5d5!important;background:#111b29!important;
+ border:1px solid #344257!important;border-radius:10px!important;
+}
+#root .app.worker main .find-shifts-panel .status,
+#root .app.worker main .find-shifts-panel .pill { color:#e5edf8!important; }
+#root .app.worker main .find-shifts-panel .status.approved,
+#root .app.worker main .find-shifts-panel .status.paid { color:#d9f99d!important; }
+#root .app.worker main .find-shifts-panel button:focus-visible,
+#root .app.worker main .find-shifts-panel input:focus-visible,
+#root .app.worker main .find-shifts-panel select:focus-visible {
+ outline:2px solid #8ab4ff!important;outline-offset:2px!important;
+}
