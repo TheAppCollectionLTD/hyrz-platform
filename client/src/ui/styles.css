@@ -7311,3 +7311,50 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 }
 
 
+
+
+/* Worker dashboard header cleanup: remove inherited dark/white blocks. */
+#root .app.worker main>header.worker-page-header{
+ display:flex!important;align-items:flex-start!important;justify-content:space-between!important;
+ gap:18px!important;width:100%!important;max-width:1180px!important;
+ margin:0 auto 28px!important;padding:0 0 22px!important;
+ border:0!important;border-bottom:1px solid rgba(255,255,255,.10)!important;
+ border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+#root .app.worker main>header.worker-page-header>div{
+ display:block!important;flex:1 1 auto!important;min-width:0!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;
+}
+#root .app.worker main>header.worker-page-header .eyebrow{
+ display:block!important;margin:0 0 8px!important;padding:0!important;
+ color:#8da2bd!important;background:transparent!important;
+ font-size:10px!important;font-weight:800!important;letter-spacing:1.7px!important;
+}
+#root .app.worker main>header.worker-page-header h1{
+ display:block!important;width:auto!important;max-width:none!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+ color:#f5f7fb!important;background:transparent!important;box-shadow:none!important;
+ font-family:Manrope,'DM Sans',sans-serif!important;
+ font-size:clamp(27px,2.4vw,34px)!important;font-weight:800!important;
+ line-height:1.18!important;letter-spacing:-1.1px!important;
+}
+#root .app.worker main>header.worker-page-header .worker-greeting-subtitle{
+ margin:9px 0 0!important;padding:0!important;max-width:620px!important;
+ color:#9eafc4!important;background:transparent!important;
+ font-size:13px!important;line-height:1.6!important;
+}
+#root .app.worker main>header.worker-page-header .worker-signout{
+ flex:0 0 auto!important;margin:0!important;padding:10px 15px!important;
+ color:#e7edf7!important;background:#172334!important;
+ border:1px solid #34445a!important;border-radius:10px!important;
+ box-shadow:none!important;
+}
+@media(max-width:760px){
+ #root .app.worker main>header.worker-page-header{
+  align-items:flex-start!important;gap:12px!important;margin-bottom:22px!important;padding-bottom:17px!important;
+ }
+ #root .app.worker main>header.worker-page-header h1{font-size:25px!important}
+ #root .app.worker main>header.worker-page-header .worker-greeting-subtitle{font-size:12px!important}
+ #root .app.worker main>header.worker-page-header .worker-signout{padding:8px 10px!important;font-size:11px!important}
+}
