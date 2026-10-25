@@ -7883,3 +7883,120 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 .app.employer .favourite-worker-expanded .applicant-profile-details{max-width:none}
 .app.employer .favourite-worker-expanded .applicant-profile-heading p{color:#8a5700;font-weight:800}
 @media(max-width:760px){.app.employer .favourite-worker-card{grid-template-columns:48px minmax(0,1fr);align-items:start}.app.employer .favourite-worker-avatar{width:48px;height:48px}.app.employer .favourite-worker-card .favourite-worker-actions{grid-column:1/-1;justify-content:flex-start}.app.employer .favourite-worker-card .favourite-worker-actions button{flex:1 1 auto}}
+
+
+/* Employer inbox: keep controls comfortably spaced and avoid nested wrapper styling. */
+.app.employer .employer-direct-inbox .employer-inbox-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+  margin:18px 0 22px;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+.app.employer .employer-direct-inbox .employer-inbox-tabs button{
+  flex:0 0 auto;
+  min-width:120px;
+  min-height:42px;
+  padding:10px 18px;
+  border:1px solid #d8d0c1;
+  border-radius:9px;
+  line-height:1.25;
+}
+.app.employer .employer-direct-inbox .employer-inbox-tabs button.active{
+  border-color:#1e281b;
+  background:#1e281b;
+  color:#fff;
+}
+.app.employer .employer-direct-inbox .inbox-worker-search{
+  margin:0 0 22px;
+  padding:18px 0 20px;
+  border:0;
+  border-bottom:1px solid #30352b;
+}
+.app.employer .employer-direct-inbox .inbox-worker-search label{
+  display:block;
+  margin:0 0 8px;
+}
+.app.employer .employer-direct-inbox .inbox-worker-search input{
+  display:block;
+  width:100%;
+  margin:0;
+  min-height:44px;
+  padding:11px 14px;
+}
+.app.employer .employer-direct-inbox .inbox-worker-search-results{
+  margin:12px 0 0;
+}
+.app.employer .employer-direct-inbox .inbox-worker-search-result{
+  gap:14px;
+  padding:12px 0;
+}
+.app.employer .employer-direct-inbox .inbox-worker-search-result button,
+.app.employer .employer-direct-inbox .direct-thread-heading button,
+.app.employer .employer-direct-inbox .direct-message-compose button{
+  flex:0 0 auto;
+  min-height:42px;
+  padding:10px 16px;
+  white-space:normal;
+}
+.app.employer .employer-direct-inbox .employer-conversation-list{
+  margin:0;
+  padding:18px;
+}
+.app.employer .employer-direct-inbox .inbox-chat-panel{
+  width:100%;
+  min-width:0;
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+}
+.app.employer .employer-direct-inbox .inbox-chatbox{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:none;
+  margin:0;
+  padding:20px;
+  border:1px solid #e3d8c6;
+  border-radius:14px;
+  box-shadow:none;
+}
+.app.employer .employer-direct-inbox .direct-thread-heading{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:0 0 16px;
+}
+.app.employer .employer-direct-inbox .direct-message-history{
+  min-height:180px;
+  margin:12px 0 16px;
+  padding:14px 4px;
+}
+.app.employer .employer-direct-inbox .direct-message-compose{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-end;
+  gap:12px;
+  margin-top:8px;
+}
+.app.employer .employer-direct-inbox .direct-message-compose textarea{
+  flex:1 1 280px;
+  min-width:0;
+  box-sizing:border-box;
+  min-height:76px;
+  padding:12px 14px;
+}
+.app.employer .employer-direct-inbox .direct-message-compose button{
+  margin:0;
+}
+@media (max-width:600px){
+  .app.employer .employer-direct-inbox .employer-inbox-tabs button{flex:1 1 130px;min-width:0}
+  .app.employer .employer-direct-inbox .inbox-chatbox{padding:14px}
+  .app.employer .employer-direct-inbox .direct-thread-heading button{width:100%}
+  .app.employer .employer-direct-inbox .direct-message-compose button{width:100%}
+}
