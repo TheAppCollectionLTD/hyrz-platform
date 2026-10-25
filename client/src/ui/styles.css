@@ -8216,3 +8216,128 @@ body{background:var(--hyrz-cream);color:var(--hyrz-ink)}
 @media(max-width:760px){
   #root .public-home-nav{left:calc(50% - 50vw)!important;width:100vw!important}
 }
+
+
+/* Strong final override: remove the black-button strip that made the public
+   navigation look like a nested box, and make the palette consistent across
+   worker, employer and admin pages (not only the landing page). */
+#root .auth-welcome{position:relative!important;padding-top:76px!important;overflow:visible}
+#root header.public-home-nav{
+  position:absolute!important;
+  top:0!important;
+  left:50%!important;
+  right:auto!important;
+  transform:translateX(-50%)!important;
+  display:flex!important;
+  width:100vw!important;
+  max-width:none!important;
+  min-width:100vw!important;
+  height:76px!important;
+  box-sizing:border-box!important;
+  padding:0 clamp(22px,4.2vw,64px)!important;
+  margin:0!important;
+  background:var(--hyrz-teal)!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  justify-content:space-between!important;
+}
+#root header.public-home-nav>nav{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  padding:0!important;
+  margin:0!important;
+}
+#root header.public-home-nav>nav>.public-about-trigger,
+#root header.public-home-nav>nav>.public-how-work-trigger,
+#root header.public-home-nav>nav>.public-nav-signin{
+  background:transparent!important;
+  color:#fff!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#root header.public-home-nav>nav>.public-app-downloads{background:transparent!important}
+#root header.public-home-nav>nav>.public-app-downloads .public-app-icon{
+  background:transparent!important;color:#fff!important;border:1px solid #8acfc2!important;
+}
+#root header.public-home-nav>nav>.public-nav-signup{
+  background:var(--hyrz-coral)!important;color:var(--hyrz-ink)!important;
+  border:1px solid var(--hyrz-coral)!important;border-radius:999px!important;
+}
+#root header.public-home-nav>nav>button:hover{filter:brightness(1.06)}
+#root header.public-home-nav .public-home-logo{background:transparent!important;border:0!important;box-shadow:none!important}
+@media(max-width:760px){
+  #root header.public-home-nav{padding-left:14px!important;padding-right:14px!important}
+}
+
+/* Brighter Hyrz product palette throughout every signed-in workspace. */
+body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
+#root .app.worker,#root .app.employer,#root .app.admin{
+  background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important;
+}
+#root .app.worker main,#root .app.employer main,#root .app.admin main{
+  background:transparent!important;color:var(--hyrz-ink)!important;
+}
+#root .app.worker main>section,#root .app.employer main>section,#root .app.admin main>section,
+#root .app.worker .panel,#root .app.employer .panel,#root .app.admin .panel,
+#root .app.worker .dashboard-panel,#root .app.employer .dashboard-panel,#root .app.admin .dashboard-panel{
+  background:#fffdf9!important;border-color:var(--hyrz-border)!important;color:var(--hyrz-ink)!important;
+}
+#root .app.worker .card,#root .app.employer .card,#root .app.admin .card,
+#root .app.worker .dashboard-card,#root .app.employer .dashboard-card,#root .app.admin .dashboard-card,
+#root .app.worker .critical-info-card,#root .app.employer .critical-info-card,#root .app.admin .critical-info-card{
+  background:var(--hyrz-mint)!important;border-color:#b9ddd1!important;color:var(--hyrz-ink)!important;
+}
+#root .app.worker .dashboard-card:nth-child(3n+2),
+#root .app.employer .dashboard-card:nth-child(3n+2),
+#root .app.admin .dashboard-card:nth-child(3n+2){background:#fff0e9!important;border-color:#ffd0c5!important}
+#root .app.worker .dashboard-card:nth-child(3n),
+#root .app.employer .dashboard-card:nth-child(3n),
+#root .app.admin .dashboard-card:nth-child(3n){background:#fff4d9!important;border-color:#f2d38b!important}
+#root .app.worker button.primary,#root .app.employer button.primary,#root .app.admin button.primary,
+#root .app.worker .primary,#root .app.employer .primary,#root .app.admin .primary{
+  background:var(--hyrz-teal)!important;border-color:var(--hyrz-teal)!important;color:#fff!important;
+}
+#root .app.worker button.primary:hover,#root .app.employer button.primary:hover,#root .app.admin button.primary:hover,
+#root .app.worker .primary:hover,#root .app.employer .primary:hover,#root .app.admin .primary:hover{
+  background:#104d51!important;border-color:#104d51!important;
+}
+#root .app.worker button.secondary,#root .app.employer button.secondary,#root .app.admin button.secondary,
+#root .app.worker .secondary,#root .app.employer .secondary,#root .app.admin .secondary,
+#root .app.worker .worker-back-button,#root .app.employer .worker-back-button{
+  background:#fff!important;border-color:#b9d5ce!important;color:var(--hyrz-teal)!important;
+}
+#root .app.worker input,#root .app.worker select,#root .app.worker textarea,
+#root .app.employer input,#root .app.employer select,#root .app.employer textarea,
+#root .app.admin input,#root .app.admin select,#root .app.admin textarea{
+  background:#fff!important;border-color:#b9d5ce!important;color:var(--hyrz-ink)!important;
+  accent-color:var(--hyrz-teal);
+}
+#root .app.worker .worker-bottom-nav,#root .app.employer .employer-bottom-nav,
+#root .app.worker nav.bottom-nav,#root .app.employer nav.bottom-nav{
+  background:var(--hyrz-teal)!important;border-color:var(--hyrz-teal)!important;color:#fff!important;
+}
+#root .app.worker .worker-bottom-nav button.active,#root .app.employer .employer-bottom-nav button.active,
+#root .app.worker nav.bottom-nav button.active,#root .app.employer nav.bottom-nav button.active{
+  background:var(--hyrz-coral)!important;color:var(--hyrz-ink)!important;border-color:var(--hyrz-coral)!important;
+}
+#root .app.worker .job-card,#root .app.employer .job-card,
+#root .app.worker .shift-card,#root .app.employer .shift-card,
+#root .app.worker .published-shift-card,#root .app.employer .published-shift-card{
+  background:#fffdf9!important;border-color:var(--hyrz-border)!important;color:var(--hyrz-ink)!important;
+}
+#root .app.worker .badge,#root .app.employer .badge,#root .app.admin .badge,
+#root .app.worker .chip,#root .app.employer .chip,#root .app.admin .chip,
+#root .app.worker .tag,#root .app.employer .tag,#root .app.admin .tag{
+  background:var(--hyrz-mint)!important;border-color:#b9ddd1!important;color:#155e63!important;
+}
+#root .app.worker .success,#root .app.employer .success,#root .app.admin .success,
+#root .app.worker .notice.success,#root .app.employer .notice.success,#root .app.admin .notice.success{
+  background:#e2f3ec!important;border-color:#9dd3bf!important;color:#205b4b!important;
+}
+#root .app.worker .notification-badge,#root .app.employer .notification-badge,#root .app.admin .notification-badge,
+#root .app.worker .unread-badge,#root .app.employer .unread-badge,#root .app.admin .unread-badge{
+  background:var(--hyrz-coral)!important;border-color:var(--hyrz-coral)!important;color:#243238!important;
+}
