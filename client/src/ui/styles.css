@@ -7451,3 +7451,313 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app.worker main>header>div {
  background:transparent!important;
 }
+
+
+/* ============================================================
+   HYRZ LAUNCH DESIGN — vibrant gradient / glass dashboard
+   Worker + Admin: luminous light UI. Employer: premium dark UI.
+   Shared lower-case text wordmark; existing routes and workflows
+   remain the source of truth.
+   ============================================================ */
+:root{
+ --hyrz-blue:#1768ff;--hyrz-blue2:#35c7ff;--hyrz-purple:#762bff;
+ --hyrz-magenta:#d22cff;--hyrz-teal:#00c9b0;--hyrz-green:#00b887;
+ --hyrz-ink:#10213e;--hyrz-muted:#536987;--hyrz-line:#dbe6f7;
+}
+#root .app:is(.worker,.employer,.admin){
+ min-height:100vh!important;isolation:isolate;position:relative;
+ font-family:'DM Sans',Inter,system-ui,sans-serif!important;
+ background:linear-gradient(135deg,#f4f8ff 0%,#f9f7ff 42%,#edf8ff 100%)!important;
+ color:#142440!important;
+}
+#root .app:is(.worker,.employer,.admin)::before{
+ content:"";position:fixed;z-index:-1;inset:0;pointer-events:none;
+ background:
+  radial-gradient(ellipse at 17% 0%,rgba(53,199,255,.27),transparent 34%),
+  radial-gradient(ellipse at 76% 0%,rgba(210,44,255,.20),transparent 36%),
+  radial-gradient(ellipse at 95% 60%,rgba(23,104,255,.09),transparent 35%),
+  linear-gradient(135deg,rgba(255,255,255,.45),rgba(238,243,255,.72));
+}
+#root .app:is(.worker,.admin){color:#142440!important}
+#root .app:is(.worker,.admin) :is(h1,h2,h3,h4,h5,strong,b,label,summary){color:#10213e}
+#root .app:is(.worker,.admin) :is(p,small,.muted,.description,.eyebrow){color:#536987}
+#root .app:is(.worker,.admin) .sidebar{
+ width:218px!important;padding:25px 13px 18px!important;
+ color:#15284a!important;background:rgba(255,255,255,.88)!important;
+ border-right:1px solid rgba(124,158,219,.24)!important;
+ box-shadow:8px 0 32px rgba(40,77,139,.07)!important;
+ backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+}
+#root .app:is(.worker,.admin) .sidebar .brand{
+ display:block!important;margin:0 10px 24px!important;
+ color:#0d1e3c!important;font:800 30px Manrope,'DM Sans',sans-serif!important;
+ letter-spacing:-1.8px!important;text-transform:lowercase!important;
+}
+#root .app:is(.worker,.admin) .sidebar .brand span{color:inherit!important}
+#root .app:is(.worker,.admin) .sidebar-role-label{
+ margin:0 10px 10px!important;color:#7186a7!important;
+ font-size:9px!important;font-weight:800!important;letter-spacing:1.3px!important;
+}
+#root .app:is(.worker,.admin) .sidebar nav{display:flex!important;flex-direction:column!important;gap:4px!important}
+#root .app:is(.worker,.admin) .sidebar nav button{
+ display:flex!important;align-items:center!important;gap:10px!important;
+ width:100%!important;min-height:36px!important;padding:9px 10px!important;
+ color:#415674!important;background:transparent!important;border:1px solid transparent!important;
+ border-radius:10px!important;text-align:left!important;font-size:12px!important;font-weight:650!important;
+}
+#root .app:is(.worker,.admin) .sidebar nav button .sidebar-icon{width:18px;flex:0 0 18px;color:#4b6d9d;font-size:15px}
+#root .app:is(.worker,.admin) .sidebar nav button:hover{color:#154bc5!important;background:#edf4ff!important}
+#root .app:is(.worker,.admin) .sidebar nav button.selected{
+ color:#fff!important;background:linear-gradient(110deg,#1768ff,#783bff)!important;
+ border-color:rgba(111,91,255,.3)!important;box-shadow:0 7px 18px rgba(68,88,235,.22)!important;
+}
+#root .app:is(.worker,.admin) .sidebar nav button.selected .sidebar-icon{color:#fff!important}
+#root .app:is(.worker,.admin) .sidebar .sidebottom button{
+ color:#304768!important;background:#f4f7ff!important;border:1px solid #dbe5f6!important;
+ border-radius:10px!important;
+}
+#root .app:is(.worker,.admin) main{
+ margin-left:218px!important;width:calc(100% - 218px)!important;max-width:none!important;
+ padding:24px clamp(18px,2.1vw,34px) 42px!important;box-sizing:border-box!important;
+ background:transparent!important;color:#142440!important;
+}
+#root .app:is(.worker,.admin) main>header{
+ position:relative!important;overflow:hidden!important;isolation:isolate!important;
+ display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:18px!important;
+ min-height:112px!important;margin:0 0 22px!important;padding:22px 25px!important;
+ border:1px solid rgba(255,255,255,.65)!important;border-radius:18px!important;
+ background:
+  radial-gradient(ellipse at 86% 8%,rgba(255,255,255,.30),transparent 28%),
+  linear-gradient(112deg,rgba(42,166,255,.20),rgba(139,89,255,.18) 54%,rgba(255,107,194,.17))!important;
+ box-shadow:0 12px 32px rgba(53,89,165,.08),inset 0 1px 0 rgba(255,255,255,.8)!important;
+}
+#root .app:is(.worker,.admin) main>header::after{
+ content:"";position:absolute;z-index:-1;right:-12px;top:-48px;width:43%;height:210px;
+ background:
+  radial-gradient(ellipse at 60% 75%,rgba(255,178,116,.50),transparent 22%),
+  linear-gradient(180deg,transparent 35%,rgba(255,255,255,.30)),
+  repeating-linear-gradient(90deg,transparent 0 22px,rgba(91,103,192,.12) 23px 25px,transparent 26px 43px);
+ clip-path:polygon(0 68%,8% 53%,14% 62%,22% 36%,29% 51%,37% 22%,45% 45%,52% 13%,61% 44%,68% 29%,76% 54%,84% 34%,92% 52%,100% 42%,100% 100%,0 100%);
+ opacity:.65;pointer-events:none;
+}
+#root .app:is(.worker,.admin) main>header>div{position:relative;z-index:1;min-width:0;background:transparent!important}
+#root .app:is(.worker,.admin) main>header .eyebrow{
+ display:block!important;margin:0 0 8px!important;color:#405f91!important;
+ font-size:9px!important;font-weight:850!important;letter-spacing:1.6px!important;
+}
+#root .app:is(.worker,.admin) main>header h1,
+#root .app:is(.worker,.admin) main>header h1 *{
+ margin:0!important;padding:0!important;background:transparent!important;border:0!important;
+ color:#10213e!important;-webkit-text-fill-color:#10213e!important;
+ font:800 clamp(24px,2.1vw,32px)/1.16 Manrope,'DM Sans',sans-serif!important;
+ letter-spacing:-.9px!important;text-shadow:none!important;opacity:1!important;
+}
+#root .app:is(.worker,.admin) main>header p,
+#root .app:is(.worker,.admin) main>header small{
+ margin:8px 0 0!important;color:#425a7b!important;-webkit-text-fill-color:#425a7b!important;
+ font-size:12px!important;line-height:1.5!important;opacity:1!important;
+}
+#root .app:is(.worker,.admin) main>header :is(button,.secondary){
+ position:relative;z-index:2;color:#253d63!important;background:rgba(255,255,255,.76)!important;
+ border:1px solid rgba(117,146,197,.3)!important;border-radius:10px!important;
+ box-shadow:0 5px 15px rgba(38,69,129,.08)!important;
+}
+#root .app:is(.worker,.admin) :is(.panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,.find-shifts-panel){
+ color:#172944!important;background:rgba(255,255,255,.87)!important;
+ border:1px solid rgba(155,178,217,.36)!important;border-radius:16px!important;
+ box-shadow:0 12px 30px rgba(31,65,125,.07),inset 0 1px 0 rgba(255,255,255,.9)!important;
+ backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+#root .app:is(.worker,.admin) :is(.panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,.find-shifts-panel) :is(h1,h2,h3,h4,strong,b,label){color:#142440!important}
+#root .app:is(.worker,.admin) :is(.panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,.find-shifts-panel) :is(p,small,.muted,.eyebrow){color:#566a87!important}
+#root .app:is(.worker,.admin) .stats{display:grid;gap:11px}
+#root .app:is(.worker,.admin) .stats .stat,
+#root .app:is(.worker,.admin) .worker-dashboard-stat{
+ color:#10213e!important;background:linear-gradient(135deg,rgba(255,255,255,.98),rgba(238,245,255,.93))!important;
+ border:1px solid rgba(142,174,230,.36)!important;border-radius:13px!important;
+ box-shadow:0 8px 22px rgba(38,76,148,.09),inset 0 1px 0 #fff!important;
+}
+#root .app:is(.worker,.admin) .stats .stat:nth-child(4n+1){background:linear-gradient(135deg,#e4f1ff,#fff)!important}
+#root .app:is(.worker,.admin) .stats .stat:nth-child(4n+2){background:linear-gradient(135deg,#f0e8ff,#fff)!important}
+#root .app:is(.worker,.admin) .stats .stat:nth-child(4n+3){background:linear-gradient(135deg,#ddfbf4,#fff)!important}
+#root .app:is(.worker,.admin) .stats .stat:nth-child(4n){background:linear-gradient(135deg,#fff0df,#fff)!important}
+#root .app:is(.worker,.admin) .stats .stat :is(strong,small,b,span),
+#root .app:is(.worker,.admin) .worker-dashboard-stat :is(strong,small,b,span){color:#142440!important}
+#root .app:is(.worker,.admin) :is(input,select,textarea){
+ color:#142440!important;background:#fff!important;border:1px solid #cfdbed!important;
+ border-radius:9px!important;box-shadow:inset 0 1px 2px rgba(23,54,106,.025)!important;
+}
+#root .app:is(.worker,.admin) :is(input,select,textarea)::placeholder{color:#6b7e99!important;opacity:1!important}
+#root .app:is(.worker,.admin) :is(input,select,textarea):focus{outline:0!important;border-color:#538cff!important;box-shadow:0 0 0 3px rgba(56,119,255,.13)!important}
+#root .app:is(.worker,.admin) select option{color:#142440;background:#fff}
+#root .app:is(.worker,.admin) button.primary,
+#root .app:is(.worker,.admin) .primary,
+#root .app:is(.worker,.admin) .shift-card .shiftpay button{
+ color:#fff!important;background:linear-gradient(115deg,#1768ff,#722cff 68%,#a42bff)!important;
+ border:1px solid rgba(107,95,255,.25)!important;border-radius:10px!important;
+ box-shadow:0 7px 17px rgba(92,57,236,.22)!important;
+}
+#root .app:is(.worker,.admin) button.secondary,
+#root .app:is(.worker,.admin) .secondary{
+ color:#274267!important;background:#f4f7ff!important;border:1px solid #d2def0!important;border-radius:10px!important;
+}
+#root .app:is(.worker,.admin) .job-tabs button,
+#root .app:is(.worker,.admin) .worker-section-links button{
+ color:#2c4364!important;background:#f4f7ff!important;border:1px solid #d8e3f4!important;border-radius:9px!important;
+}
+#root .app:is(.worker,.admin) .job-tabs button.selected,
+#root .app:is(.worker,.admin) .job-tabs button.active,
+#root .app:is(.worker,.admin) .worker-section-links button.selected{
+ color:#fff!important;background:linear-gradient(110deg,#1768ff,#7a35ff)!important;border-color:transparent!important;
+}
+#root .app:is(.worker,.admin) .shift-card,
+#root .app:is(.worker,.admin) .shiftrow,
+#root .app:is(.worker,.admin) .row{
+ color:#152744!important;background:rgba(255,255,255,.94)!important;
+ border:1px solid #e0e8f5!important;border-radius:13px!important;
+ box-shadow:0 6px 16px rgba(39,72,130,.055)!important;
+}
+#root .app:is(.worker,.admin) .shift-card :is(h3,h4,strong,b),
+#root .app:is(.worker,.admin) .shiftrow :is(h3,h4,strong,b),
+#root .app:is(.worker,.admin) .row :is(h3,h4,strong,b){color:#12213c!important}
+#root .app:is(.worker,.admin) .shift-card :is(p,small,span),
+#root .app:is(.worker,.admin) .shiftrow :is(p,small,span),
+#root .app:is(.worker,.admin) .row :is(p,small,span){color:#4f6380}
+#root .app:is(.worker,.admin) .rolling-shift-calendar,
+#root .app:is(.worker,.admin) .rolling-calendar,
+#root .app:is(.worker,.admin) .calendar-strip{
+ color:#152744!important;background:linear-gradient(135deg,#f7fbff,#edf4ff)!important;
+ border:1px solid #d5e1f3!important;border-radius:13px!important;
+}
+#root .app:is(.worker,.admin) .rolling-shift-calendar *,
+#root .app:is(.worker,.admin) .rolling-calendar *,
+#root .app:is(.worker,.admin) .calendar-strip *{color:#243b5e}
+#root .app:is(.worker,.admin) .rolling-shift-calendar button,
+#root .app:is(.worker,.admin) .rolling-calendar button,
+#root .app:is(.worker,.admin) .calendar-strip button{background:#fff!important;border:1px solid #dbe5f4!important;color:#1a3154!important;border-radius:8px!important}
+#root .app:is(.worker,.admin) .empty{color:#516783!important;background:#f5f8ff!important;border:1px solid #dce6f4!important;border-radius:11px!important}
+#root .app:is(.worker,.admin) table{color:#172944!important}
+#root .app:is(.worker,.admin) th{color:#415b7e!important;background:#edf3ff!important}
+#root .app:is(.worker,.admin) td{color:#263e5f!important;border-color:#e1e8f3!important}
+#root .app:is(.worker,.admin) .worker-bottom-nav,
+#root .app:is(.worker,.admin) .admin-bottom-nav{
+ background:rgba(255,255,255,.94)!important;border-top:1px solid #dce6f5!important;
+ box-shadow:0 -8px 28px rgba(31,63,117,.12)!important;backdrop-filter:blur(20px);
+}
+#root .app:is(.worker,.admin) .worker-bottom-nav button,
+#root .app:is(.worker,.admin) .admin-bottom-nav button{color:#516785!important;background:transparent!important}
+#root .app:is(.worker,.admin) .worker-bottom-nav button.active,
+#root .app:is(.worker,.admin) .admin-bottom-nav button.selected{color:#1768ff!important;background:#e9f1ff!important;border-radius:9px!important}
+#root .app:is(.worker,.admin) .worker-bottom-nav button span{color:inherit!important}
+
+/* Employer workspace: keep the dark glass style from the chosen concept. */
+#root .app.employer{
+ color:#f3f7ff!important;
+ background:
+  radial-gradient(ellipse at 88% -8%,rgba(195,54,255,.28),transparent 38%),
+  radial-gradient(ellipse at 28% 0%,rgba(0,153,255,.25),transparent 35%),
+  linear-gradient(135deg,#061126 0%,#071c3c 48%,#0b1230 100%)!important;
+}
+#root .app.employer::before{
+ content:"";position:fixed;z-index:-1;inset:0;pointer-events:none;
+ background:
+  radial-gradient(circle at 16% 8%,rgba(24,161,255,.18),transparent 25%),
+  radial-gradient(circle at 78% 36%,rgba(194,42,255,.14),transparent 28%),
+  linear-gradient(135deg,rgba(2,11,28,.12),rgba(7,18,43,.45));
+}
+#root .app.employer :is(h1,h2,h3,h4,h5,strong,b,label,summary){color:#f4f7ff}
+#root .app.employer :is(p,small,.muted,.description,.eyebrow){color:#a8bad7}
+#root .app.employer .sidebar{
+ width:218px!important;padding:25px 13px 18px!important;
+ color:#eef4ff!important;background:rgba(4,14,34,.91)!important;
+ border-right:1px solid rgba(98,149,235,.22)!important;box-shadow:8px 0 35px rgba(0,0,0,.18)!important;
+ backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+}
+#root .app.employer .sidebar .brand{display:block!important;margin:0 10px 24px!important;color:#fff!important;font:800 30px Manrope,'DM Sans',sans-serif!important;letter-spacing:-1.8px!important}
+#root .app.employer .sidebar-role-label{margin:0 10px 10px!important;color:#6885b2!important;font-size:9px!important;font-weight:800!important;letter-spacing:1.3px!important}
+#root .app.employer .sidebar nav{display:flex!important;flex-direction:column!important;gap:4px!important}
+#root .app.employer .sidebar nav button{display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;min-height:36px!important;padding:9px 10px!important;color:#a9bad5!important;background:transparent!important;border:1px solid transparent!important;border-radius:10px!important;text-align:left!important;font-size:12px!important;font-weight:650!important}
+#root .app.employer .sidebar nav button .sidebar-icon{width:18px;flex:0 0 18px;color:#82a8e8;font-size:15px}
+#root .app.employer .sidebar nav button:hover{color:#fff!important;background:rgba(44,107,211,.18)!important}
+#root .app.employer .sidebar nav button.selected{color:#fff!important;background:linear-gradient(110deg,#1768ff,#782cff)!important;border-color:rgba(141,123,255,.45)!important;box-shadow:0 7px 19px rgba(62,73,255,.23)!important}
+#root .app.employer .sidebar nav button.selected .sidebar-icon{color:#fff!important}
+#root .app.employer .sidebar .sidebottom button{color:#e1eaff!important;background:rgba(28,49,83,.7)!important;border:1px solid rgba(133,169,231,.22)!important;border-radius:10px!important}
+#root .app.employer main{margin-left:218px!important;width:calc(100% - 218px)!important;max-width:none!important;padding:24px clamp(18px,2.1vw,34px) 42px!important;box-sizing:border-box!important;background:transparent!important;color:#f3f7ff!important}
+#root .app.employer main>header{
+ position:relative!important;overflow:hidden!important;isolation:isolate!important;
+ display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:18px!important;
+ min-height:112px!important;margin:0 0 22px!important;padding:22px 25px!important;
+ border:1px solid rgba(153,190,255,.24)!important;border-radius:18px!important;
+ background:radial-gradient(ellipse at 88% 10%,rgba(195,54,255,.18),transparent 32%),linear-gradient(110deg,rgba(12,40,83,.91),rgba(18,31,72,.82) 55%,rgba(71,32,105,.56))!important;
+ box-shadow:0 16px 36px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.06)!important;
+}
+#root .app.employer main>header::after{content:"";position:absolute;z-index:-1;right:-12px;top:-42px;width:42%;height:200px;background:repeating-linear-gradient(90deg,transparent 0 20px,rgba(97,143,245,.14) 21px 24px,transparent 25px 39px);clip-path:polygon(0 70%,9% 52%,18% 65%,27% 30%,36% 53%,44% 15%,53% 45%,62% 24%,72% 53%,83% 35%,100% 50%,100% 100%,0 100%);opacity:.9;pointer-events:none}
+#root .app.employer main>header>div{position:relative;z-index:1;background:transparent!important}
+#root .app.employer main>header .eyebrow{display:block!important;margin:0 0 8px!important;color:#a6c6ff!important;font-size:9px!important;font-weight:850!important;letter-spacing:1.6px!important}
+#root .app.employer main>header h1,#root .app.employer main>header h1 *{margin:0!important;padding:0!important;background:transparent!important;border:0!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font:800 clamp(24px,2.1vw,32px)/1.16 Manrope,'DM Sans',sans-serif!important;letter-spacing:-.9px!important;text-shadow:none!important;opacity:1!important}
+#root .app.employer main>header p,#root .app.employer main>header small{margin:8px 0 0!important;color:#c0cee7!important;-webkit-text-fill-color:#c0cee7!important;font-size:12px!important;opacity:1!important}
+#root .app.employer :is(.panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,.find-shifts-panel){
+ color:#f1f6ff!important;background:linear-gradient(135deg,rgba(13,37,73,.87),rgba(7,22,48,.91))!important;
+ border:1px solid rgba(117,161,235,.23)!important;border-radius:16px!important;
+ box-shadow:0 14px 34px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.045)!important;
+ backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px);
+}
+#root .app.employer :is(.panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,.find-shifts-panel) :is(h1,h2,h3,h4,strong,b,label){color:#f3f7ff!important}
+#root .app.employer :is(.panel,.worker-section-nav,.worker-inbox-panel,.onboarding-panel,.find-shifts-panel) :is(p,small,.muted,.eyebrow){color:#a9bad6!important}
+#root .app.employer .stats .stat,#root .app.employer .worker-dashboard-stat{
+ color:#fff!important;background:linear-gradient(135deg,rgba(21,63,117,.8),rgba(14,32,66,.9))!important;
+ border:1px solid rgba(101,157,245,.24)!important;border-radius:13px!important;box-shadow:0 10px 25px rgba(0,0,0,.15)!important;
+}
+#root .app.employer .stats .stat:nth-child(4n+2){background:linear-gradient(135deg,rgba(91,42,163,.6),rgba(17,29,63,.9))!important}
+#root .app.employer .stats .stat:nth-child(4n+3){background:linear-gradient(135deg,rgba(0,126,110,.45),rgba(12,36,58,.9))!important}
+#root .app.employer .stats .stat:nth-child(4n){background:linear-gradient(135deg,rgba(169,79,25,.38),rgba(24,34,61,.9))!important}
+#root .app.employer .stats .stat :is(strong,small,b,span),#root .app.employer .worker-dashboard-stat :is(strong,small,b,span){color:#f3f7ff!important}
+#root .app.employer :is(input,select,textarea){color:#f4f7ff!important;background:rgba(4,15,34,.82)!important;border:1px solid rgba(123,161,223,.32)!important;border-radius:9px!important}
+#root .app.employer :is(input,select,textarea)::placeholder{color:#9aacc8!important;opacity:1!important}
+#root .app.employer select option{color:#f4f7ff;background:#101d36}
+#root .app.employer button.primary,#root .app.employer .primary,#root .app.employer .shift-card .shiftpay button{color:#fff!important;background:linear-gradient(115deg,#1768ff,#782cff 68%,#bd2dff)!important;border:1px solid rgba(177,149,255,.32)!important;border-radius:10px!important;box-shadow:0 7px 20px rgba(112,54,255,.28)!important}
+#root .app.employer button.secondary,#root .app.employer .secondary{color:#e4edff!important;background:rgba(30,51,84,.8)!important;border:1px solid rgba(129,165,224,.25)!important;border-radius:10px!important}
+#root .app.employer .job-tabs button,#root .app.employer .worker-section-links button{color:#d8e6ff!important;background:rgba(25,47,81,.84)!important;border:1px solid rgba(125,163,226,.22)!important;border-radius:9px!important}
+#root .app.employer .job-tabs button.selected,#root .app.employer .job-tabs button.active{color:#fff!important;background:linear-gradient(110deg,#1768ff,#7c2dff)!important}
+#root .app.employer .shift-card,#root .app.employer .shiftrow,#root .app.employer .row{color:#edf4ff!important;background:linear-gradient(135deg,rgba(19,46,84,.91),rgba(10,27,55,.94))!important;border:1px solid rgba(116,157,220,.23)!important;border-radius:13px!important;box-shadow:0 7px 19px rgba(0,0,0,.14)!important}
+#root .app.employer .shift-card :is(h3,h4,strong,b),#root .app.employer .shiftrow :is(h3,h4,strong,b),#root .app.employer .row :is(h3,h4,strong,b){color:#f3f7ff!important}
+#root .app.employer .shift-card :is(p,small,span),#root .app.employer .shiftrow :is(p,small,span),#root .app.employer .row :is(p,small,span){color:#afc1de}
+#root .app.employer .worker-bottom-nav,#root .app.employer .employer-bottom-nav,#root .app.employer .admin-bottom-nav{background:rgba(4,13,30,.96)!important;border-top:1px solid rgba(115,157,229,.22)!important;box-shadow:0 -8px 30px rgba(0,0,0,.25)!important;backdrop-filter:blur(20px)}
+#root .app.employer .worker-bottom-nav button,#root .app.employer .employer-bottom-nav button,#root .app.employer .admin-bottom-nav button{color:#a6bbdc!important;background:transparent!important}
+#root .app.employer .worker-bottom-nav button.active,#root .app.employer .employer-bottom-nav button.active,#root .app.employer .admin-bottom-nav button.selected{color:#fff!important;background:rgba(56,106,232,.24)!important;border-radius:9px!important}
+
+/* Shared status colours and keyboard accessibility. */
+#root .app:is(.worker,.employer,.admin) :is(.status,.pill){border-radius:7px!important;font-weight:750!important}
+#root .app:is(.worker,.employer,.admin) :is(input,select,textarea,button,a,[tabindex]):focus-visible{outline:2px solid #40bfff!important;outline-offset:2px!important}
+#root .app:is(.worker,.employer,.admin) .sidebar .brand{cursor:pointer;text-transform:lowercase!important}
+@media(min-width:761px){
+ #root .app:is(.worker,.employer,.admin) .worker-bottom-nav,
+ #root .app:is(.worker,.employer,.admin) .employer-bottom-nav,
+ #root .app:is(.worker,.employer,.admin) .admin-bottom-nav{display:none!important}
+}
+@media(max-width:760px){
+ #root .app:is(.worker,.employer,.admin){padding-bottom:82px!important}
+ #root .app:is(.worker,.employer,.admin) .sidebar{
+  position:relative!important;inset:auto!important;width:100%!important;height:auto!important;min-height:58px!important;
+  max-height:none!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;
+  padding:12px 16px!important;border-right:0!important;border-bottom:1px solid rgba(110,145,205,.22)!important;
+ }
+ #root .app:is(.worker,.employer,.admin) .sidebar .brand{margin:0!important;font-size:26px!important}
+ #root .app:is(.worker,.employer,.admin) .sidebar-role-label,
+ #root .app:is(.worker,.employer,.admin) .sidebar nav,
+ #root .app:is(.worker,.employer,.admin) .sidebar .tag{display:none!important}
+ #root .app:is(.worker,.employer,.admin) .sidebar .sidebottom{margin:0!important;padding:0!important}
+ #root .app:is(.worker,.employer,.admin) .sidebar .sidebottom button{width:auto!important;padding:8px 10px!important}
+ #root .app:is(.worker,.employer,.admin) main{margin:0!important;width:100%!important;padding:16px 12px 25px!important}
+ #root .app:is(.worker,.employer,.admin) main>header{min-height:100px!important;padding:17px 15px!important;margin-bottom:16px!important;border-radius:15px!important}
+ #root .app:is(.worker,.employer,.admin) main>header h1{font-size:24px!important}
+ #root .app:is(.worker,.employer,.admin) main>header::after{width:40%;opacity:.4}
+ #root .app:is(.worker,.admin) .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ #root .app:is(.worker,.employer,.admin) .stats .stat,
+ #root .app:is(.worker,.employer,.admin) .worker-dashboard-stat{padding:12px!important;min-width:0!important}
+ #root .app:is(.worker,.employer,.admin) .worker-bottom-nav,
+ #root .app:is(.worker,.employer,.admin) .employer-bottom-nav{display:grid!important;position:fixed!important;z-index:100;left:0;right:0;bottom:0;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:7px 7px calc(7px + env(safe-area-inset-bottom))}
+ #root .app.employer .employer-bottom-nav{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #root .app:is(.worker,.employer,.admin) .admin-bottom-nav{display:flex!important;position:fixed!important;z-index:100;left:0;right:0;bottom:0;min-width:0;gap:4px;padding:7px 7px calc(7px + env(safe-area-inset-bottom))}
+ #root .app:is(.worker,.employer,.admin) .admin-bottom-nav button{min-width:0!important;flex:1!important;padding:8px 3px!important;font-size:10px!important}
+}
