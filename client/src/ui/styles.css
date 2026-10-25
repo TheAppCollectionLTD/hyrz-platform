@@ -7866,3 +7866,20 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  .app.employer main .past-shift-list>.published-shift-card>.shiftmain>b{font-size:16px!important}
  .app.employer main .past-shift-list>.published-shift-card>.shiftmain>.shift-business{font-size:11px!important}
 }
+
+
+/* Employer worker directory: compact, clickable cards with clear ratings and direct chat. */
+.app.employer .favourite-worker-card{display:grid;grid-template-columns:56px minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease}
+.app.employer .favourite-worker-card:hover,.app.employer .favourite-worker-card:focus-visible,.app.employer .favourite-worker-card.is-expanded{border-color:#3159d9;box-shadow:0 0 0 2px rgba(49,89,217,.12);outline:none}
+.app.employer .favourite-worker-avatar{width:56px;height:56px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:10px;background:#e9efff;color:#17316d;font-size:16px;font-weight:800;flex-shrink:0}
+.app.employer .favourite-worker-avatar img{width:100%;height:100%;object-fit:cover}
+.app.employer .favourite-worker-info{gap:5px}
+.app.employer .favourite-worker-card strong{color:#111827;font-size:15px}
+.app.employer .favourite-worker-card small{color:#374151;font-size:12px;line-height:1.4}
+.app.employer .favourite-worker-card .worker-starting-rating{color:#8a5700;font-weight:800}
+.app.employer .favourite-worker-card .favourite-worker-actions{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px}
+.app.employer .favourite-worker-card .favourite-worker-actions button{white-space:nowrap}
+.app.employer .favourite-worker-expanded{grid-column:1/-1;width:100%;margin-top:8px;padding-top:12px;border-top:1px solid #d8dfec;cursor:default}
+.app.employer .favourite-worker-expanded .applicant-profile-details{max-width:none}
+.app.employer .favourite-worker-expanded .applicant-profile-heading p{color:#8a5700;font-weight:800}
+@media(max-width:760px){.app.employer .favourite-worker-card{grid-template-columns:48px minmax(0,1fr);align-items:start}.app.employer .favourite-worker-avatar{width:48px;height:48px}.app.employer .favourite-worker-card .favourite-worker-actions{grid-column:1/-1;justify-content:flex-start}.app.employer .favourite-worker-card .favourite-worker-actions button{flex:1 1 auto}}
