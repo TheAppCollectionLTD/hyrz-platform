@@ -8395,3 +8395,29 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
   margin-top:0!important;
   margin-bottom:16px!important;
 }
+
+
+/* Empty lists should read as simple inline messages, not large dark panels. */
+#root .app .empty-state,
+#root .app.worker .empty-state,
+#root .app.employer .empty-state,
+#root .app.admin .empty-state{
+  display:block!important;
+  margin:12px 0 4px!important;
+  padding:8px 0!important;
+  min-height:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:#596577!important;
+  text-align:left!important;
+  font-size:14px!important;
+}
+#root .app .empty-state *,
+#root .app .empty-state p,
+#root .app .empty-state span,
+#root .app .empty-state small,
+#root .app .empty-state strong{
+  color:#596577!important;
+}
