@@ -7584,3 +7584,161 @@ body {
 @media (prefers-reduced-motion: reduce) {
   #root *, #root *::before, #root *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* Dark theme refinement for the real worker/employer/admin component classes.
+   These selectors intentionally override legacy light-theme component rules. */
+#root .app.worker,
+#root .app.employer,
+#root .app.admin {
+  min-height:100vh !important;
+  background:#070d14 !important;
+  color:#f4f7fb !important;
+}
+#root .app.worker main,
+#root .app.employer main,
+#root .app.admin main {
+  background:transparent !important;
+  color:#f4f7fb !important;
+}
+#root .app.worker main .worker-page-header,
+#root .app.employer main .worker-page-header,
+#root .app.admin main .worker-page-header {
+  background:transparent !important;
+  color:#f4f7fb !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+#root .app.worker main .worker-page-header h1,
+#root .app.employer main .worker-page-header h1,
+#root .app.admin main .worker-page-header h1 {
+  color:#f5f8fc !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+  letter-spacing:-.035em !important;
+}
+#root .app.worker main .worker-page-header p,
+#root .app.employer main .worker-page-header p,
+#root .app.admin main .worker-page-header p { color:#9aacc0 !important; }
+#root .app.worker main .panel,
+#root .app.worker main .stat,
+#root .app.worker main .card,
+#root .app.worker main .section-card,
+#root .app.worker main .dashboard-card,
+#root .app.worker main .critical-info-box,
+#root .app.employer main .panel,
+#root .app.employer main .stat,
+#root .app.employer main .card,
+#root .app.employer main .section-card,
+#root .app.employer main .dashboard-card,
+#root .app.employer main .critical-info-box,
+#root .app.admin main .panel,
+#root .app.admin main .stat,
+#root .app.admin main .card,
+#root .app.admin main .section-card,
+#root .app.admin main .dashboard-card,
+#root .app.admin main .critical-info-box {
+  background:linear-gradient(145deg,#132131,#0e1925) !important;
+  color:#f4f7fb !important;
+  border:1px solid #263b50 !important;
+  box-shadow:0 10px 28px rgba(0,0,0,.22) !important;
+}
+#root .app.worker main .panel h1,
+#root .app.worker main .panel h2,
+#root .app.worker main .panel h3,
+#root .app.worker main .stat h1,
+#root .app.worker main .stat h2,
+#root .app.worker main .stat h3,
+#root .app.employer main .panel h1,
+#root .app.employer main .panel h2,
+#root .app.employer main .panel h3,
+#root .app.employer main .stat h1,
+#root .app.employer main .stat h2,
+#root .app.employer main .stat h3,
+#root .app.admin main .panel h1,
+#root .app.admin main .panel h2,
+#root .app.admin main .panel h3 { color:#f4f7fb !important; }
+#root .app.worker main .worker-three-strikes-card {
+  grid-template-columns:minmax(0,1fr) auto auto auto !important;
+  gap:12px 18px !important;
+  background:linear-gradient(120deg,#142234,#101a27) !important;
+  color:#f4f7fb !important;
+  border:1px solid #2a4057 !important;
+  border-radius:15px !important;
+  box-shadow:0 10px 28px rgba(0,0,0,.2) !important;
+}
+#root .app.worker main .worker-three-strikes-copy .eyebrow { color:#91a8c1 !important; }
+#root .app.worker main .worker-three-strikes-copy h2 { color:#f4f7fb !important; }
+#root .app.worker main .worker-three-strikes-count,
+#root .app.worker main .worker-three-strikes-count strong,
+#root .app.worker main .worker-three-strikes-count small { color:#dce8f5 !important; }
+#root .app.worker main .worker-todays-shift-card,
+#root .app.worker main .worker-todays-shift-wrap .stat {
+  background:linear-gradient(135deg,#14263a,#101c2a) !important;
+  color:#f4f7fb !important;
+  border:1px solid #2c435a !important;
+  border-radius:15px !important;
+}
+#root .app.worker main .worker-todays-shift-card :is(small,strong,span,p) { color:#e5eef8 !important; }
+#root .app.worker main .worker-dashboard-stat small { color:#a7bbd0 !important; }
+#root .app.worker main .worker-dashboard-stat strong {
+  color:#f8fbff !important;
+  font-size:28px !important;
+  letter-spacing:-.04em !important;
+}
+#root .app.worker main .worker-dashboard-stat span { color:#9db3ca !important; }
+#root .app.worker main .worker-dashboard-stat:hover { border-color:#3973a8 !important; }
+#root .app.worker main .worker-section-nav,
+#root .app.employer main .worker-section-nav {
+  background:linear-gradient(145deg,#101e2d,#0d1723) !important;
+  color:#f4f7fb !important;
+  border:1px solid #2a4055 !important;
+}
+#root .app.worker main .worker-section-nav h2,
+#root .app.employer main .worker-section-nav h2 { color:#f4f7fb !important; }
+#root .app.worker main .worker-section-links button,
+#root .app.employer main .worker-section-links button {
+  background:#142438 !important;
+  color:#dce8f5 !important;
+  border:1px solid #2b435a !important;
+}
+#root .app.worker main .worker-section-links button:hover,
+#root .app.employer main .worker-section-links button:hover {
+  background:#1b3148 !important;
+  border-color:#47749a !important;
+}
+#root .app.worker .worker-bottom-nav,
+#root .app.employer .employer-bottom-nav {
+  background:rgba(7,13,20,.97) !important;
+  border-top:1px solid #26394d !important;
+  box-shadow:0 -8px 28px rgba(0,0,0,.32) !important;
+  backdrop-filter:blur(18px);
+}
+#root .app.worker .worker-bottom-nav button,
+#root .app.employer .employer-bottom-nav button {
+  background:transparent !important;
+  color:#91a4b9 !important;
+  border:1px solid transparent !important;
+}
+#root .app.worker .worker-bottom-nav button.active,
+#root .app.employer .employer-bottom-nav button.active {
+  color:#fff !important;
+  background:#152b40 !important;
+  border-color:#2d4b68 !important;
+}
+#root .app.worker .worker-bottom-nav button span,
+#root .app.worker .worker-bottom-nav button small,
+#root .app.employer .employer-bottom-nav button span,
+#root .app.employer .employer-bottom-nav button small { color:inherit !important; }
+#root .app.worker main .worker-todays-shift-wrap .stat,
+#root .app.worker main .stats .stat { min-width:0; }
+#root .app.worker main :is(.empty-state,.hint,.muted,.eyebrow,small) { color:#9aacc0; }
+#root .app.worker main .worker-three-strikes-actions button { white-space:nowrap; }
+@media(max-width:760px) {
+  #root .app.worker main .worker-three-strikes-card { grid-template-columns:1fr auto !important; }
+  #root .app.worker main .worker-three-strikes-indicators { justify-self:start; }
+  #root .app.worker main .worker-three-strikes-actions { justify-self:end; }
+  #root .app.worker .worker-bottom-nav { padding-left:8px !important; padding-right:8px !important; }
+  #root .app.worker .worker-bottom-nav button { min-height:54px !important; }
+}
