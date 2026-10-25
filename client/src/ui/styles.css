@@ -8034,3 +8034,26 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   background:#1e281b !important;
   color:#fff !important;
 }
+
+
+/* Align subsection back toolbar to the same centered content rail as its panel. */
+.app.employer .worker-subsection-toolbar{
+  width:100%;
+  max-width:900px;
+  box-sizing:border-box;
+  margin:-18px auto 18px;
+  padding:0;
+}
+.app.employer .worker-subsection-toolbar .worker-back-button{
+  margin:0;
+}
+.app.employer .employer-direct-inbox{
+  width:100%;
+  max-width:900px;
+  box-sizing:border-box;
+  margin-left:auto;
+  margin-right:auto;
+}
+@media(max-width:760px){
+  .app.employer .worker-subsection-toolbar{margin:-8px auto 16px}
+}
