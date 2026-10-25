@@ -37,7 +37,7 @@ export default function App(){
  useEffect(()=>{try{localStorage.setItem('hyrz-workchat-avatars-'+(user?.id||'session'),JSON.stringify(workchatAvatars))}catch{}},[workchatAvatars,user?.id]);
  function saveWorkchatAvatar(workchatId,file){if(!file)return;if(!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)){window.alert('Choose a PNG, JPG, WEBP or GIF image.');return;}if(file.size>400*1024){window.alert('Choose an image smaller than 400 KB.');return;}const reader=new FileReader();reader.onload=()=>{const image=String(reader.result||'');if(image)setWorkchatAvatars(current=>({...current,[String(workchatId)]:image}));};reader.readAsDataURL(file);}
  function workchatAvatar(workchat){return workchatAvatars[String(workchat?.id)]||workchat?.profile_picture||profilePicture||'';}
- function workchatInitials(name){return String(name||'W').trim().split(/\\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();}
+ function workchatInitials(name){return String(name||'W').trim().split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();}
  useEffect(()=>{try{localStorage.setItem('hyrz-workchats-'+(user?.id||'session'),JSON.stringify(workchatItems))}catch{}},[workchatItems,user?.id]);
  function goWorkchatSection(section){setWorkchatSection(section);setWorkchatOpenId(null);setWorkchatMessages([]);setWorkchatTypingUsers([]);setWorkchatUnreadFilter('all');setWorkchatRefresh(v=>v+1);}
  function openUnreadWorkchats(){setWorkchatUnreadFilter('all');setWorkchatSection('current');setWorkchatOpenId(null);setWorkchatMessages([]);setWorkchatTypingUsers([]);setWorkchatSettingsOpen(false);setWorkchatRefresh(v=>v+1);}
