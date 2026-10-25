@@ -7848,3 +7848,190 @@ body {
  background:#152c43 !important;
  border-color:#2b4e6d !important;
 }
+
+/* Desktop and mobile shell layout aligned to Design 2's app preview. */
+@media (min-width: 761px) {
+ #root .app.worker, #root .app.employer, #root .app.admin {
+   display:grid !important;
+   grid-template-columns:224px minmax(0,1fr) !important;
+   align-items:stretch !important;
+   min-height:100vh !important;
+   padding:0 !important;
+ }
+ #root .app.worker > .sidebar, #root .app.employer > .sidebar, #root .app.admin > .sidebar {
+   position:sticky !important;
+   top:0 !important;
+   left:auto !important;
+   display:flex !important;
+   flex-direction:column !important;
+   align-items:stretch !important;
+   width:224px !important;
+   height:100vh !important;
+   min-height:100vh !important;
+   overflow-y:auto !important;
+   box-sizing:border-box !important;
+   padding:24px 14px 18px !important;
+   background:linear-gradient(180deg,#09131f 0%,#070e17 100%) !important;
+   border-right:1px solid #1e3042 !important;
+   box-shadow:8px 0 28px rgba(0,0,0,.12) !important;
+   z-index:30 !important;
+ }
+ #root .app .sidebar .brand {
+   display:flex !important;
+   align-items:center !important;
+   gap:9px !important;
+   margin:0 8px 28px !important;
+   color:#f5f8fc !important;
+   font-size:25px !important;
+   font-weight:800 !important;
+   letter-spacing:-1px !important;
+   text-decoration:none !important;
+ }
+ #root .app .sidebar .brand-mark {
+   display:inline-flex !important;
+   align-items:center !important;
+   justify-content:center !important;
+   width:30px !important;height:30px !important;
+   border-radius:9px !important;
+   color:#fff !important;
+   background:linear-gradient(135deg,#1688ff,#8554ff) !important;
+   font-size:18px !important;
+ }
+ #root .app .sidebar nav {
+   display:flex !important;
+   flex-direction:column !important;
+   gap:5px !important;
+   width:100% !important;
+   margin:0 !important;
+   padding:0 !important;
+ }
+ #root .app .sidebar nav button {
+   display:flex !important;
+   align-items:center !important;
+   justify-content:flex-start !important;
+   gap:11px !important;
+   width:100% !important;
+   min-height:39px !important;
+   padding:9px 11px !important;
+   border:1px solid transparent !important;
+   border-radius:10px !important;
+   background:transparent !important;
+   color:#a7b8ca !important;
+   text-align:left !important;
+   font-size:13px !important;
+   font-weight:600 !important;
+   line-height:1.2 !important;
+   box-shadow:none !important;
+ }
+ #root .app .sidebar nav button .sidebar-icon {
+   display:inline-flex !important;
+   align-items:center !important;
+   justify-content:center !important;
+   flex:0 0 18px !important;
+   width:18px !important;
+   color:#8ea4bb !important;
+   font-size:16px !important;
+   line-height:1 !important;
+ }
+ #root .app .sidebar nav button:hover {
+   color:#f5f8fc !important;
+   background:#122337 !important;
+ }
+ #root .app .sidebar nav button:hover .sidebar-icon { color:#71baff !important; }
+ #root .app .sidebar nav button.selected {
+   color:#fff !important;
+   background:linear-gradient(100deg,#0879eb,#155bbd) !important;
+   border-color:#2487f3 !important;
+   box-shadow:0 6px 18px rgba(8,105,220,.22) !important;
+ }
+ #root .app .sidebar nav button.selected .sidebar-icon { color:#fff !important; }
+ #root .app .sidebar .sidebottom {
+   display:flex !important;
+   margin-top:auto !important;
+   padding-top:22px !important;
+ }
+ #root .app .sidebar .sidebottom button {
+   width:100% !important;
+   padding:10px 12px !important;
+   color:#bdcddd !important;
+   background:#122033 !important;
+   border:1px solid #2a4055 !important;
+   border-radius:10px !important;
+ }
+ #root .app.worker > main, #root .app.employer > main, #root .app.admin > main {
+   grid-column:2 !important;
+   min-width:0 !important;
+   width:auto !important;
+   max-width:none !important;
+   margin:0 !important;
+   padding:30px clamp(24px,3vw,48px) 100px !important;
+   box-sizing:border-box !important;
+   background:transparent !important;
+ }
+ #root .app.worker > .worker-bottom-nav, #root .app.employer > .employer-bottom-nav,
+ #root .app.admin > .admin-bottom-nav { display:none !important; }
+ #root .app.worker main .worker-page-header { padding-top:0 !important; }
+}
+@media (max-width:760px) {
+ #root .app.worker, #root .app.employer, #root .app.admin {
+   display:flex !important;
+   flex-direction:column !important;
+   min-height:100vh !important;
+   padding-bottom:82px !important;
+ }
+ #root .app.worker > .sidebar, #root .app.employer > .sidebar, #root .app.admin > .sidebar {
+   position:relative !important;
+   top:auto !important;left:auto !important;
+   display:flex !important;
+   flex-direction:row !important;
+   align-items:center !important;
+   justify-content:space-between !important;
+   gap:12px !important;
+   width:100% !important;
+   height:auto !important;
+   min-height:62px !important;
+   padding:12px 16px !important;
+   background:#08111b !important;
+   border-right:0 !important;
+   border-bottom:1px solid #1e3042 !important;
+   box-sizing:border-box !important;
+ }
+ #root .app .sidebar .brand {
+   display:flex !important;align-items:center !important;gap:8px !important;
+   margin:0 !important;font-size:23px !important;color:#f5f8fc !important;
+ }
+ #root .app .sidebar .brand-mark {
+   display:inline-flex !important;align-items:center !important;justify-content:center !important;
+   width:27px !important;height:27px !important;border-radius:8px !important;
+   color:#fff !important;background:linear-gradient(135deg,#1688ff,#8554ff) !important;
+ }
+ #root .app .sidebar nav { display:none !important; }
+ #root .app .sidebar .sidebottom { display:flex !important;margin:0 0 0 auto !important;padding:0 !important; }
+ #root .app .sidebar .sidebottom button {
+   padding:8px 10px !important;border:1px solid #2a4055 !important;
+   border-radius:9px !important;background:#122033 !important;color:#dce8f5 !important;
+ }
+ #root .app.worker > main, #root .app.employer > main, #root .app.admin > main {
+   width:100% !important;max-width:none !important;min-width:0 !important;
+   margin:0 !important;padding:22px 16px 28px !important;box-sizing:border-box !important;
+ }
+ #root .app.worker .worker-bottom-nav, #root .app.employer .employer-bottom-nav {
+   display:grid !important;
+   position:fixed !important;z-index:50 !important;left:0 !important;right:0 !important;bottom:0 !important;
+   grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:4px !important;
+   padding:8px 8px calc(8px + env(safe-area-inset-bottom)) !important;
+   background:rgba(5,11,18,.97) !important;border-top:1px solid #26384a !important;
+   box-shadow:0 -8px 28px rgba(0,0,0,.32) !important;backdrop-filter:blur(18px) !important;
+ }
+ #root .app.worker .worker-bottom-nav button, #root .app.employer .employer-bottom-nav button {
+   display:flex !important;align-items:center !important;justify-content:center !important;
+   flex-direction:column !important;gap:4px !important;min-width:0 !important;min-height:48px !important;
+   padding:5px 2px !important;border-radius:9px !important;background:transparent !important;
+   border:1px solid transparent !important;color:#91a4b9 !important;
+ }
+ #root .app.worker .worker-bottom-nav button.active, #root .app.employer .employer-bottom-nav button.active {
+   color:#fff !important;background:#152b40 !important;border-color:#2d4b68 !important;
+ }
+ #root .app.worker .worker-bottom-nav button span, #root .app.employer .employer-bottom-nav button span {font-size:18px !important;color:inherit !important;}
+ #root .app.worker .worker-bottom-nav button small, #root .app.employer .employer-bottom-nav button small {font-size:10px !important;color:inherit !important;}
+}
