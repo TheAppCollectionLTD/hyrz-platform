@@ -8341,3 +8341,43 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
 #root .app.worker .unread-badge,#root .app.employer .unread-badge,#root .app.admin .unread-badge{
   background:var(--hyrz-coral)!important;border-color:var(--hyrz-coral)!important;color:#243238!important;
 }
+
+
+/* Employer page heading should sit on the same content rail as the panel below.
+   Keep the title and sign-out control, but remove the oversized white wrapper. */
+#root .app.employer>main>header{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  box-sizing:border-box!important;
+  width:calc(100% - 30px)!important;
+  max-width:786px!important;
+  min-width:0!important;
+  margin:0 auto 18px!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+#root .app.employer>main>header>div{
+  min-width:0!important;
+  flex:1 1 auto!important;
+}
+#root .app.employer>main>header h1{
+  margin:0!important;
+  color:var(--hyrz-ink)!important;
+}
+#root .app.employer>main>header .eyebrow{color:var(--hyrz-teal)!important}
+#root .app.employer>main>header .employer-signout{
+  flex:0 0 auto!important;
+  margin:0!important;
+}
+@media(max-width:600px){
+  #root .app.employer>main>header{
+    width:100%!important;
+    max-width:100%!important;
+    margin-bottom:16px!important;
+  }
+}
