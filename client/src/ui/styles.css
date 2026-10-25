@@ -8381,3 +8381,17 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
     margin-bottom:16px!important;
   }
 }
+
+
+/* Give page headings and the Back control more breathing room before the panel. */
+#root .app.employer>main>header{margin-bottom:28px!important}
+#root .app.employer>main>button.worker-back-button,
+#root .app.employer>main>button.secondary.worker-back-button,
+#root .app.employer>main>.worker-back-button{
+  margin-bottom:16px!important;
+}
+#root .app.employer>main>header+button,
+#root .app.employer>main>header+.worker-back-button{
+  margin-top:0!important;
+  margin-bottom:16px!important;
+}
