@@ -7572,3 +7572,20 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root .app.worker main :is(.find-shifts-panel,.worker-find-shifts-panel,.worker-jobs-panel,.jobs-panel)>:first-child{
  border-top-left-radius:0;
 }
+
+
+/* Find Shifts empty result: replace the accidental dark block with a clear,
+   high-contrast empty state that matches the restored light interface. */
+#root .app.worker main .empty{
+ width:100%!important;max-width:none!important;min-height:64px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ box-sizing:border-box!important;margin:12px 0 0!important;padding:18px 20px!important;
+ background:#F8FAFC!important;color:#334155!important;
+ -webkit-text-fill-color:#334155!important;
+ border:1px dashed #CBD5E1!important;border-radius:10px!important;
+ font-size:13px!important;font-weight:600!important;opacity:1!important;
+}
+#root .app.worker main .empty *{
+ background:transparent!important;color:#334155!important;
+ -webkit-text-fill-color:#334155!important;opacity:1!important;
+}
