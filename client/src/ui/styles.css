@@ -7690,3 +7690,86 @@ button[type="submit"],.selected-tab){
  }
  #root .app>.admin-bottom-nav button{flex:1!important;min-width:0!important;color:#CBD5E1!important}
 }
+
+
+/* FINAL ACCESSIBILITY OVERRIDE — enforce high contrast across every page.
+   Use dark surfaces wherever text is light; do not allow legacy pale text on white cards. */
+#root .app .sidebar .brand,
+#root .app .sidebar .tag,
+#root .app .sidebar .sidebar-role-label{
+ color:#F8FAFC!important;-webkit-text-fill-color:#F8FAFC!important;opacity:1!important;
+}
+#root .app main,
+#root .app main *{
+ text-shadow:none!important;
+}
+#root .app main :is(h1,h2,h3,h4,h5,h6,strong,b,th,dt),
+#root .app main header :is(*){
+ color:#F8FAFC!important;-webkit-text-fill-color:#F8FAFC!important;opacity:1!important;
+}
+#root .app main :is(p,span,div,label,small,li,a,td,dd,dt,legend,summary,figcaption,output){
+ -webkit-text-fill-color:#E2E8F0;opacity:1;
+}
+#root .app main :is(.muted,.eyebrow,.description,.helper-text,.subtitle,.hint,.worker-three-strikes-copy){
+ color:#CBD5E1!important;-webkit-text-fill-color:#CBD5E1!important;opacity:1!important;
+}
+/* Bring all card-like surfaces into the same navy family so light text is always legible. */
+#root .app main :is(
+ section,article,aside,
+ [class*="card"],[class*="panel"],[class*="stat"],[class*="section"],
+ [class*="tile"],[class*="box"],[class*="wrap"],[class*="summary"],
+ [class*="empty"],[class*="critical"],[class*="workspace"],[class*="strike"]
+){
+ background-color:#111E32!important;
+ color:#F8FAFC!important;
+ border-color:#34465F!important;
+}
+#root .app main :is(
+ section,article,aside,
+ [class*="card"],[class*="panel"],[class*="stat"],[class*="section"],
+ [class*="tile"],[class*="box"],[class*="wrap"],[class*="summary"],
+ [class*="empty"],[class*="critical"],[class*="workspace"],[class*="strike"]
+) *{
+ color:#F8FAFC!important;-webkit-text-fill-color:#F8FAFC!important;opacity:1!important;
+}
+/* Keep nested layout wrappers transparent, but keep text readable. */
+#root .app main :is(.worker-todays-shift-wrap,.worker-dashboard-stats,.stats,.employer-dashboard-critical){
+ background:transparent!important;
+}
+/* High-contrast controls and calendar cells. */
+#root .app main :is(input,select,textarea){
+ background:#1B2B45!important;color:#FFFFFF!important;
+ -webkit-text-fill-color:#FFFFFF!important;border:1px solid #647895!important;opacity:1!important;
+}
+#root .app main :is(input,select,textarea)::placeholder{
+ color:#D5DFEE!important;-webkit-text-fill-color:#D5DFEE!important;opacity:1!important;
+}
+#root .app main select option{background:#1B2B45!important;color:#FFFFFF!important}
+#root .app main :is(button,a[role="button"],[role="tab"]){
+ opacity:1!important;
+}
+#root .app main :is(button.primary,.primary,.btn-primary,.apply-button,.publish-button,button[type="submit"],.selected-tab){
+ background:linear-gradient(110deg,#7C3AED,#4F46E5)!important;
+ color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;border-color:#8B5CF6!important;
+}
+#root .app main :is(button.secondary,.btn-secondary,.tab,button:not(.primary):not([type="submit"])){
+ color:#F8FAFC!important;-webkit-text-fill-color:#F8FAFC!important;
+}
+#root .app main :is(.success,.status-success,.badge-success,.confirmed){
+ color:#6EE7B7!important;-webkit-text-fill-color:#6EE7B7!important;background:#064E3B!important;
+}
+#root .app main :is(.warning,.status-warning,.badge-warning,.pending){
+ color:#FDE68A!important;-webkit-text-fill-color:#FDE68A!important;background:#78350F!important;
+}
+#root .app main :is(.danger,.error,.status-error,.badge-danger,.rejected){
+ color:#FECDD3!important;-webkit-text-fill-color:#FECDD3!important;background:#881337!important;
+}
+#root .app main :is(.worker-todays-shift-card,.worker-three-strikes-card,.worker-dashboard-stat,.worker-dashboard-critical,.worker-dashboard-sections,.worker-section-links,.worker-section-nav,.worker-dashboard-grid,.dashboard-sections,.worker-dashboard-stats,.stat,.empty-state,.empty){
+ background:#111E32!important;color:#F8FAFC!important;border-color:#34465F!important;
+}
+#root .app main :is(.worker-todays-shift-card,.worker-three-strikes-card,.worker-dashboard-stat,.worker-dashboard-critical,.worker-dashboard-sections,.worker-section-links,.worker-section-nav,.worker-dashboard-grid,.dashboard-sections,.worker-dashboard-stats,.stat,.empty-state,.empty) *{
+ color:#F8FAFC!important;-webkit-text-fill-color:#F8FAFC!important;opacity:1!important;
+}
+#root .app :is(button,a,input,select,textarea,[tabindex]):focus-visible{
+ outline:3px solid #22D3EE!important;outline-offset:2px!important;
+}
