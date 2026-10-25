@@ -8057,3 +8057,95 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 @media(max-width:760px){
   .app.employer .worker-subsection-toolbar{margin:-8px auto 16px}
 }
+
+
+/* Hyrz visual identity refresh — teal, coral and warm cream.
+   Shared across worker, employer and admin experiences; functionality is unchanged. */
+:root{
+  --hyrz-teal:#155e63;
+  --hyrz-teal-bright:#25afa0;
+  --hyrz-coral:#ff796c;
+  --hyrz-cream:#faf7f0;
+  --hyrz-mint:#e2f3ec;
+  --hyrz-ink:#243238;
+  --hyrz-muted:#627477;
+  --hyrz-border:#d9e5df;
+  --hyrz-white:#ffffff;
+}
+body{background:var(--hyrz-cream);color:var(--hyrz-ink)}
+.app{color:var(--hyrz-ink)}
+.app.worker,.app.employer,.app.admin{background:var(--hyrz-cream);color:var(--hyrz-ink)}
+.app.worker main,.app.employer main,.app.admin main{color:var(--hyrz-ink)}
+.app.worker main>section,.app.employer main>section,.app.admin main>section,
+.app.worker .panel,.app.employer .panel,.app.admin .panel,
+.app.worker .card,.app.employer .card,.app.admin .card{
+  border-color:var(--hyrz-border);
+}
+.app.worker h1,.app.worker h2,.app.worker h3,
+.app.employer h1,.app.employer h2,.app.employer h3,
+.app.admin h1,.app.admin h2,.app.admin h3{color:var(--hyrz-ink)}
+.app.worker button.primary,.app.employer button.primary,.app.admin button.primary,
+.app.worker button:not(.secondary):not(.worker-back-button):not(.employer-signout),
+.app.employer button:not(.secondary):not(.worker-back-button):not(.employer-signout),
+.app.admin button:not(.secondary){
+  transition:background-color .16s ease,border-color .16s ease,color .16s ease;
+}
+.app.worker button.primary,.app.employer button.primary,.app.admin button.primary,
+.app.worker .worker-bottom-nav button.active,.app.employer .employer-bottom-nav button.active{
+  background:var(--hyrz-teal);border-color:var(--hyrz-teal);color:#fff;
+}
+.app.worker button.primary:hover,.app.employer button.primary:hover,.app.admin button.primary:hover{
+  background:#104d51;border-color:#104d51;
+}
+.app.worker button.secondary,.app.employer button.secondary,.app.admin button.secondary,
+.app.worker .worker-back-button,.app.employer .worker-back-button{
+  background:#fff;border:1px solid #b9d5ce;color:var(--hyrz-teal);
+}
+.app.worker button.secondary:hover,.app.employer button.secondary:hover,.app.admin button.secondary:hover,
+.app.worker .worker-back-button:hover,.app.employer .worker-back-button:hover{
+  background:var(--hyrz-mint);border-color:var(--hyrz-teal-bright);
+}
+.app.worker input,.app.worker select,.app.worker textarea,
+.app.employer input,.app.employer select,.app.employer textarea,
+.app.admin input,.app.admin select,.app.admin textarea{
+  border-color:#cbdcd5;
+}
+.app.worker input:focus,.app.worker select:focus,.app.worker textarea:focus,
+.app.employer input:focus,.app.employer select:focus,.app.employer textarea:focus,
+.app.admin input:focus,.app.admin select:focus,.app.admin textarea:focus{
+  outline:2px solid #25afa044;border-color:var(--hyrz-teal-bright);
+}
+.app.worker .worker-bottom-nav,.app.employer .employer-bottom-nav,
+.app.worker nav.bottom-nav,.app.employer nav.bottom-nav{
+  background:var(--hyrz-teal);border-color:var(--hyrz-teal);color:#fff;
+}
+.app.worker .worker-bottom-nav button,.app.employer .employer-bottom-nav button,
+.app.worker nav.bottom-nav button,.app.employer nav.bottom-nav button{color:#eaf8f4}
+.app.worker .worker-bottom-nav button.active,.app.employer .employer-bottom-nav button.active,
+.app.worker nav.bottom-nav button.active,.app.employer nav.bottom-nav button.active{color:#fff}
+.app.worker .job-card,.app.employer .job-card,
+.app.worker .shift-card,.app.employer .shift-card{
+  border-color:var(--hyrz-border);
+}
+.app.worker .success,.app.employer .success,.app.admin .success,
+.app.worker .notice.success,.app.employer .notice.success,.app.admin .notice.success{
+  background:var(--hyrz-mint);border-color:#abd8c8;color:#205b4b;
+}
+.app.worker .eyebrow,.app.employer .eyebrow,.app.admin .eyebrow{color:var(--hyrz-teal)}
+.app.worker .notification-badge,.app.employer .notification-badge,.app.admin .notification-badge,
+.app.worker .unread-badge,.app.employer .unread-badge,.app.admin .unread-badge{
+  background:var(--hyrz-coral);border-color:var(--hyrz-coral);color:#342323;
+}
+/* Inbox tabs and chat surfaces use the same palette without adding wrapper boxes. */
+.app.employer .employer-direct-inbox,.app.worker .worker-inbox-panel{
+  background:#fff;color:var(--hyrz-ink);border-color:var(--hyrz-border);
+}
+.app.employer .employer-direct-inbox .employer-inbox-tabs button{
+  border-color:#b9d5ce!important;color:var(--hyrz-teal)!important;background:#fff!important;
+}
+.app.employer .employer-direct-inbox .employer-inbox-tabs button.active{
+  background:var(--hyrz-teal)!important;border-color:var(--hyrz-teal)!important;color:#fff!important;
+}
+.app.employer .employer-direct-inbox .inbox-chatbox{
+  background:#fffdf9;border-color:var(--hyrz-border);
+}
