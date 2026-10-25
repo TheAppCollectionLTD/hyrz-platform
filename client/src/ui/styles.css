@@ -7589,3 +7589,26 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  background:transparent!important;color:#334155!important;
  -webkit-text-fill-color:#334155!important;opacity:1!important;
 }
+
+
+/* Align worker page sections to one shared horizontal grid. */
+@media(min-width:761px){
+ #root .app.worker main .worker-todays-shift-wrap{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;max-width:none!important;
+ }
+ #root .app.worker main .worker-todays-shift-card{
+  grid-column:1/-1!important;width:100%!important;max-width:none!important;
+  min-width:0!important;box-sizing:border-box!important;
+ }
+ #root .app.worker main section.panel.find-shifts-panel{
+  width:100%!important;max-width:none!important;box-sizing:border-box!important;
+  padding:0!important;margin-left:0!important;margin-right:0!important;
+  background:transparent!important;border:0!important;box-shadow:none!important;
+ }
+ #root .app.worker main .available-shifts-open-section{
+  width:100%!important;max-width:none!important;box-sizing:border-box!important;
+  margin-left:0!important;margin-right:0!important;
+ }
+}
+#root .app.worker main .empty:empty{display:none!important}
