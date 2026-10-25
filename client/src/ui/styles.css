@@ -8035,3 +8035,130 @@ body {
  #root .app.worker .worker-bottom-nav button span, #root .app.employer .employer-bottom-nav button span {font-size:18px !important;color:inherit !important;}
  #root .app.worker .worker-bottom-nav button small, #root .app.employer .employer-bottom-nav button small {font-size:10px !important;color:inherit !important;}
 }
+
+/* Final Design 2 surface normalization. Apply to legacy dashboard component names
+   as well as generic cards so no light-theme panels remain in the dark shell. */
+#root .app.worker, #root .app.employer, #root .app.admin {
+ --bg:#050b12; --panel:#101c29; --panel-border:#26384a;
+ --text:#f5f7fb; --muted:#91a2b5;
+ background:#050b12 !important; color:#f5f7fb !important;
+ font-family:Inter,"DM Sans",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+}
+#root .app.worker main, #root .app.employer main, #root .app.admin main {
+ background:transparent !important;
+ color:#f5f7fb !important;
+ max-width:none !important;
+}
+#root .app.worker main header, #root .app.employer main header, #root .app.admin main header {
+ display:flex !important; align-items:flex-start !important; justify-content:space-between !important;
+ gap:20px !important; margin:0 0 26px !important; padding:0 !important;
+ border:0 !important; background:transparent !important; box-shadow:none !important;
+}
+#root .app.worker main header h1, #root .app.employer main header h1, #root .app.admin main header h1 {
+ padding:0 !important; margin:0 !important; border:0 !important; border-radius:0 !important;
+ background:transparent !important; box-shadow:none !important; color:#f5f7fb !important;
+ font-size:clamp(25px,2.2vw,32px) !important; font-weight:750 !important; letter-spacing:-1.1px !important;
+ line-height:1.15 !important;
+}
+#root .app.worker main header .eyebrow, #root .app.employer main header .eyebrow, #root .app.admin main header .eyebrow {
+ color:#71859a !important; font-size:10px !important; font-weight:800 !important; letter-spacing:2px !important;
+}
+#root .app.worker main .worker-greeting-subtitle { margin-top:8px !important; color:#9aacc0 !important; font-size:14px !important; }
+#root .app.worker main .worker-three-strikes-card {
+ display:grid !important; grid-template-columns:minmax(0,1fr) auto auto auto !important;
+ align-items:center !important; gap:12px 20px !important; margin:0 0 18px !important;
+ padding:18px 20px !important; border-radius:15px !important;
+ background:linear-gradient(110deg,#142235,#0e1926) !important;
+ border:1px solid #2a4056 !important; box-shadow:0 10px 26px rgba(0,0,0,.22) !important;
+}
+#root .app.worker main .worker-three-strikes-card h2 { margin:4px 0 0 !important; color:#f5f7fb !important; font-size:16px !important; }
+#root .app.worker main .worker-three-strikes-count strong { color:#f5f7fb !important; font-size:23px !important; }
+#root .app.worker main .worker-three-strikes-count strong span,
+#root .app.worker main .worker-three-strikes-count small { color:#91a2b5 !important; }
+#root .app.worker main .worker-three-strikes-indicators span { border:1px solid #2b4056 !important; }
+#root .app.worker main .worker-three-strikes-indicators .is-clear { background:#12372f !important; color:#61dfb8 !important; }
+#root .app.worker main .worker-three-strikes-indicators .is-used { background:#48202b !important; color:#ff8a9b !important; }
+#root .app.worker main .stats.worker-dashboard-stats {
+ display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:12px !important;
+ margin:0 0 22px !important; padding:0 !important; background:transparent !important; border:0 !important; box-shadow:none !important;
+}
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat {
+ display:flex !important; flex-direction:column !important; align-items:flex-start !important; justify-content:flex-start !important;
+ min-width:0 !important; min-height:112px !important; padding:17px 18px !important;
+ border:1px solid #263b50 !important; border-radius:15px !important;
+ box-shadow:0 10px 24px rgba(0,0,0,.19) !important; text-align:left !important;
+}
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat:nth-child(1) {
+ background:radial-gradient(circle at 90% 5%,rgba(22,136,255,.19),transparent 48%),linear-gradient(145deg,#122438,#0c1723) !important;
+}
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat:nth-child(2) {
+ background:radial-gradient(circle at 90% 5%,rgba(133,84,255,.2),transparent 48%),linear-gradient(145deg,#1a1b36,#101727) !important;
+}
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat:nth-child(3) {
+ background:radial-gradient(circle at 90% 5%,rgba(16,185,129,.17),transparent 48%),linear-gradient(145deg,#102d2b,#0d1d27) !important;
+}
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat small {
+ color:#a9bacd !important; font-size:10px !important; font-weight:750 !important; letter-spacing:.7px !important;
+}
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat strong {
+ margin-top:8px !important; color:#f5f7fb !important; font-size:29px !important; line-height:1 !important; letter-spacing:-1px !important;
+}
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat:nth-child(1) strong { color:#65b7ff !important; }
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat:nth-child(2) strong { color:#b5a0ff !important; }
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat:nth-child(3) strong { color:#65e6bd !important; }
+#root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat span {
+ margin-top:auto !important; padding-top:10px !important; color:#9db4ca !important; font-size:11px !important;
+}
+#root .app.worker main .worker-section-nav {
+ margin:0 0 22px !important; padding:22px !important; border-radius:16px !important;
+ background:linear-gradient(145deg,#101e2d,#0b1520) !important; border:1px solid #263b50 !important;
+ box-shadow:0 12px 28px rgba(0,0,0,.2) !important; color:#f5f7fb !important;
+}
+#root .app.worker main .worker-section-nav .eyebrow { color:#71869c !important; font-size:10px !important; letter-spacing:1.8px !important; }
+#root .app.worker main .worker-section-nav h2 { color:#f5f7fb !important; margin:7px 0 0 !important; font-size:21px !important; letter-spacing:-.5px !important; }
+#root .app.worker main .worker-section-links.job-tabs-squares {
+ display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:10px !important; margin-top:18px !important;
+}
+#root .app.worker main .worker-section-links.job-tabs-squares button {
+ display:flex !important; align-items:center !important; justify-content:center !important;
+ min-height:76px !important; padding:14px 10px !important; white-space:normal !important;
+ background:linear-gradient(145deg,#16283b,#122033) !important; border:1px solid #2a425a !important;
+ border-radius:12px !important; color:#dce8f5 !important; font-size:13px !important; font-weight:700 !important;
+ box-shadow:none !important;
+}
+#root .app.worker main .worker-section-links.job-tabs-squares button:hover {
+ background:linear-gradient(145deg,#1b334a,#14263a) !important; border-color:#47739a !important; color:#fff !important;
+}
+#root .app :is(.panel,.stat,.card,.section-card,.dashboard-card,.critical-info-box,.worker-todays-shift-card,
+ .worker-finance-card,.checkout-record,.invoice-card,.notification-card,.message-card,.job-card,.shift-card) {
+ color:#f5f7fb !important; border-color:#26384a !important;
+}
+#root .app :is(.panel,.stat,.card,.section-card,.dashboard-card,.critical-info-box,.worker-todays-shift-card,
+ .worker-finance-card,.checkout-record,.invoice-card,.notification-card,.message-card,.job-card,.shift-card)
+ :is(h1,h2,h3,h4,strong,b,label) { color:#f5f7fb !important; }
+#root .app :is(.panel,.stat,.card,.section-card,.dashboard-card,.critical-info-box,.worker-todays-shift-card,
+ .worker-finance-card,.checkout-record,.invoice-card,.notification-card,.message-card,.job-card,.shift-card)
+ :is(p,small,.muted,.hint,.eyebrow,.subtitle) { color:#91a2b5 !important; }
+#root .app :is(.panel,.stat,.card,.section-card,.dashboard-card,.critical-info-box,.worker-todays-shift-card,
+ .worker-finance-card,.checkout-record,.invoice-card,.notification-card,.message-card,.job-card,.shift-card)
+ :is(input,select,textarea) { background:#09131f !important; color:#f5f7fb !important; border-color:#2a3e52 !important; }
+#root .app :is(.primary,.primary-button,.btn-primary,.button-primary,.apply-button,.publish-button,.save-button,.confirm-button) {
+ background:linear-gradient(115deg,#7b3ff2,#9557ff) !important; color:#fff !important;
+ border:1px solid #a27aff !important; box-shadow:0 5px 18px rgba(123,63,242,.24) !important;
+}
+#root .app :is(.secondary,.secondary-button,.btn-secondary,.button-secondary,.ghost-button,.outline-button) {
+ background:#142335 !important; color:#dce8f5 !important; border:1px solid #30465c !important;
+}
+@media(max-width:760px) {
+ #root .app.worker main header h1 { font-size:25px !important; }
+ #root .app.worker main .worker-three-strikes-card { grid-template-columns:minmax(0,1fr) auto !important; padding:14px !important; }
+ #root .app.worker main .worker-three-strikes-indicators { justify-self:start !important; }
+ #root .app.worker main .worker-three-strikes-actions { justify-self:end !important; }
+ #root .app.worker main .stats.worker-dashboard-stats { gap:8px !important; }
+ #root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat { min-height:105px !important; padding:12px 10px !important; }
+ #root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat small { font-size:8px !important; letter-spacing:.25px !important; }
+ #root .app.worker main .stats.worker-dashboard-stats > .worker-dashboard-stat strong { font-size:24px !important; }
+ #root .app.worker main .worker-section-nav { padding:16px !important; }
+ #root .app.worker main .worker-section-links.job-tabs-squares { gap:8px !important; }
+ #root .app.worker main .worker-section-links.job-tabs-squares button { min-height:62px !important; font-size:11px !important; padding:10px 5px !important; }
+}
