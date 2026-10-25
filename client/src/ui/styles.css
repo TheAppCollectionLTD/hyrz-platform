@@ -7309,3 +7309,278 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   #root .download-app-visual .app-visual-phone { width:238px !important;height:460px !important; }
   #root .app-visual-screen { padding:16px 10px 8px !important; }
 }
+
+ 
+/* ============================================================
+   HYRZ DARK & MODERN THEME
+   Presentation-only overrides. Preserve existing routes, forms,
+   controls, labels, interactions and feature logic.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --hyrz-bg: #070d14;
+  --hyrz-bg-soft: #0b1420;
+  --hyrz-panel: #101b28;
+  --hyrz-panel-raised: #142233;
+  --hyrz-panel-hover: #1a2a3d;
+  --hyrz-border: #26384b;
+  --hyrz-text: #f4f7fb;
+  --hyrz-muted: #9aacc0;
+  --hyrz-blue: #1688ff;
+  --hyrz-blue-strong: #0869dc;
+  --hyrz-purple: #8657ff;
+  --hyrz-green: #14c995;
+  --hyrz-shadow: 0 12px 32px rgba(0,0,0,.24);
+}
+html, body, #root {
+  min-height: 100%;
+  background: var(--hyrz-bg) !important;
+  color: var(--hyrz-text) !important;
+}
+body {
+  color-scheme: dark;
+  background-image: radial-gradient(ellipse at 50% -15%, rgba(27,105,168,.15), transparent 48%) !important;
+}
+#root, #root * {
+  scrollbar-color: #344a61 #0a121c;
+}
+#root *:focus-visible {
+  outline-color: #3298ff !important;
+}
+#root :is(h1,h2,h3,h4,h5,h6,strong,b,label,legend,summary) {
+  color: var(--hyrz-text);
+}
+#root :is(p,small,.muted,.subtle,.description,.helper-text,.field-hint) {
+  color: var(--hyrz-muted);
+}
+#root :is(input,select,textarea) {
+  color: var(--hyrz-text) !important;
+  background: #0b1521 !important;
+  border: 1px solid #2a3e53 !important;
+  border-radius: 10px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025) !important;
+  accent-color: var(--hyrz-blue);
+}
+#root :is(input,select,textarea)::placeholder {
+  color: #71859b !important;
+  opacity: 1;
+}
+#root :is(input,select,textarea):hover {
+  border-color: #42617f !important;
+}
+#root :is(input,select,textarea):focus {
+  border-color: var(--hyrz-blue) !important;
+  box-shadow: 0 0 0 3px rgba(22,136,255,.15) !important;
+}
+#root select option {
+  background: #101b28;
+  color: var(--hyrz-text);
+}
+#root :is(button,.button,[role="button"],a.button) {
+  transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+#root button {
+  color: inherit;
+}
+#root :is(button,a.button,.primary-button,.btn-primary,[type="submit"]) {
+  border-radius: 10px;
+}
+#root :is(button,.button,[role="button"]):disabled {
+  opacity: .48;
+  cursor: not-allowed;
+}
+#root :is(.app,.app-shell,.app-layout,.dashboard,.dashboard-layout,.main-layout,.workspace,.page-shell,.content-shell,.worker-app,.employer-app) {
+  background: transparent !important;
+  color: var(--hyrz-text) !important;
+}
+#root :is(header,.app-header,.topbar,.top-bar,.main-header,.dashboard-header,.workspace-header) {
+  background: rgba(7,13,20,.92) !important;
+  color: var(--hyrz-text) !important;
+  border-color: var(--hyrz-border) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.16) !important;
+  backdrop-filter: blur(16px);
+}
+#root :is(nav,.sidebar,.side-nav,.sidenav,.app-sidebar,.dashboard-sidebar,.navigation,.main-nav) {
+  background: #09121d !important;
+  color: #d9e4f1 !important;
+  border-color: #1e3042 !important;
+}
+#root :is(.sidebar a,.side-nav a,.sidenav a,.app-sidebar a,.navigation a,.main-nav a,
+          .sidebar button,.side-nav button,.sidenav button,.app-sidebar button,.navigation button) {
+  color: #aebfd1 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  border-radius: 10px !important;
+}
+#root :is(.sidebar a,.side-nav a,.sidenav a,.app-sidebar a,.navigation a,.main-nav a,
+          .sidebar button,.side-nav button,.sidenav button,.app-sidebar button,.navigation button):hover {
+  color: #fff !important;
+  background: #132337 !important;
+}
+#root :is(.sidebar .active,.side-nav .active,.sidenav .active,.app-sidebar .active,.navigation .active,
+          .sidebar a[aria-current="page"],.side-nav a[aria-current="page"],.app-sidebar a[aria-current="page"]) {
+  color: #fff !important;
+  background: linear-gradient(100deg,#0877eb,#1758bd) !important;
+  box-shadow: 0 5px 16px rgba(8,105,220,.24) !important;
+}
+#root :is(main,.main-content,.content,.page-content,.dashboard-content,.workspace-content,.panel-content) {
+  color: var(--hyrz-text) !important;
+  background: transparent !important;
+}
+#root :is(.card,.stat-card,.metric-card,.critical-info-card,.info-card,.job-card,.shift-card,
+          .application-card,.checkout-card,.invoice-card,.notification-card,.message-card,
+          .worker-card,.employer-card,.template-card,.dashboard-card,.panel,.section-card,
+          .content-card,.modal,.dialog,.popover,.dropdown-menu,.menu-panel,.filter-panel,
+          .filters-panel,.table-container,.list-container,.empty-state,.subsection,.settings-card) {
+  color: var(--hyrz-text) !important;
+  background: linear-gradient(145deg,rgba(19,33,49,.98),rgba(13,24,36,.98)) !important;
+  border: 1px solid var(--hyrz-border) !important;
+  box-shadow: var(--hyrz-shadow) !important;
+  border-radius: 15px !important;
+}
+#root :is(.card,.stat-card,.metric-card,.critical-info-card,.info-card,.job-card,.shift-card,
+          .application-card,.checkout-card,.invoice-card,.notification-card,.message-card,
+          .worker-card,.employer-card,.template-card,.dashboard-card,.section-card,.content-card):hover {
+  border-color: #3a5875 !important;
+}
+#root :is(.card,.stat-card,.metric-card,.critical-info-card,.info-card,.job-card,.shift-card,
+          .application-card,.checkout-card,.invoice-card,.notification-card,.message-card,
+          .worker-card,.employer-card,.template-card,.dashboard-card,.section-card,.content-card)
+  :is(p,small,.muted,.subtle,.description,.meta,.subtitle) {
+  color: var(--hyrz-muted) !important;
+}
+#root :is(.stat-card,.metric-card,.critical-info-card) :is(.value,.number,.count,strong) {
+  color: #fff !important;
+}
+#root :is(.primary,.primary-button,.btn-primary,.button-primary,.apply-button,.publish-button,
+          .save-button,.confirm-button,[data-variant="primary"]) {
+  color: #fff !important;
+  background: linear-gradient(110deg,#087bf0,#1765d8) !important;
+  border: 1px solid #2588fa !important;
+  box-shadow: 0 6px 18px rgba(8,105,220,.22) !important;
+}
+#root :is(.primary,.primary-button,.btn-primary,.button-primary,.apply-button,.publish-button,
+          .save-button,.confirm-button,[data-variant="primary"]):hover {
+  background: linear-gradient(110deg,#168cff,#2478ed) !important;
+  transform: translateY(-1px);
+}
+#root :is(.secondary,.secondary-button,.btn-secondary,.button-secondary,.ghost-button,
+          .outline-button,[data-variant="secondary"]) {
+  color: #dce8f6 !important;
+  background: #152538 !important;
+  border: 1px solid #30485f !important;
+}
+#root :is(.secondary,.secondary-button,.btn-secondary,.button-secondary,.ghost-button,
+          .outline-button,[data-variant="secondary"]):hover {
+  background: #20364d !important;
+  border-color: #4b6b8b !important;
+}
+#root :is(.danger,.danger-button,.btn-danger,.delete-button,[data-variant="danger"]) {
+  color: #fff !important;
+  background: #7f2433 !important;
+  border-color: #a83b4c !important;
+}
+#root :is(.success,.success-button,.btn-success,[data-variant="success"]) {
+  color: #fff !important;
+  background: #087d62 !important;
+  border-color: #12a17c !important;
+}
+#root :is(.badge,.tag,.chip,.pill,.status-badge,.filter-chip) {
+  color: #c9e4ff !important;
+  background: #142c43 !important;
+  border: 1px solid #294b6b !important;
+  border-radius: 999px !important;
+}
+#root :is(.active,.selected,[aria-pressed="true"],[aria-selected="true"]) {
+  --hyrz-selected: #1688ff;
+}
+#root :is(.tabs,.tab-list,.segmented-control) {
+  background: #0a1521 !important;
+  border: 1px solid var(--hyrz-border) !important;
+  border-radius: 12px !important;
+  padding: 4px;
+}
+#root :is(.tabs button,.tab-list button,.segmented-control button,[role="tab"]) {
+  color: #9eb1c6 !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 9px !important;
+}
+#root :is(.tabs button.active,.tab-list button.active,.segmented-control button.active,
+          [role="tab"][aria-selected="true"]) {
+  color: #fff !important;
+  background: #1a2f45 !important;
+  border-color: #31516f !important;
+}
+#root :is(table,thead,tbody,tr,th,td) {
+  color: var(--hyrz-text) !important;
+  border-color: #26394d !important;
+}
+#root table { background: #101b28 !important; }
+#root thead { background: #142438 !important; }
+#root tbody tr:nth-child(even) { background: rgba(255,255,255,.018) !important; }
+#root tbody tr:hover { background: rgba(22,136,255,.07) !important; }
+#root hr { border: 0 !important; border-top: 1px solid #26394d !important; }
+#root :is(.divider,.separator,.border-bottom,.border-top) { border-color: #26394d !important; }
+#root :is(.modal-backdrop,.overlay,.dialog-backdrop) { background: rgba(0,0,0,.72) !important; backdrop-filter: blur(5px); }
+#root :is(.modal,.dialog,[role="dialog"]) {
+  background: #101b28 !important;
+  border: 1px solid #30465d !important;
+  color: var(--hyrz-text) !important;
+}
+#root :is(.alert,.notice,.toast,.banner,.error-message,.success-message,.warning-message) {
+  color: var(--hyrz-text) !important;
+  background: #142235 !important;
+  border-color: #2c455e !important;
+}
+#root :is(.error,.error-message,.field-error) { color: #ff9aa8 !important; }
+#root :is(.success,.success-message) { color: #6be3ba !important; }
+#root :is(.calendar,.calendar-grid,.timetable,.date-picker,.date-grid) {
+  color: var(--hyrz-text) !important;
+  background: #0d1926 !important;
+  border-color: #26394d !important;
+}
+#root :is(.calendar button,.calendar-grid button,.timetable button,.date-picker button,.date-grid button) {
+  color: #cbd9e8 !important;
+  background: #132235 !important;
+  border-color: #293e54 !important;
+}
+#root :is(.calendar button.selected,.calendar button.active,.date-picker button.selected,
+          .date-grid button.selected,[data-date-selected="true"]) {
+  color: #fff !important;
+  background: #126fe0 !important;
+  border-color: #3b9aff !important;
+}
+#root :is(.calendar button:disabled,.date-picker button:disabled) { opacity: .35; }
+#root :is(.avatar,.profile-avatar,.user-avatar) {
+  border-color: #38516a !important;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.035) !important;
+}
+#root :is(.public-home-nav,.public-home-footer) {
+  background: #070d14 !important;
+  color: var(--hyrz-text) !important;
+  border-color: #26394d !important;
+}
+#root :is(.public-home-nav a,.public-home-footer a,.public-home-footer button) {
+  color: #c6d5e5 !important;
+}
+#root :is(.auth-card,.login-card,.register-card,.auth-panel) {
+  color: var(--hyrz-text) !important;
+  background: #101b28 !important;
+  border: 1px solid #26394d !important;
+  box-shadow: 0 22px 60px rgba(0,0,0,.32) !important;
+}
+@media (max-width: 760px) {
+  #root :is(.sidebar,.side-nav,.sidenav,.app-sidebar,.navigation) {
+    background: #09121d !important;
+  }
+  #root :is(.card,.stat-card,.metric-card,.critical-info-card,.job-card,.shift-card,
+            .application-card,.checkout-card,.invoice-card,.message-card,.worker-card,
+            .employer-card,.dashboard-card,.section-card,.content-card) {
+    border-radius: 13px !important;
+  }
+  #root :is(input,select,textarea) { font-size: 16px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #root *, #root *::before, #root *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
