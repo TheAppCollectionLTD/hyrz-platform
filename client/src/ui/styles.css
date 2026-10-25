@@ -7562,3 +7562,13 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
   min-height:92px!important;padding:14px!important;font-size:14px!important;
  }
 }
+
+
+/* Find Shifts: remove the outer enclosing frame, retaining the internal controls. */
+#root .app.worker main :is(.find-shifts-panel,.worker-find-shifts-panel,.worker-jobs-panel,.jobs-panel){
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ padding:0!important;margin-left:0!important;margin-right:0!important;
+}
+#root .app.worker main :is(.find-shifts-panel,.worker-find-shifts-panel,.worker-jobs-panel,.jobs-panel)>:first-child{
+ border-top-left-radius:0;
+}
