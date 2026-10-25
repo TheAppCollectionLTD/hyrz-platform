@@ -7742,3 +7742,109 @@ body {
   #root .app.worker .worker-bottom-nav { padding-left:8px !important; padding-right:8px !important; }
   #root .app.worker .worker-bottom-nav button { min-height:54px !important; }
 }
+
+/* Design 2 palette: near-black chrome, midnight-blue cards, electric blue,
+   violet primary actions, and restrained emerald status accents. */
+:root {
+ --hyrz-bg:#050b12;
+ --hyrz-bg-soft:#08111b;
+ --hyrz-panel:#0d1824;
+ --hyrz-panel-raised:#111f2e;
+ --hyrz-panel-hover:#182b3e;
+ --hyrz-border:#26384a;
+ --hyrz-text:#f5f7fb;
+ --hyrz-muted:#91a2b5;
+ --hyrz-blue:#1688ff;
+ --hyrz-blue-strong:#0869dc;
+ --hyrz-purple:#8554ff;
+ --hyrz-green:#10b981;
+}
+#root, html, body { background:#050b12 !important; color:#f5f7fb !important; }
+#root .app.worker, #root .app.employer, #root .app.admin {
+ background:#050b12 !important; color:#f5f7fb !important;
+}
+#root .app :is(.panel,.stat,.card,.section-card,.dashboard-card,.critical-info-box,
+ .worker-section-nav,.employer-dashboard-sections,.worker-todays-shift-card,
+ .worker-three-strikes-card) {
+ background:linear-gradient(145deg,#101d2b 0%,#0b1520 100%) !important;
+ color:#f5f7fb !important;
+ border:1px solid #26384a !important;
+ box-shadow:0 12px 28px rgba(0,0,0,.23) !important;
+}
+#root .app :is(.panel,.stat,.card,.section-card,.dashboard-card) :is(h1,h2,h3,h4,strong,b) {
+ color:#f5f7fb !important;
+}
+#root .app :is(.panel,.stat,.card,.section-card,.dashboard-card) :is(p,small,.muted,.hint,.eyebrow) {
+ color:#91a2b5 !important;
+}
+#root .app .worker-dashboard-stats > :nth-child(1) {
+ background:radial-gradient(circle at 90% 0%,rgba(22,136,255,.18),transparent 46%),linear-gradient(145deg,#122438,#0c1723) !important;
+}
+#root .app .worker-dashboard-stats > :nth-child(2) {
+ background:radial-gradient(circle at 90% 0%,rgba(133,84,255,.2),transparent 46%),linear-gradient(145deg,#1a1b36,#101727) !important;
+}
+#root .app .worker-dashboard-stats > :nth-child(3) {
+ background:radial-gradient(circle at 90% 0%,rgba(16,185,129,.17),transparent 46%),linear-gradient(145deg,#102d2b,#0d1d27) !important;
+}
+#root .app .worker-dashboard-stats > :nth-child(1) strong { color:#64b4ff !important; }
+#root .app .worker-dashboard-stats > :nth-child(2) strong { color:#b39aff !important; }
+#root .app .worker-dashboard-stats > :nth-child(3) strong { color:#62e5bb !important; }
+#root .app .worker-dashboard-stats > :nth-child(1):hover { border-color:#287ec4 !important; }
+#root .app .worker-dashboard-stats > :nth-child(2):hover { border-color:#7652d6 !important; }
+#root .app .worker-dashboard-stats > :nth-child(3):hover { border-color:#168e70 !important; }
+/* Main actions use the violet treatment from the Design 2 preview. */
+#root .app :is(.primary,.primary-button,.btn-primary,.button-primary,.apply-button,
+ .publish-button,.save-button,.confirm-button,.employer-dashboard-post,[data-variant="primary"]) {
+ color:#fff !important;
+ background:linear-gradient(115deg,#7b3ff2,#9557ff) !important;
+ border:1px solid #a27aff !important;
+ box-shadow:0 5px 18px rgba(123,63,242,.24) !important;
+}
+#root .app :is(.primary,.primary-button,.btn-primary,.button-primary,.apply-button,
+ .publish-button,.save-button,.confirm-button,.employer-dashboard-post,[data-variant="primary"]):hover {
+ background:linear-gradient(115deg,#8b50ff,#a66bff) !important;
+ border-color:#c2a6ff !important;
+}
+/* Filters and selected controls use violet; links and navigation stay blue. */
+#root .app :is(.filter-button,.filters-button,.filter-toggle,.show-filters-button,
+ .filters-panel button[type="submit"],button[aria-label*="Filter"],button[title*="Filter"]) {
+ color:#fff !important;
+ background:linear-gradient(115deg,#7137e8,#9252ff) !important;
+ border-color:#9b70ff !important;
+}
+#root .app :is(.worker-section-links button.selected,.worker-section-links button[aria-pressed="true"],
+ .job-tabs button.selected,.employer-shift-tab.selected,[role="tab"][aria-selected="true"]) {
+ color:#fff !important;
+ background:#6538cf !important;
+ border-color:#a184ff !important;
+}
+#root .app :is(a,.link,.text-link) { color:#66b3ff; }
+#root .app :is(.secondary,.secondary-button,.btn-secondary,.button-secondary,.ghost-button,.outline-button) {
+ color:#d8e4f1 !important;
+ background:#142335 !important;
+ border:1px solid #30465c !important;
+}
+#root .app :is(.success,.success-button,.btn-success,[data-variant="success"]) {
+ color:#eafff7 !important;
+ background:linear-gradient(115deg,#087e62,#0b9b74) !important;
+ border-color:#19b98d !important;
+}
+#root .app :is(.badge,.tag,.chip,.pill,.status-badge) {
+ color:#c3e2ff !important;
+ background:#142b40 !important;
+ border-color:#2b4d6b !important;
+}
+#root .app :is(input,select,textarea) {
+ color:#f5f7fb !important;
+ background:#09131f !important;
+ border:1px solid #2a3e52 !important;
+}
+#root .app .worker-bottom-nav, #root .app .employer-bottom-nav {
+ background:rgba(5,11,18,.97) !important;
+ border-top:1px solid #26384a !important;
+}
+#root .app .worker-bottom-nav button.active, #root .app .employer-bottom-nav button.active {
+ color:#fff !important;
+ background:#152c43 !important;
+ border-color:#2b4e6d !important;
+}
