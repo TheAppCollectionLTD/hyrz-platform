@@ -8581,7 +8581,6 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
   line-height:1.2;
   white-space:nowrap;
 }
-.shift-card .shift-pay-action-row button
 @media(max-width:700px){
   .shift-card .shiftpay{
     grid-template-columns:minmax(0,auto) minmax(0,1fr);
@@ -8602,3 +8601,11 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
     font-size:10px!important;
   }
 }
+
+
+/* Worker Jobs: direct invitations are distinct from public shift listings. */
+.private-offers-section{display:grid;gap:18px;padding:22px 2px 8px}
+.private-offers-section .find-shifts-heading{margin:0}
+.private-offers-empty{padding:28px 20px;text-align:center;border:1px dashed #d5ddcf;border-radius:12px;background:#fbfcf8;color:#263448}
+.private-offers-empty strong{display:block;font-size:16px;margin-bottom:6px}
+.private-offers-empty p{margin:0;color:#64748b;font-size:13px;line-height:1.5}
