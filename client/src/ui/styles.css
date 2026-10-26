@@ -9173,3 +9173,227 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .app :is(button,a,[role="button"],input,select,textarea):focus-visible{
  outline:3px solid rgba(37,78,219,.55)!important;outline-offset:2px;
 }
+
+
+/* WhatsApp-inspired workchat conversation layout with accessible Cobalt + Lime contrast. */
+#root .app :is(.workchat-conversation){
+ display:flex!important;flex-direction:column!important;overflow:hidden!important;
+ border:1px solid #D8E1F2!important;border-radius:16px!important;background:#F0F3FA!important;
+ box-shadow:0 8px 26px rgba(17,26,53,.07)!important;
+}
+#root .app .workchat-back-row{
+ display:flex!important;align-items:center!important;gap:10px!important;
+ padding:12px 16px!important;background:#FFFFFF!important;border-bottom:1px solid #E1E7F5!important;
+}
+#root .app .workchat-back-row button{
+ min-height:36px!important;padding:8px 13px!important;background:#FFFFFF!important;
+ color:#17316D!important;-webkit-text-fill-color:#17316D!important;
+ border:1px solid #C9D5F4!important;border-radius:9px!important;font-weight:700!important;
+}
+#root .app .workchat-conversation-header{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;
+ gap:14px!important;padding:18px 20px!important;
+ background:#254EDB!important;border:0!important;border-radius:0!important;
+ color:#FFFFFF!important;box-shadow:none!important;
+}
+#root .app .workchat-conversation-title{display:flex!important;align-items:center!important;gap:12px!important;min-width:0!important}
+#root .app .workchat-conversation-title .workchat-profile-avatar{
+ width:54px!important;height:54px!important;flex:0 0 54px!important;
+ border:2px solid rgba(255,255,255,.72)!important;background:#C5F455!important;
+ color:#111A35!important;box-shadow:0 2px 6px rgba(17,26,53,.16)!important;
+}
+#root .app .workchat-conversation-title h3{
+ margin:0 0 4px!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;
+ font-size:19px!important;font-weight:800!important;letter-spacing:-.2px!important;text-align:left!important;
+}
+#root .app .workchat-conversation-title p{
+ margin:0!important;color:#E5EBFF!important;-webkit-text-fill-color:#E5EBFF!important;
+ font-size:12px!important;text-align:left!important;
+}
+#root .app .workchat-conversation-title .workchat-photo-upload{
+ display:inline-flex!important;align-items:center!important;gap:5px!important;margin-top:6px!important;
+ color:#F2F5FF!important;-webkit-text-fill-color:#F2F5FF!important;font-size:11px!important;
+}
+#root .app .workchat-conversation-title .workchat-photo-upload input{
+ color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;font-size:10px!important;
+}
+#root .app .workchat-conversation-actions{display:flex!important;align-items:center!important;gap:8px!important;flex-wrap:wrap!important}
+#root .app .workchat-conversation-actions .workchat-manage-button,
+#root .app .workchat-conversation-actions .workchat-settings-button{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+ min-height:40px!important;padding:9px 13px!important;border-radius:10px!important;
+ background:#FFFFFF!important;color:#17316D!important;-webkit-text-fill-color:#17316D!important;
+ border:1px solid #FFFFFF!important;font-size:12px!important;font-weight:800!important;
+ box-shadow:0 2px 5px rgba(17,26,53,.13)!important;
+}
+#root .app .workchat-conversation-actions .workchat-settings-button :is(span,svg){
+ color:#17316D!important;-webkit-text-fill-color:#17316D!important;
+}
+#root .app .workchat-conversation-actions .workchat-settings-button:hover,
+#root .app .workchat-conversation-actions .workchat-manage-button:hover{
+ background:#C5F455!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;border-color:#C5F455!important;
+}
+#root .app .workchat-settings{position:relative!important}
+#root .app .workchat-settings-menu{
+ position:absolute!important;z-index:50!important;top:calc(100% + 8px)!important;right:0!important;
+ min-width:210px!important;padding:6px!important;background:#FFFFFF!important;color:#19233C!important;
+ border:1px solid #D8E1F2!important;border-radius:12px!important;box-shadow:0 14px 36px rgba(17,26,53,.2)!important;
+}
+#root .app .workchat-settings-menu button{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;
+ width:100%!important;padding:11px 12px!important;border:0!important;border-radius:8px!important;
+ background:#FFFFFF!important;color:#19233C!important;-webkit-text-fill-color:#19233C!important;
+ text-align:left!important;font-size:12px!important;font-weight:700!important;
+}
+#root .app .workchat-settings-menu button:hover{background:#EAF0FF!important;color:#17316D!important}
+#root .app .workchat-settings-menu .workchat-delete-action{color:#A12632!important;-webkit-text-fill-color:#A12632!important}
+#root .app .workchat-settings-menu .workchat-toggle{color:#17316D!important;-webkit-text-fill-color:#17316D!important}
+#root .app .workchat-info-tabs{
+ display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:wrap!important;
+ padding:10px 14px!important;background:#FFFFFF!important;border-bottom:1px solid #D8E1F2!important;
+}
+#root .app .workchat-info-tabs>button{
+ padding:8px 12px!important;border:1px solid #D8E1F2!important;border-radius:999px!important;
+ background:#F7F8FC!important;color:#344563!important;-webkit-text-fill-color:#344563!important;
+ font-size:11px!important;font-weight:750!important;
+}
+#root .app .workchat-info-tabs>button.active,
+#root .app .workchat-info-tabs>button[aria-selected="true"]{
+ background:#EAF0FF!important;color:#17316D!important;-webkit-text-fill-color:#17316D!important;
+ border-color:#254EDB!important;box-shadow:inset 0 0 0 1px #254EDB!important;
+}
+#root .app .workchat-info-content{background:#FFFFFF!important;color:#19233C!important}
+#root .app .workchat-info-content h4{color:#17316D!important}
+#root .app .workchat-message-list{
+ display:flex!important;flex-direction:column!important;gap:12px!important;
+ min-height:280px!important;max-height:min(58vh,620px)!important;overflow-y:auto!important;
+ padding:22px clamp(14px,3vw,28px)!important;background-color:#F0F3FA!important;
+ background-image:radial-gradient(rgba(37,78,219,.075) .8px,transparent .8px)!important;
+ background-size:18px 18px!important;border:0!important;
+}
+#root .app .workchat-message-row{
+ display:flex!important;align-items:flex-end!important;gap:8px!important;width:100%!important;
+ margin:0!important;padding:0!important;background:transparent!important;border:0!important;
+}
+#root .app .workchat-message-row.mine{flex-direction:row-reverse!important;justify-content:flex-start!important}
+#root .app .workchat-avatar{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:30px!important;height:30px!important;flex:0 0 30px!important;overflow:hidden!important;
+ border-radius:50%!important;background:#DDE6FF!important;border:1px solid #C9D5F4!important;
+ color:#17316D!important;font-size:10px!important;font-weight:800!important;
+}
+#root .app .workchat-avatar img{width:100%!important;height:100%!important;object-fit:cover!important}
+#root .app .workchat-message-content{
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+ gap:4px!important;min-width:0!important;max-width:min(76%,560px)!important;
+}
+#root .app .workchat-message-row.mine .workchat-message-content{align-items:flex-end!important}
+#root .app .workchat-message-meta{
+ display:flex!important;align-items:center!important;gap:8px!important;padding:0 4px!important;
+ color:#52617D!important;font-size:10px!important;line-height:1.3!important;
+}
+#root .app .workchat-message-meta strong{color:#254EDB!important;font-size:10px!important;font-weight:800!important}
+#root .app .workchat-message-meta time{color:#667085!important;font-size:10px!important}
+#root .app .workchat-message-bubble{
+ display:block!important;width:fit-content!important;max-width:100%!important;
+ padding:10px 13px!important;border:1px solid #DCE3F2!important;border-radius:14px 14px 14px 4px!important;
+ background:#FFFFFF!important;color:#19233C!important;-webkit-text-fill-color:#19233C!important;
+ box-shadow:0 1px 2px rgba(17,26,53,.07)!important;font-size:13px!important;line-height:1.5!important;
+ white-space:pre-wrap!important;overflow-wrap:anywhere!important;cursor:pointer!important;
+}
+#root .app .workchat-message-row.mine .workchat-message-bubble{
+ border-color:#B5E94A!important;border-radius:14px 14px 4px 14px!important;
+ background:#DFFF91!important;color:#17210D!important;-webkit-text-fill-color:#17210D!important;
+}
+#root .app .workchat-message-bubble:is(.tone-0,.tone-1,.tone-2,.tone-3,.tone-4,.tone-5){
+ background:#FFFFFF!important;color:#19233C!important;-webkit-text-fill-color:#19233C!important;
+}
+#root .app .workchat-message-row.mine .workchat-message-bubble:is(.tone-0,.tone-1,.tone-2,.tone-3,.tone-4,.tone-5){
+ background:#DFFF91!important;color:#17210D!important;-webkit-text-fill-color:#17210D!important;
+}
+#root .app .workchat-quoted-message{
+ display:flex!important;flex-direction:column!important;gap:3px!important;width:100%!important;
+ padding:8px 10px!important;margin:0!important;text-align:left!important;
+ border:0!important;border-left:3px solid #254EDB!important;border-radius:8px!important;
+ background:#EAF0FF!important;color:#19233C!important;-webkit-text-fill-color:#19233C!important;
+}
+#root .app .workchat-quoted-message small{color:#254EDB!important;-webkit-text-fill-color:#254EDB!important;font-weight:800!important}
+#root .app .workchat-quoted-message span{color:#344563!important;-webkit-text-fill-color:#344563!important}
+#root .app .workchat-message-row.mine .workchat-quoted-message{
+ background:#C9F36E!important;border-left-color:#17316D!important;
+}
+#root .app .workchat-reaction-row{display:flex!important;flex-wrap:wrap!important;gap:5px!important;margin-top:2px!important}
+#root .app .workchat-reaction{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;
+ min-width:28px!important;min-height:26px!important;padding:3px 7px!important;
+ border:1px solid #D8E1F2!important;border-radius:999px!important;background:#FFFFFF!important;
+ color:#19233C!important;-webkit-text-fill-color:#19233C!important;font-size:13px!important;
+}
+#root .app .workchat-reaction.selected{
+ background:#C5F455!important;border-color:#A5D83B!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;
+}
+#root .app .workchat-message-actions{
+ display:flex!important;flex-wrap:wrap!important;gap:5px!important;margin-top:3px!important;padding:6px!important;
+ border:1px solid #D8E1F2!important;border-radius:10px!important;background:#FFFFFF!important;
+ box-shadow:0 5px 16px rgba(17,26,53,.1)!important;
+}
+#root .app .workchat-message-actions button{
+ min-height:30px!important;padding:6px 9px!important;border:1px solid #D8E1F2!important;border-radius:7px!important;
+ background:#F7F8FC!important;color:#17316D!important;-webkit-text-fill-color:#17316D!important;font-size:11px!important;
+}
+#root .app .workchat-typing{min-height:18px!important;padding:3px 18px!important;background:#F0F3FA!important;color:#52617D!important;font-size:11px!important}
+#root .app .workchat-disabled-banner,#root .app .workchat-error{
+ margin:8px 12px!important;padding:10px 12px!important;border-radius:9px!important;font-size:12px!important;
+}
+#root .app .workchat-composer{
+ display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:8px 10px!important;
+ align-items:end!important;padding:12px 14px!important;background:#FFFFFF!important;
+ border-top:1px solid #D8E1F2!important;
+}
+#root .app .workchat-composer textarea{
+ grid-column:1!important;grid-row:1!important;min-height:48px!important;max-height:160px!important;
+ padding:13px 15px!important;resize:vertical!important;border:1px solid #C9D5F4!important;
+ border-radius:14px!important;background:#F7F8FC!important;color:#19233C!important;
+ font-size:13px!important;line-height:1.45!important;
+}
+#root .app .workchat-composer textarea::placeholder{color:#667085!important;opacity:1!important}
+#root .app .workchat-composer>button[type="submit"]{
+ grid-column:2!important;grid-row:1!important;align-self:stretch!important;min-width:112px!important;
+ min-height:46px!important;padding:11px 16px!important;border:1px solid #254EDB!important;border-radius:12px!important;
+ background:#254EDB!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;font-weight:800!important;
+}
+#root .app .workchat-composer>button[type="submit"]:hover{
+ background:#17316D!important;border-color:#17316D!important;
+}
+#root .app .workchat-enter-hint{grid-column:1/-1!important;grid-row:2!important;color:#667085!important;font-size:10px!important;padding-left:4px!important}
+#root .app .workchat-reply-preview{
+ grid-column:1/-1!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;
+ padding:10px 12px!important;border-left:4px solid #254EDB!important;border-radius:8px!important;background:#EAF0FF!important;color:#19233C!important;
+}
+#root .app .workchat-reply-preview small{color:#254EDB!important;font-weight:800!important}
+#root .app .workchat-reply-preview p{margin:3px 0 0!important;color:#344563!important;font-size:12px!important}
+#root .app .workchat-pinned-section{padding:10px 14px!important;background:#FFFFFF!important;border-bottom:1px solid #D8E1F2!important}
+#root .app .workchat-pinned-section h4{color:#17316D!important}
+#root .app .workchat-pinned-item{background:#F7F8FC!important;border:1px solid #D8E1F2!important;color:#19233C!important}
+#root .app .workchat-pinned-item :is(strong,span,small){color:#19233C!important}
+@media(max-width:700px){
+ #root .app .workchat-conversation-header{align-items:flex-start!important;padding:14px!important;gap:10px!important}
+ #root .app .workchat-conversation-title .workchat-profile-avatar{width:44px!important;height:44px!important;flex-basis:44px!important}
+ #root .app .workchat-conversation-title h3{font-size:16px!important}
+ #root .app .workchat-conversation-actions{gap:5px!important}
+ #root .app .workchat-conversation-actions .workchat-manage-button,
+ #root .app .workchat-conversation-actions .workchat-settings-button{min-height:35px!important;padding:7px 9px!important;font-size:11px!important}
+ #root .app .workchat-message-list{max-height:54vh!important;padding:16px 10px!important}
+ #root .app .workchat-message-content{max-width:84%!important}
+ #root .app .workchat-avatar{width:26px!important;height:26px!important;flex-basis:26px!important}
+ #root .app .workchat-composer{grid-template-columns:minmax(0,1fr) auto!important;padding:9px!important;gap:6px!important}
+ #root .app .workchat-composer>button[type="submit"]{min-width:82px!important;padding:9px!important;font-size:11px!important}
+}
+@media(max-width:420px){
+ #root .app .workchat-conversation-header{flex-direction:column!important}
+ #root .app .workchat-conversation-actions{width:100%!important;justify-content:flex-end!important}
+ #root .app .workchat-composer{grid-template-columns:minmax(0,1fr)!important}
+ #root .app .workchat-composer textarea,#root .app .workchat-composer>button[type="submit"]{grid-column:1!important;grid-row:auto!important}
+ #root .app .workchat-composer>button[type="submit"]{width:100%!important;min-height:42px!important}
+ #root .app .workchat-enter-hint{grid-row:auto!important}
+}
