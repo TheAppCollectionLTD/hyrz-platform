@@ -8526,13 +8526,13 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
 @media(max-width:600px){.app .workchat-info-dl{grid-template-columns:1fr;gap:4px}.app .workchat-info-dl dd{margin-bottom:8px}}
 
 
-/* Available shifts: keep the hourly rate and worker actions compact and readable. */
+/* Available shifts: make the apply action explicit and align Instant Pay beside it. */
 .shift-card .shiftpay{
   display:grid!important;
-  grid-template-columns:minmax(0,auto) minmax(0,1fr);
+  grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);
   align-items:center!important;
   justify-items:stretch!important;
-  gap:8px 12px!important;
+  gap:10px 18px!important;
   min-width:0;
 }
 .shift-card .shiftpay>.shift-meta-label{
@@ -8543,7 +8543,8 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
   grid-column:1;
   grid-row:2;
   align-self:center;
-  font-size:clamp(21px,2.2vw,28px)!important;
+  justify-self:start;
+  font-size:clamp(22px,2.4vw,30px)!important;
   line-height:1.1;
   white-space:nowrap;
 }
@@ -8552,56 +8553,77 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
   grid-row:2;
   display:flex!important;
   flex-direction:row!important;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
   align-items:center!important;
   justify-content:flex-end!important;
-  gap:6px!important;
+  gap:10px!important;
   width:100%!important;
   min-width:0;
   margin:0!important;
 }
-.shift-card .shift-pay-action-row .instant-pay-badge{
-  flex:1 0 100%;
-  max-width:100%;
-  text-align:right;
-  font-size:9px;
-  line-height:1.3;
-}
-.shift-card .shift-pay-action-row button{
-  flex:0 1 auto;
+.shift-card .shift-pay-action-row .apply-for-shift-button{
+  flex:0 1 auto!important;
   width:auto!important;
-  min-width:0;
-  min-height:36px;
-  padding:8px 11px!important;
-  border-radius:7px;
+  min-width:135px!important;
+  min-height:42px!important;
+  padding:11px 16px!important;
+  border-radius:8px!important;
   background:#17666a!important;
   color:#fff!important;
   border:1px solid #17666a!important;
-  font:700 11px 'DM Sans',sans-serif!important;
+  font:700 13px 'DM Sans',sans-serif!important;
   line-height:1.2;
+  text-align:center;
   white-space:nowrap;
+  cursor:pointer;
+  box-shadow:0 2px 0 rgba(13,64,67,.12);
+}
+.shift-card .shift-pay-action-row .apply-for-shift-button:hover{
+  background:#10565a!important;
+  border-color:#10565a!important;
+}
+.shift-card .shift-pay-action-row .instant-pay-badge{
+  flex:0 1 auto!important;
+  max-width:210px;
+  min-width:0;
+  text-align:left;
+  font-size:10px!important;
+  line-height:1.35;
+  white-space:normal;
+  padding:6px 9px;
+  border-radius:7px;
 }
 @media(max-width:700px){
   .shift-card .shiftpay{
-    grid-template-columns:minmax(0,auto) minmax(0,1fr);
-    gap:8px 10px!important;
+    grid-template-columns:minmax(0,1fr);
+    gap:10px!important;
     padding-left:0!important;
     border-left:0!important;
     min-height:0!important;
   }
-  .shift-card .shiftpay>strong{
-    font-size:clamp(20px,5vw,26px)!important;
+  .shift-card .shiftpay>.shift-meta-label,
+  .shift-card .shiftpay>strong,
+  .shift-card .shiftpay>.shift-pay-action-row{
+    grid-column:1;
   }
-  .shift-card .shift-pay-action-row{
-    justify-content:flex-end!important;
-    gap:5px!important;
+  .shift-card .shiftpay>strong{grid-row:auto;font-size:clamp(22px,5vw,28px)!important}
+  .shift-card .shiftpay>.shift-pay-action-row{
+    grid-row:auto;
+    justify-content:flex-start!important;
+    flex-wrap:wrap;
+    gap:8px!important;
   }
-  .shift-card .shift-pay-action-row button{
-    padding:8px 9px!important;
+  .shift-card .shift-pay-action-row .apply-for-shift-button{
+    min-width:135px!important;
+    min-height:42px!important;
+    padding:10px 13px!important;
+    font-size:12px!important;
+  }
+  .shift-card .shift-pay-action-row .instant-pay-badge{
+    max-width:100%;
     font-size:10px!important;
   }
 }
-
 
 /* Worker Jobs: direct invitations are distinct from public shift listings. */
 .private-offers-section{display:grid;gap:18px;padding:22px 2px 8px}
