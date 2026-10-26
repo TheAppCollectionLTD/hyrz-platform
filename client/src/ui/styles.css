@@ -8697,3 +8697,163 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 @media(max-width:700px){
   .app .worker-bottom-nav button.selected,.app .employer-bottom-nav button.selected,.app .admin-bottom-nav button.selected{box-shadow:0 2px 0 #C5F455}
 }
+
+
+/* Complete Cobalt & Lime rollout — final high-contrast overrides */
+:root{
+ --hyrz-cobalt:#254EDB;
+ --hyrz-cobalt-dark:#17316D;
+ --hyrz-navy:#111A35;
+ --hyrz-lime:#C5F455;
+ --hyrz-lime-hover:#B5E94A;
+ --hyrz-page:#F7F8FC;
+ --hyrz-surface:#FFFFFF;
+ --hyrz-border:#E1E5EF;
+ --hyrz-text:#19233C;
+ --hyrz-muted:#586681;
+ --hyrz-focus:#254EDB;
+}
+/* Apply the brand consistently to the whole app, not just the first set of controls. */
+#root,.app,body{background:var(--hyrz-page);color:var(--hyrz-text)}
+#root .app main{color:var(--hyrz-text)}
+#root .app :is(h1,h2,h3,h4,h5,h6,strong,b){color:inherit}
+#root .app :is(p,small,.muted,.subtitle,.description,.helper-text,.field-hint){color:var(--hyrz-muted)}
+#root .app :is(a,.text-link,.link-button){color:var(--hyrz-cobalt)}
+#root .app :is(a:hover,.text-link:hover,.link-button:hover){color:var(--hyrz-cobalt-dark)}
+#root .app :is(.panel,.stat,.card,.section-card,.content-card,.modal,.dialog,.dropdown-menu,.popover,.table-wrap,.list-card,.settings-card,.profile-card,.message-list-panel,.inbox-panel,.shift-card,.published-shift-card,.worker-card,.employer-card,.private-offer-card){
+ border-color:var(--hyrz-border);
+}
+/* Shared navigation and page chrome */
+#root .app :is(.sidebar,.topbar,.app-header,.dashboard-sidebar,.admin-sidebar){
+ background:var(--hyrz-navy)!important;color:#F8FAFF!important;
+}
+#root .app .sidebar nav button.selected,
+#root .app .sidebar nav button[aria-current="page"],
+#root .app .sidebar nav button:hover{
+ background:#202D55!important;color:var(--hyrz-lime)!important;
+}
+#root .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav){
+ background:var(--hyrz-navy)!important;border-color:#29385F!important;
+}
+#root .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav) button{
+ color:#F8FAFF!important;-webkit-text-fill-color:#F8FAFF!important;
+ background:transparent!important;
+}
+#root .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav) button:is(.active,.selected,[aria-current="page"]){
+ background:var(--hyrz-lime)!important;color:var(--hyrz-navy)!important;
+ -webkit-text-fill-color:var(--hyrz-navy)!important;border-color:var(--hyrz-lime)!important;
+}
+#root .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav) button:is(.active,.selected,[aria-current="page"]) *{
+ color:var(--hyrz-navy)!important;-webkit-text-fill-color:var(--hyrz-navy)!important;
+}
+/* Buttons: clear, consistent hierarchy and readable text in every state. */
+#root .app button.primary,
+#root .app button[class~="primary"],
+#root .app :is(.primary-button,.btn-primary,.action-primary,.confirm-button,.publish-shift-button){
+ background:var(--hyrz-lime)!important;border:1px solid var(--hyrz-lime)!important;
+ color:var(--hyrz-navy)!important;-webkit-text-fill-color:var(--hyrz-navy)!important;
+}
+#root .app :is(.primary,.primary-button,.btn-primary,.action-primary,.confirm-button,.publish-shift-button):hover{
+ background:var(--hyrz-lime-hover)!important;border-color:var(--hyrz-lime-hover)!important;
+ color:var(--hyrz-navy)!important;-webkit-text-fill-color:var(--hyrz-navy)!important;
+}
+#root .app :is(.secondary,.secondary-button,.btn-secondary,.outline-button,.back-button){
+ border-color:#C9D5F4!important;color:var(--hyrz-cobalt-dark)!important;
+}
+#root .app :is(.secondary,.secondary-button,.btn-secondary,.outline-button,.back-button):hover{
+ background:#EDF1FF!important;border-color:#9DB3F4!important;
+}
+#root .app :is(.selected,.active,[aria-pressed="true"],[aria-selected="true"]).tab,
+#root .app :is(.job-tabs,.worker-section-links,.admin-tabs,.section-tabs,.subsection-tabs) button:is(.selected,.active,[aria-pressed="true"],[aria-selected="true"]){
+ background:var(--hyrz-cobalt)!important;border-color:var(--hyrz-cobalt)!important;
+ color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;
+}
+#root .app :is(.job-tabs,.worker-section-links,.admin-tabs,.section-tabs,.subsection-tabs) button{
+ border-color:var(--hyrz-border);
+}
+/* Inputs and searchable controls keep a white surface and high-contrast text. */
+#root .app :is(input,select,textarea,[contenteditable="true"]){
+ background:#FFFFFF;color:var(--hyrz-text);caret-color:var(--hyrz-text);
+ border-color:#C9D2E3;
+}
+#root .app :is(input,select,textarea,[contenteditable="true"]):focus{
+ border-color:var(--hyrz-cobalt)!important;outline:0;
+ box-shadow:0 0 0 3px rgba(37,78,219,.16)!important;
+}
+#root .app :is(input,textarea)::placeholder{color:#667085!important;opacity:1}
+#root .app :is(label,.field-label,.form-label){color:#34415E}
+#root .app :is(.eyebrow,.section-kicker){color:#53658D}
+/* Cobalt is the consistent interactive accent; lime is reserved for emphasis/selection. */
+#root .app :is(.green,.live,.accent,.brand-accent,.success-accent){color:#426D00}
+#root .app :is(.pill,.badge,.chip,.filter-chip,.role-chip,.shift-type-chip){
+ border-color:#D7E2FF;
+}
+#root .app :is(.pill,.filter-chip,.role-chip,.shift-type-chip).selected,
+#root .app :is(.pill,.filter-chip,.role-chip,.shift-type-chip)[aria-pressed="true"]{
+ background:var(--hyrz-lime)!important;color:var(--hyrz-navy)!important;border-color:#B2DB40!important;
+}
+#root .app :is(.shiftdate,.date-tile,.calendar-date).selected,
+#root .app :is(.shiftdate,.date-tile,.calendar-date)[aria-pressed="true"]{
+ background:var(--hyrz-cobalt)!important;color:#FFFFFF!important;border-color:var(--hyrz-cobalt)!important;
+}
+#root .app :is(.shiftdate,.date-tile,.calendar-date).available{
+ background:#F0F8D9;color:#29420B;border-color:#CDE88B;
+}
+#root .app :is(.progress-bar,.progress-fill,.step-indicator.is-complete){background:var(--hyrz-cobalt)}
+#root .app :is(.toggle input:checked + .toggle-track,.switch input:checked + .switch-track){background:var(--hyrz-cobalt)!important}
+/* Brand the common empty, info and workchat panels without recolouring message content. */
+#root .app :is(.empty-state,.empty-result,.private-offers-empty,.info-panel,.notice-panel){
+ border-color:#D3DDF7;
+}
+#root .app :is(.private-offers-empty,.empty-state,.empty-result){background:#F8FAFF;color:var(--hyrz-text)}
+#root .app :is(.workchat-info-tabs>button.active,.workchat-info-tabs>button[aria-selected="true"]){
+ background:var(--hyrz-cobalt)!important;border-color:var(--hyrz-cobalt)!important;color:#FFFFFF!important;
+}
+#root .app .workchat-info-avatar{background:#EAF0FF!important;color:var(--hyrz-cobalt-dark)!important}
+#root .app .workchat-info-badge{background:#E3F5EF!important;color:#126B51!important}
+#root .app .workchat-media-list a{color:var(--hyrz-cobalt)!important}
+/* Shift cards and employer controls use the same action colours. */
+#root .app .shiftpay button,
+#root .app .row button,
+#root .app .shift-pay-action-row .apply-for-shift-button{
+ background:var(--hyrz-cobalt)!important;border-color:var(--hyrz-cobalt)!important;
+ color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;
+}
+#root .app .shift-pay-action-row .apply-for-shift-button:hover,
+#root .app .shiftpay button:hover,
+#root .app .row button:hover{
+ background:var(--hyrz-cobalt-dark)!important;border-color:var(--hyrz-cobalt-dark)!important;
+}
+#root .app .shiftpay button.primary,
+#root .app .row button.primary{background:var(--hyrz-lime)!important;color:var(--hyrz-navy)!important}
+#root .app .published-shift-card .shift-contract-preview[open] .shift-contract-document{
+ border-color:var(--hyrz-border)!important;background:#FFFFFF!important;
+}
+/* Retain familiar semantic meaning for warnings, errors and successful actions. */
+#root .app :is(.error,.alert.error,.status.rejected,.status.disputed,.status.overdue){
+ color:#8B2525;
+}
+#root .app :is(.success,.alert.success,.status.approved,.status.paid){
+ background:#E3F5EF;color:#126B51;
+}
+#root .app :is(.warning,.alert.warning,.status.pending,.status.awaiting){
+ background:#FFF5D9;color:#714B00;
+}
+/* Dark worker surfaces are recoloured navy; text remains near-white for contrast. */
+#root .app.worker :is(.panel,.stat,.card,.section-card,.content-card){
+ background:#17213A;border-color:#2A385C;color:#F8FAFF;
+}
+#root .app.worker :is(.panel,.stat,.card,.section-card,.content-card) :is(p,small,.muted,.subtitle,.description){
+ color:#C4CEE4;
+}
+#root .app.worker .shiftdate{background:#202D55;color:#D9FF8A}
+#root .app.worker .secondary{background:#263452;color:#F8FAFF;border-color:#40527A}
+#root .app.worker .sidebar nav button.selected{color:var(--hyrz-lime)!important}
+/* Visible keyboard focus and no low-contrast text on buttons. */
+#root .app :is(button,a,[role="button"],input,select,textarea):focus-visible{
+ outline:3px solid rgba(37,78,219,.55)!important;outline-offset:2px;
+}
+#root .app button:disabled{opacity:.58;cursor:not-allowed}
+#root .app :is(button.primary,button.secondary,.shift-pay-action-row .apply-for-shift-button) *{
+ color:inherit!important;-webkit-text-fill-color:currentColor!important;
+}
