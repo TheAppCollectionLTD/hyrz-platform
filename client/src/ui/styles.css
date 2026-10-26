@@ -5377,18 +5377,8 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 /* Worker hourly-rate counter-offer */
 .shift-pay-action-row{display:flex;align-items:flex-end;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .shift-pay-action-row>button{white-space:nowrap}
-
-.rate-negotiation-modal{width:min(520px,calc(100vw - 32px));box-sizing:border-box}
-.rate-negotiation-modal h2{margin-top:0}
-.rate-negotiation-modal form{display:grid;gap:14px}
-.rate-negotiation-modal label{display:grid;gap:7px;font-weight:600}
-.rate-negotiation-modal input,.rate-negotiation-modal textarea{box-sizing:border-box;width:100%}
-.rate-negotiation-modal .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
-.rate-counteroffer-review{margin-top:12px;padding:12px 14px;border:1px solid #e5d9c5;border-radius:10px;background:#faf7ef}
-.rate-counteroffer-review p{margin:8px 0;line-height:1.45}
-.rate-counteroffer-review small{color:var(--muted,#6e7784)}
 .application-review-row{align-items:flex-start}
-@media(max-width:560px){.shift-pay-action-row{justify-content:stretch}.shift-pay-action-row>button{width:100%}.rate-negotiation-modal .actions>*{flex:1 1 100%}}
+@media(max-width:560px){.shift-pay-action-row{justify-content:stretch}.shift-pay-action-row>button{width:100%}}
 
 
 /* Platform-wide switch controls: use toggles instead of square checkboxes. */
@@ -5484,15 +5474,7 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 .worker-three-strikes-indicators span.is-used{background:#c95c4d}
 .worker-three-strikes-note{grid-column:1/-1;margin:0;color:#9a9c91;font-size:.75rem;line-height:1.4}
 @media(max-width:520px){.worker-three-strikes-card{padding:1rem;gap:.65rem}.worker-three-strikes-copy p{font-size:.88rem}.worker-three-strikes-count>strong{font-size:1.4rem}}
-
-
-/* Make requested-rate counter-offers unmistakable during employer review */
-.rate-counteroffer-review.applicant-rate-counteroffer{position:relative;margin-top:14px;padding:16px 18px 15px 20px;border:2px solid #c64f42;border-left:7px solid #b9362d;border-radius:12px;background:#fff0ed;box-shadow:0 3px 10px rgba(145,42,32,.10);color:#6d211c}
-.rate-counteroffer-review.applicant-rate-counteroffer:before{content:"RATE COUNTER-OFFER";display:inline-flex;align-items:center;margin:0 0 9px;padding:4px 8px;border-radius:5px;background:#b9362d;color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.09em}
-.rate-counteroffer-review.applicant-rate-counteroffer>strong{display:block;font-size:1.08rem;line-height:1.4;color:#7f211b}
-.rate-counteroffer-review.applicant-rate-counteroffer p{margin:9px 0;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.78);color:#4e302d}
-.rate-counteroffer-review.applicant-rate-counteroffer small{display:block;margin-top:8px;color:#7d4a45;font-weight:600}
-@media(prefers-reduced-motion:no-preference){.rate-counteroffer-review.applicant-rate-counteroffer{animation:counterofferAttention .45s ease-out 1}}
+@media(prefers-reduced-motion:no-preference){}
 @keyframes counterofferAttention{from{box-shadow:0 0 0 4px rgba(185,54,45,.18)}to{box-shadow:0 3px 10px rgba(145,42,32,.10)}}
 
 
