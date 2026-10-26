@@ -8936,3 +8936,240 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 #root .app.worker main :is(.calendar-strip,.horizontal-calendar,.find-shifts-calendar) :is(button,.date-tile)[aria-pressed="true"]{
  background:#C5F455!important;border-color:#C5F455!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;
 }
+
+
+/* Final comprehensive Cobalt + Lime pass across public, auth and every signed-in section. */
+/* Normalize legacy palette variables still used by older sections/components. */
+:root{
+ --hyrz-teal:#254EDB!important;
+ --hyrz-coral:#C5F455!important;
+ --hyrz-mint:#EAF0FF!important;
+ --hyrz-ink:#19233C!important;
+ --hyrz-cream:#F7F8FC!important;
+ --hyrz-border:#D8E1F2!important;
+ --hyrz-blue:#254EDB!important;
+ --hyrz-blue-soft:#EAF0FF!important;
+ --hyrz-lime:#C5F455!important;
+ --hyrz-lime-ink:#19233C!important;
+}
+html,body,#root,#root>*,#root .app.auth-layout{
+ background-color:#F7F8FC!important;color:#19233C!important;
+}
+#root .auth-welcome,#root .auth-welcome .welcome-panel,
+#root .auth-welcome .how-work-page,#root .auth-welcome .how-work-content,
+#root .auth-welcome .work-how-page,#root .auth-welcome .work-how-content{
+ background:#F7F8FC!important;color:#19233C!important;
+}
+#root header.public-home-nav{
+ background:#254EDB!important;color:#FFFFFF!important;border-color:#254EDB!important;
+}
+#root header.public-home-nav .public-home-logo,
+#root header.public-home-nav .public-home-logo span{color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important}
+#root header.public-home-nav>nav,
+#root header.public-home-nav>nav>.public-about-trigger,
+#root header.public-home-nav>nav>.public-how-work-trigger,
+#root header.public-home-nav>nav>.public-nav-signin{
+ background:transparent!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;border-color:transparent!important;
+}
+#root header.public-home-nav>nav>.public-app-downloads .public-app-icon{
+ background:transparent!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;border-color:#AFC0FF!important;
+}
+#root header.public-home-nav>nav>.public-nav-signup,
+#root .public-how-work-cta,
+#root .auth-welcome .primary,#root .auth-welcome button.primary,
+#root .auth-welcome .cta,#root .auth-welcome .header-cta,
+#root .auth-welcome .signup-button,#root .auth-welcome .sign-up-button,
+#root .auth-welcome .btn-primary,#root .auth-welcome .button-primary{
+ background:#C5F455!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;border:1px solid #C5F455!important;
+}
+#root header.public-home-nav>nav>.public-nav-signup:hover,
+#root .public-how-work-cta:hover,
+#root .auth-welcome .primary:hover{background:#B5E94A!important;border-color:#B5E94A!important}
+#root .public-how-work-panel{
+ background:#FFFFFF!important;color:#19233C!important;border-color:#D8E1F2!important;
+}
+#root .public-how-work-panel h3,
+#root .public-how-work-panel ol,
+#root .public-how-work-panel li{color:#19233C!important}
+#root .auth-welcome :is(h1,h2,h3,h4,.hero-copy h2,.carousel-overlay h1,.carousel-overlay h2){
+ color:#19233C!important;
+}
+#root .auth-welcome :is(p,li,.eyebrow,.download-app-copy>p,.download-app-note){
+ color:#52617D!important;
+}
+#root .auth-welcome .work-carousel,
+#root .auth-welcome .carousel-overlay{
+ background-color:#111A35!important;color:#FFFFFF!important;
+}
+#root .auth-welcome .work-carousel :is(h1,h2,h3,p,li,strong,em,.eyebrow),
+#root .auth-welcome .carousel-overlay :is(h1,h2,h3,p,li,strong,em){
+ color:#FFFFFF!important;
+}
+#root .auth-welcome .work-carousel .primary,
+#root .auth-welcome .work-carousel .cta,
+#root .auth-welcome .carousel-overlay .primary{
+ background:#C5F455!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;
+}
+#root .auth-welcome .pill,
+#root .auth-welcome .how-work-tabs button,
+#root .auth-welcome .how-work-tabs .selected,
+#root .auth-welcome .how-work-tabs button[aria-selected="true"]{
+ background:#FFFFFF!important;color:#17316D!important;-webkit-text-fill-color:#17316D!important;border-color:#C9D5F4!important;
+}
+#root .auth-welcome .how-work-tabs .selected,
+#root .auth-welcome .how-work-tabs button[aria-selected="true"]{
+ background:#C5F455!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;border-color:#C5F455!important;
+}
+#root .auth-welcome :is(.public-home-footer,.public-footer,.site-footer){
+ background:#111A35!important;color:#FFFFFF!important;border-color:#2A385C!important;
+}
+#root .auth-welcome :is(.public-home-footer,.public-footer,.site-footer) *{
+ border-color:#2A385C;
+}
+#root .auth-welcome :is(.public-home-footer,.public-footer,.site-footer) :is(h2,h3,p,span,a,button,strong,small){
+ color:#F8FAFF!important;
+}
+#root .auth-welcome :is(.public-home-footer,.public-footer,.site-footer) a:hover,
+#root .auth-welcome :is(.public-home-footer,.public-footer,.site-footer) button:hover{color:#C5F455!important}
+#root .download-app-section{
+ background:#111A35!important;color:#FFFFFF!important;border-color:#2A385C!important;
+}
+#root .download-app-copy{background:transparent!important;color:#FFFFFF!important}
+#root .download-app-eyebrow{color:#C5F455!important}
+#root .download-app-copy h2,
+#root .download-app-copy h2 em,
+#root .download-app-copy>p,
+#root .download-app-note{color:#F8FAFF!important}
+#root .download-app-visual{
+ background:radial-gradient(circle at 70% 20%,#3559D8 0,#17316D 45%,#111A35 85%)!important;
+}
+#root .app-visual-phone{border-color:#254EDB!important;background:#FFFFFF!important;color:#19233C!important}
+#root .app-visual-confirm{background:#C5F455!important;color:#111A35!important}
+#root .app-visual-pay{background:#EAF0FF!important;color:#19233C!important}
+#root .app-visual-logo,#root .app-visual-shift-label,#root .app-visual-phone>small,#root .app-visual-pay small{color:#17316D!important}
+
+/* All public how-it-works tabs, pagination, cards and link accents. */
+#root .auth-welcome :is(.how-work-tabs button,.carousel-controls button,.carousel-arrow,.pagination button){
+ border-color:#C9D5F4!important;
+}
+#root .auth-welcome :is(.how-work-tabs button.active,.carousel-controls button.active,.pagination button.active){
+ background:#C5F455!important;color:#111A35!important;border-color:#C5F455!important;
+}
+#root .auth-welcome a:not(.primary):not(.cta){color:#254EDB!important}
+#root .auth-welcome input:focus,#root .auth-welcome select:focus,#root .auth-welcome textarea:focus{
+ border-color:#254EDB!important;box-shadow:0 0 0 3px rgba(37,78,219,.16)!important;
+}
+
+/* Shared signed-in app palette: workers, employers and all admin tiers. */
+#root .app.worker,#root .app.employer,#root .app.admin{
+ background:#F7F8FC!important;color:#19233C!important;
+}
+#root .app.worker main,#root .app.employer main,#root .app.admin main{
+ background:transparent!important;color:#19233C!important;
+}
+#root .app.worker main>section,#root .app.employer main>section,#root .app.admin main>section,
+#root .app.worker .panel,#root .app.employer .panel,#root .app.admin .panel,
+#root .app.worker .stat,#root .app.employer .stat,#root .app.admin .stat,
+#root .app.worker .job-card,#root .app.employer .job-card,
+#root .app.worker .shift-card,#root .app.employer .shift-card,
+#root .app.worker .published-shift-card,#root .app.employer .published-shift-card,
+#root .app.worker .checkout-record,#root .app.employer .checkout-record,#root .app.admin .checkout-record{
+ background:#FFFFFF!important;border-color:#D8E1F2!important;color:#19233C!important;
+}
+#root .app.worker :is(h1,h2,h3,h4,strong,label,dt),
+#root .app.employer :is(h1,h2,h3,h4,strong,label,dt),
+#root .app.admin :is(h1,h2,h3,h4,strong,label,dt){color:#19233C}
+#root .app.worker :is(.eyebrow,.muted,.subtitle,.description),
+#root .app.employer :is(.eyebrow,.muted,.subtitle,.description),
+#root .app.admin :is(.eyebrow,.muted,.subtitle,.description){color:#52617D}
+#root .app.worker .sidebar,#root .app.employer .sidebar,#root .app.admin .sidebar{
+ background:#111A35!important;color:#F8FAFF!important;border-color:#2A385C!important;
+}
+#root .app.worker .sidebar .brand,#root .app.employer .sidebar .brand,#root .app.admin .sidebar .brand{
+ color:#FFFFFF!important;
+}
+#root .app.worker .sidebar nav button.selected,
+#root .app.employer .sidebar nav button.selected,
+#root .app.admin .sidebar nav button.selected{
+ background:#202D55!important;color:#C5F455!important;
+}
+#root .app.worker button.primary,#root .app.employer button.primary,#root .app.admin button.primary,
+#root .app.worker .primary,#root .app.employer .primary,#root .app.admin .primary,
+#root .app.worker .shiftpay button,#root .app.employer .shiftpay button,#root .app.admin .shiftpay button,
+#root .app.worker .row button,#root .app.employer .row button,#root .app.admin .row button{
+ background:#254EDB!important;border-color:#254EDB!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;
+}
+#root .app.worker button.primary:hover,#root .app.employer button.primary:hover,#root .app.admin button.primary:hover,
+#root .app.worker .primary:hover,#root .app.employer .primary:hover,#root .app.admin .primary:hover{
+ background:#17316D!important;border-color:#17316D!important;
+}
+#root .app.worker button.secondary,#root .app.employer button.secondary,#root .app.admin button.secondary,
+#root .app.worker .secondary,#root .app.employer .secondary,#root .app.admin .secondary,
+#root .app.worker .worker-back-button,#root .app.employer .worker-back-button{
+ background:#FFFFFF!important;border-color:#C9D5F4!important;color:#17316D!important;-webkit-text-fill-color:#17316D!important;
+}
+#root .app.worker button.selected,#root .app.employer button.selected,#root .app.admin button.selected,
+#root .app.worker [aria-pressed="true"],#root .app.employer [aria-pressed="true"],#root .app.admin [aria-pressed="true"]{
+ background:#C5F455!important;border-color:#B5E94A!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;
+}
+#root .app.worker input,#root .app.worker select,#root .app.worker textarea,
+#root .app.employer input,#root .app.employer select,#root .app.employer textarea,
+#root .app.admin input,#root .app.admin select,#root .app.admin textarea{
+ background:#FFFFFF!important;border-color:#C9D5F4!important;color:#19233C!important;accent-color:#254EDB!important;
+}
+#root .app.worker input:focus,#root .app.worker select:focus,#root .app.worker textarea:focus,
+#root .app.employer input:focus,#root .app.employer select:focus,#root .app.employer textarea:focus,
+#root .app.admin input:focus,#root .app.admin select:focus,#root .app.admin textarea:focus{
+ border-color:#254EDB!important;box-shadow:0 0 0 3px rgba(37,78,219,.16)!important;
+}
+#root .app.worker .worker-bottom-nav,#root .app.employer .employer-bottom-nav,
+#root .app.worker nav.bottom-nav,#root .app.employer nav.bottom-nav{
+ background:#111A35!important;border-color:#254EDB!important;color:#F8FAFF!important;
+}
+#root .app.worker .worker-bottom-nav button,#root .app.employer .employer-bottom-nav button,
+#root .app.worker nav.bottom-nav button,#root .app.employer nav.bottom-nav button{
+ background:transparent!important;color:#F8FAFF!important;-webkit-text-fill-color:#F8FAFF!important;
+}
+#root .app.worker .worker-bottom-nav button.active,#root .app.employer .employer-bottom-nav button.active,
+#root .app.worker nav.bottom-nav button.active,#root .app.employer nav.bottom-nav button.active{
+ background:#C5F455!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;border-color:#C5F455!important;
+}
+#root .app.worker .worker-bottom-nav button.active *,#root .app.employer .employer-bottom-nav button.active *,
+#root .app.worker nav.bottom-nav button.active * ,#root .app.employer nav.bottom-nav button.active *{
+ color:#111A35!important;-webkit-text-fill-color:#111A35!important;
+}
+#root .app.worker .badge,#root .app.employer .badge,#root .app.admin .badge,
+#root .app.worker .chip,#root .app.employer .chip,#root .app.admin .chip,
+#root .app.worker .tag,#root .app.employer .tag,#root .app.admin .tag{
+ background:#EAF0FF!important;border-color:#C9D5F4!important;color:#17316D!important;
+}
+#root .app.worker .pill,#root .app.employer .pill,#root .app.admin .pill{
+ background:#EAF0FF!important;border-color:#C9D5F4!important;color:#17316D!important;
+}
+#root .app.worker .shiftdate,#root .app.employer .shiftdate,#root .app.admin .shiftdate,
+#root .app.worker .date-tile,#root .app.employer .date-tile,#root .app.admin .date-tile{
+ background:#EAF0FF!important;border-color:#C9D5F4!important;color:#17316D!important;
+}
+#root .app.worker .shiftdate.selected,#root .app.employer .shiftdate.selected,#root .app.admin .shiftdate.selected,
+#root .app.worker .date-tile.selected,#root .app.employer .date-tile.selected,#root .app.admin .date-tile.selected{
+ background:#C5F455!important;border-color:#C5F455!important;color:#111A35!important;
+}
+#root .app.worker .success,#root .app.employer .success,#root .app.admin .success{
+ background:#E3F5EF!important;border-color:#B8E0D2!important;color:#126B51!important;
+}
+#root .app.worker .error,#root .app.employer .error,#root .app.admin .error{
+ background:#FFF0F0!important;border-color:#F2B9B9!important;color:#8B2525!important;
+}
+#root .app.worker .warning,#root .app.employer .warning,#root .app.admin .warning{
+ background:#FFF5D9!important;border-color:#F2D38B!important;color:#714B00!important;
+}
+#root .app :is(.workchat-info-tabs>button.active,.workchat-info-tabs>button[aria-selected="true"]){
+ background:#254EDB!important;border-color:#254EDB!important;color:#FFFFFF!important;
+}
+#root .app :is(.workchat-info-avatar,.workchat-item-avatar,.workchat-profile-avatar){
+ background:#EAF0FF!important;border-color:#C9D5F4!important;color:#17316D!important;
+}
+#root .app :is(.workchat-photo-upload,.workchat-media-list a){color:#254EDB!important}
+#root .app :is(button,a,[role="button"],input,select,textarea):focus-visible{
+ outline:3px solid rgba(37,78,219,.55)!important;outline-offset:2px;
+}
