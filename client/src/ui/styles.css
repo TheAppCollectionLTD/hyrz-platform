@@ -9504,12 +9504,48 @@ html,body,#root,#root>*,#root .app.auth-layout{
  background:#FFF0ED!important;border:1px solid #F4C2B9!important;color:#8A2D25!important;
 }
 @media(max-width:760px){
- #root .app .shift-card-six-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:auto!important}
- #root .app .shift-card-six-grid>.shift-grid-cell{min-height:140px!important;padding:12px!important}
+ #root .app .shift-card-six-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:auto!important;
+  gap:8px 14px!important;padding:14px 16px!important;
+ }
+ #root .app .shift-card-six-grid>.shift-grid-cell{
+  min-height:0!important;padding:4px 0!important;gap:6px!important;
+ }
+ #root .app .shift-card-six-grid>.shift-grid-profile{
+  min-height:0!important;align-items:flex-start!important;justify-content:center!important;
+  text-align:left!important;gap:7px!important;
+ }
+ #root .app .shift-card-six-grid .shift-employer-avatar{
+  width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;
+  margin:0!important;border-width:1px!important;
+ }
+ #root .app .shift-card-six-grid .shift-grid-company-name{
+  width:auto!important;text-align:left!important;font-size:12px!important;line-height:1.25!important;
+ }
+ #root .app .shift-card-six-grid .company-shifts-open,
+ #root .app .shift-card-six-grid .company-shift-browser,
+ #root .app .shift-card-six-grid .company-shift-browser-button,
+ #root .app .shift-card-six-grid .shift-company-link{align-self:flex-start!important;margin-top:2px!important}
+ #root .app .shift-card-six-grid .shift-grid-cell h4{font-size:11px!important}
+ #root .app .shift-card-six-grid .shift-detail-item{gap:2px!important}
+ #root .app .shift-card-six-grid .shift-detail-item strong{font-size:11px!important;line-height:1.3!important}
+ #root .app .shift-card-six-grid .shift-meta-label{font-size:8px!important}
+ #root .app .shift-card-six-grid .shift-grid-schedule{gap:6px!important}
+ #root .app .shift-card-six-grid .shift-grid-cell ul{font-size:10px!important;gap:3px!important}
+ #root .app .shift-card-six-grid .shift-grid-empty{font-size:10px!important;line-height:1.35!important}
+ #root .app .shift-card-six-grid>.shift-grid-requirements:has(.shift-grid-empty),
+ #root .app .shift-card-six-grid>.shift-grid-perks:has(.shift-grid-empty){display:none!important}
+ #root .app .shift-card-six-grid .shift-grid-hourly-rate{font-size:22px!important}
+ #root .app .shift-card-six-grid .shift-pay-action-row{gap:5px!important;margin-top:2px!important}
+ #root .app .shift-card-six-grid .shift-pay-action-row .apply-for-shift-button{min-height:36px!important;padding:8px!important;font-size:11px!important}
+ #root .app .shift-card-six-grid .shift-pay-action-row .instant-pay-badge{padding:6px 7px!important;font-size:9px!important;line-height:1.25!important}
 }
 @media(max-width:480px){
- #root .app .shift-card-six-grid{grid-template-columns:minmax(0,1fr)!important;gap:9px!important;padding:9px!important}
- #root .app .shift-card-six-grid>.shift-grid-cell{min-height:0!important}
- #root .app .shift-card-six-grid>.shift-grid-profile{min-height:165px!important}
- #root .app .shift-card-six-grid .shift-grid-hourly-rate{font-size:25px!important}
+ #root .app .shift-card-six-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px 12px!important;padding:12px 13px!important}
+ #root .app .shift-card-six-grid>.shift-grid-role{gap:5px!important}
+ #root .app .shift-card-six-grid>.shift-grid-schedule{gap:5px!important}
+ #root .app .shift-card-six-grid>.shift-grid-pay{gap:5px!important}
+ #root .app .shift-card-six-grid .shift-grid-hourly-rate{font-size:21px!important}
+ #root .app .shift-card-six-grid>.shift-grid-requirements:not(:has(.shift-grid-empty)),
+ #root .app .shift-card-six-grid>.shift-grid-perks:not(:has(.shift-grid-empty)){grid-column:1/-1!important}
 }
