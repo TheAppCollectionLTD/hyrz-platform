@@ -5377,7 +5377,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 /* Worker hourly-rate counter-offer */
 .shift-pay-action-row{display:flex;align-items:flex-end;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .shift-pay-action-row>button{white-space:nowrap}
-.negotiate-rate-button{background:#fff!important;color:#283b26!important;border:1px solid #cfc7b9!important}
+
 .rate-negotiation-modal{width:min(520px,calc(100vw - 32px));box-sizing:border-box}
 .rate-negotiation-modal h2{margin-top:0}
 .rate-negotiation-modal form{display:grid;gap:14px}
@@ -8599,11 +8599,7 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
   line-height:1.2;
   white-space:nowrap;
 }
-.shift-card .shift-pay-action-row button.negotiate-rate-button{
-  background:#fff!important;
-  color:#174f53!important;
-  border:1px solid #8bb7b6!important;
-}
+.shift-card .shift-pay-action-row button
 @media(max-width:700px){
   .shift-card .shiftpay{
     grid-template-columns:minmax(0,auto) minmax(0,1fr);
