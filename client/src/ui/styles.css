@@ -8857,3 +8857,82 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 #root .app :is(button.primary,button.secondary,.shift-pay-action-row .apply-for-shift-button) *{
  color:inherit!important;-webkit-text-fill-color:currentColor!important;
 }
+
+
+/* Fix worker dashboard palette overrides that were more specific than the first rollout. */
+/* The worker dashboard uses more-specific legacy selectors; override those directly. */
+#root .app.worker main .worker-three-strikes-card,
+#root .app.worker main .worker-dashboard-stats .worker-dashboard-stat{
+ background:#FFFFFF!important;
+ color:#19233C!important;
+ border:1px solid #D8E1F2!important;
+ box-shadow:0 3px 12px rgba(17,26,53,.045)!important;
+}
+#root .app.worker main .worker-three-strikes-card :is(h2,strong,small,.eyebrow),
+#root .app.worker main .worker-dashboard-stats .worker-dashboard-stat :is(small,strong,span){
+ color:#19233C!important;-webkit-text-fill-color:#19233C!important;
+}
+#root .app.worker main .worker-three-strikes-card .eyebrow,
+#root .app.worker main .worker-dashboard-stats .worker-dashboard-stat>small{
+ color:#254EDB!important;-webkit-text-fill-color:#254EDB!important;
+}
+#root .app.worker main .worker-section-nav.panel,
+#root .app.worker main .worker-section-nav.panel.employer-dashboard-sections{
+ background:transparent!important;border:0!important;box-shadow:none!important;
+}
+#root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button,
+#root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button.secondary{
+ background:#FFFFFF!important;
+ color:#17316D!important;-webkit-text-fill-color:#17316D!important;
+ border:1px solid #C9D5F4!important;
+ box-shadow:0 3px 10px rgba(17,26,53,.07)!important;
+}
+#root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button:hover{
+ background:#EDF1FF!important;border-color:#254EDB!important;
+}
+#root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button:focus-visible{
+ outline:3px solid rgba(37,78,219,.55)!important;outline-offset:2px;
+}
+#root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button *{
+ color:#17316D!important;-webkit-text-fill-color:#17316D!important;
+}
+#root nav.worker-bottom-nav,
+#root .app.worker nav.worker-bottom-nav{
+ background:#111A35!important;
+ border-top:2px solid #254EDB!important;
+ box-shadow:0 -8px 24px rgba(17,26,53,.2)!important;
+}
+#root nav.worker-bottom-nav button,
+#root .app.worker nav.worker-bottom-nav button{
+ background:transparent!important;color:#F8FAFF!important;
+ -webkit-text-fill-color:#F8FAFF!important;border-color:transparent!important;
+}
+#root nav.worker-bottom-nav button.active,
+#root .app.worker nav.worker-bottom-nav button.active{
+ background:#C5F455!important;color:#111A35!important;
+ -webkit-text-fill-color:#111A35!important;border:1px solid #C5F455!important;
+}
+#root nav.worker-bottom-nav button.active :is(span,small),
+#root .app.worker nav.worker-bottom-nav button.active :is(span,small){
+ color:#111A35!important;-webkit-text-fill-color:#111A35!important;
+}
+#root nav.worker-bottom-nav button:not(.active):hover,
+#root .app.worker nav.worker-bottom-nav button:not(.active):hover{
+ background:#202D55!important;color:#C5F455!important;
+ -webkit-text-fill-color:#C5F455!important;
+}
+#root nav.worker-bottom-nav button:not(.active):hover :is(span,small),
+#root .app.worker nav.worker-bottom-nav button:not(.active):hover :is(span,small){
+ color:#C5F455!important;-webkit-text-fill-color:#C5F455!important;
+}
+/* Use cobalt for worker calendar controls and lime only for clearly selected dates. */
+#root .app.worker main .calendar-strip,
+#root .app.worker main .horizontal-calendar,
+#root .app.worker main .find-shifts-calendar{background:#111A35!important;border-color:#254EDB!important}
+#root .app.worker main :is(.calendar-strip,.horizontal-calendar,.find-shifts-calendar) :is(button,.date-tile){
+ color:#19233C!important;-webkit-text-fill-color:#19233C!important;
+}
+#root .app.worker main :is(.calendar-strip,.horizontal-calendar,.find-shifts-calendar) :is(button,.date-tile).selected,
+#root .app.worker main :is(.calendar-strip,.horizontal-calendar,.find-shifts-calendar) :is(button,.date-tile)[aria-pressed="true"]{
+ background:#C5F455!important;border-color:#C5F455!important;color:#111A35!important;-webkit-text-fill-color:#111A35!important;
+}
