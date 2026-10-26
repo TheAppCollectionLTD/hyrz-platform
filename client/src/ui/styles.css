@@ -9615,3 +9615,132 @@ html,body,#root,#root>*,#root .app.auth-layout{
   #root .app main.page-workchats .worker-workchat-page-heading p{font-size:13px!important}
 }
 
+/* Compact worker dashboard on phones so today's shift, account standing,
+   critical info cards and dashboard section tiles fit in the first view. */
+@media(max-width:600px){
+  #root .app.worker>main.page-dashboard{
+    padding:12px 12px 88px!important;
+    gap:10px!important;
+  }
+  #root .app.worker>main.page-dashboard>header,
+  #root .app.worker>main.page-dashboard>header.worker-page-header{
+    margin:0 0 8px!important;
+    padding:0 0 8px!important;
+    min-height:0!important;
+    gap:8px!important;
+  }
+  #root .app.worker>main.page-dashboard>header h1,
+  #root .app.worker>main.page-dashboard>header h2{
+    font-size:20px!important;
+    line-height:1.15!important;
+    margin:2px 0!important;
+  }
+  #root .app.worker>main.page-dashboard>header p{
+    font-size:10px!important;
+    line-height:1.3!important;
+    margin:4px 0 0!important;
+  }
+  #root .app.worker>main.page-dashboard>header .eyebrow{
+    font-size:7px!important;
+    letter-spacing:.12em!important;
+  }
+  #root .app.worker>main.page-dashboard>header button{
+    min-height:30px!important;
+    padding:6px 9px!important;
+    font-size:9px!important;
+    border-radius:8px!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-wrap{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:8px!important;
+    margin:0!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-card{
+    padding:10px!important;
+    min-height:0!important;
+    border-radius:10px!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-card :is(h2,h3,strong){
+    font-size:12px!important;
+    line-height:1.2!important;
+    margin:3px 0!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-card :is(p,small,span){
+    font-size:9px!important;
+    line-height:1.3!important;
+  }
+  #root .app.worker main.page-dashboard .worker-three-strikes-card{
+    padding:9px 10px!important;
+    margin:0!important;
+    border-radius:10px!important;
+    min-height:0!important;
+  }
+  #root .app.worker main.page-dashboard .worker-three-strikes-card :is(h2,h3,strong){
+    font-size:11px!important;
+    line-height:1.2!important;
+    margin:2px 0!important;
+  }
+  #root .app.worker main.page-dashboard .worker-three-strikes-card :is(p,small,span,label,button){
+    font-size:8px!important;
+    line-height:1.25!important;
+  }
+  #root .app.worker main.page-dashboard .worker-three-strikes-card button{
+    min-height:26px!important;
+    padding:4px 8px!important;
+  }
+  #root .app.worker main.page-dashboard .stats.worker-dashboard-stats{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:6px!important;
+    margin:0!important;
+  }
+  #root .app.worker main.page-dashboard .stats.worker-dashboard-stats .worker-dashboard-stat{
+    padding:8px 7px!important;
+    min-height:0!important;
+    border-radius:9px!important;
+    gap:3px!important;
+  }
+  #root .app.worker main.page-dashboard .stats.worker-dashboard-stats .worker-dashboard-stat :is(small,.eyebrow){
+    font-size:6px!important;
+    line-height:1.2!important;
+    letter-spacing:.06em!important;
+  }
+  #root .app.worker main.page-dashboard .stats.worker-dashboard-stats .worker-dashboard-stat strong{
+    font-size:15px!important;
+    line-height:1.05!important;
+    margin:1px 0!important;
+  }
+  #root .app.worker main.page-dashboard .stats.worker-dashboard-stats .worker-dashboard-stat :is(span,p,a){
+    font-size:7px!important;
+    line-height:1.2!important;
+  }
+  #root .app.worker main.page-dashboard .worker-section-nav{
+    margin:0!important;
+    padding:8px!important;
+    border-radius:10px!important;
+  }
+  #root .app.worker main.page-dashboard .worker-section-nav>h2,
+  #root .app.worker main.page-dashboard .worker-section-nav>header h2{
+    font-size:13px!important;
+    line-height:1.15!important;
+    margin:0 0 6px!important;
+  }
+  #root .app.worker main.page-dashboard .worker-section-nav .worker-section-links.job-tabs-squares{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+  #root .app.worker main.page-dashboard .worker-section-nav .worker-section-links.job-tabs-squares>button{
+    min-height:48px!important;
+    padding:6px 4px!important;
+    font-size:8px!important;
+    line-height:1.15!important;
+    border-radius:8px!important;
+  }
+  #root .app.worker main.page-dashboard .worker-section-nav .worker-section-links.job-tabs-squares>button :is(small,span){
+    font-size:7px!important;
+    line-height:1.15!important;
+  }
+}
+
