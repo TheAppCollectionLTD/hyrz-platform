@@ -9408,12 +9408,12 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .app .shift-card-six-grid>.shift-grid-cell{
  display:flex!important;flex-direction:column!important;align-items:flex-start!important;
  justify-content:flex-start!important;gap:10px!important;min-width:0!important;min-height:150px!important;
- padding:14px!important;border:1px solid #D8E1F2!important;border-radius:12px!important;
- background:#FFFFFF!important;color:#19233C!important;box-shadow:0 1px 3px rgba(17,26,53,.04)!important;
+ padding:14px!important;border:0!important;border-radius:0!important;
+ background:transparent!important;color:#19233C!important;box-shadow:none!important;
 }
 #root .app .shift-card-six-grid>.shift-grid-profile{
  align-items:center!important;justify-content:center!important;text-align:center!important;
- background:#F4F7FF!important;border-color:#C9D5F4!important;
+ background:transparent!important;border-color:transparent!important;
 }
 #root .app .shift-card-six-grid .shift-employer-avatar{
  display:flex!important;align-items:center!important;justify-content:center!important;
@@ -9448,7 +9448,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 }
 #root .app .shift-card-six-grid .shift-grid-schedule{gap:12px!important}
 #root .app .shift-card-six-grid .shift-grid-requirements,
-#root .app .shift-card-six-grid .shift-grid-perks{background:#FAFBFF!important}
+#root .app .shift-card-six-grid .shift-grid-perks{background:transparent!important}
 #root .app .shift-card-six-grid .shift-grid-cell ul{
  display:flex!important;flex-direction:column!important;gap:6px!important;
  margin:0!important;padding-left:17px!important;width:100%!important;
@@ -9469,7 +9469,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
  padding:9px!important;color:#263653!important;font-size:10px!important;line-height:1.5!important;
 }
 #root .app .shift-card-six-grid .shift-grid-pay{
- justify-content:center!important;background:#F4F7FF!important;border-color:#C9D5F4!important;
+ justify-content:center!important;background:transparent!important;border-color:transparent!important;
 }
 #root .app .shift-card-six-grid .shift-grid-hourly-rate{
  color:#111A35!important;font-size:27px!important;font-weight:900!important;line-height:1.1!important;
