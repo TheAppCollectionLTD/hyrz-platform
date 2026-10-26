@@ -8631,3 +8631,69 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
 .private-offers-empty{padding:28px 20px;text-align:center;border:1px dashed #d5ddcf;border-radius:12px;background:#fbfcf8;color:#263448}
 .private-offers-empty strong{display:block;font-size:16px;margin-bottom:6px}
 .private-offers-empty p{margin:0;color:#64748b;font-size:13px;line-height:1.5}
+
+
+/* Hyrz brand refresh: Cobalt & Lime */
+/* Core brand tokens */
+:root{
+  --hyrz-cobalt:#254EDB;
+  --hyrz-cobalt-dark:#17316D;
+  --hyrz-navy:#111A35;
+  --hyrz-lime:#C5F455;
+  --hyrz-lime-hover:#B5E94A;
+  --hyrz-page:#F7F8FC;
+  --hyrz-border:#E1E5EF;
+  --hyrz-text:#19233C;
+  --hyrz-muted:#667085;
+  --hyrz-success:#168568;
+}
+body{background:var(--hyrz-page);color:var(--hyrz-text)}
+.app{color:var(--hyrz-text)}
+.app:not(.worker):not(.admin) main{color:var(--hyrz-text)}
+.app .eyebrow{color:#64729A}
+.app .sidebar{background:var(--hyrz-navy);color:#fff}
+.app .brand span,.app .green,.app .live{color:var(--hyrz-lime)}
+.app .sidebar nav button.selected,.app .sidebar nav button:hover{background:#202D55;color:var(--hyrz-lime)}
+.app .primary{background:var(--hyrz-lime)!important;color:#17213A!important;border:1px solid var(--hyrz-lime)!important}
+.app .primary:hover{background:var(--hyrz-lime-hover)!important;border-color:var(--hyrz-lime-hover)!important}
+.app .secondary{background:#EDF1FC;color:var(--hyrz-navy);border:1px solid #D8E1F5}
+.app input:focus,.app select:focus,.app textarea:focus{border-color:var(--hyrz-cobalt);box-shadow:0 0 0 3px #254edb18}
+.app .pill{background:#EAF0FF;color:var(--hyrz-cobalt-dark)}
+.app .shiftdate{background:#EAF0FF;color:var(--hyrz-cobalt-dark)}
+.app .shiftpay button,.app .row button{background:var(--hyrz-cobalt);color:#fff}
+.app .status.approved,.app .status.paid{background:#E3F5EF;color:#126B51}
+.app .success{background:#E3F5EF;color:#126B51}
+.app .panel,.app .stat{border-color:var(--hyrz-border)}
+.app .worker-bottom-nav,.app .employer-bottom-nav,.app .admin-bottom-nav{
+  background:var(--hyrz-navy)!important;
+  border-color:#28365B!important;
+}
+.app .worker-bottom-nav button,.app .employer-bottom-nav button,.app .admin-bottom-nav button{color:#E5EAF8}
+.app .worker-bottom-nav button.selected,.app .employer-bottom-nav button.selected,.app .admin-bottom-nav button.selected{
+  background:var(--hyrz-lime)!important;color:var(--hyrz-navy)!important;border-color:var(--hyrz-lime)!important;
+}
+.app .worker-bottom-nav button.selected svg,.app .employer-bottom-nav button.selected svg,.app .admin-bottom-nav button.selected svg{color:var(--hyrz-navy)!important}
+.app .worker-section-links button.selected,.app .job-tabs button.selected,.app .admin-tabs button.selected{
+  background:var(--hyrz-cobalt)!important;border-color:var(--hyrz-cobalt)!important;color:#fff!important;
+}
+.app .worker-section-links button,.app .job-tabs button{border-color:var(--hyrz-border)}
+.app .workchat-info-tabs>button.active{background:var(--hyrz-cobalt)!important;border-color:var(--hyrz-cobalt)!important;color:#fff!important}
+.app .workchat-info-avatar{background:#EAF0FF;color:var(--hyrz-cobalt-dark)}
+.app .workchat-info-badge{background:#E3F5EF;color:#126B51}
+.app .workchat-media-list a{color:var(--hyrz-cobalt)}
+.app .shift-card .shift-pay-action-row .apply-for-shift-button{background:var(--hyrz-cobalt)!important;border-color:var(--hyrz-cobalt)!important;color:#fff!important}
+.app .shift-card .shift-pay-action-row .apply-for-shift-button:hover{background:var(--hyrz-cobalt-dark)!important;border-color:var(--hyrz-cobalt-dark)!important}
+.app .private-offers-empty{border-color:#C8D5FA;background:#F8FAFF;color:var(--hyrz-text)}
+.app .private-offers-empty strong{color:var(--hyrz-cobalt-dark)}
+.app .worker-starting-rating{color:#8A6500}
+.app .hero-copy h2 em{color:var(--hyrz-cobalt)}
+.app .hero-card{background:var(--hyrz-navy)}
+.app .hero-card .live,.app .hero-card .big-stat strong,.app .hero-card .mini-shift>span{color:var(--hyrz-lime)}
+/* Worker dark surfaces keep their contrast while adopting the new brand accents. */
+.app.worker .primary{background:var(--hyrz-lime)!important;color:var(--hyrz-navy)!important}
+.app.worker .sidebar nav button.selected,.app.worker .sidebar nav button:hover{color:var(--hyrz-lime)}
+.app.worker .shiftdate{background:#202D55;color:#D9FF8A}
+.app.worker .status.approved{background:#243B32;color:#B8F5D7}
+@media(max-width:700px){
+  .app .worker-bottom-nav button.selected,.app .employer-bottom-nav button.selected,.app .admin-bottom-nav button.selected{box-shadow:0 2px 0 #C5F455}
+}
