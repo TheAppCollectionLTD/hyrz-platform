@@ -10419,3 +10419,79 @@ html,body,#root,#root>*,#root .app.auth-layout{
     margin-right:0!important;
   }
 }
+
+
+/* Application review interactions: contract starts collapsed; upcoming shifts
+   are real, keyboard-accessible selection controls rather than static cards. */
+#root .shift-application-contract-details>summary{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
+  padding:14px 15px!important;
+  border:1px solid #dce3ef!important;
+  border-radius:12px!important;
+  background:#f7f9fd!important;
+  color:#18233b!important;
+  font-size:15px!important;
+  font-weight:750!important;
+  line-height:1.4!important;
+  cursor:pointer!important;
+  list-style:none!important;
+}
+#root .shift-application-contract-details>summary::-webkit-details-marker{display:none!important}
+#root .shift-application-contract-details>summary:after{
+  content:"+"!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:26px!important;
+  height:26px!important;
+  border-radius:50%!important;
+  background:#e8edfa!important;
+  font-size:20px!important;
+  line-height:1!important;
+  flex:0 0 26px!important;
+}
+#root .shift-application-contract-details[open]>summary:after{content:"−"!important}
+#root .shift-application-contract-details>summary span{
+  color:#657188!important;
+  font-size:12px!important;
+  font-weight:450!important;
+}
+#root .shift-application-contract-details[open] .shift-contract-document{margin-top:12px!important}
+#root .shift-application-company-shift-button{
+  appearance:none!important;
+  width:100%!important;
+  text-align:left!important;
+  font:inherit!important;
+  color:inherit!important;
+  cursor:pointer!important;
+  background:#fafbff!important;
+  transition:border-color .15s ease,background .15s ease,box-shadow .15s ease!important;
+}
+#root .shift-application-company-shift-button:hover,
+#root .shift-application-company-shift-button:focus-visible{
+  border-color:#a8d94b!important;
+  outline:2px solid rgba(168,217,75,.35)!important;
+  outline-offset:1px!important;
+}
+#root .shift-application-company-shift-button.current{
+  border-color:#a6df42!important;
+  background:#f5ffe5!important;
+  box-shadow:inset 0 0 0 1px rgba(166,223,66,.25)!important;
+}
+#root .shift-application-company-shift-details{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:5px!important;
+  min-width:0!important;
+}
+#root .shift-application-company-shift-details>strong{font-size:14px!important;line-height:1.4!important}
+#root .shift-application-company-shift-details>span{font-size:12px!important;color:#657188!important;line-height:1.45!important}
+#root .shift-application-company-shift-details>.shift-application-select-hint{
+  color:#536c1c!important;
+  font-size:11px!important;
+  font-weight:700!important;
+}
