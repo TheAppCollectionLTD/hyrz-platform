@@ -94,6 +94,7 @@ const ensurePublicUserIds = enqueueSchemaChange(async()=>{
 const ensureSignupTermsColumns = (async()=>{await addColumn('users','terms_accepted_at DATETIME NULL','signup terms acceptance timestamp');await addColumn('users',"terms_version VARCHAR(40) NULL",'signup terms version');})();
 const ensureShiftContractColumns = (async()=>{await addColumn('applications','contract_accepted_at DATETIME NULL','shift contract acceptance timestamp');await addColumn('applications','contract_snapshot LONGTEXT NULL','accepted shift contract snapshot');})();
 const ensureShiftPublishingColumns = (async()=>{await addColumn('shifts',"shift_type VARCHAR(80) NOT NULL DEFAULT 'hospitality'",'shift type');await addColumn('shifts','requirements JSON NULL','shift requirements');await addColumn('shifts','perks JSON NULL','shift perks');await addColumn('shifts','preferences JSON NULL','shift preferences');})();
+const ensureShiftAdditionalNotesColumn = addColumn('shifts','additional_notes TEXT NULL','additional shift notes');
 const ensureApplicationCancellationFee = addColumn('applications','cancellation_fee DECIMAL(10,2) NOT NULL DEFAULT 0','application cancellation fee');
 const ensureApplicationPreferencesColumn = addColumn('applications','confirmed_preferences JSON NULL','confirmed applicant preferences');
 const ensureUserAddressColumns = (async()=>{
@@ -815,7 +816,7 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureBusinessAddressColumns]);
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
- let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
+ let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_rating_count,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
  const args=[];
  if(from){sql+=' AND s.starts_at>=?';args.push(from);}
  if(to){sql+=' AND s.starts_at<=?';args.push(to);}
@@ -840,8 +841,8 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  res.json({shifts});
 }));
 app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
- await ensureShiftPublishingColumns;
- const {title,description,location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false,shiftType='hospitality',requirements=[],perks=[],preferences=[]}=req.body||{};
+ await Promise.all([ensureShiftPublishingColumns,ensureShiftAdditionalNotesColumn]);
+ const {title,description,additionalNotes='',location,startsAt,endsAt,breakMinutes=0,hourlyPay,slots=1,autoApprove=false,shiftType='hospitality',requirements=[],perks=[],preferences=[]}=req.body||{};
  const allowedShiftTypes=new Set(['hospitality','warehouse','retail','events','office','cleaning','care','construction','driving','other']);
  const validDateTime=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value)&&Number.isFinite(new Date(value).getTime());
  const startDate=validDateTime(startsAt)?new Date(startsAt):null;
@@ -852,13 +853,14 @@ app.post('/api/shifts',auth,allow('employer'),requireVerification,asyncRoute(asy
  if(typeof title!=='string'||!VALID_JOB_ROLES.has(title)) return res.status(400).json({error:'Choose a job role from the approved role list.'});
  if(typeof shiftType!=='string'||!allowedShiftTypes.has(shiftType))return res.status(400).json({error:'Choose a valid shift type.'});
  if(typeof description!=='undefined'&&description!==null&&(typeof description!=='string'||description.length>5000))return res.status(400).json({error:'Shift description must be 5,000 characters or fewer.'});
+ if(typeof additionalNotes!=='string'||additionalNotes.length>5000)return res.status(400).json({error:'Additional notes must be 5,000 characters or fewer.'});
  if(typeof location!=='undefined'&&location!==null&&(typeof location!=='string'||location.trim().length>255))return res.status(400).json({error:'Shift location must be 255 characters or fewer.'});
  if(!startDate||!endDate||durationMinutes<=0||durationMinutes>72*60||!Number.isFinite(pay)||pay<8||pay>500||!Number.isInteger(workerSlots)||workerSlots<1||workerSlots>500||!Number.isInteger(breakMins)||breakMins<0||breakMins>=durationMinutes||!validList(requirements)||!validList(perks)||!validList(preferences)||typeof autoApprove!=='boolean')return res.status(400).json({error:'Invalid shift details. Check dates, times, hourly pay (£8–£500), worker count, break duration and optional lists.'});
  const [bs]=await db.execute('SELECT id, address_line_1, city FROM businesses WHERE owner_user_id=?',[req.user.id]);
  if(!bs.length)return res.status(400).json({error:'Business profile missing'});
  const shiftLocation=String(location||[bs[0].address_line_1,bs[0].city].filter(Boolean).join(', ')||'Location to be confirmed').trim();
- const [r]=await db.execute('INSERT INTO shifts(business_id,created_by,title,description,location,starts_at,ends_at,break_minutes,hourly_pay,slots,auto_approve,shift_type,requirements,perks,preferences) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
- [bs[0].id,req.user.id,title,description||null,shiftLocation,startsAt,endsAt,breakMinutes,hourlyPay,slots,!!autoApprove,shiftType,JSON.stringify(requirements.map(x=>x.trim()).filter(Boolean)),JSON.stringify(perks.map(x=>x.trim()).filter(Boolean)),JSON.stringify(preferences.map(x=>x.trim()).filter(Boolean))]);
+ const [r]=await db.execute('INSERT INTO shifts(business_id,created_by,title,description,additional_notes,location,starts_at,ends_at,break_minutes,hourly_pay,slots,auto_approve,shift_type,requirements,perks,preferences) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+ [bs[0].id,req.user.id,title,description||null,additionalNotes.trim()||null,shiftLocation,startsAt,endsAt,breakMinutes,hourlyPay,slots,!!autoApprove,shiftType,JSON.stringify(requirements.map(x=>x.trim()).filter(Boolean)),JSON.stringify(perks.map(x=>x.trim()).filter(Boolean)),JSON.stringify(preferences.map(x=>x.trim()).filter(Boolean))]);
  await audit(req,'shift.created','shift',r.insertId);res.status(201).json({id:r.insertId});
 }));
 app.delete('/api/shifts/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
