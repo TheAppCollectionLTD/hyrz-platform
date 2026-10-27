@@ -10745,3 +10745,5 @@ html,body,#root,#root>*,#root .app.auth-layout{
   #root .app main.page-workchats .workchat-conversation-actions button{min-height:32px!important;}
   #root .app main.page-workchats .workchat-message-list{padding:10px!important;gap:12px!important;}
 }
+
+#root .worker-workchat-panel .workchat-list-last-sender{display:inline;color:#34425b;font-weight:800;font-size:11px;}
