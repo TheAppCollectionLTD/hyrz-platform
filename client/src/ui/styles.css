@@ -10652,3 +10652,10 @@ html,body,#root,#root>*,#root .app.auth-layout{
     font-size:10px!important;
   }
 }
+
+
+/* Worker shift cards can be selected by tapping anywhere on the card. */
+@media(max-width:760px){
+ #root .app.worker .shift-card-six-grid{cursor:pointer;}
+ #root .app.worker .shift-card-six-grid:focus-visible{outline:3px solid #b7f34b;outline-offset:2px;}
+}
