@@ -813,7 +813,7 @@ app.get('/api/shifts/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
  res.json({shifts:rows});
 }));
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
- await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureBusinessAddressColumns]);
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureBusinessAddressColumns,ensureShiftAdditionalNotesColumn]);
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
  let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_rating_count,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
