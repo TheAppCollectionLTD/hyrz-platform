@@ -10589,3 +10589,66 @@ html,body,#root,#root>*,#root .app.auth-layout{
  #root .shift-application-company-shift-pay{min-width:0;max-width:43%}
  #root .shift-application-company-shift-pay>.instant-pay-badge{font-size:9px;padding:4px}
 }
+
+
+
+/* Find Shifts: Today's Shift is a slim, full-width horizontal status strip. */
+@media(max-width:760px){
+  #root .app.worker>main.page-jobs .stats.worker-todays-shift-wrap{
+    display:block!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0 0 10px!important;
+    padding:0!important;
+  }
+  #root .app.worker>main.page-jobs .worker-todays-shift-card{
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:4px 10px!important;
+    width:100%!important;
+    min-height:0!important;
+    height:auto!important;
+    box-sizing:border-box!important;
+    padding:9px 12px!important;
+    margin:0!important;
+    text-align:left!important;
+    border-radius:10px!important;
+  }
+  #root .app.worker>main.page-jobs .worker-todays-shift-card>small{
+    flex:0 0 auto!important;
+    width:auto!important;
+    margin:0!important;
+    font-size:8px!important;
+    line-height:1.25!important;
+    letter-spacing:.08em!important;
+    white-space:nowrap!important;
+  }
+  #root .app.worker>main.page-jobs .worker-todays-shift-card>strong{
+    flex:0 1 auto!important;
+    width:auto!important;
+    margin:0!important;
+    font-size:12px!important;
+    line-height:1.25!important;
+  }
+  #root .app.worker>main.page-jobs .worker-todays-shift-card>span{
+    flex:1 1 130px!important;
+    width:auto!important;
+    min-width:0!important;
+    margin:0!important;
+    font-size:9px!important;
+    line-height:1.3!important;
+  }
+  #root .app.worker>main.page-jobs .worker-todays-shift-card .worker-todays-shift-actions{
+    flex:0 0 auto!important;
+    width:auto!important;
+    margin:0!important;
+  }
+  #root .app.worker>main.page-jobs .worker-todays-shift-card .worker-todays-shift-actions button{
+    min-height:28px!important;
+    padding:5px 9px!important;
+    font-size:10px!important;
+  }
+}
