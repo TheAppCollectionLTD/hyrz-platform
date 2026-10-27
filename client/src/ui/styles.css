@@ -10582,3 +10582,10 @@ html,body,#root,#root>*,#root .app.auth-layout{
   background:#fff!important;
   transform:translateX(18px)!important;
 }
+
+#root .shift-application-company-shift-pay{display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:94px;max-width:46%;flex:0 0 auto}
+#root .shift-application-company-shift-pay>.instant-pay-badge{display:inline-flex;max-width:100%;white-space:normal;text-align:center;justify-content:center;line-height:1.25;font-size:10px;padding:4px 6px;border-radius:7px}
+@media(max-width:600px){
+ #root .shift-application-company-shift-pay{min-width:0;max-width:43%}
+ #root .shift-application-company-shift-pay>.instant-pay-badge{font-size:9px;padding:4px}
+}
