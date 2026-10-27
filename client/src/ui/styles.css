@@ -10747,3 +10747,27 @@ html,body,#root,#root>*,#root .app.auth-layout{
 }
 
 #root .worker-workchat-panel .workchat-list-last-sender{display:inline;color:#34425b;font-weight:800;font-size:11px;}
+
+
+/* Inbox messages open into a readable reply thread. */
+#root .worker-inbox-messages{display:flex;flex-direction:column;gap:0;}
+#root .worker-inbox-message-button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #e1e7f0;border-radius:0;background:transparent;color:#172033;padding:14px 8px;cursor:pointer;font:inherit;}
+#root .worker-inbox-message-button:hover,#root .worker-inbox-message-button:focus-visible{background:#f0f5ff;outline:2px solid #c8d8ff;outline-offset:-2px;}
+#root .worker-inbox-message-button .worker-inbox-message-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px;}
+#root .worker-inbox-message-button .worker-inbox-message-top strong{font-size:14px;font-weight:800;overflow-wrap:anywhere;}
+#root .worker-inbox-message-button .worker-inbox-message-top small{font-size:10px;color:#667085;white-space:nowrap;}
+#root .worker-inbox-message-preview{display:block;font-size:12px;color:#46536a;line-height:1.5;margin-bottom:8px;overflow-wrap:anywhere;}
+#root .worker-inbox-message-button>small{font-size:10px;color:#667085;}
+#root .worker-inbox-thread{display:flex;flex-direction:column;gap:12px;padding-top:12px;}
+#root .worker-inbox-thread-back{align-self:flex-start;}
+#root .worker-inbox-thread-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #e1e7f0;}
+#root .worker-inbox-thread-heading h3{margin:0;font-size:17px;overflow-wrap:anywhere;}
+#root .worker-inbox-thread-heading small{font-size:10px;color:#667085;}
+#root .worker-inbox-thread-message{max-width:92%;padding:12px;border-radius:12px;background:#f0f3f8;align-self:flex-start;overflow-wrap:anywhere;}
+#root .worker-inbox-thread-message.sent{align-self:flex-end;background:#e4f7a8;}
+#root .worker-inbox-thread-message p{margin:0 0 8px;white-space:pre-wrap;line-height:1.5;font-size:13px;}
+#root .worker-inbox-thread-message small{font-size:10px;color:#596579;}
+#root .worker-inbox-thread-reply{display:flex;flex-direction:column;gap:9px;padding-top:12px;border-top:1px solid #e1e7f0;}
+#root .worker-inbox-thread-reply label{font-size:12px;font-weight:700;}
+#root .worker-inbox-thread-reply textarea{width:100%;min-height:100px;box-sizing:border-box;padding:12px;border:1px solid #ccd5e3;border-radius:10px;font:inherit;resize:vertical;}
+#root .worker-inbox-thread-reply button{align-self:flex-end;min-height:42px;}
