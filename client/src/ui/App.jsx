@@ -872,14 +872,6 @@ function ShiftList({shifts,allShifts=shifts,role,apply,selectedDate,onRefresh}){
     <div className="shift-detail-item"><span className="shift-meta-label">TIME</span><strong>{new Date(s.starts_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} – {new Date(s.ends_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</strong></div>
     <div className="shift-detail-item"><span className="shift-meta-label">TOTAL SHIFT RATE</span><strong>{money(perWorkerTotal)}</strong></div>
    </section>
-   <section className="shift-grid-cell shift-grid-requirements">
-    <h4>Work requirements</h4>
-    {requirements.length?<ul>{requirements.map((item,index)=><li key={'requirement-'+index}>{typeof item==='string'?item:(item.label||item.name||item.description||String(item))}</li>)}</ul>:<p className="shift-grid-empty">No specific requirements listed.</p>}
-   </section>
-   <section className="shift-grid-cell shift-grid-perks">
-    <h4>Work perks</h4>
-    {perks.length?<ul>{perks.map((item,index)=><li key={'perk-'+index}>{typeof item==='string'?item:(item.label||item.name||item.description||String(item))}</li>)}</ul>:<p className="shift-grid-empty">No perks listed for this shift.</p>}
-   </section>
    <section className="shift-grid-cell shift-grid-pay">
     <span className="shift-meta-label">HOURLY RATE</span>
     <strong className="shift-grid-hourly-rate">{money(s.hourly_pay)}<small>/hr</small></strong>
