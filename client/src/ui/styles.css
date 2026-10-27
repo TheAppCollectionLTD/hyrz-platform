@@ -9958,3 +9958,43 @@ html,body,#root,#root>*,#root .app.auth-layout{
   }
 }
 
+/* Final sizing override: dashboard section rows use the same compact dimensions
+   and card treatment as the critical-info boxes (never square/tall tiles). */
+@media(max-width:600px){
+  #root .app.worker main.page-dashboard .worker-section-nav .worker-section-links.job-tabs-squares>button{
+    appearance:none!important;
+    aspect-ratio:auto!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    flex:0 0 auto!important;
+    align-self:stretch!important;
+    box-sizing:border-box!important;
+    margin:0!important;
+    padding:10px 12px!important;
+    border:1px solid #dfe6f2!important;
+    border-radius:10px!important;
+    background:#fff!important;
+    box-shadow:0 2px 7px rgba(23,35,61,.035)!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    width:100%!important;
+    min-width:0!important;
+    text-align:left!important;
+    font-size:11px!important;
+    font-weight:700!important;
+    line-height:1.3!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  #root .app.worker main.page-dashboard .worker-section-nav .worker-section-links.job-tabs-squares>button :is(small,span){
+    margin-left:auto!important;
+    font-size:9px!important;
+    line-height:1.3!important;
+    text-align:right!important;
+  }
+}
+
