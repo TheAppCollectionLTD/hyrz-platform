@@ -10276,3 +10276,23 @@ html,body,#root,#root>*,#root .app.auth-layout{
  #root .shift-application-map{height:210px}
  #root .shift-application-actions{position:sticky;bottom:0;padding:12px 0 max(4px,env(safe-area-inset-bottom))}
 }
+
+/* Let the worker dashboard fill the mobile viewport down to the fixed bottom navigation. */
+@media(max-width:760px){
+ .app.worker main.page-dashboard{
+  min-height:calc(100dvh - 86px);
+  display:flex;
+  flex-direction:column;
+ }
+ .app.worker main.page-dashboard>.worker-page-header{flex:0 0 auto}
+ .app.worker main.page-dashboard>.worker-todays-shift-wrap{flex:0 0 auto}
+ .app.worker main.page-dashboard>.worker-dashboard-stats{flex:0 0 auto}
+ .app.worker main.page-dashboard>.worker-section-nav{
+  flex:1 0 auto;
+  min-height:calc(100dvh - 470px);
+  margin-bottom:0;
+ }
+ .app.worker main.page-dashboard>.worker-section-nav .worker-section-links{
+  align-content:flex-start;
+ }
+}
