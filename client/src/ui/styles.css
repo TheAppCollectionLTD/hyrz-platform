@@ -9998,3 +9998,121 @@ html,body,#root,#root>*,#root .app.auth-layout{
   }
 }
 
+
+
+/* Repair mobile worker dashboard header: keep the greeting and today's-shift
+   card in separate, readable blocks with no overlapping text. */
+@media(max-width:600px){
+  #root .app.worker>main.page-dashboard{
+    min-width:0!important;
+    overflow-x:hidden!important;
+  }
+  #root .app.worker>main.page-dashboard>header.worker-page-header{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+    margin:0 0 12px!important;
+    padding:0!important;
+  }
+  #root .app.worker>main.page-dashboard>header.worker-page-header>div{
+    display:flex!important;
+    flex:1 1 auto!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    gap:4px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:calc(100% - 72px)!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  #root .app.worker>main.page-dashboard>header.worker-page-header .eyebrow{
+    display:block!important;
+    margin:0!important;
+    font-size:8px!important;
+    line-height:1.35!important;
+    letter-spacing:.09em!important;
+    white-space:normal!important;
+  }
+  #root .app.worker>main.page-dashboard>header.worker-page-header h1{
+    display:block!important;
+    margin:0!important;
+    font-size:21px!important;
+    line-height:1.2!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+  }
+  #root .app.worker>main.page-dashboard>header.worker-page-header .worker-greeting-subtitle{
+    display:block!important;
+    margin:2px 0 0!important;
+    max-width:100%!important;
+    font-size:10px!important;
+    line-height:1.45!important;
+    white-space:normal!important;
+    overflow-wrap:break-word!important;
+  }
+  #root .app.worker>main.page-dashboard>header.worker-page-header .worker-signout{
+    position:static!important;
+    flex:0 0 auto!important;
+    margin:0!important;
+    padding:7px 9px!important;
+    font-size:10px!important;
+    line-height:1.2!important;
+    white-space:nowrap!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-wrap{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0 0 10px!important;
+    padding:0!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-card{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    gap:5px!important;
+    width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+    margin:0!important;
+    padding:12px!important;
+    text-align:left!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-card :is(small,strong,span,p){
+    position:static!important;
+    display:block!important;
+    max-width:100%!important;
+    margin:0!important;
+    white-space:normal!important;
+    overflow-wrap:break-word!important;
+    word-break:normal!important;
+    text-align:left!important;
+    line-height:1.4!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-card small{
+    font-size:8px!important;
+    letter-spacing:.08em!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-card strong{
+    font-size:14px!important;
+    line-height:1.25!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-card span{
+    font-size:10px!important;
+  }
+  #root .app.worker main.page-dashboard .worker-todays-shift-actions{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    gap:6px!important;
+    width:100%!important;
+    margin-top:4px!important;
+  }
+}
