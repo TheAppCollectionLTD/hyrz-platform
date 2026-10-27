@@ -857,7 +857,7 @@ function ShiftList({shifts,allShifts=shifts,role,apply,selectedDate,onRefresh}){
   const perks=parseShiftList(s.perks??s.shift_perks??s.benefits);
   const contract=buildShiftContract(s);
   return <article className="shiftrow shift-card shift-card-six-grid" key={s.id}
-   onClick={e=>{if(role==='worker'&&!e.target.closest('button,a,input,select,textarea,label'))apply(s.id)}}
+   onClick={e=>{if(role==='worker'&&!e.target.closest('input,select,textarea,details,summary,[data-no-shift-apply]'))apply(s.id)}}
    onKeyDown={e=>{if(role==='worker'&&(e.key==='Enter'||e.key===' ')&&e.target===e.currentTarget){e.preventDefault();apply(s.id)}}}
    tabIndex={role==='worker'?0:undefined}
    aria-label={role==='worker'?`Select ${s.title||'shift'} at ${s.business_name||'employer'} to apply`:undefined}>
