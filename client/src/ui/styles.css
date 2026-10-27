@@ -10800,3 +10800,21 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .worker-inbox-message-card .worker-inbox-delete-message{align-self:center;flex:0 0 auto;min-height:34px;padding:6px 9px;border:1px solid #f1caca;border-radius:8px;background:#fff5f5;color:#a12626;font-size:11px;font-weight:700;cursor:pointer;}
 #root .worker-inbox-message-card .worker-inbox-delete-message:hover{background:#ffe8e8;}
 @media(max-width:600px){#root .worker-inbox-message-card{gap:4px;padding:6px;}#root .worker-inbox-message-card .worker-inbox-delete-message{padding:6px 7px;}}
+
+
+/* Employer dashboard mirrors the worker dashboard's horizontal overview and full-width section list. */
+.app.employer .employer-todays-overview{display:block;width:100%;margin:0 0 20px;}
+.app.employer .employer-todays-overview .worker-todays-shift-card{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:7px 12px;width:100%;box-sizing:border-box;padding:15px 17px;border-radius:12px;text-align:left;}
+.app.employer .employer-todays-overview .worker-todays-shift-card>small{width:auto;margin:0;font-size:9px;letter-spacing:.1em;}
+.app.employer .employer-todays-overview .worker-todays-shift-card>strong{width:auto;margin:0;font-size:15px;}
+.app.employer .employer-todays-overview .worker-todays-shift-card>span{flex:1 1 180px;width:auto;min-width:0;margin:0;font-size:11px;line-height:1.4;}
+.app.employer .employer-todays-overview .worker-todays-shift-actions{display:flex;gap:7px;margin:0;}
+.app.employer .employer-todays-overview .worker-todays-shift-actions button{min-height:34px;padding:8px 12px;font-size:11px;}
+.app.employer .employer-dashboard-sections{padding:18px;margin-bottom:22px;}
+.app.employer .employer-dashboard-sections-head{display:block;margin-bottom:0;}
+.app.employer .employer-dashboard-sections-head p{margin:8px 0 0;color:#647084;line-height:1.45;}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button{display:flex;align-items:center;justify-content:space-between;aspect-ratio:auto;min-height:48px;padding:13px 14px;border:1px solid #dce5f2;border-radius:10px;background:#fff;color:#1c2b48;text-align:left;font-size:12px;font-weight:700;}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:after{content:'→';font-size:15px;color:#647084;}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:hover{border-color:#b7f34a;background:#fbfff3;}
+@media(max-width:760px){.app.employer .employer-todays-overview .worker-todays-shift-card{padding:11px 12px;gap:5px 9px}.app.employer .employer-todays-overview .worker-todays-shift-card>span{flex-basis:130px;font-size:10px}.app.employer .employer-dashboard-sections{padding:14px}}
