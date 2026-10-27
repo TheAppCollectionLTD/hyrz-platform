@@ -10229,3 +10229,50 @@ html,body,#root,#root>*,#root .app.auth-layout{
     margin-top:4px!important;
   }
 }
+
+
+/* Worker application review: company-first, readable, responsive layout */
+#root .shift-application-review-backdrop{align-items:flex-start!important;overflow-y:auto!important;padding:20px 12px!important}
+#root .shift-application-review{position:relative!important;width:min(860px,100%)!important;max-width:860px!important;max-height:none!important;overflow:visible!important;margin:0 auto!important;padding:28px!important;border-radius:20px!important}
+#root .shift-application-close{position:absolute!important;top:16px!important;right:16px!important;z-index:2}
+#root .shift-application-company-header{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 20px 24px;border-bottom:1px solid #e5e9f2;margin-bottom:20px}
+#root .shift-application-company-avatar{width:88px;height:88px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f0f4ff;border:1px solid #d8e1f5;color:#17213c;font-size:34px;font-weight:800;margin-bottom:12px}
+#root .shift-application-company-avatar img{width:100%;height:100%;object-fit:cover}
+#root .shift-application-company-header h2{margin:0 72px 8px!important;font-size:clamp(21px,3vw,28px)!important;line-height:1.25!important}
+#root .shift-application-rating{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;color:#596579;font-size:13px;margin:0 0 10px}
+#root .shift-application-rating strong{color:#7250c8;font-size:15px}
+#root .shift-application-company-description{max-width:650px;margin:0 auto!important;color:#526078;line-height:1.6}
+#root .shift-application-section{padding:18px 0;border-bottom:1px solid #e9edf4}
+#root .shift-application-section:last-of-type{border-bottom:0}
+#root .shift-application-section h3{font-size:16px!important;line-height:1.35!important;margin:0 0 12px!important;color:#18233b}
+#root .shift-application-muted{margin:-4px 0 12px!important;color:#657188;font-size:13px;line-height:1.5}
+#root .shift-application-current-role,#root .shift-application-company-shift{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 15px;border:1px solid #e1e7f2;border-radius:12px;background:#fafbff}
+#root .shift-application-current-role>div,#root .shift-application-company-shift>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+#root .shift-application-current-role strong,#root .shift-application-company-shift strong{font-size:14px;line-height:1.4}
+#root .shift-application-current-role span,#root .shift-application-company-shift span{font-size:12px;color:#657188;line-height:1.45}
+#root .shift-application-current-role>strong,#root .shift-application-company-shift>strong{white-space:nowrap;color:#17213c}
+#root .shift-application-company-shifts{display:grid;gap:8px}
+#root .shift-application-company-shift.current{border-color:#a6df42;background:#f7ffe9}
+#root .shift-application-show-all{margin-top:12px}
+#root .shift-application-section .shift-confirm-checklist{margin:0}
+#root .shift-application-section ul{padding-left:22px;margin:8px 0;color:#39465d;line-height:1.65}
+#root .shift-application-notes{white-space:pre-wrap;line-height:1.6;color:#39465d;margin:0}
+#root .shift-application-review .shift-contract-document{max-height:none;overflow:visible;background:#fafbfe;border:1px solid #e1e7f2;border-radius:12px;padding:18px;line-height:1.6}
+#root .shift-application-contract-agreement{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:14px;border-radius:12px;background:#f5f8ff;line-height:1.5;cursor:pointer}
+#root .shift-application-contract-agreement input{width:18px;height:18px;flex:0 0 18px;margin-top:2px;accent-color:#b5f34a}
+#root .shift-application-map{width:100%;height:260px;overflow:hidden;border-radius:14px;border:1px solid #dce3ef;background:#f1f4f8}
+#root .shift-application-map iframe{width:100%;height:100%;border:0}
+#root .shift-application-actions{position:sticky;bottom:0;z-index:2;background:rgba(255,255,255,.97);padding:16px 0 2px;margin-top:0;border-top:1px solid #e9edf4}
+@media(max-width:600px){
+ #root .shift-application-review-backdrop{padding:0!important;align-items:stretch!important}
+ #root .shift-application-review{width:100%!important;max-width:none!important;min-height:100dvh!important;border-radius:0!important;padding:64px 17px 22px!important}
+ #root .shift-application-close{top:14px!important;right:16px!important}
+ #root .shift-application-company-header{padding:0 4px 20px;margin-bottom:6px}
+ #root .shift-application-company-avatar{width:72px;height:72px;font-size:28px}
+ #root .shift-application-company-header h2{margin:0 0 8px!important;font-size:22px!important}
+ #root .shift-application-section{padding:15px 0}
+ #root .shift-application-current-role,#root .shift-application-company-shift{align-items:flex-start;padding:11px;gap:8px}
+ #root .shift-application-current-role>strong,#root .shift-application-company-shift>strong{font-size:12px}
+ #root .shift-application-map{height:210px}
+ #root .shift-application-actions{position:sticky;bottom:0;padding:12px 0 max(4px,env(safe-area-inset-bottom))}
+}
