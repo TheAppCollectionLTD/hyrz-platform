@@ -856,7 +856,11 @@ function ShiftList({shifts,allShifts=shifts,role,apply,selectedDate,onRefresh}){
   const requirements=parseShiftList(s.work_requirements??s.requirements??s.required_confirmations??s.shift_requirements??s.duties);
   const perks=parseShiftList(s.perks??s.shift_perks??s.benefits);
   const contract=buildShiftContract(s);
-  return <article className="shiftrow shift-card shift-card-six-grid" key={s.id}>
+  return <article className="shiftrow shift-card shift-card-six-grid" key={s.id}
+   onClick={e=>{if(role==='worker'&&!e.target.closest('button,a,input,select,textarea,label'))apply(s.id)}}
+   onKeyDown={e=>{if(role==='worker'&&(e.key==='Enter'||e.key===' ')&&e.target===e.currentTarget){e.preventDefault();apply(s.id)}}}
+   tabIndex={role==='worker'?0:undefined}
+   aria-label={role==='worker'?`Select ${s.title||'shift'} at ${s.business_name||'employer'} to apply`:undefined}>
    <div className="shift-grid-cell shift-grid-profile">
     <button type="button" className="shift-employer-avatar company-profile-avatar-button" aria-label={`Open ${s.business_name||'employer'} company profile and available shifts`} title="View company profile and all available shifts" onClick={()=>window.dispatchEvent(new CustomEvent('hyrz-open-company-profile',{detail:{businessId:s.business_id??s.employer_id??null,businessName:s.business_name||'Employer'}}))}>{s.employer_profile_picture?<img src={s.employer_profile_picture} alt={`${s.business_name||'Employer'} profile`}/>:<span>{(s.business_name||'H').trim().charAt(0).toUpperCase()}</span>}</button>
     <strong className="shift-grid-company-name">{s.business_name||'Employer'}</strong>
