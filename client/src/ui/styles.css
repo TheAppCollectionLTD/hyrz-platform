@@ -10788,3 +10788,15 @@ html,body,#root,#root>*,#root .app.auth-layout{
   #root .app.worker>main .worker-todays-shift-card .worker-todays-shift-actions{flex:0 0 auto!important;width:auto!important;margin:0!important;}
   #root .app.worker>main .worker-todays-shift-card .worker-todays-shift-actions button{min-height:28px!important;padding:5px 9px!important;font-size:10px!important;}
 }
+
+
+/* Inbox: each message is a distinct card with a separate delete action. */
+#root .worker-inbox-messages{display:flex;flex-direction:column;gap:10px;padding:4px 0;}
+#root .worker-inbox-message-card{display:flex;align-items:stretch;gap:8px;width:100%;box-sizing:border-box;padding:8px;border:1px solid #dfe6f1;border-radius:12px;background:#fff;box-shadow:0 2px 7px rgba(24,39,75,.045);}
+#root .worker-inbox-message-card .worker-inbox-message-button{flex:1 1 auto;min-width:0;border:0;border-radius:8px;background:transparent;padding:8px;text-align:left;}
+#root .worker-inbox-message-card .worker-inbox-message-button:hover,#root .worker-inbox-message-card .worker-inbox-message-button:focus-visible{background:#f4f7fc;outline:2px solid #d5e1f7;outline-offset:-2px;}
+#root .worker-inbox-message-card .worker-inbox-message-top{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:5px 10px;}
+#root .worker-inbox-message-card .worker-inbox-message-preview{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;}
+#root .worker-inbox-message-card .worker-inbox-delete-message{align-self:center;flex:0 0 auto;min-height:34px;padding:6px 9px;border:1px solid #f1caca;border-radius:8px;background:#fff5f5;color:#a12626;font-size:11px;font-weight:700;cursor:pointer;}
+#root .worker-inbox-message-card .worker-inbox-delete-message:hover{background:#ffe8e8;}
+@media(max-width:600px){#root .worker-inbox-message-card{gap:4px;padding:6px;}#root .worker-inbox-message-card .worker-inbox-delete-message{padding:6px 7px;}}
