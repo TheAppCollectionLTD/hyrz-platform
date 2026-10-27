@@ -10569,9 +10569,9 @@ html,body,#root,#root>*,#root .app.auth-layout{
   transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
 }
 #root .shift-application-contract-agreement:has(input:checked){
-  background:#efffd0!important;
-  border:2px solid #79b91e!important;
-  box-shadow:0 0 0 3px rgba(154,220,48,.2)!important;
+  background:#fff!important;
+  border:1px solid #cbd8e8!important;
+  box-shadow:none!important;
 }
 #root .shift-application-contract-agreement input:checked{
   background:#a9e936!important;
