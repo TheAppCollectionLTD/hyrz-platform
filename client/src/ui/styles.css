@@ -10501,3 +10501,84 @@ html,body,#root,#root>*,#root .app.auth-layout{
   font-size:11px!important;
   font-weight:700!important;
 }
+
+
+/* Clear, consistent selected-shift and agreement toggle states */
+#root .shift-application-company-shift.current,
+#root .shift-application-company-shift.current:hover,
+#root .shift-application-company-shift.current:focus-visible{
+  border:2px solid #79b91e!important;
+  background:#c5f65a!important;
+  color:#172033!important;
+  box-shadow:0 0 0 3px rgba(154,220,48,.28)!important;
+}
+#root .shift-application-company-shift.current .shift-application-select-hint{
+  display:inline-flex;
+  width:fit-content;
+  margin-top:4px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:#e7ffb4;
+  color:#29450b;
+  font-weight:800;
+}
+#root .shift-confirm-checklist label{
+  align-items:center!important;
+  gap:12px!important;
+  min-height:54px;
+  padding:12px 14px!important;
+  border:1px solid #dce5f2!important;
+  border-radius:12px!important;
+  background:#fff!important;
+}
+#root .shift-confirm-checklist label>span{
+  order:1;
+  flex:1;
+  min-width:0;
+  overflow-wrap:anywhere;
+  color:#243149;
+  line-height:1.45;
+}
+#root .shift-confirm-checklist .hyrz-toggle{
+  order:2;
+  flex:0 0 46px!important;
+  width:46px!important;
+  height:27px!important;
+  padding:3px!important;
+  margin:0 0 0 auto!important;
+  border:1px solid #c7d0df!important;
+  background:#dce3ed!important;
+  box-shadow:inset 0 1px 2px rgba(20,35,55,.08);
+}
+#root .shift-confirm-checklist .hyrz-toggle>span{
+  width:19px!important;
+  height:19px!important;
+  background:#fff!important;
+  box-shadow:0 1px 3px rgba(0,0,0,.25)!important;
+}
+#root .shift-confirm-checklist .hyrz-toggle.on{
+  border-color:#79b91e!important;
+  background:#b9ef4b!important;
+}
+#root .shift-confirm-checklist .hyrz-toggle.on>span{
+  transform:translateX(19px)!important;
+  background:#fff!important;
+}
+#root .shift-application-contract-agreement{
+  border:1px solid #cbd8e8!important;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+#root .shift-application-contract-agreement:has(input:checked){
+  background:#efffd0!important;
+  border:2px solid #79b91e!important;
+  box-shadow:0 0 0 3px rgba(154,220,48,.2)!important;
+}
+#root .shift-application-contract-agreement input:checked{
+  background:#a9e936!important;
+  border-color:#70ad18!important;
+  box-shadow:0 0 0 2px rgba(121,185,30,.18)!important;
+}
+#root .shift-application-contract-agreement input:checked::after{
+  background:#fff!important;
+  transform:translateX(18px)!important;
+}
