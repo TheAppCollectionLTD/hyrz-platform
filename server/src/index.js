@@ -103,6 +103,7 @@ const ensureUserAddressColumns = (async()=>{
   await addColumn('users','address_postcode VARCHAR(20) NULL','user address postcode');
 })();
 const ensureWorkerPhoneVisibilityColumn = addColumn('users','phone_visible_to_employers TINYINT(1) NOT NULL DEFAULT 0','worker phone visibility preference');
+const ensureEmployerPhoneVisibilityColumn = addColumn('users',"employer_phone_visibility VARCHAR(20) NOT NULL DEFAULT 'hidden'",'employer phone visibility preference');
 const adminLoginNamesReady = createTable(`CREATE TABLE IF NOT EXISTS admin_login_names (user_id BIGINT UNSIGNED PRIMARY KEY, username VARCHAR(80) NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`,'administrator usernames');
 const ensureUniqueEmails = enqueueSchemaChange(async () => {
   const [duplicates] = await db.query("SELECT LOWER(TRIM(email)) AS normalized_email, COUNT(*) AS account_count FROM users GROUP BY LOWER(TRIM(email)) HAVING COUNT(*) > 1 LIMIT 1");
@@ -527,8 +528,8 @@ app.post('/api/auth/login', asyncRoute(async (req, res) => {
 }));
 
 app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{
- await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureWorkerPhoneVisibilityColumn]);
- const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureWorkerPhoneVisibilityColumn,ensureEmployerPhoneVisibilityColumn]);
+ const [u]=await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,employer_phone_visibility,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
  if(u[0]?.role==='worker'){
   await db.query("CREATE TABLE IF NOT EXISTS worker_strikes (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,worker_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,shift_id BIGINT UNSIGNED NOT NULL,reason VARCHAR(255) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uniq_worker_strike_application (application_id))");
   const [[strikeCount]]=await db.execute('SELECT COUNT(*) AS strikes FROM worker_strikes WHERE worker_id=?',[req.user.id]);
@@ -561,6 +562,7 @@ app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
  if(email!==undefined){updates.push('email=?');values.push(email);updates.push('email_verified_at=NULL');}
  if(req.body.phone!==undefined){updates.push('phone=?');values.push(phone||null);}
  if(req.user.role==='worker'&&req.body.phoneVisibleToEmployers!==undefined){updates.push('phone_visible_to_employers=?');values.push(req.body.phoneVisibleToEmployers?1:0);}
+ if(req.user.role==='employer'&&req.body.employerPhoneVisibility!==undefined){const visibility=['hidden','all','favourites'].includes(req.body.employerPhoneVisibility)?req.body.employerPhoneVisibility:'hidden';updates.push('employer_phone_visibility=?');values.push(visibility);}
  if(updates.length){values.push(req.user.id);await db.execute('UPDATE users SET '+updates.join(', ')+' WHERE id=?',values);}
  const [rows] = await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
  return res.json({ user: rows[0], emailVerificationRequired: email!==undefined });
@@ -816,8 +818,8 @@ app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureBusinessAddressColumns,ensureShiftAdditionalNotesColumn]);
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
- let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_rating_count,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
- const args=[];
+ let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,CASE WHEN ?='worker' AND (u.employer_phone_visibility='all' OR (u.employer_phone_visibility='favourites' AND EXISTS(SELECT 1 FROM worker_employer_favourites wf WHERE wf.worker_user_id=? AND wf.business_id=b.id))) THEN u.phone ELSE NULL END AS employer_contact_phone,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_rating_count,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
+ const args=[req.user.role,req.user.id];
  if(from){sql+=' AND s.starts_at>=?';args.push(from);}
  if(to){sql+=' AND s.starts_at<=?';args.push(to);}
  if(search){sql+=' AND (s.title LIKE ? OR s.description LIKE ? OR s.location LIKE ?)';args.push(`%${search}%`,`%${search}%`,`%${search}%`);}
