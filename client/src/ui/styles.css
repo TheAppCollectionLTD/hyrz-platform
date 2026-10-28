@@ -10852,3 +10852,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .public-app-icon-label,.download-app-eyebrow,.how-work-eyebrow{color:#C2410C!important}
 .app .selected:not(.sidebar nav button){border-color:var(--hyrz-orange)!important}
 @media(max-width:760px){.app .worker-bottom-nav button.active,.app .mobile-bottom-nav button.active,.app .worker-mobile-nav button.active,.app .bottom-nav button.active{background:var(--hyrz-orange)!important;color:var(--hyrz-white)!important}}
+
+
+/* Brand correction: override legacy high-specificity blue/lime public-site rules. */
+#root header.public-home-nav{background:#111111!important;color:#FFFFFF!important;border-color:#111111!important;}
+#root header.public-home-nav .public-home-logo,#root header.public-home-nav .public-home-logo span{color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
+#root header.public-home-nav>nav>.public-about-trigger,#root header.public-home-nav>nav>.public-how-work-trigger,#root header.public-home-nav>nav>.public-nav-signin{background:transparent!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;border-color:transparent!important;}
+#root header.public-home-nav>nav>.public-nav-signup,#root .public-how-work-cta,#root .auth-welcome .primary,#root .auth-welcome button.primary,#root .auth-welcome .cta,#root .auth-welcome .header-cta,#root .auth-welcome .signup-button,#root .auth-welcome .sign-up-button,#root .auth-welcome .btn-primary,#root .auth-welcome .button-primary{background:#F97316!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;border-color:#F97316!important;}
+#root header.public-home-nav>nav>.public-nav-signup:hover,#root .public-how-work-cta:hover,#root .auth-welcome .primary:hover{background:#EA580C!important;border-color:#EA580C!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
+#root .public-intro-carousel .active,#root .public-intro-dots button.active,#root .public-intro-tabs button.active{background:#F97316!important;border-color:#F97316!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
+#root .public-intro-carousel button,#root .public-intro-tabs button{border-color:#E5E5E5!important;}
+#root .auth-welcome,#root .auth-welcome .welcome-panel,#root .auth-welcome .how-work-page,#root .auth-welcome .how-work-content,#root .auth-welcome .work-how-page,#root .auth-welcome .work-how-content{background:#F7F7F7!important;color:#111111!important;}
+#root .auth-welcome :is(h1,h2,h3,h4,.hero-copy h2){color:#111111!important;}
+#root .auth-welcome :is(p,li,.eyebrow,.download-app-copy>p,.download-app-note){color:#666666!important;}
+#root .auth-welcome .work-carousel,#root .auth-welcome .carousel-overlay{background-color:#111111!important;color:#FFFFFF!important;}
+#root .auth-welcome .work-carousel :is(h1,h2,h3,p,li,strong,em,.eyebrow),#root .auth-welcome .carousel-overlay :is(h1,h2,h3,p,li,strong,em){color:#FFFFFF!important;}
+#root .app .primary,#root .app button.primary,#root .app .worker-section-links button.active,#root .app .job-tabs-squares>button.active{background:#F97316!important;border-color:#F97316!important;color:#FFFFFF!important;}
+#root .app .primary:hover,#root .app button.primary:hover{background:#EA580C!important;border-color:#EA580C!important;}
+#root .app .worker-bottom-nav,#root .app .mobile-bottom-nav,#root .app .worker-mobile-nav,#root .app .bottom-nav{background:#111111!important;}
