@@ -11783,3 +11783,63 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   color:#F97316!important;
 }
 
+/* Keep the automatic-matching confirmation dialog readable on the black panel. */
+#root .app .worker-availability-panel .availability-confirm-dialog{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:18px!important;
+  margin:16px 0 0!important;
+  overflow:visible!important;
+  background:#111111!important;
+  border:2px solid #F97316!important;
+  border-radius:12px!important;
+  color:#FFFFFF!important;
+}
+#root .app .worker-availability-panel .availability-confirm-dialog h3{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  color:#FFFFFF!important;
+  font-size:17px!important;
+  line-height:1.35!important;
+  font-weight:800!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+#root .app .worker-availability-panel .availability-confirm-dialog p{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  color:#FFFFFF!important;
+  font-size:14px!important;
+  line-height:1.55!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+#root .app .worker-availability-panel .availability-confirm-dialog>div{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  margin-top:4px!important;
+}
+#root .app .worker-availability-panel .availability-confirm-dialog button{
+  min-height:42px!important;
+  max-width:100%!important;
+  white-space:normal!important;
+}
+@media(max-width:650px){
+  #root .app .worker-availability-panel .availability-confirm-dialog{padding:14px!important}
+  #root .app .worker-availability-panel .availability-confirm-dialog>div{align-items:stretch!important}
+  #root .app .worker-availability-panel .availability-confirm-dialog>div button{flex:1 1 100%!important}
+}
+
