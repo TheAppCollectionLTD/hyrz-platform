@@ -10960,3 +10960,58 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   #root .public-home-nav .auth-symbol-button{width:38px;height:38px;min-width:38px;border-radius:12px}
   #root .public-home-nav .auth-symbol-button svg{width:20px;height:20px}
 }
+
+
+/* Shared icon-only sign-out controls, matching the sign-in/sign-up icon language. */
+#root .auth-symbol-button{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  cursor:pointer;
+  transition:background-color .18s ease,color .18s ease,border-color .18s ease,transform .18s ease;
+}
+#root .auth-symbol-button svg{
+  display:block;
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+#root .admin-bottom-nav .admin-signout-icon{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.05);
+  color:inherit;
+}
+#root .admin-bottom-nav .admin-signout-icon:hover,
+#root .admin-bottom-nav .admin-signout-icon:focus-visible,
+#root .content-signout-icon:hover,
+#root .content-signout-icon:focus-visible{
+  background:rgba(249,115,22,.14);
+  border-color:var(--hyrz-amber,#F97316);
+}
+#root .content-signout-icon{
+  border:1px solid var(--border,#34382f);
+}
+#root .worker-subsection-toolbar .worker-back-button,
+#root .icon-back-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:44px;
+  min-height:44px;
+  padding:0;
+  font-size:25px;
+  line-height:1;
+}
+@media(max-width:600px){
+  #root .auth-symbol-button{width:40px;height:40px;min-width:40px}
+  #root .auth-symbol-button svg{width:20px;height:20px}
+}
