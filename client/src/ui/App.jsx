@@ -518,7 +518,7 @@ async function submitPasswordReset(e){
 </form>
 </section>}
 
-{!user && page==='passwordResetSent'&&<section className="panel auth"><h2>Check your email</h2><p>{notice||'If an active account exists for that email, a password reset link will be sent.'}</p><p>The reset link expires after 30 minutes and can only be used once.</p><button className="primary" aria-label="Back to sign in" title="Back to sign in" onClick={()=>navigateTo('login')}>←</button></section>}
+{!user && page==='passwordResetSent'&&<section className="panel auth"><h2>Check your email</h2><p>{notice||'If an active account exists for that email, a password reset link will be sent.'}</p><p>The reset link expires after 30 minutes and can only be used once.</p><button type="button" className="primary icon-back-button" aria-label="Back to sign in" title="Back to sign in" onClick={()=>navigateTo('login')}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 14 4 9l5-5"/><path d="M4 9h9a7 7 0 0 1 7 7v4"/></svg></button></section>}
 
 {!user && page==='resetPassword'&&<section className="panel auth">
 <h2>Choose a new password</h2><p>Use at least 12 characters. The reset link can only be used once.</p>
