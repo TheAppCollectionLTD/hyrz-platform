@@ -11843,3 +11843,67 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   #root .app .worker-availability-panel .availability-confirm-dialog>div button{flex:1 1 100%!important}
 }
 
+
+
+/* Unified back controls: compact curved-arrow button, consistently centered. */
+#root .app button.icon-back-button,
+#root .app .workchat-back-row button,
+#root .app button.worker-back-button{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  width:30px!important;
+  min-width:30px!important;
+  max-width:30px!important;
+  height:30px!important;
+  min-height:30px!important;
+  max-height:30px!important;
+  margin:0!important;
+  padding:0!important;
+  gap:0!important;
+  border:1px solid #bdbdbd!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  color:#292929!important;
+  -webkit-text-fill-color:#292929!important;
+  font-size:0!important;
+  line-height:1!important;
+  box-shadow:none!important;
+}
+#root .app button.icon-back-button svg,
+#root .app .workchat-back-row button svg,
+#root .app button.worker-back-button svg{
+  display:block!important;
+  width:17px!important;
+  height:17px!important;
+  flex:0 0 17px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.8!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+#root .app .workchat-back-row{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:10px 0!important;
+  gap:0!important;
+}
+#root .app button.icon-back-button:hover,
+#root .app .workchat-back-row button:hover,
+#root .app button.worker-back-button:hover{
+  border-color:#F97316!important;
+  background:#fff!important;
+  color:#C2410C!important;
+  -webkit-text-fill-color:#C2410C!important;
+}
+#root .app button.icon-back-button:focus-visible,
+#root .app .workchat-back-row button:focus-visible,
+#root .app button.worker-back-button:focus-visible{
+  outline:2px solid #F97316!important;
+  outline-offset:3px!important;
+}
