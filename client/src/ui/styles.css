@@ -10870,3 +10870,19 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .primary,#root .app button.primary,#root .app .worker-section-links button.active,#root .app .job-tabs-squares>button.active{background:#F97316!important;border-color:#F97316!important;color:#FFFFFF!important;}
 #root .app .primary:hover,#root .app button.primary:hover{background:#EA580C!important;border-color:#EA580C!important;}
 #root .app .worker-bottom-nav,#root .app .mobile-bottom-nav,#root .app .worker-mobile-nav,#root .app .bottom-nav{background:#111111!important;}
+
+
+/* Contract acceptance switch: make the accepted/on state unmistakably Hyrz orange. */
+#root .shift-application-contract-agreement input[type="checkbox"]:checked,
+#root .shift-contract-agreement input[type="checkbox"]:checked,
+#root .shift-application-contract-agreement input:checked {
+  background-color: #F97316 !important;
+  border-color: #C2410C !important;
+  accent-color: #F97316 !important;
+}
+#root .shift-application-contract-agreement input[type="checkbox"]:checked::after,
+#root .shift-contract-agreement input[type="checkbox"]:checked::after,
+#root .shift-application-contract-agreement input:checked::after {
+  background-color: #FFFFFF !important;
+  transform: translateX(18px) !important;
+}
