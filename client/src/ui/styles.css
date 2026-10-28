@@ -11015,3 +11015,118 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   #root .auth-symbol-button{width:40px;height:40px;min-width:40px}
   #root .auth-symbol-button svg{width:20px;height:20px}
 }
+
+
+/* High-contrast worker shift filters: keep every control readable on mobile and desktop. */
+#root .app.worker .shift-filters{
+  background:#20221f!important;
+  border:1px solid #555b51!important;
+  color:#fff!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.22)!important;
+}
+#root .app.worker .shift-filters>label,
+#root .app.worker .shift-filters .shift-date-range,
+#root .app.worker .shift-filters .shift-date-range-label,
+#root .app.worker .shift-filters .role-multi-filter,
+#root .app.worker .shift-filters .role-multi-filter-heading,
+#root .app.worker .shift-filters .role-multi-filter-heading>span,
+#root .app.worker .shift-filters .shift-type-filter-label,
+#root .app.worker .shift-filters .role-filter-hint{
+  color:#ffd37a!important;
+  -webkit-text-fill-color:#ffd37a!important;
+  opacity:1!important;
+}
+#root .app.worker .shift-filters input:not([type="checkbox"]),
+#root .app.worker .shift-filters select,
+#root .app.worker .shift-filters .shift-type-picker-toggle,
+#root .app.worker .shift-filters .role-picker-toggle,
+#root .app.worker .shift-filters .role-picker-panel>input[type="search"]{
+  background:#fff!important;
+  color:#171916!important;
+  -webkit-text-fill-color:#171916!important;
+  caret-color:#171916!important;
+  border:1px solid #b8bdb4!important;
+  box-shadow:0 1px 3px rgba(0,0,0,.12)!important;
+  opacity:1!important;
+}
+#root .app.worker .shift-filters input::placeholder,
+#root .app.worker .shift-filters .role-picker-panel>input[type="search"]::placeholder{
+  color:#555b51!important;
+  -webkit-text-fill-color:#555b51!important;
+  opacity:1!important;
+}
+#root .app.worker .shift-filters .shift-type-picker-panel,
+#root .app.worker .shift-filters .role-picker-panel{
+  background:#fff!important;
+  color:#171916!important;
+  border:1px solid #c4c9c0!important;
+  box-shadow:0 14px 32px rgba(0,0,0,.32)!important;
+}
+#root .app.worker .shift-filters .shift-type-picker-option,
+#root .app.worker .shift-filters .role-picker-option,
+#root .app.worker .shift-filters .role-picker-group,
+#root .app.worker .shift-filters .role-picker-group legend,
+#root .app.worker .shift-filters .shift-type-picker-footer{
+  color:#171916!important;
+  -webkit-text-fill-color:#171916!important;
+}
+#root .app.worker .shift-filters .shift-type-picker-option,
+#root .app.worker .shift-filters .role-picker-option{
+  background:#fff!important;
+}
+#root .app.worker .shift-filters .shift-type-picker-option:hover,
+#root .app.worker .shift-filters .role-picker-option:hover{
+  background:#fff3dc!important;
+}
+#root .app.worker .shift-filters .role-picker-footer{
+  background:#f5f6f3!important;
+  color:#171916!important;
+  border-top:1px solid #d7dbd3!important;
+}
+#root .app.worker .shift-filters .role-picker-footer span{
+  color:#343a32!important;
+}
+#root .app.worker .shift-filters input[type="checkbox"]{
+  accent-color:#f97316!important;
+  opacity:1!important;
+}
+#root .app.worker .shift-filters input:focus,
+#root .app.worker .shift-filters select:focus,
+#root .app.worker .shift-filters .shift-type-picker-toggle:focus-visible,
+#root .app.worker .shift-filters .role-picker-toggle:focus-visible{
+  outline:2px solid #f97316!important;
+  outline-offset:2px!important;
+  border-color:#f97316!important;
+}
+@media(max-width:600px){
+  #root .app.worker .shift-filters{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:14px 10px!important;
+    padding:14px!important;
+  }
+  #root .app.worker .shift-filters>.shift-type-multi-filter,
+  #root .app.worker .shift-filters>.role-multi-filter,
+  #root .app.worker .shift-filters>.shift-date-range{
+    grid-column:1/-1!important;
+    grid-row:auto!important;
+    min-width:0!important;
+  }
+  #root .app.worker .shift-filters>.shift-filters label,
+  #root .app.worker .shift-filters>label{
+    min-width:0!important;
+  }
+  #root .app.worker .shift-filters .shift-date-range-inputs{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  #root .app.worker .shift-filters .shift-type-picker-toggle,
+  #root .app.worker .shift-filters .role-picker-toggle{
+    width:100%!important;
+    min-width:0!important;
+  }
+}
+@media(max-width:360px){
+  #root .app.worker .shift-filters{grid-template-columns:minmax(0,1fr)!important}
+  #root .app.worker .shift-filters>.shift-type-multi-filter,
+  #root .app.worker .shift-filters>.role-multi-filter,
+  #root .app.worker .shift-filters>.shift-date-range{grid-column:1!important}
+}
