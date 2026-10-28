@@ -11337,3 +11337,51 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
     grid-column:1!important;
   }
 }
+
+
+/* Platform-wide toggle rule: every selected/on switch is Hyrz orange. */
+#root .app input[type="checkbox"]:checked,
+#root input[type="checkbox"]:checked{
+  background:#F97316!important;
+  border-color:#F97316!important;
+  accent-color:#F97316!important;
+}
+#root .app input[type="checkbox"]:focus-visible,
+#root input[type="checkbox"]:focus-visible{
+  outline:2px solid #F97316!important;
+  outline-offset:2px!important;
+}
+#root .app .hyrz-toggle.on,
+#root .hyrz-toggle.on,
+#root .app .template-toggle.is-on .template-toggle-track,
+#root .template-toggle.is-on .template-toggle-track,
+#root .app .notification-switch:checked,
+#root .notification-switch:checked,
+#root .app .toggle input:checked + .toggle-track,
+#root .app .switch input:checked + .switch-track,
+#root .toggle input:checked + .toggle-track,
+#root .switch input:checked + .switch-track{
+  background:#F97316!important;
+  border-color:#F97316!important;
+}
+#root .app .workchat-toggle.on,
+#root .workchat-toggle.on{
+  background:#F97316!important;
+  border-color:#F97316!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
+#root .app .shift-confirm-checklist .hyrz-toggle.on,
+#root .shift-confirm-checklist .hyrz-toggle.on,
+#root .app .notification-switch:checked::before,
+#root .notification-switch:checked::before{
+  background:#000!important;
+}
+#root .app .hyrz-toggle:focus-visible,
+#root .hyrz-toggle:focus-visible,
+#root .app .notification-switch:focus-visible,
+#root .notification-switch:focus-visible,
+#root .app .template-toggle:focus-visible{
+  outline:2px solid #F97316!important;
+  outline-offset:3px!important;
+}
