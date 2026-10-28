@@ -504,8 +504,8 @@ async function submitPasswordReset(e){
 <form onSubmit={e=>{e.preventDefault();authenticate(false)}}>
 <label>Email<input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)}/></label>
 <label>Password<input type="password" required autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)}/></label>
-{error&&<p className="shift-publish-feedback shift-publish-error" role="alert">{error}</p>}{notice&&<p className="shift-publish-feedback shift-publish-notice" role="status">{notice}</p>}<button className="primary" disabled={busy}>{busy?'Signing in…':'Sign in'}</button></form>
-<button type="button" className="textbutton" onClick={()=>{setError('');setNotice('');navigateTo('forgotPassword')}}>Forgot your password?</button>
+{error&&<p className="shift-publish-feedback shift-publish-error" role="alert">{error}</p>}{notice&&<p className="shift-publish-feedback shift-publish-notice" role="status">{notice}</p>}<button type="submit" className="primary auth-submit-symbol" aria-label={busy?'Signing in':'Sign in'} title={busy?'Signing in':'Sign in'} disabled={busy}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5M10 16l4-4-4-4M14 12H3"/></svg></button></form>
+<button type="button" className="textbutton auth-forgot-link" onClick={()=>{setError('');setNotice('');navigateTo('forgotPassword')}}>Forgot your password?</button>
 </section>}
 
 {!user && page==='forgotPassword'&&<section className="panel auth">
