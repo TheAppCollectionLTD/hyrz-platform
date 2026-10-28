@@ -11679,3 +11679,42 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .role-selection .role-card:focus-visible b{
   color:#F97316!important;
 }
+
+
+/* Homepage: keep the "Sign in" action as plain text, not a boxed button. */
+#root .app.auth-layout .home-registered-prompt{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:4px!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#root .app.auth-layout .home-registered-prompt .home-signin-link{
+  display:inline!important;
+  width:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  font:inherit!important;
+  font-weight:700!important;
+  text-decoration:underline!important;
+  text-decoration-color:#F97316!important;
+  text-underline-offset:3px!important;
+}
+#root .app.auth-layout .home-registered-prompt .home-signin-link:hover,
+#root .app.auth-layout .home-registered-prompt .home-signin-link:focus-visible{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  color:#F97316!important;
+  -webkit-text-fill-color:#F97316!important;
+}
