@@ -11130,3 +11130,33 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   #root .app.worker .shift-filters>.role-multi-filter,
   #root .app.worker .shift-filters>.shift-date-range{grid-column:1!important}
 }
+
+
+/* Keep the dashboard profile avatar circular despite global button styles. */
+#root .app .worker-page-header button.worker-header-profile-picture{
+  width:42px!important;
+  height:42px!important;
+  min-width:42px!important;
+  min-height:42px!important;
+  flex:0 0 42px!important;
+  padding:0!important;
+  aspect-ratio:1/1!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  clip-path:circle(50% at 50% 50%)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+#root .app .worker-page-header .worker-header-profile-picture img,
+#root .app .worker-page-header .worker-header-profile-picture span{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  flex:0 0 100%!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  object-fit:cover!important;
+  box-sizing:border-box!important;
+}
