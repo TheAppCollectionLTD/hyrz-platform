@@ -11460,3 +11460,43 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
     box-sizing:border-box!important;
   }
 }
+
+
+/* One consistent, modern curved back-arrow icon across all back controls. */
+#root .app button.icon-back-button,
+#root .app .workchat-back-row button{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:42px!important;
+  min-width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  padding:0!important;
+  gap:0!important;
+  font-size:0!important;
+  line-height:1!important;
+  border-radius:12px!important;
+}
+#root .app button.icon-back-button svg,
+#root .app .workchat-back-row button svg{
+  display:block!important;
+  width:22px!important;
+  height:22px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:2!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+  flex:0 0 22px!important;
+}
+#root .app button.icon-back-button:hover,
+#root .app .workchat-back-row button:hover{
+  border-color:#F97316!important;
+  color:#F97316!important;
+}
+#root .app button.icon-back-button:focus-visible,
+#root .app .workchat-back-row button:focus-visible{
+  outline:2px solid #F97316!important;
+  outline-offset:3px!important;
+}
