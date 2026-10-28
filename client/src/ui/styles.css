@@ -11160,3 +11160,180 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   object-fit:cover!important;
   box-sizing:border-box!important;
 }
+
+
+/* FINAL worker filters pass: simple orange, white and black only; clear spacing and legible controls. */
+#root .app.worker .find-shifts-panel .shift-filters{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:start!important;
+  gap:16px!important;
+  padding:18px!important;
+  background:#000!important;
+  color:#fff!important;
+  border:2px solid #f97316!important;
+  border-radius:14px!important;
+  box-shadow:none!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters > label,
+#root .app.worker .find-shifts-panel .shift-filters .shift-date-range,
+#root .app.worker .find-shifts-panel .shift-filters .shift-date-range-label,
+#root .app.worker .find-shifts-panel .shift-filters .role-multi-filter,
+#root .app.worker .find-shifts-panel .shift-filters .role-multi-filter-heading,
+#root .app.worker .find-shifts-panel .shift-filters .role-multi-filter-heading > span,
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-filter-label,
+#root .app.worker .find-shifts-panel .shift-filters .role-filter-hint{
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  text-shadow:none!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1.4!important;
+  opacity:1!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters > label,
+#root .app.worker .find-shifts-panel .shift-filters .shift-date-range,
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-multi-filter,
+#root .app.worker .find-shifts-panel .shift-filters .role-multi-filter{
+  min-width:0!important;
+  width:100%!important;
+  margin:0!important;
+  gap:8px!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters input:not([type="checkbox"]),
+#root .app.worker .find-shifts-panel .shift-filters select,
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-toggle,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-toggle{
+  display:block!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:44px!important;
+  padding:10px 12px!important;
+  background:#fff!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  caret-color:#000!important;
+  border:2px solid #f97316!important;
+  border-radius:8px!important;
+  box-shadow:none!important;
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:1.3!important;
+  opacity:1!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters select,
+#root .app.worker .find-shifts-panel .shift-filters select option,
+#root .app.worker .find-shifts-panel .shift-filters select optgroup{
+  background-color:#fff!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters input::placeholder,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-panel > input[type="search"]::placeholder{
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  opacity:1!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters .shift-date-range-inputs{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+  width:100%!important;
+  min-width:0!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters .shift-date-range-inputs label{
+  display:grid!important;
+  gap:7px!important;
+  min-width:0!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-panel,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-panel{
+  box-sizing:border-box!important;
+  background:#fff!important;
+  color:#000!important;
+  border:2px solid #f97316!important;
+  border-radius:10px!important;
+  box-shadow:none!important;
+  z-index:1000!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-option,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-option,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-group,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-group legend,
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-footer,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-footer,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-footer span{
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  background-color:#fff!important;
+  text-shadow:none!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-option,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-option{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  padding:9px 8px!important;
+  border-radius:6px!important;
+  line-height:1.4!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-option:hover,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-option:hover{
+  background:#f97316!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters input[type="checkbox"]{
+  accent-color:#f97316!important;
+  opacity:1!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-footer button,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-footer button,
+#root .app.worker .find-shifts-panel .shift-filters .role-picker-footer button:hover{
+  background:#f97316!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  border:1px solid #f97316!important;
+  border-radius:7px!important;
+  font-weight:700!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters .role-clear-button,
+#root .app.worker .find-shifts-panel .clear-all-filters{
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  background:#000!important;
+  border:1px solid #f97316!important;
+  border-radius:7px!important;
+}
+#root .app.worker .find-shifts-panel .shift-filters input:focus,
+#root .app.worker .find-shifts-panel .shift-filters select:focus,
+#root .app.worker .find-shifts-panel .shift-filters button:focus-visible{
+  outline:2px solid #f97316!important;
+  outline-offset:2px!important;
+}
+@media(max-width:600px){
+  #root .app.worker .find-shifts-panel .shift-filters{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:15px 10px!important;
+    padding:14px!important;
+  }
+  #root .app.worker .find-shifts-panel .shift-filters > .shift-type-multi-filter,
+  #root .app.worker .find-shifts-panel .shift-filters > .role-multi-filter,
+  #root .app.worker .find-shifts-panel .shift-filters > .shift-date-range{
+    grid-column:1/-1!important;
+  }
+  #root .app.worker .find-shifts-panel .shift-filters .shift-date-range-inputs{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:360px){
+  #root .app.worker .find-shifts-panel .shift-filters{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  #root .app.worker .find-shifts-panel .shift-filters > .shift-type-multi-filter,
+  #root .app.worker .find-shifts-panel .shift-filters > .role-multi-filter,
+  #root .app.worker .find-shifts-panel .shift-filters > .shift-date-range{
+    grid-column:1!important;
+  }
+}
