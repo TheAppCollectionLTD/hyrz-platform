@@ -11907,3 +11907,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   outline:2px solid #F97316!important;
   outline-offset:3px!important;
 }
+
+
+/* Ensure text-only legacy back buttons retain a visible icon after icon-only styling. */
+#root .app button.worker-back-button::before{
+  content:"↶"!important;
+  display:block!important;
+  color:#292929!important;
+  -webkit-text-fill-color:#292929!important;
+  font-family:Arial,sans-serif!important;
+  font-size:18px!important;
+  font-weight:500!important;
+  line-height:1!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
