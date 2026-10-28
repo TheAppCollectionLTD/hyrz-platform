@@ -10818,3 +10818,37 @@ html,body,#root,#root>*,#root .app.auth-layout{
 .app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:after{content:'→';font-size:15px;color:#647084;}
 .app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:hover{border-color:#b7f34a;background:#fbfff3;}
 @media(max-width:760px){.app.employer .employer-todays-overview .worker-todays-shift-card{padding:11px 12px;gap:5px 9px}.app.employer .employer-todays-overview .worker-todays-shift-card>span{flex-basis:130px;font-size:10px}.app.employer .employer-dashboard-sections{padding:14px}}
+
+
+/* Hyrz brand refresh: orange, black and white. Keep the palette consistent across public, worker, employer and admin screens. */
+:root{--hyrz-orange:#F97316;--hyrz-orange-hover:#EA580C;--hyrz-black:#111111;--hyrz-white:#FFFFFF;--hyrz-page:#F7F7F7;--hyrz-border:#E5E5E5;--hyrz-muted:#666666;}
+:root{color:var(--hyrz-black);background:var(--hyrz-page)}
+body{background:var(--hyrz-page);color:var(--hyrz-black)}
+.sidebar{background:var(--hyrz-black);color:var(--hyrz-white)}
+.brand span,.green,.hero-copy h2 em,.live{color:var(--hyrz-orange)!important}
+.primary,.public-nav-signup,.public-intro-cta,.public-how-work-cta{background:var(--hyrz-orange)!important;border-color:var(--hyrz-orange)!important;color:var(--hyrz-white)!important}
+.primary:hover,.public-nav-signup:hover,.public-intro-cta:hover,.public-how-work-cta:hover{background:var(--hyrz-orange-hover)!important;border-color:var(--hyrz-orange-hover)!important;color:var(--hyrz-white)!important}
+.primary:disabled{background:var(--hyrz-orange)!important;color:var(--hyrz-white)!important;opacity:.55}
+.sidebar nav button.selected,.sidebar nav button:hover{background:#292929!important;color:var(--hyrz-white)!important;border-left:3px solid var(--hyrz-orange)}
+.pill{background:#FFF0E6!important;color:#9A3412!important}
+input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!important;box-shadow:0 0 0 2px #F973161F}
+.textbutton,.inline-link,.how-work-link{color:#C2410C!important}
+.status.approved,.status.paid,.success{background:#FFF0E6!important;color:#9A3412!important}
+.error,.status.rejected,.status.disputed,.status.overdue{background:#FEE2E2!important;color:#991B1B!important}
+.worker .primary,.worker .worker-bottom-nav button.active,.worker .mobile-bottom-nav button.active,.worker .worker-nav button.active,.worker .worker-section-links button.active{background:var(--hyrz-orange)!important;color:var(--hyrz-white)!important}
+.worker .shiftdate{background:#292929!important;color:#FDBA74!important}
+.worker .shiftpay button,.worker .row button{background:#FFF0E6!important;color:#9A3412!important}
+.worker .status.approved{background:#FFF0E6!important;color:#9A3412!important}
+.app .worker-bottom-nav,.app .mobile-bottom-nav,.app .worker-mobile-nav,.app .bottom-nav{background:var(--hyrz-black)!important}
+.app .worker-bottom-nav button.active,.app .mobile-bottom-nav button.active,.app .worker-mobile-nav button.active,.app .bottom-nav button.active{background:var(--hyrz-orange)!important;color:var(--hyrz-white)!important}
+.app .worker-dashboard-stat,.app .worker-todays-shift-card,.app .employer-todays-overview .worker-todays-shift-card{border-color:var(--hyrz-border)}
+.app .worker-section-links button:hover,.app .worker-section-links button:focus-visible,.app .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:hover{border-color:var(--hyrz-orange)!important;background:#FFF7F0!important}
+.app .worker-section-links button:after{color:var(--hyrz-orange)!important}
+.app .worker-page-header .worker-header-profile-picture{border-color:#F9731640!important}
+.app .worker-page-header .worker-header-profile-picture span{background:var(--hyrz-black)!important;color:var(--hyrz-white)!important}
+.public-home-logo,.brand{color:var(--hyrz-white)}
+.public-nav-signin{border-color:var(--hyrz-black)!important;color:var(--hyrz-black)!important}
+.public-intro-carousel .active,.public-intro-dots button.active{background:var(--hyrz-orange)!important}
+.public-app-icon-label,.download-app-eyebrow,.how-work-eyebrow{color:#C2410C!important}
+.app .selected:not(.sidebar nav button){border-color:var(--hyrz-orange)!important}
+@media(max-width:760px){.app .worker-bottom-nav button.active,.app .mobile-bottom-nav button.active,.app .worker-mobile-nav button.active,.app .bottom-nav button.active{background:var(--hyrz-orange)!important;color:var(--hyrz-white)!important}}
