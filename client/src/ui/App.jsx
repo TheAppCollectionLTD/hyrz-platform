@@ -451,7 +451,7 @@ async function submitPasswordReset(e){
 <div className="welcome-panel">
 <h2>Flexible work.<br/><em>Reliable staffing.</em></h2><p className="welcome-tagline">Whoever you are. Wherever you are.</p>
 <button className="primary" onClick={()=>navigateTo('chooseRole')}>Get started</button>
-<p>Already registered? <button className="textbutton" onClick={()=>navigateTo('login')}>Sign in</button></p>
+<p className="home-registered-prompt">Already registered? <button type="button" className="textbutton home-signin-link" onClick={()=>navigateTo('login')}>Sign in</button></p>
 </div>
 <section className="download-app-section">
  <div className="download-app-copy"><span className="download-app-eyebrow">hyrz FOR YOUR PHONE</span><h2>Take hyrz <em>with you.</em></h2><p>Find shifts, manage your work and stay connected wherever you are. The hyrz mobile app is coming soon.</p><div className="download-app-actions"><div className="app-store-placeholder" aria-label="App Store download coming soon"><span className="store-symbol">●</span><span><small>COMING SOON</small><strong>App Store</strong></span></div><div className="app-store-placeholder" aria-label="Google Play download coming soon"><span className="store-symbol">▶</span><span><small>COMING SOON</small><strong>Google Play</strong></span></div></div><small className="download-app-note">iOS and Android download links will appear here when available.</small></div>
