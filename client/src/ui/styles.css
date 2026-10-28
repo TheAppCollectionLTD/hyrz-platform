@@ -11500,3 +11500,72 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   outline:2px solid #F97316!important;
   outline-offset:3px!important;
 }
+
+
+/* Login screen: icon-only sign-in action and a simple unboxed password-reset link. */
+#root .app.auth-layout .panel.auth form > .auth-submit-symbol{
+  width:48px!important;
+  min-width:48px!important;
+  height:48px!important;
+  min-height:48px!important;
+  margin:8px auto 0!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid #F97316!important;
+  border-radius:12px!important;
+  background:#F97316!important;
+  color:#fff!important;
+  box-shadow:none!important;
+  font-size:0!important;
+  line-height:1!important;
+}
+#root .app.auth-layout .panel.auth form > .auth-submit-symbol svg{
+  display:block!important;
+  width:23px!important;
+  height:23px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.9!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+#root .app.auth-layout .panel.auth form > .auth-submit-symbol:hover:not(:disabled),
+#root .app.auth-layout .panel.auth form > .auth-submit-symbol:focus-visible{
+  background:#000!important;
+  border-color:#F97316!important;
+  color:#F97316!important;
+}
+#root .app.auth-layout .panel.auth form > .auth-submit-symbol:disabled{
+  opacity:.65!important;
+  cursor:wait!important;
+}
+#root .app.auth-layout .panel.auth > .auth-forgot-link{
+  display:inline-block!important;
+  width:auto!important;
+  min-height:0!important;
+  margin:14px 0 0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  font-size:12px!important;
+  font-weight:600!important;
+  line-height:1.5!important;
+  text-align:left!important;
+  text-decoration:underline!important;
+  text-decoration-color:#F97316!important;
+  text-underline-offset:3px!important;
+}
+#root .app.auth-layout .panel.auth > .auth-forgot-link:hover,
+#root .app.auth-layout .panel.auth > .auth-forgot-link:focus-visible{
+  color:#F97316!important;
+  -webkit-text-fill-color:#F97316!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
