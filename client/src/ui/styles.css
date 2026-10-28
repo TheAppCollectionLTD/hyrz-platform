@@ -10886,3 +10886,77 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   background-color: #FFFFFF !important;
   transform: translateX(18px) !important;
 }
+
+
+/* Icon-only authentication actions: modern, accessible and consistent across breakpoints. */
+#root .public-home-nav .auth-symbol-button{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  transition:background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+}
+#root .public-home-nav .auth-symbol-button svg,
+#root .sidebar .sidebar-auth-icon svg{
+  display:block;
+  width:22px;
+  height:22px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+#root .public-home-nav .public-nav-signin.auth-symbol-button{
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.05);
+  color:#fff;
+}
+#root .public-home-nav .public-nav-signin.auth-symbol-button:hover,
+#root .public-home-nav .public-nav-signin.auth-symbol-button:focus-visible{
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.5);
+}
+#root .public-home-nav .public-nav-signup.auth-symbol-button{
+  border:1px solid var(--hyrz-amber, #F97316);
+  background:var(--hyrz-amber, #F97316);
+  color:var(--hyrz-ink, #111);
+}
+#root .public-home-nav .public-nav-signup.auth-symbol-button:hover,
+#root .public-home-nav .public-nav-signup.auth-symbol-button:focus-visible{
+  transform:translateY(-1px);
+  background:#ffd37a;
+  border-color:#ffd37a;
+}
+#root .sidebar .sidebottom .sidebar-auth-icon{
+  width:44px;
+  height:44px;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  cursor:pointer;
+  transition:background-color .18s ease, border-color .18s ease;
+}
+#root .sidebar .sidebottom .sidebar-auth-icon:hover,
+#root .sidebar .sidebottom .sidebar-auth-icon:focus-visible{
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.35);
+}
+#root .public-home-nav .auth-symbol-button:focus-visible,
+#root .sidebar .sidebar-auth-icon:focus-visible{
+  outline:2px solid var(--hyrz-amber, #F97316);
+  outline-offset:3px;
+}
+@media(max-width:600px){
+  #root .public-home-nav .auth-symbol-button{width:38px;height:38px;min-width:38px;border-radius:12px}
+  #root .public-home-nav .auth-symbol-button svg{width:20px;height:20px}
+}
