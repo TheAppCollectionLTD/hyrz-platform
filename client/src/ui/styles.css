@@ -11569,3 +11569,49 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   border:0!important;
   box-shadow:none!important;
 }
+
+
+/* Sign-in page: centre the complete form content, including all text and links. */
+#root .app.auth-layout .panel.auth{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+}
+#root .app.auth-layout .panel.auth > .icon-back-button{
+  align-self:center!important;
+  margin:0 auto 8px!important;
+}
+#root .app.auth-layout .panel.auth > h2,
+#root .app.auth-layout .panel.auth > p{
+  width:100%!important;
+  text-align:center!important;
+}
+#root .app.auth-layout .panel.auth form{
+  width:100%!important;
+  align-self:stretch!important;
+  text-align:center!important;
+}
+#root .app.auth-layout .panel.auth form > label{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  width:100%!important;
+  text-align:center!important;
+}
+#root .app.auth-layout .panel.auth form > label input,
+#root .app.auth-layout .panel.auth form > label select{
+  width:100%!important;
+  box-sizing:border-box!important;
+  text-align:left!important;
+}
+#root .app.auth-layout .panel.auth form > .shift-publish-feedback{
+  text-align:center!important;
+}
+#root .app.auth-layout .panel.auth form > .auth-submit-symbol{
+  align-self:center!important;
+}
+#root .app.auth-layout .panel.auth > .auth-forgot-link{
+  align-self:center!important;
+  text-align:center!important;
+}
