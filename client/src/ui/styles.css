@@ -11718,3 +11718,68 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   color:#F97316!important;
   -webkit-text-fill-color:#F97316!important;
 }
+
+/* Account-type choices: keep each full option in its own card, but leave the
+   "Continue as..." action itself as unboxed text. */
+#root .app .role-selection .role-cards{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:16px!important;
+  margin-top:28px!important;
+}
+#root .app .role-selection .role-card{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:160px!important;
+  padding:24px 18px!important;
+  border:1px solid #dedede!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  box-shadow:0 2px 8px rgb(0 0 0 / 4%)!important;
+  color:#000!important;
+  text-align:center!important;
+  cursor:pointer!important;
+}
+#root .app .role-selection .role-card:hover,
+#root .app .role-selection .role-card:focus-visible{
+  border-color:#F97316!important;
+  background:#fff!important;
+  box-shadow:0 3px 12px rgb(0 0 0 / 7%)!important;
+}
+#root .app .role-selection .role-card strong{
+  color:#000!important;
+  font-size:20px!important;
+  font-weight:700!important;
+  text-align:center!important;
+}
+#root .app .role-selection .role-card span{
+  color:#525252!important;
+  line-height:1.6!important;
+  text-align:center!important;
+}
+#root .app .role-selection .role-card b{
+  display:inline-block!important;
+  margin:8px 0 0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#000!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  text-align:center!important;
+  text-decoration:underline!important;
+  text-decoration-color:#F97316!important;
+  text-underline-offset:4px!important;
+}
+#root .app .role-selection .role-card:hover b,
+#root .app .role-selection .role-card:focus-visible b{
+  color:#F97316!important;
+}
+
