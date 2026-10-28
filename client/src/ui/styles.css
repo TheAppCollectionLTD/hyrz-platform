@@ -11615,3 +11615,67 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   align-self:center!important;
   text-align:center!important;
 }
+
+
+/* Account-type choices: remove card boxes and make continuation actions plain text links. */
+#root .app .role-selection .role-cards{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:28px!important;
+  margin-top:28px!important;
+}
+#root .app .role-selection .role-card{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  padding:12px 8px 16px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#000!important;
+  text-align:center!important;
+  cursor:pointer!important;
+}
+#root .app .role-selection .role-card:hover{
+  transform:none!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#root .app .role-selection .role-card strong{
+  color:#000!important;
+  font-size:20px!important;
+  font-weight:700!important;
+  text-align:center!important;
+}
+#root .app .role-selection .role-card span{
+  color:#000!important;
+  line-height:1.6!important;
+  text-align:center!important;
+}
+#root .app .role-selection .role-card b{
+  display:inline-block!important;
+  margin:12px 0 0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#000!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  text-align:center!important;
+  text-decoration:underline!important;
+  text-decoration-color:#F97316!important;
+  text-underline-offset:4px!important;
+}
+#root .app .role-selection .role-card:hover b,
+#root .app .role-selection .role-card:focus-visible b{
+  color:#F97316!important;
+}
