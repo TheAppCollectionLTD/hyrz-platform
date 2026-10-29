@@ -562,7 +562,7 @@ app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
  if(email!==undefined){updates.push('email=?');values.push(email);updates.push('email_verified_at=NULL');}
  if(req.body.phone!==undefined){updates.push('phone=?');values.push(phone||null);}
  if(req.user.role==='worker'&&req.body.phoneVisibleToEmployers!==undefined){updates.push('phone_visible_to_employers=?');values.push(req.body.phoneVisibleToEmployers?1:0);}
- if(req.user.role==='employer'&&req.body.employerPhoneVisibility!==undefined){const visibility=['hidden','all','favourites'].includes(req.body.employerPhoneVisibility)?req.body.employerPhoneVisibility:'hidden';updates.push('employer_phone_visibility=?');values.push(visibility);}
+ if(req.user.role==='employer'&&req.body.employerPhoneVisibility!==undefined){const requested=Array.isArray(req.body.employerPhoneVisibility)?req.body.employerPhoneVisibility:[req.body.employerPhoneVisibility];const allowed=[...new Set(requested.filter(value=>['all','favourites','workers'].includes(value)))];const visibility=allowed.includes('all')?'all':allowed.length?allowed.join(','):'hidden';updates.push('employer_phone_visibility=?');values.push(visibility);}
  if(updates.length){values.push(req.user.id);await db.execute('UPDATE users SET '+updates.join(', ')+' WHERE id=?',values);}
  const [rows] = await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
  return res.json({ user: rows[0], emailVerificationRequired: email!==undefined });
@@ -815,11 +815,11 @@ app.get('/api/shifts/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
  res.json({shifts:rows});
 }));
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
- await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureBusinessAddressColumns,ensureShiftAdditionalNotesColumn,ensureWorkerEmployerFavourites,ensureEmployerPhoneVisibilityColumn]);
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureBusinessAddressColumns,ensureShiftAdditionalNotesColumn,ensureWorkerEmployerFavourites,ensureEmployerWorkerFavourites,ensureEmployerPhoneVisibilityColumn]);
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
- let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,CASE WHEN (u.employer_phone_visibility='all' OR (?='worker' AND u.employer_phone_visibility='favourites' AND EXISTS(SELECT 1 FROM worker_employer_favourites wf WHERE wf.worker_user_id=? AND wf.business_id=b.id))) THEN u.phone ELSE NULL END AS employer_contact_phone,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_rating_count,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
- const args=[req.user.role,req.user.id];
+ let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,CASE WHEN (FIND_IN_SET('all',u.employer_phone_visibility)>0 OR (?='worker' AND ((FIND_IN_SET('favourites',u.employer_phone_visibility)>0 AND EXISTS(SELECT 1 FROM worker_employer_favourites wf WHERE wf.worker_user_id=? AND wf.business_id=b.id)) OR (FIND_IN_SET('workers',u.employer_phone_visibility)>0 AND EXISTS(SELECT 1 FROM employer_worker_favourites ef WHERE ef.employer_user_id=u.id AND ef.worker_user_id=?))))) THEN u.phone ELSE NULL END AS employer_contact_phone,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_rating_count,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
+ const args=[req.user.role,req.user.id,req.user.id];
  if(from){sql+=' AND s.starts_at>=?';args.push(from);}
  if(to){sql+=' AND s.starts_at<=?';args.push(to);}
  if(search){sql+=' AND (s.title LIKE ? OR s.description LIKE ? OR s.location LIKE ?)';args.push(`%${search}%`,`%${search}%`,`%${search}%`);}
