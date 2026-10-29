@@ -538,7 +538,7 @@ app.get('/api/auth/me',auth,asyncRoute(async(req,res)=>{
  res.json({user:u[0]});
 }));
 app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
- await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureWorkerPhoneVisibilityColumn]);
+ await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureWorkerPhoneVisibilityColumn,ensureEmployerPhoneVisibilityColumn]);
  const firstName = String(req.body.firstName || '').trim();
  const lastName = String(req.body.lastName || '').trim();
  const phone = String(req.body.phone || '').trim();
@@ -564,7 +564,7 @@ app.patch('/api/auth/profile', auth, asyncRoute(async (req, res) => {
  if(req.user.role==='worker'&&req.body.phoneVisibleToEmployers!==undefined){updates.push('phone_visible_to_employers=?');values.push(req.body.phoneVisibleToEmployers?1:0);}
  if(req.user.role==='employer'&&req.body.employerPhoneVisibility!==undefined){const requested=Array.isArray(req.body.employerPhoneVisibility)?req.body.employerPhoneVisibility:[req.body.employerPhoneVisibility];const allowed=[...new Set(requested.filter(value=>['all','favourites','workers'].includes(value)))];const visibility=allowed.includes('all')?'all':allowed.length?allowed.join(','):'hidden';updates.push('employer_phone_visibility=?');values.push(visibility);}
  if(updates.length){values.push(req.user.id);await db.execute('UPDATE users SET '+updates.join(', ')+' WHERE id=?',values);}
- const [rows] = await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
+ const [rows] = await db.execute('SELECT id,email,role,admin_tier,first_name,last_name,phone,phone_visible_to_employers,employer_phone_visibility,profile_picture,status,created_at,address_line_1,address_city,address_postcode,email_verified_at FROM users WHERE id=?',[req.user.id]);
  return res.json({ user: rows[0], emailVerificationRequired: email!==undefined });
 }));
 
