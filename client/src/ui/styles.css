@@ -12102,3 +12102,28 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  .app.employer .shift-cluster-item{align-items:flex-start;flex-direction:column}
  .app.employer .shift-cluster-item button{width:100%}
 }
+
+
+/* Employer support inbox: unread items first, with clear red/green status. */
+.app.employer .hyrz-admin-message-item.is-unread{
+ border:2px solid #dc2626;
+ background:#fff7f7;
+}
+.app.employer .hyrz-admin-message-item.is-read{
+ border:2px solid #16a34a;
+ background:#f4fbf5;
+}
+.app.employer .hyrz-admin-message-item.is-unread:hover{border-color:#b91c1c;background:#fff1f2}
+.app.employer .hyrz-admin-message-item.is-read:hover{border-color:#15803d;background:#ecfdf3}
+.app.employer .hyrz-admin-message-item em{
+ margin-left:auto;
+ flex:0 0 auto;
+ padding:4px 8px;
+ border-radius:999px;
+ font-size:.7rem;
+ font-style:normal;
+ font-weight:800;
+}
+.app.employer .hyrz-admin-message-item.is-unread em{color:#b91c1c;background:#fee2e2}
+.app.employer .hyrz-admin-message-item.is-read em{color:#166534;background:#dcfce7}
+@media(max-width:560px){.app.employer .hyrz-admin-message-item{align-items:flex-start;flex-wrap:wrap}.app.employer .hyrz-admin-message-item em{margin-left:54px}}
