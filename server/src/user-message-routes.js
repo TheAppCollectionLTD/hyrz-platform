@@ -1,6 +1,7 @@
 const { auth, allow } = require('./middleware');
 
 module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta }) {
+  const ensureEmployerMessageReadColumn=addColumn('admin_message_meta','employer_read_at DATETIME NULL','employer inbox read state');
   // Share the API's schema queue so this metadata migration cannot race the
   // user/profile migrations performed during server startup.
 
@@ -30,12 +31,21 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
 
   app.get('/api/messages/mine', auth, asyncRoute(async(req,res) => {
     await ensureAdminMessageMeta;
-    const [messages]=await db.execute(`SELECT m.id,m.body,m.created_at,m.sender_id,meta.category,meta.subject,meta.read_at,meta.recipient_id,
+    const [messages]=await db.execute(`SELECT m.id,m.conversation_key,m.body,m.created_at,m.sender_id,meta.category,meta.subject,meta.read_at,meta.employer_read_at,meta.recipient_id,
       sender.email AS sender_email,sender.role AS sender_role,recipient.email AS recipient_email,recipient.role AS recipient_role
       FROM messages m JOIN admin_message_meta meta ON meta.message_id=m.id
       JOIN users sender ON sender.id=m.sender_id JOIN users recipient ON recipient.id=meta.recipient_id
       WHERE m.sender_id=? OR meta.recipient_id=? ORDER BY m.created_at DESC LIMIT 200`,[req.user.id,req.user.id]);
     res.json({messages});
+  }));
+
+  app.post('/api/messages/:id/read', auth, allow('employer'), asyncRoute(async(req,res) => {
+    await ensureAdminMessageMeta;
+    await ensureEmployerMessageReadColumn;
+    const [rows]=await db.execute('SELECT m.conversation_key FROM messages m JOIN admin_message_meta meta ON meta.message_id=m.id WHERE m.id=? AND meta.recipient_id=? AND m.sender_id<>? LIMIT 1',[req.params.id,req.user.id,req.user.id]);
+    if(!rows.length)return res.status(404).json({error:'Unread support conversation not found.'});
+    await db.execute("UPDATE admin_message_meta meta JOIN messages m ON m.id=meta.message_id JOIN users sender ON sender.id=m.sender_id SET meta.employer_read_at=COALESCE(meta.employer_read_at,UTC_TIMESTAMP()) WHERE m.conversation_key=? AND meta.recipient_id=? AND sender.role='admin'",[rows[0].conversation_key,req.user.id]);
+    res.json({ok:true,conversationKey:rows[0].conversation_key});
   }));
   // Direct employer-worker conversations, separate from support/admin messages.
   const ensureDirectMessages = Promise.all([
