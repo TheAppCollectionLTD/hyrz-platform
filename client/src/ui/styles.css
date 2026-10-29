@@ -11961,3 +11961,32 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   -webkit-text-fill-color:#C2410C!important;
   box-shadow:0 0 0 2px rgba(249,115,22,.16)!important;
 }
+
+
+/* Final back-button emphasis: larger control, stronger outline and heavier arrow. */
+#root .app button.icon-back-button,
+#root .app .workchat-back-row button,
+#root .app button.worker-back-button{
+  width:46px!important;
+  min-width:46px!important;
+  max-width:46px!important;
+  height:46px!important;
+  min-height:46px!important;
+  max-height:46px!important;
+  border:2px solid #555!important;
+  border-radius:12px!important;
+  box-shadow:0 2px 4px rgba(0,0,0,.16)!important;
+}
+#root .app button.icon-back-button svg,
+#root .app .workchat-back-row button svg,
+#root .app button.worker-back-button svg{
+  width:27px!important;
+  height:27px!important;
+  flex:0 0 27px!important;
+  stroke-width:3.2!important;
+}
+#root .app button.worker-back-button::before{
+  font-size:28px!important;
+  font-weight:800!important;
+  -webkit-text-stroke:.6px currentColor!important;
+}
