@@ -10814,8 +10814,8 @@ html,body,#root,#root>*,#root .app.auth-layout{
 .app.employer .employer-dashboard-sections-head{display:block;margin-bottom:0;}
 .app.employer .employer-dashboard-sections-head p{margin:8px 0 0;color:#C2410C;line-height:1.45;}
 .app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
-.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button{display:flex;align-items:center;justify-content:space-between;aspect-ratio:auto;min-height:48px;padding:13px 14px;border:1px solid #FFF0E6;border-radius:10px;background:#fff;color:#111111;text-align:left;font-size:12px;font-weight:700;}
-.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:after{content:'→';font-size:15px;color:#C2410C;}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button{display:flex;align-items:center;justify-content:center;aspect-ratio:auto;min-height:52px;padding:14px 16px;border:1px solid #FFF0E6;border-radius:10px;background:#fff;color:#111111;text-align:center;font-size:15px;font-weight:750;line-height:1.35;}
+.app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:after{content:none;display:none;}
 .app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:hover{border-color:#F97316;background:#F7F7F7;}
 @media(max-width:760px){.app.employer .employer-todays-overview .worker-todays-shift-card{padding:11px 12px;gap:5px 9px}.app.employer .employer-todays-overview .worker-todays-shift-card>span{flex-basis:130px;font-size:10px}.app.employer .employer-dashboard-sections{padding:14px}}
 
