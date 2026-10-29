@@ -11990,3 +11990,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   font-weight:800!important;
   -webkit-text-stroke:.6px currentColor!important;
 }
+
+
+/* Collapsible business contact-number visibility controls */
+.contact-visibility-options{border:1px solid var(--hyrz-line,var(--border,#ddd));border-radius:10px;padding:.75rem .85rem;background:var(--hyrz-surface-soft,#F7F7F7);margin:.75rem 0}
+.contact-visibility-options>summary{cursor:pointer;font-weight:700;list-style-position:inside;padding:.2rem 0;min-height:24px}
+.contact-visibility-options[open]>summary{margin-bottom:.65rem}
+.contact-visibility-options-list{display:grid;gap:.6rem}
+.contact-visibility-options-list label{display:flex;align-items:center;gap:.6rem;line-height:1.35;cursor:pointer}
+.contact-visibility-options-list input{flex:0 0 auto;margin:0}
