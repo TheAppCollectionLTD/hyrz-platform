@@ -12064,3 +12064,41 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   min-width:0;
  }
 }
+
+
+/* Shift cluster builder: clear summary of queued shifts before batch publishing. */
+.app.employer .shift-cluster-builder{
+ box-sizing:border-box;
+ width:100%;
+ min-width:0;
+ margin:1rem 0;
+ padding:1rem;
+ border:1px solid #f3c7a8;
+ border-radius:12px;
+ background:#fffaf6;
+}
+.app.employer .shift-cluster-heading h3{margin:.25rem 0 .4rem;color:#171916}
+.app.employer .shift-cluster-heading p{margin:0 0 .8rem;color:#68706a;line-height:1.45}
+.app.employer .shift-cluster-list{display:grid;gap:.5rem;margin:0 0 .8rem}
+.app.employer .shift-cluster-item{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:.75rem;
+ min-width:0;
+ padding:.75rem;
+ border:1px solid #f0e1d5;
+ border-radius:9px;
+ background:#fff;
+}
+.app.employer .shift-cluster-item>div{display:grid;gap:.25rem;min-width:0}
+.app.employer .shift-cluster-item strong{color:#171916;overflow-wrap:anywhere}
+.app.employer .shift-cluster-item span{color:#68706a;font-size:.82rem;line-height:1.4}
+.app.employer .shift-cluster-item button{flex:0 0 auto}
+.app.employer .shift-cluster-add-button{width:100%;margin:.25rem 0 .5rem;border-color:#f97316}
+.app.employer .shift-cluster-builder>small{display:block;color:#68706a;line-height:1.45}
+@media(max-width:560px){
+ .app.employer .shift-cluster-builder{padding:.75rem}
+ .app.employer .shift-cluster-item{align-items:flex-start;flex-direction:column}
+ .app.employer .shift-cluster-item button{width:100%}
+}
