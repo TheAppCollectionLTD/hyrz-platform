@@ -12140,3 +12140,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .app.employer .shift-post-heading h2{margin:0 0 6px}
 .app.employer .shift-post-heading p{margin:0;color:#687386}
 @media(max-width:600px){.app.employer .shift-creation-choice-grid{grid-template-columns:1fr}.app.employer .shift-creation-choice{min-height:0}}
+
+
+/* Saved-template picker shared by cluster and individual shift creation. */
+.app.employer .shift-use-template{grid-column:1/-1;margin:0 0 8px;border:1px solid #eadfce;border-radius:12px;background:#fffdf9;overflow:hidden}
+.app.employer .shift-use-template-trigger{display:flex;width:100%;justify-content:space-between;align-items:center;padding:13px 16px;border:0;border-radius:0;background:transparent;color:#171717;font-weight:700;text-align:left}
+.app.employer .shift-use-template-trigger strong{font-size:1.25rem;color:#d94b08}
+.app.employer .shift-use-template-panel{padding:0 14px 14px}
+.app.employer .shift-use-template-panel>.muted{margin:8px 0;color:#687386}
+.app.employer .shift-use-template-list{display:grid;gap:9px}
+.app.employer .shift-use-template-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #eee4d7;border-radius:10px;background:#fff}
+.app.employer .shift-use-template-item>div{display:grid;gap:4px;min-width:0}
+.app.employer .shift-use-template-item>div strong{font-size:.98rem}
+.app.employer .shift-use-template-item>div span,.app.employer .shift-use-template-item>div small{color:#687386;line-height:1.35}
+.app.employer .shift-use-template-item button{flex:0 0 auto}
+@media(max-width:600px){.app.employer .shift-use-template-item{align-items:flex-start;flex-direction:column}.app.employer .shift-use-template-item button{width:100%}}
