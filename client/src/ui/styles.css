@@ -11922,3 +11922,42 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   visibility:visible!important;
   opacity:1!important;
 }
+
+
+/* Make every back control easy to see and tap on desktop and mobile. */
+#root .app button.icon-back-button,
+#root .app .workchat-back-row button,
+#root .app button.worker-back-button{
+  width:42px!important;
+  min-width:42px!important;
+  max-width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  max-height:42px!important;
+  border:1.5px solid #777!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:#171717!important;
+  -webkit-text-fill-color:#171717!important;
+  box-shadow:0 1px 3px rgba(0,0,0,.12)!important;
+}
+#root .app button.icon-back-button svg,
+#root .app .workchat-back-row button svg,
+#root .app button.worker-back-button svg{
+  width:24px!important;
+  height:24px!important;
+  flex:0 0 24px!important;
+  stroke-width:2.5!important;
+}
+#root .app button.worker-back-button::before{
+  font-size:25px!important;
+  font-weight:700!important;
+}
+#root .app button.icon-back-button:hover,
+#root .app .workchat-back-row button:hover,
+#root .app button.worker-back-button:hover{
+  border-color:#C2410C!important;
+  color:#C2410C!important;
+  -webkit-text-fill-color:#C2410C!important;
+  box-shadow:0 0 0 2px rgba(249,115,22,.16)!important;
+}
