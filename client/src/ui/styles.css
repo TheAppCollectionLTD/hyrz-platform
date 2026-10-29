@@ -12155,3 +12155,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .app.employer .shift-use-template-item>div span,.app.employer .shift-use-template-item>div small{color:#687386;line-height:1.35}
 .app.employer .shift-use-template-item button{flex:0 0 auto}
 @media(max-width:600px){.app.employer .shift-use-template-item{align-items:flex-start;flex-direction:column}.app.employer .shift-use-template-item button{width:100%}}
+
+
+/* Cluster creation: persistent summary and clearly numbered shift drafts. */
+.app.employer .shift-cluster-overview{grid-column:1/-1;margin:0 0 12px;padding:14px;border:1px solid #eadfce;border-radius:12px;background:#fffdf9}
+.app.employer .shift-cluster-overview .shift-cluster-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.app.employer .shift-cluster-overview .shift-cluster-heading h3{margin:3px 0 5px}
+.app.employer .shift-cluster-overview .shift-cluster-heading p{margin:0;color:#687386}
+.app.employer .shift-cluster-count{display:grid;place-items:center;flex:0 0 66px;width:66px;height:66px;border-radius:12px;background:#fff0e6;color:#c94708}
+.app.employer .shift-cluster-count strong{font-size:1.55rem;line-height:1}
+.app.employer .shift-cluster-count span{font-size:.68rem;font-weight:700}
+.app.employer .cluster-current-shift-heading{grid-column:1/-1;padding:12px 14px;border-left:4px solid #e95a13;background:#fff8f2;border-radius:8px}
+.app.employer .cluster-current-shift-heading h3{margin:3px 0}
+.app.employer .cluster-current-shift-heading p{margin:0;color:#687386}
+.app.employer .cluster-save-template{margin:12px 0 8px}
+.app.employer .cluster-save-template .template-setup-panel button{margin-top:10px}
+.app.employer .shift-cluster-add-button{width:100%;margin:0 0 10px;font-weight:700}
+@media(max-width:600px){.app.employer .shift-cluster-overview .shift-cluster-heading{align-items:flex-start}.app.employer .shift-cluster-count{flex-basis:58px;width:58px;height:58px}}
