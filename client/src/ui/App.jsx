@@ -388,6 +388,48 @@ async function apply(id){const target=shifts.find(item=>Number(item.id)===Number
  {!user&&page==='home'&&<section className="auth-welcome">
 <header className="public-home-nav"><button className="public-home-logo" onClick={()=>navigateTo('home')} aria-label="hyrz home">hyrz</button><nav><button type="button" className="public-about-trigger" onClick={()=>{setPublicIntroSlide(0);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>About us</button><button type="button" className="public-how-work-trigger" onClick={()=>{setPublicIntroSlide(howWorkAudience==='employer'?2:1);setShowHowItWorks(false);document.getElementById('public-intro-carousel')?.scrollIntoView({behavior:'smooth',block:'start'})}}>How we work</button><div className="public-app-downloads" aria-label="Mobile apps"><button type="button" className="public-app-icon" aria-label="hyrz for iPhone — coming soon" title="App Store — coming soon" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.7 12.8c0-2.2 1.8-3.3 1.9-3.4-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-3-.8-1.6 0-3.1.9-3.9 2.3-1.7 2.9-.4 7.1 1.2 9.4.8 1.1 1.6 2.3 2.8 2.2 1.1 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-.1 2.8-1.3.9-1.2 1.3-2.4 1.3-2.5-.1 0-2.5-1-2.5-5zM14.4 6.2c.6-.8 1.1-1.9 1-3-1 .1-2.2.7-2.9 1.5-.6.7-1.1 1.8-1 2.9 1.1.1 2.2-.5 2.9-1.4z"/></svg><span className="public-app-icon-label">App Store</span></button><button type="button" className="public-app-icon" aria-label="hyrz for Android — coming soon" title="Google Play — coming soon" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2.8c-.4.3-.6.8-.6 1.4v15.6c0 .6.2 1.1.6 1.4L13 12 4 2.8zm1.5-.7L15 11l3-3L7.2 1.8c-.6-.4-1.2-.4-1.7.3zm0 19.8c.5.6 1.1.6 1.7.3L18 16l-3-3-9.5 8.9zM19 9l-3.5 3.5L19 16l1.9-1.1c1.2-.7 1.2-1.8 0-2.5L19 11.3V9z"/></svg><span className="public-app-icon-label">Google Play</span></button></div><button type="button" className="public-nav-signin auth-symbol-button" aria-label="Sign in" title="Sign in" onClick={()=>navigateTo('login')}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5M10 16l4-4-4-4M14 12H3"/></svg></button><button type="button" className="public-nav-signup auth-symbol-button" aria-label="Sign up" title="Sign up" onClick={()=>navigateTo('chooseRole')}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20M19 8v8M15 12h8"/></svg></button></nav>{showHowItWorks&&<div className="public-how-work-panel"><div className="how-work-tabs"><button type="button" aria-pressed={howWorkAudience==='worker'} className={howWorkAudience==='worker'?'selected':''} onClick={()=>setHowWorkAudience('worker')}>For workers</button><button type="button" aria-pressed={howWorkAudience==='employer'} className={howWorkAudience==='employer'?'selected':''} onClick={()=>setHowWorkAudience('employer')}>For employers</button></div>{howWorkAudience==='worker'?<div className="how-work-detail"><span className="how-work-eyebrow">YOUR WORK, YOUR WAY</span><h3>How hyrz works for workers</h3><p className="how-work-summary">Find shifts that fit your availability, understand what you’re agreeing to, and keep your work organised in one place.</p><ol className="how-work-steps"><li><strong>Create your profile</strong><span>Set up your account and tell us about your experience, skills and the roles you want to work in.</span></li><li><strong>Get verified</strong><span>Complete the identity and eligibility checks requested by hyrz. Verification helps build trust, supports responsible platform use and helps meet applicable legal and compliance requirements. Only describe yourself as verified once your checks are complete.</span></li><li><strong>Set your availability and preferences</strong><span>Choose when you can work, preferred shift types, travel distance and minimum rates that suit you.</span></li><li><strong>Find the right shifts</strong><span>Browse opportunities, check the location, hours, pay, requirements and shift contract, then apply to shifts that work for you.</span></li><li><strong>Get confirmed and prepare</strong><span>Follow your application status, review shift details and keep track of your upcoming commitments.</span></li><li><strong>Work, record hours and get paid</strong><span>Use your account to manage check-ins and check-outs, review recorded hours and follow your shift payments.</span></li></ol><button type="button" className="public-how-work-cta" onClick={()=>{setRole('worker');setShowHowItWorks(false);navigateTo('register')}}>Create a worker account <span aria-hidden="true">→</span></button></div>:<div className="how-work-detail"><span className="how-work-eyebrow">STAFFING, MADE CLEARER</span><h3>How hyrz works for employers</h3><p className="how-work-summary">Plan your staffing needs, reach suitable workers and manage shifts and payments with a clearer process from start to finish.</p><ol className="how-work-steps"><li><strong>Set up your business profile</strong><span>Create an employer account and add your business details so workers know who is offering the shift.</span></li><li><strong>Verify your identity and business</strong><span>Complete the identity and business verification checks requested by hyrz. These checks help demonstrate that your organisation is genuine, support trust between workers and employers, and help meet applicable legal and compliance obligations. Verification is only confirmed when the checks have actually been completed.</span></li><li><strong>Publish the shift you need covered</strong><span>Set the role, date, start and finish times, pay rate, number of workers, required skills and any useful perks or preferences.</span></li><li><strong>Review applicants and choose your team</strong><span>Compare applications and worker details, then select the people who best match your requirements. Matching tools can help you manage the process.</span></li><li><strong>Keep shifts and attendance organised</strong><span>Track published, unfilled and filled shifts, communicate with workers, and review check-in and check-out records and submitted hours.</span></li><li><strong>Manage invoices and payments</strong><span>Follow invoices and account activity from your dashboard so shift administration stays organised alongside day-to-day operations.</span></li></ol><button type="button" className="public-how-work-cta" onClick={()=>{setRole('employer');setShowHowItWorks(false);navigateTo('register')}}>Create an employer account <span aria-hidden="true">→</span></button></div>}</div>}
 </header>
+<div className="work-carousel">
+  <div className="carousel-slide slide-hospitality">
+    <span className="pill">HOSPITALITY & BARS</span>
+    <h2>Pick up a shift.<br/><em>Make it count.</em></h2>
+    <p>Flexible bar, restaurant and hospitality work to fit your availability.</p>
+  </div>
+  <div className="carousel-slide slide-festivals">
+    <span className="pill">FESTIVALS & EVENTS</span>
+    <h2>Be part of<br/><em>what's happening.</em></h2>
+    <p>Discover event and festival shifts, from front-of-house to event support.</p>
+  </div>
+  <div className="carousel-slide slide-warehouse">
+    <span className="pill">WAREHOUSE & LOGISTICS</span>
+    <h2>Extra hours.<br/><em>Extra earning power.</em></h2>
+    <p>Explore warehouse, fulfilment and logistics shifts that suit your schedule.</p>
+  </div>
+  <div className="carousel-slide slide-office">
+    <span className="pill">OFFICE & ADMINISTRATION</span>
+    <h2>Put your skills<br/><em>to work.</em></h2>
+    <p>Find office and administration opportunities across different industries.</p>
+  </div>
+  <div className="carousel-slide slide-retail">
+    <span className="pill">RETAIL & CUSTOMER SERVICE</span>
+    <h2>Find shifts<br/><em>that fit your day.</em></h2>
+    <p>Choose from available retail and customer service opportunities.</p>
+  </div>
+  <div className="carousel-slide slide-hotels">
+    <span className="pill">HOTELS & CATERING</span>
+    <h2>Flexible work.<br/><em>More possibilities.</em></h2>
+    <p>Explore hotel, catering and service shifts around your other commitments.</p>
+  </div>
+  <div className="carousel-slide slide-more">
+    <span className="pill">MORE OPPORTUNITIES</span>
+    <h2>Find work that<br/><em>fits you.</em></h2>
+    <p>From hospitality and logistics to office work, retail and beyond, discover opportunities that suit your availability.</p>
+  </div>
+</div>
+<div className="welcome-panel">
+<h2>Flexible work.<br/><em>Reliable staffing.</em></h2><p className="welcome-tagline">Whoever you are. Wherever you are.</p>
+<button className="primary" onClick={()=>navigateTo('chooseRole')}>Get started</button>
+<p className="home-registered-prompt">Already registered? <button type="button" className="textbutton home-signin-link" onClick={()=>navigateTo('login')}>Sign in</button></p>
+</div>
 <section id="public-intro-carousel" className="public-intro-carousel" aria-label="About hyrz and how it works">
   <div className="public-intro-topline">
     <span className="public-intro-counter">0{publicIntroSlide+1} <span>/ 03</span></span>
@@ -447,48 +489,7 @@ async function apply(id){const target=shifts.find(item=>Number(item.id)===Number
     <span>ABOUT hyrz <b>·</b> HOW WE WORK</span>
   </div>
 </section>
-<div className="work-carousel">
-  <div className="carousel-slide slide-hospitality">
-    <span className="pill">HOSPITALITY & BARS</span>
-    <h2>Pick up a shift.<br/><em>Make it count.</em></h2>
-    <p>Flexible bar, restaurant and hospitality work to fit your availability.</p>
-  </div>
-  <div className="carousel-slide slide-festivals">
-    <span className="pill">FESTIVALS & EVENTS</span>
-    <h2>Be part of<br/><em>what's happening.</em></h2>
-    <p>Discover event and festival shifts, from front-of-house to event support.</p>
-  </div>
-  <div className="carousel-slide slide-warehouse">
-    <span className="pill">WAREHOUSE & LOGISTICS</span>
-    <h2>Extra hours.<br/><em>Extra earning power.</em></h2>
-    <p>Explore warehouse, fulfilment and logistics shifts that suit your schedule.</p>
-  </div>
-  <div className="carousel-slide slide-office">
-    <span className="pill">OFFICE & ADMINISTRATION</span>
-    <h2>Put your skills<br/><em>to work.</em></h2>
-    <p>Find office and administration opportunities across different industries.</p>
-  </div>
-  <div className="carousel-slide slide-retail">
-    <span className="pill">RETAIL & CUSTOMER SERVICE</span>
-    <h2>Find shifts<br/><em>that fit your day.</em></h2>
-    <p>Choose from available retail and customer service opportunities.</p>
-  </div>
-  <div className="carousel-slide slide-hotels">
-    <span className="pill">HOTELS & CATERING</span>
-    <h2>Flexible work.<br/><em>More possibilities.</em></h2>
-    <p>Explore hotel, catering and service shifts around your other commitments.</p>
-  </div>
-  <div className="carousel-slide slide-more">
-    <span className="pill">MORE OPPORTUNITIES</span>
-    <h2>Find work that<br/><em>fits you.</em></h2>
-    <p>From hospitality and logistics to office work, retail and beyond, discover opportunities that suit your availability.</p>
-  </div>
-</div>
-<div className="welcome-panel">
-<h2>Flexible work.<br/><em>Reliable staffing.</em></h2><p className="welcome-tagline">Whoever you are. Wherever you are.</p>
-<button className="primary" onClick={()=>navigateTo('chooseRole')}>Get started</button>
-<p className="home-registered-prompt">Already registered? <button type="button" className="textbutton home-signin-link" onClick={()=>navigateTo('login')}>Sign in</button></p>
-</div>
+
 <section className="download-app-section">
  <div className="download-app-copy"><span className="download-app-eyebrow">hyrz FOR YOUR PHONE</span><h2>Find work <em>on the go.</em></h2><p>Explore shifts, manage your work and stay connected. The hyrz mobile app is coming soon.</p><div className="download-app-actions"><div className="app-store-placeholder" aria-label="App Store download coming soon"><span className="store-symbol">●</span><span><small>COMING SOON</small><strong>App Store</strong></span></div><div className="app-store-placeholder" aria-label="Google Play download coming soon"><span className="store-symbol">▶</span><span><small>COMING SOON</small><strong>Google Play</strong></span></div></div><small className="download-app-note">iOS and Android download links will appear here when available.</small></div>
  <div className="download-app-visual" role="img" aria-label="Preview of the hyrz mobile app displayed on an iPhone 16"><div className="app-visual-orbit orbit-one"></div><div className="app-visual-orbit orbit-two"></div><div className="app-visual-phone"><div className="app-visual-screen"><div className="app-visual-status"><span>9:41</span><span className="app-visual-status-icons">▮ ▰ ◉</span></div><div className="app-visual-dynamic-island"></div><div className="app-visual-appbar"><strong>hyrz</strong><span className="app-visual-avatar">S</span></div><div className="app-visual-screen-title">Find shifts<span>Explore work that fits your life.</span></div><div className="app-visual-search">⌕ <span>Roles, locations or keywords</span></div><div className="app-visual-filters"><span className="is-active">All shifts</span><span>Hospitality</span><span>Warehouse</span></div><div className="app-visual-list-heading">Available shifts <span>See all →</span></div><article className="app-visual-job"><div className="app-visual-job-top"><span className="app-visual-job-icon">H</span><span><strong>Bar staff</strong><small>The Crown · London</small></span><b>£15.00/hr</b></div><div className="app-visual-job-meta">◷ Fri 24 Oct · 18:00–00:00</div><div className="app-visual-job-tag">Hospitality</div></article><article className="app-visual-job"><div className="app-visual-job-top"><span className="app-visual-job-icon">W</span><span><strong>Warehouse operative</strong><small>Fulfilment centre · London</small></span></div><div className="app-visual-job-meta">◷ Sat 25 Oct · 08:00–16:00</div><div className="app-visual-job-bottom">£13.50/hr <span>View shift →</span></div></article><div className="app-visual-tabbar"><span className="active">⌂<small>Home</small></span><span>⌕<small>Find shifts</small></span><span>▣<small>My shifts</small></span><span>◌<small>Messages</small></span><span>○<small>Profile</small></span></div></div></div></div>
