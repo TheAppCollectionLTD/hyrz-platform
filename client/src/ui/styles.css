@@ -12461,7 +12461,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 
 
-/* Three strike slots: muted outlined X until a strike is applied, then red. */
+/* Three simple strike circles: grey X by default, red X when a strike is applied. */
 .app.worker .worker-three-strikes-indicators{
  display:flex;
  align-items:center;
@@ -12491,9 +12491,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  color:#AEB4BA;
 }
 .app.worker .worker-three-strikes-indicators span.is-used{
- border-color:#C62828;
- background:#C62828;
- color:#FFFFFF;
+ border-color:#AEB4BA;
+ background:#FFFFFF;
+ color:#C62828;
 }
  
 /* Shift-card profile image: rectangular and filling the top-left profile quadrant. */
