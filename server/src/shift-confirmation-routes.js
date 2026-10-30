@@ -79,7 +79,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       JOIN applications a ON a.id=i.application_id
       JOIN shifts s ON s.id=i.shift_id
       JOIN businesses b ON b.id=s.business_id
-      WHERE i.worker_id=? AND i.status='pending' AND s.starts_at>UTC_TIMESTAMP()
+      WHERE i.worker_id=? AND i.status='pending' AND s.starts_at>NOW()
       ORDER BY s.starts_at,i.created_at
     `, [request.user.id]);
     response.json({ confirmations: rows });
@@ -208,7 +208,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       for (const worker of eligible) {
         const [existing] = await conn.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1 FOR UPDATE', [shiftId, worker.id]);
         let applicationId;
-        if (existing.length && !['withdrawn','rejected','cancelled'].includes(existing[0].status)) continue;
+        if (existing.length && existing[0].status === 'approved') continue;
         if (existing.length) {
           await conn.execute("UPDATE applications SET status='pending',contract_accepted_at=NULL,contract_snapshot=NULL WHERE id=?", [existing[0].id]);
           applicationId = existing[0].id;
