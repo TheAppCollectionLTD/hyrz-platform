@@ -219,10 +219,10 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
           const j = Math.floor(Math.random() * (i + 1));
           [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
         }
-        candidates = candidates.slice(0, remainingPositions);
       }
 
       for (const worker of candidates) {
+        if (!requiresFirstComeFirstServed && remainingPositions <= 0) break;
         const [existing] = await conn.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1 FOR UPDATE', [shiftId, worker.id]);
         if (existing.length && existing[0].status === 'approved') continue;
         let applicationId;
