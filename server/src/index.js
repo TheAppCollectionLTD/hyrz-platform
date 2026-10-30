@@ -94,6 +94,7 @@ const ensurePublicUserIds = enqueueSchemaChange(async()=>{
 const ensureSignupTermsColumns = (async()=>{await addColumn('users','terms_accepted_at DATETIME NULL','signup terms acceptance timestamp');await addColumn('users',"terms_version VARCHAR(40) NULL",'signup terms version');})();
 const ensureShiftContractColumns = (async()=>{await addColumn('applications','contract_accepted_at DATETIME NULL','shift contract acceptance timestamp');await addColumn('applications','contract_snapshot LONGTEXT NULL','accepted shift contract snapshot');})();
 const ensureShiftPublishingColumns = (async()=>{await addColumn('shifts',"shift_type VARCHAR(80) NOT NULL DEFAULT 'hospitality'",'shift type');await addColumn('shifts','requirements JSON NULL','shift requirements');await addColumn('shifts','perks JSON NULL','shift perks');await addColumn('shifts','preferences JSON NULL','shift preferences');})();
+const ensurePrivateShiftOffers = (async()=>{await addColumn('shifts','private_only TINYINT(1) NOT NULL DEFAULT 0','private-only shifts');await createTable(`CREATE TABLE IF NOT EXISTS private_shift_offers (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, shift_id BIGINT UNSIGNED NOT NULL, employer_user_id BIGINT UNSIGNED NOT NULL, worker_user_id BIGINT UNSIGNED NOT NULL, status ENUM('pending','accepted','declined','withdrawn') NOT NULL DEFAULT 'pending', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, responded_at DATETIME NULL, UNIQUE KEY uq_private_offer_worker_shift (shift_id,worker_user_id), KEY idx_private_offer_worker_status (worker_user_id,status), FOREIGN KEY (shift_id) REFERENCES shifts(id) ON DELETE CASCADE, FOREIGN KEY (employer_user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (worker_user_id) REFERENCES users(id) ON DELETE CASCADE) ENGINE=InnoDB`,'private shift offers');})();
 const ensureShiftAdditionalNotesColumn = addColumn('shifts','additional_notes TEXT NULL','additional shift notes');
 const ensureApplicationCancellationFee = addColumn('applications','cancellation_fee DECIMAL(10,2) NOT NULL DEFAULT 0','application cancellation fee');
 const ensureApplicationPreferencesColumn = addColumn('applications','confirmed_preferences JSON NULL','confirmed applicant preferences');
@@ -829,11 +830,64 @@ app.get('/api/shifts/mine',auth,allow('employer'),asyncRoute(async(req,res)=>{
  const [rows]=await db.execute('SELECT s.*,b.owner_user_id AS employer_id,b.name AS business_name FROM shifts s JOIN businesses b ON b.id=s.business_id WHERE b.owner_user_id=? ORDER BY s.starts_at DESC',[req.user.id]);
  res.json({shifts:rows});
 }));
+
+app.post('/api/private-offers',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
+ await Promise.all([ensureShiftPublishingColumns,ensureShiftAdditionalNotesColumn,ensurePrivateShiftOffers]);
+ const workerIds=[...new Set((Array.isArray(req.body?.workerIds)?req.body.workerIds:[]).map(Number).filter(id=>Number.isInteger(id)&&id>0))];
+ const entries=Array.isArray(req.body?.shifts)?req.body.shifts:[];
+ if(!workerIds.length||workerIds.length>100)return res.status(400).json({error:'Select between 1 and 100 workers.'});
+ if(!entries.length||entries.length>100)return res.status(400).json({error:'Add at least one shift to the private offer.'});
+ const [workers]=await db.query("SELECT id,email,first_name FROM users WHERE role='worker' AND id IN ("+workerIds.map(()=>'?').join(',')+")",workerIds);
+ if(workers.length!==workerIds.length)return res.status(400).json({error:'One or more selected worker accounts could not be found.'});
+ const [businesses]=await db.execute('SELECT id,name FROM businesses WHERE owner_user_id=?',[req.user.id]);
+ if(!businesses.length)return res.status(400).json({error:'Business profile missing.'});
+ const validDateTime=value=>typeof value==='string'&&/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$/.test(value)&&Number.isFinite(new Date(value).getTime());
+ const allowedShiftTypes=new Set(['hospitality','warehouse','retail','events','office','cleaning','care','construction','driving','other']);
+ const validList=value=>Array.isArray(value)&&value.length<=10&&value.every(item=>typeof item==='string'&&item.trim().length<=250);
+ const conn=await db.getConnection();const created=[];
+ try{
+  await conn.beginTransaction();
+  for(const entry of entries){
+   const shift=entry?.shift||{};const dates=[...new Set(Array.isArray(entry.dates)?entry.dates:[])];
+   if(!VALID_JOB_ROLES.has(shift.title)||!allowedShiftTypes.has(shift.shiftType||'hospitality')||!dates.length||dates.length>60||!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(entry.startTime||'')||!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(entry.endTime||'')||!Number.isFinite(Number(shift.hourlyPay))||Number(shift.hourlyPay)<8||Number(shift.hourlyPay)>500||!Number.isInteger(Number(shift.slots))||Number(shift.slots)<1||!validList(entry.requirements||[])||!validList(entry.perks||[])||!validList(entry.preferences||[]))throw Object.assign(new Error('One of the reviewed shifts contains invalid details.'),{statusCode:400});
+   for(const date of dates){
+    if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date))throw Object.assign(new Error('A shift date is invalid.'),{statusCode:400});
+    const startsAt=date+' '+entry.startTime+':00';let endDate=date;
+    if(entry.endTime<=entry.startTime){const d=new Date(date+'T12:00:00');d.setDate(d.getDate()+1);endDate=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+    const endsAt=endDate+' '+entry.endTime+':00';
+    if(new Date(endsAt)<=new Date(startsAt))throw Object.assign(new Error('A shift must finish after it starts.'),{statusCode:400});
+    const [result]=await conn.execute('INSERT INTO shifts(business_id,created_by,title,description,additional_notes,location,starts_at,ends_at,break_minutes,hourly_pay,slots,auto_approve,shift_type,requirements,perks,preferences,private_only) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)',[businesses[0].id,req.user.id,shift.title,shift.description||null,String(shift.additionalNotes||'').trim()||null,String(shift.location||'').trim()||'Location to be confirmed',startsAt,endsAt,0,Number(shift.hourlyPay),Number(shift.slots),false,shift.shiftType||'hospitality',JSON.stringify(entry.requirements||[]),JSON.stringify(entry.perks||[]),JSON.stringify(entry.preferences||[])]);
+    for(const workerId of workerIds){await conn.execute("INSERT INTO private_shift_offers(shift_id,employer_user_id,worker_user_id,status) VALUES(?,?,?,'pending')",[result.insertId,req.user.id,workerId]);}
+    created.push({shiftId:Number(result.insertId),date,workerCount:workerIds.length});
+   }
+  }
+  await conn.commit();
+ }catch(error){try{await conn.rollback()}catch(_){};if(error.statusCode)return res.status(error.statusCode).json({error:error.message});throw error;}finally{conn.release();}
+ let emailsSent=0,emailFailures=0;
+ if(resend&&process.env.EMAIL_FROM&&process.env.APP_URL){
+  for(const worker of workers){try{const url=new URL('/',process.env.APP_URL);url.searchParams.set('private-offers','1');const safeName=String(worker.first_name||'there').replace(/[&<>"]/g,'');const result=await resend.emails.send({from:process.env.EMAIL_FROM,to:worker.email,subject:'You have a new private shift offer on hyrz',html:'<p>Hello '+safeName+',</p><p>'+String(businesses[0].name||'An employer').replace(/[&<>"]/g,'')+' has invited you to review '+created.length+' private shift(s) on hyrz.</p><p><a href="'+url.toString()+'">View your private offers</a></p>'});if(result.error)throw new Error(result.error.message);emailsSent++;}catch(error){emailFailures++;console.error('Private offer email could not be sent:',error.message);}}
+ }
+ await audit(req,'private_shift_offers.sent','private_shift_offer',null,{shiftCount:created.length,workerCount:workers.length,emailsSent,emailFailures});
+ res.status(201).json({ok:true,offersCreated:created.length*workers.length,shiftsCreated:created.length,workersInvited:workers.length,emailsSent,emailFailures,emailConfigured:Boolean(resend&&process.env.EMAIL_FROM)});
+}));
+app.get('/api/private-offers/mine',auth,allow('worker'),asyncRoute(async(req,res)=>{
+ await ensurePrivateShiftOffers;
+ const [rows]=await db.execute("SELECT pso.id AS offer_id,pso.status AS offer_status,pso.created_at AS offered_at,s.*,b.name AS business_name,u.profile_picture AS employer_profile_picture FROM private_shift_offers pso JOIN shifts s ON s.id=pso.shift_id JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE pso.worker_user_id=? AND pso.status='pending' AND s.starts_at>UTC_TIMESTAMP() ORDER BY s.starts_at",[req.user.id]);
+ res.json({offers:rows});
+}));
+app.post('/api/private-offers/:id/respond',auth,allow('worker'),requireVerification,asyncRoute(async(req,res)=>{
+ await ensurePrivateShiftOffers;const status=req.body?.status;
+ if(!['accepted','declined'].includes(status))return res.status(400).json({error:'Choose accepted or declined.'});
+ const [result]=await db.execute('UPDATE private_shift_offers SET status=?,responded_at=UTC_TIMESTAMP() WHERE id=? AND worker_user_id=? AND status=\'pending\'',[status,req.params.id,req.user.id]);
+ if(!result.affectedRows)return res.status(404).json({error:'Private offer not found or already responded to.'});
+ res.json({ok:true,status});
+}));
+
 app.get('/api/shifts',auth,asyncRoute(async(req,res)=>{
  await Promise.all([ensureProfilePictureColumn,ensureUserAddressColumns,ensureBusinessAddressColumns,ensureShiftAdditionalNotesColumn,ensureWorkerEmployerFavourites,ensureEmployerWorkerFavourites,ensureEmployerPhoneVisibilityColumn]);
  await deleteImminentOpenShifts();
  const {postcode,from,to,search}=req.query;
- let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,CASE WHEN (FIND_IN_SET('all',u.employer_phone_visibility)>0 OR (?='worker' AND ((FIND_IN_SET('favourites',u.employer_phone_visibility)>0 AND EXISTS(SELECT 1 FROM worker_employer_favourites wf WHERE wf.worker_user_id=? AND wf.business_id=b.id)) OR (FIND_IN_SET('workers',u.employer_phone_visibility)>0 AND EXISTS(SELECT 1 FROM employer_worker_favourites ef WHERE ef.employer_user_id=u.id AND ef.worker_user_id=?))))) THEN u.phone ELSE NULL END AS employer_contact_phone,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_rating_count,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open'`;
+ let sql=`SELECT s.*,b.name AS business_name,b.postcode AS employer_postcode,u.profile_picture AS employer_profile_picture,CASE WHEN (FIND_IN_SET('all',u.employer_phone_visibility)>0 OR (?='worker' AND ((FIND_IN_SET('favourites',u.employer_phone_visibility)>0 AND EXISTS(SELECT 1 FROM worker_employer_favourites wf WHERE wf.worker_user_id=? AND wf.business_id=b.id)) OR (FIND_IN_SET('workers',u.employer_phone_visibility)>0 AND EXISTS(SELECT 1 FROM employer_worker_favourites ef WHERE ef.employer_user_id=u.id AND ef.worker_user_id=?))))) THEN u.phone ELSE NULL END AS employer_contact_phone,(SELECT AVG(r.score) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_average_rating,(SELECT COUNT(*) FROM ratings r WHERE r.reviewee_id=b.owner_user_id) AS business_rating_count,(SELECT COUNT(*) FROM applications a WHERE a.shift_id=s.id AND a.status='approved') AS workers_hired FROM shifts s JOIN businesses b ON b.id=s.business_id JOIN users u ON u.id=b.owner_user_id WHERE s.status='open' AND COALESCE(s.private_only,0)=0`;
  const args=[req.user.role,req.user.id,req.user.id];
  if(from){sql+=' AND s.starts_at>=?';args.push(from);}
  if(to){sql+=' AND s.starts_at<=?';args.push(to);}
