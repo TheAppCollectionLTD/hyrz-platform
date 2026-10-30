@@ -12232,3 +12232,22 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  border-color:#f97316;background:#fff7f1;
 }
 
+/* Worker inbox: employer conversation cards must be readable on the light inbox surface. */
+.app.worker .worker-direct-inbox .direct-conversation-list{
+ min-width:0;padding:0;border:0;border-radius:0;background:transparent;
+}
+.app.worker .worker-direct-inbox .direct-conversation-item{
+ display:flex;width:100%;min-width:0;flex-direction:column;align-items:flex-start;gap:5px;
+ margin:0 0 8px;padding:13px 14px;border:1px solid #e8dfd0;border-radius:10px;
+ background:#fff;color:#171916;text-align:left;box-shadow:none;cursor:pointer;
+}
+.app.worker .worker-direct-inbox .direct-conversation-item strong{color:#171916!important;font-size:13px}
+.app.worker .worker-direct-inbox .direct-conversation-item small,
+.app.worker .worker-direct-inbox .direct-conversation-item span{color:#626b75!important;font-size:11px;overflow-wrap:anywhere}
+.app.worker .worker-direct-inbox .direct-conversation-item:hover,
+.app.worker .worker-direct-inbox .direct-conversation-item.selected{border-color:#f97316;background:#fffaf6}
+.app.worker .worker-direct-inbox .empty-state{
+ margin:8px 0 0;padding:0;border:0;border-radius:0;background:transparent;
+ color:#626b75;font-size:13px;text-align:left;
+}
+
