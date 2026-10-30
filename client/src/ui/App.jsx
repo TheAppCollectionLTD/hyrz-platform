@@ -280,14 +280,18 @@ async function submitPasswordReset(e){
  async function persistShiftTemplate(name, source=shift, requirements=shiftRequirements, perks=shiftPerks, preferences=shiftPreferences, start=postStartTime, end=postEndTime){
   const cleanName=String(name||'').trim();
   if(!cleanName){setError('Give this shift template a name.');return false;}
+  // Preserve every reusable shift field, excluding only dates and worker count.
+  const reusableShift={...(source||{})};
+  ['slots','workers','numberOfWorkers','dates','postDates','startsAt','endsAt','startDate','endDate'].forEach(key=>delete reusableShift[key]);
   const payload={
     name:cleanName,
     shift:{
+      ...reusableShift,
       title:String(source?.title||'').trim(),
       shiftType:String(source?.shiftType||'').trim(),
       hourlyPay:String(source?.hourlyPay??''),
-      description:String(source?.description||'').trim(),
-      additionalNotes:String(source?.additionalNotes||'').trim()
+      description:String(source?.description||''),
+      additionalNotes:String(source?.additionalNotes||'')
     },
     requirements:(Array.isArray(requirements)?requirements:[]).map(x=>String(x||'').trim()).filter(Boolean),
     perks:(Array.isArray(perks)?perks:[]).map(x=>String(x||'').trim()).filter(Boolean),
@@ -305,13 +309,22 @@ async function submitPasswordReset(e){
     return saved;
   }catch(error){setError(error.message||'Could not save the shift template.');return false;}
  }
- function applyTemplateToCurrentShift(item){setShift(current=>({...current,title:item.shift?.title||'',description:item.shift?.description||'',additionalNotes:item.shift?.additionalNotes||'',shiftType:item.shift?.shiftType||'hospitality',hourlyPay:String(item.shift?.hourlyPay??15),slots:1,startsAt:'',endsAt:''}));setShiftRequirements(Array.isArray(item.requirements)&&item.requirements.length?item.requirements:['']);setShiftPerks(Array.isArray(item.perks)&&item.perks.length?item.perks:['']);setShiftPreferences(Array.isArray(item.preferences)&&item.preferences.length?item.preferences:['']);setAutoAcceptEnabled(Boolean(item.autoAcceptEnabled));setAutoAcceptCriteria(item.autoAcceptCriteria&&typeof item.autoAcceptCriteria==='object'?{requirements:true,favourites:false,highRating:false,cancellation24h:false,...item.autoAcceptCriteria}:{requirements:true,favourites:false,highRating:false,cancellation24h:false});setPostStartTime(item.startTime||'09:00');setPostEndTime(item.endTime||'17:00');setPostDates([]);setShiftValidation({});setTemplateName('');setTemplateSetupOpen(false);setUseTemplateOpen(false);setNotice('Template loaded. Choose the dates and worker count, then complete any additional details before publishing.');setError('');}
- function useShiftTemplate(item){
-  setShift({...shift,title:item.shift?.title||'',description:item.shift?.description||'',additionalNotes:item.shift?.additionalNotes||'',shiftType:item.shift?.shiftType||'hospitality',hourlyPay:String(item.shift?.hourlyPay??15),slots:1,startsAt:'',endsAt:''});
-  setShiftRequirements(Array.isArray(item.requirements)&&item.requirements.length?item.requirements:['']);setShiftPerks(Array.isArray(item.perks)&&item.perks.length?item.perks:['']);setShiftPreferences(Array.isArray(item.preferences)&&item.preferences.length?item.preferences:['']);
-  setPostStartTime(item.startTime||'09:00');setPostEndTime(item.endTime||'17:00');setTemplateName(item.name||'');setPostDates([]);setShiftSection('new');setShiftCluster([]);navigateTo('post');
- }
- async function deleteShiftTemplate(id){
+ function restoreShiftTemplate(item){
+   const savedShift=item?.shift&&typeof item.shift==='object'?item.shift:{};
+   const reusable={...savedShift};
+   ['slots','workers','numberOfWorkers','dates','postDates','startsAt','endsAt','startDate','endDate'].forEach(key=>delete reusable[key]);
+   setShift(current=>({...current,...reusable,title:savedShift.title||'',description:savedShift.description||'',additionalNotes:savedShift.additionalNotes||'',shiftType:savedShift.shiftType||'hospitality',hourlyPay:String(savedShift.hourlyPay??15),slots:1,startsAt:'',endsAt:''}));
+   setShiftRequirements(Array.isArray(item?.requirements)?(item.requirements.length?item.requirements:['']):['']);
+   setShiftPerks(Array.isArray(item?.perks)?(item.perks.length?item.perks:['']):['']);
+   setShiftPreferences(Array.isArray(item?.preferences)?(item.preferences.length?item.preferences:['']):['']);
+   setAutoAcceptEnabled(Boolean(item?.autoAcceptEnabled));
+   setAutoAcceptCriteria({requirements:true,favourites:false,highRating:false,cancellation24h:false,...(item?.autoAcceptCriteria||{})});
+   setPostStartTime(item?.startTime||'09:00');setPostEndTime(item?.endTime||'17:00');
+   setPostDates([]);setShiftValidation({});setError('');
+  }
+  function applyTemplateToCurrentShift(item){restoreShiftTemplate(item);setTemplateName('');setTemplateSetupOpen(false);setUseTemplateOpen(false);setNotice('Template loaded. Choose the dates and worker count, then publish.');}
+  function useShiftTemplate(item){restoreShiftTemplate(item);setTemplateName(item?.name||'');setShiftSection('new');setShiftCluster([]);navigateTo('post');}
+  async function deleteShiftTemplate(id){
   const template=shiftTemplates.find(item=>Number(item.id)===Number(id));
   if(!window.confirm('Delete the template'+(template?.name?' “'+template.name+'”':'')+'? This cannot be undone.'))return;
   try{await request('/shift-templates/'+id,{method:'DELETE'});setShiftTemplates(current=>current.filter(item=>Number(item.id)!==Number(id)));setNotice('Template deleted.');}
