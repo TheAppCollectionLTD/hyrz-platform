@@ -2,9 +2,9 @@ import React,{useEffect,useState}from'react';import{request,token}from'../api';
 import JOB_ROLE_GROUPS from '../../../shared/job-roles.json';
 const JOB_ROLES=JOB_ROLE_GROUPS.flatMap(([,roles])=>roles);
 const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n||0));
-function handleMessageEnter(event){if(event.key!=='Enter'||event.shiftKey||event.nativeEvent?.isComposing)return;event.preventDefault();const form=event.currentTarget.form;if(form&&!form.querySelector('button[type="submit"]:disabled'))form.requestSubmit();}
+export default function handleMessageEnter(event){if(event.key!=='Enter'||event.shiftKey||event.nativeEvent?.isComposing)return;event.preventDefault();const form=event.currentTarget.form;if(form&&!form.querySelector('button[type="submit"]:disabled'))form.requestSubmit();}
 
-export default function App(){
+function App(){
 
 
  const [publicIntroSlide,setPublicIntroSlide]=useState(0),[user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[shiftValidation,setShiftValidation]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
@@ -973,11 +973,11 @@ function ShiftList({shifts,allShifts=shifts,role,apply,selectedDate,onRefresh}){
    <section className="shift-grid-cell shift-grid-schedule">
     <div className="shift-detail-item"><span className="shift-meta-label">DATE</span><strong>{new Date(s.starts_at).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'})}</strong></div>
     <div className="shift-detail-item"><span className="shift-meta-label">TIME</span><strong>{new Date(s.starts_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} – {new Date(s.ends_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</strong></div>
+    <div className="shift-detail-item"><span className="shift-meta-label">TOTAL SHIFT RATE</span><strong>{money(perWorkerTotal)}</strong></div>
    </section>
    <section className="shift-grid-cell shift-grid-pay">
     <span className="shift-meta-label">HOURLY RATE</span>
     <strong className="shift-grid-hourly-rate">{money(s.hourly_pay)}<small>/hr</small></strong>
-    <div className="shift-grid-total-rate"><span className="shift-meta-label">TOTAL SHIFT RATE</span><strong>{money(perWorkerTotal)}</strong></div>
     <div className="shift-pay-action-row">{role==='worker'&&<button className="apply-for-shift-button" onClick={()=>apply(s.id)}>Apply for shift</button>}<span className={'instant-pay-badge '+(instantPayAvailable?'available':'unavailable')} title={instantPayAvailable?'Instant Pay is available for this shift':`Instant Pay unavailable: ${paymentLabel}`}>{instantPayAvailable?'Instant Pay available':`Instant Pay unavailable · ${paymentLabel}`}</span></div>
    </section>
   </article>
