@@ -168,7 +168,8 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     if (!shifts.length) return response.status(404).json({ error: 'Open shift not found.' });
     const shift = shifts[0];
     const hoursUntilStart = new Date(shift.starts_at).getTime() - Date.now();
-    if (hoursUntilStart < 0 || hoursUntilStart > 16 * 60 * 60 * 1000) return response.status(409).json({ error: 'Automatic confirmation invitations can only be sent within 16 hours of the shift start.' });
+    if (hoursUntilStart < 0) return response.status(409).json({ error: 'This shift has already started.' });
+    const requiresFirstComeFirstServed = hoursUntilStart <= 16 * 60 * 60 * 1000;
     await db.query("CREATE TABLE IF NOT EXISTS worker_employer_favourites (worker_user_id BIGINT UNSIGNED NOT NULL,business_id BIGINT UNSIGNED NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(worker_user_id,business_id)) ENGINE=InnoDB");
     await ensureWorkerAvailabilityTable;
     const [workers] = await db.execute(`
@@ -202,26 +203,49 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     });
     const conn = await db.getConnection();
     const invited = [];
+    const assigned = [];
     try {
       await conn.beginTransaction();
       const [locked] = await conn.execute('SELECT id,slots,status FROM shifts WHERE id=? FOR UPDATE', [shiftId]);
       if (!locked.length || locked[0].status !== 'open') throw Object.assign(new Error('This shift is no longer open.'), { status: 409 });
-      for (const worker of eligible) {
+      const [[approvedCounts]] = await conn.execute("SELECT COUNT(*) AS approved_count FROM applications WHERE shift_id=? AND status='approved'", [shiftId]);
+      let remainingPositions = Math.max(0, Number(locked[0].slots || 1) - Number(approvedCounts.approved_count || 0));
+
+      // Within 16 hours: invite every eligible worker; the first confirmations fill the positions.
+      // More than 16 hours: randomly allocate only the available positions.
+      let candidates = [...eligible];
+      if (!requiresFirstComeFirstServed) {
+        for (let i = candidates.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+        }
+        candidates = candidates.slice(0, remainingPositions);
+      }
+
+      for (const worker of candidates) {
         const [existing] = await conn.execute('SELECT id,status FROM applications WHERE shift_id=? AND worker_id=? LIMIT 1 FOR UPDATE', [shiftId, worker.id]);
-        let applicationId;
         if (existing.length && existing[0].status === 'approved') continue;
+        let applicationId;
         if (existing.length) {
-          await conn.execute("UPDATE applications SET status='pending',contract_accepted_at=NULL,contract_snapshot=NULL WHERE id=?", [existing[0].id]);
+          await conn.execute("UPDATE applications SET status=?,contract_accepted_at=NULL,contract_snapshot=NULL WHERE id=?", [requiresFirstComeFirstServed ? 'pending' : 'approved', existing[0].id]);
           applicationId = existing[0].id;
         } else {
-          const [created] = await conn.execute("INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences) VALUES(?,?,'pending','[]')", [shiftId, worker.id]);
+          const [created] = await conn.execute("INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences) VALUES(?,?,?,'[]')", [shiftId, worker.id, requiresFirstComeFirstServed ? 'pending' : 'approved']);
           applicationId = created.insertId;
         }
-        await conn.execute(`INSERT INTO shift_confirmation_invites(shift_id,application_id,worker_id,employer_user_id,invite_type,status)
-          VALUES(?,?,?,?, 'automatic','pending')
-          ON DUPLICATE KEY UPDATE application_id=VALUES(application_id),employer_user_id=VALUES(employer_user_id),invite_type='automatic',status='pending',created_at=CURRENT_TIMESTAMP,responded_at=NULL`,
-          [shiftId, applicationId, worker.id, request.user.id]);
-        invited.push(worker);
+        if (requiresFirstComeFirstServed) {
+          await conn.execute(`INSERT INTO shift_confirmation_invites(shift_id,application_id,worker_id,employer_user_id,invite_type,status)
+            VALUES(?,?,?,?, 'automatic','pending')
+            ON DUPLICATE KEY UPDATE application_id=VALUES(application_id),employer_user_id=VALUES(employer_user_id),invite_type='automatic',status='pending',created_at=CURRENT_TIMESTAMP,responded_at=NULL`,
+            [shiftId, applicationId, worker.id, request.user.id]);
+          invited.push(worker);
+        } else {
+          assigned.push(worker);
+        }
+        remainingPositions = Math.max(0, remainingPositions - 1);
+      }
+      if (!requiresFirstComeFirstServed && assigned.length) {
+        await conn.execute("UPDATE shifts SET status=CASE WHEN (SELECT COUNT(*) FROM applications WHERE shift_id=? AND status='approved') >= slots THEN 'filled' ELSE status END WHERE id=?", [shiftId, shiftId]);
       }
       await conn.commit();
     } catch (error) {
@@ -229,8 +253,22 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       if (error.status) return response.status(error.status).json({ error: error.message });
       throw error;
     } finally { conn.release(); }
-    for (const worker of invited) await sendInviteEmail(worker, shift, shift.business_name);
-    await audit(request, 'shift.automatic_confirmation_invites_sent', 'shift', shiftId, { invitedWorkers: invited.length, availablePositions: Number(shift.slots || 1) });
-    response.status(201).json({ ok: true, invitedWorkers: invited.length, message: invited.length ? 'Confirmation invitations sent to all eligible workers.' : 'No workers with matching confirmed automatic availability were found.' });
+
+    if (requiresFirstComeFirstServed) {
+      for (const worker of invited) await sendInviteEmail(worker, shift, shift.business_name);
+      await audit(request, 'shift.automatic_confirmation_invites_sent', 'shift', shiftId, { invitedWorkers: invited.length, availablePositions: Number(shift.slots || 1), allocationPolicy: 'first_come_first_served' });
+      response.status(201).json({
+        ok: true,
+        invitedWorkers: invited.length,
+        message: invited.length ? 'Confirmation invitations sent to all eligible workers. Positions go to the first workers who confirm.' : 'No workers with matching confirmed automatic availability were found.'
+      });
+    } else {
+      await audit(request, 'shift.automatic_workers_randomly_assigned', 'shift', shiftId, { assignedWorkers: assigned.length, availablePositions: Number(shift.slots || 1), allocationPolicy: 'random' });
+      response.status(201).json({
+        ok: true,
+        assignedWorkers: assigned.length,
+        message: assigned.length ? assigned.length + ' eligible worker' + (assigned.length === 1 ? ' was' : 's were') + ' randomly selected and allocated to this shift.' : 'No workers with matching confirmed automatic availability were found, or all positions are already filled.'
+      });
+    }
   })));
 };
