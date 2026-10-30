@@ -49,6 +49,7 @@ jobs:
       - run: node --check src/identifier-hash.js
       - run: node --check src/middleware.js
       - run: node --check src/postcode-distance.js
+      - run: node --check src/shift-confirmation-routes.js
       - run: node --check scripts/admin-journeys.integration.js
       - run: node --check scripts/reset-test-db.js
       - run: node --check scripts/run-integration-test.js
