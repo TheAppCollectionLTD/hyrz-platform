@@ -2,9 +2,9 @@ import React,{useEffect,useState}from'react';import{request,token}from'../api';
 import JOB_ROLE_GROUPS from '../../../shared/job-roles.json';
 const JOB_ROLES=JOB_ROLE_GROUPS.flatMap(([,roles])=>roles);
 const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n||0));
-export default function handleMessageEnter(event){if(event.key!=='Enter'||event.shiftKey||event.nativeEvent?.isComposing)return;event.preventDefault();const form=event.currentTarget.form;if(form&&!form.querySelector('button[type="submit"]:disabled'))form.requestSubmit();}
+function handleMessageEnter(event){if(event.key!=='Enter'||event.shiftKey||event.nativeEvent?.isComposing)return;event.preventDefault();const form=event.currentTarget.form;if(form&&!form.querySelector('button[type="submit"]:disabled'))form.requestSubmit();}
 
-function App(){
+export default function App(){
 
 
  const [publicIntroSlide,setPublicIntroSlide]=useState(0),[user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[shiftValidation,setShiftValidation]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
