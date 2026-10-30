@@ -12208,3 +12208,27 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .worker-availability-panel .shift-type-picker-footer{border-top:1px solid #e5e7eb!important}
 .worker-availability-panel .shift-type-picker-footer button:first-child{color:#c2410c!important}
 
+/* Clear, always-visible choices when selecting individual favourite employers. */
+.worker-availability-panel .availability-favourite-employer-list{
+ display:grid;gap:7px;margin:10px 0;padding:10px;
+ border:1px solid #e5e7eb;border-radius:10px;background:#fff;
+}
+.worker-availability-panel .availability-favourite-employer-option{
+ display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ gap:10px!important;padding:9px!important;border:1px solid #eceff2;border-radius:8px;
+ background:#fff;color:#171916!important;cursor:pointer;
+}
+.worker-availability-panel .availability-favourite-employer-option input[type="checkbox"]{
+ display:inline-block!important;appearance:checkbox!important;-webkit-appearance:checkbox!important;
+ flex:0 0 17px!important;width:17px!important;height:17px!important;min-height:17px!important;
+ margin:0!important;accent-color:#f97316;
+}
+.worker-availability-panel .availability-favourite-employer-option>span{
+ display:grid;gap:2px;color:#171916!important;
+}
+.worker-availability-panel .availability-favourite-employer-option strong{font-size:13px;color:#171916!important}
+.worker-availability-panel .availability-favourite-employer-option small{font-size:11px;color:#626b75!important}
+.worker-availability-panel .availability-favourite-employer-option:has(input:checked){
+ border-color:#f97316;background:#fff7f1;
+}
+
