@@ -274,7 +274,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     await ensureBlockedIdentifiers;
     await ensureWorkerIdentifierColumns;
     for (const [type,raw] of [['national_insurance',nationalInsuranceNumber],['worker_permit',workerPermitNumber]]) {
-      const normalized=String(raw||'').replace(/\\s+/g,'').toUpperCase();
+      const normalized=String(raw||'').replace(/\s+/g,'').toUpperCase();
       if (!normalized) continue;
       const hash=hashIdentifier(normalized);
       const [blocked]=await db.execute('SELECT id FROM blocked_identifiers WHERE identifier_type=? AND identifier_hash=? LIMIT 1',[type,hash]).catch(error=>{if(error.code==='ER_NO_SUCH_TABLE')return [[]];throw error;});
@@ -841,7 +841,7 @@ app.post('/api/private-offers',auth,allow('employer'),requireVerification,asyncR
  if(workers.length!==workerIds.length)return res.status(400).json({error:'One or more selected worker accounts could not be found.'});
  const [businesses]=await db.execute('SELECT id,name FROM businesses WHERE owner_user_id=?',[req.user.id]);
  if(!businesses.length)return res.status(400).json({error:'Business profile missing.'});
- const validDateTime=value=>typeof value==='string'&&/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$/.test(value)&&Number.isFinite(new Date(value).getTime());
+ const validDateTime=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value)&&Number.isFinite(new Date(value).getTime());
  const allowedShiftTypes=new Set(['hospitality','warehouse','retail','events','office','cleaning','care','construction','driving','other']);
  const validList=value=>Array.isArray(value)&&value.length<=10&&value.every(item=>typeof item==='string'&&item.trim().length<=250);
  const conn=await db.getConnection();const created=[];
@@ -849,9 +849,9 @@ app.post('/api/private-offers',auth,allow('employer'),requireVerification,asyncR
   await conn.beginTransaction();
   for(const entry of entries){
    const shift=entry?.shift||{};const dates=[...new Set(Array.isArray(entry.dates)?entry.dates:[])];
-   if(!VALID_JOB_ROLES.has(shift.title)||!allowedShiftTypes.has(shift.shiftType||'hospitality')||!dates.length||dates.length>60||!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(entry.startTime||'')||!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(entry.endTime||'')||!Number.isFinite(Number(shift.hourlyPay))||Number(shift.hourlyPay)<8||Number(shift.hourlyPay)>500||!Number.isInteger(Number(shift.slots))||Number(shift.slots)<1||!validList(entry.requirements||[])||!validList(entry.perks||[])||!validList(entry.preferences||[]))throw Object.assign(new Error('One of the reviewed shifts contains invalid details.'),{statusCode:400});
+   if(!VALID_JOB_ROLES.has(shift.title)||!allowedShiftTypes.has(shift.shiftType||'hospitality')||!dates.length||dates.length>60||!/^([01]\d|2[0-3]):[0-5]\d$/.test(entry.startTime||'')||!/^([01]\d|2[0-3]):[0-5]\d$/.test(entry.endTime||'')||!Number.isFinite(Number(shift.hourlyPay))||Number(shift.hourlyPay)<8||Number(shift.hourlyPay)>500||!Number.isInteger(Number(shift.slots))||Number(shift.slots)<1||!validList(entry.requirements||[])||!validList(entry.perks||[])||!validList(entry.preferences||[]))throw Object.assign(new Error('One of the reviewed shifts contains invalid details.'),{statusCode:400});
    for(const date of dates){
-    if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date))throw Object.assign(new Error('A shift date is invalid.'),{statusCode:400});
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date))throw Object.assign(new Error('A shift date is invalid.'),{statusCode:400});
     const startsAt=date+' '+entry.startTime+':00';let endDate=date;
     if(entry.endTime<=entry.startTime){const d=new Date(date+'T12:00:00');d.setDate(d.getDate()+1);endDate=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
     const endsAt=endDate+' '+entry.endTime+':00';
