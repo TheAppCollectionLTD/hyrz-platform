@@ -12620,3 +12620,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   line-height:1.2!important;
  }
 }
+
+
+/* Restore the employer profile image to its previous full-height size in shift cards. */
+#root .app .shift-card-six-grid .shift-grid-profile .shift-employer-avatar{
+ height:118px!important;
+ min-height:118px!important;
+}
+@media(max-width:760px){
+ #root .app .shift-card-six-grid .shift-grid-profile .shift-employer-avatar{
+  height:118px!important;
+  min-height:118px!important;
+ }
+}
