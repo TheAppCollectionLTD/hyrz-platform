@@ -12461,8 +12461,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 
 
-/* Make the three-strike indicators unmistakable: green ticks for clear slots,
-   red crosses for strikes received. Use CSS glyphs to avoid missing-font boxes. */
+/* Three strike slots: muted outlined X until a strike is applied, then red. */
 .app.worker .worker-three-strikes-indicators{
  display:flex;
  align-items:center;
@@ -12477,28 +12476,26 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  width:27px;
  height:27px;
  flex:0 0 27px;
+ box-sizing:border-box;
+ border:1.5px solid #AEB4BA;
  border-radius:50%;
- font-size:0;
- font-weight:900;
- line-height:1;
-}
-.app.worker .worker-three-strikes-indicators span::before{
- display:block;
- font-size:19px;
+ background:#FFFFFF;
+ color:#AEB4BA;
+ font-size:18px;
+ font-weight:800;
  line-height:1;
 }
 .app.worker .worker-three-strikes-indicators span.is-clear{
- color:#16803C;
- background:#E8F6EC;
+ border-color:#AEB4BA;
+ background:#FFFFFF;
+ color:#AEB4BA;
 }
-.app.worker .worker-three-strikes-indicators span.is-clear::before{content:"✓"}
 .app.worker .worker-three-strikes-indicators span.is-used{
- color:#C62828;
- background:#FDECEC;
+ border-color:#C62828;
+ background:#C62828;
+ color:#FFFFFF;
 }
-.app.worker .worker-three-strikes-indicators span.is-used::before{content:"✕"}
-
-
+ 
 /* Shift-card profile image: rectangular and filling the top-left profile quadrant. */
 #root .app .shift-card-six-grid>.shift-grid-profile{
  align-items:stretch!important;
