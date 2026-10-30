@@ -910,6 +910,30 @@ function ApplicationShiftList({applications,empty,cancel}){
 function buildShiftContract(s){const hours=Math.max(0,(new Date(s.ends_at)-new Date(s.starts_at))/3600000-Number(s.break_minutes||0)/60);const list=value=>{if(Array.isArray(value))return value.filter(Boolean);if(typeof value==='string'){try{const parsed=JSON.parse(value);return Array.isArray(parsed)?parsed.filter(Boolean):[]}catch{return []}}return []};const paymentDate=s.company_payment_date??s.payment_date??s.payment_due_date??s.invoice_due_at??s.business_payment_date;const paymentDays=Number(s.company_payment_days??s.payment_days??s.payment_terms_days??s.business_payment_days);const payment=new Date(paymentDate);const paymentTerms=paymentDate&&!Number.isNaN(payment.getTime())?'Payment due '+payment.toLocaleDateString('en-GB'):(Number.isFinite(paymentDays)&&paymentDays>=0&&paymentDays<=14?'Employer payment terms: within '+paymentDays+' day'+(paymentDays===1?'':'s'):'Employer payment terms: payment date shown on the employer invoice, up to 14 days');return {version:'hyrz-shift-contract-v1',employer:s.business_name||'Employer',worker:'You (applicant)',role:s.title||'Shift worker',location:s.location||'To be confirmed',date:new Date(s.starts_at).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),startTime:new Date(s.starts_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),endTime:new Date(s.ends_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),hours:Number(hours.toFixed(2)),hourlyRate:Number(s.hourly_pay||0),grossPay:Number((Number(s.hourly_pay||0)*hours).toFixed(2)),paymentTerms,description:s.description||'Duties as reasonably described by the employer for this role.',breakMinutes:Number(s.break_minutes||0),requirements:list(s.requirements),preferences:list(s.preferences),perks:list(s.perks),cancellation:'Cancellations and any applicable fees or worker strikes are handled under the hyrz platform rules and applicable law.',records:'Hours worked must be recorded accurately and submitted for review. Payment is based on approved hours and the agreed hourly rate, subject to applicable deductions and legal requirements.'};}
 function ShiftContractDetails({shift}){const contract=buildShiftContract(shift);return <details className="shift-contract-preview employer-shift-contract"><summary>View shift contract and payment terms</summary><div className="shift-contract-document"><h3>Shift contract</h3><p><strong>Contract parties:</strong> {contract.employer} and {contract.worker}</p><p><strong>Role and location:</strong> {contract.role} · {contract.location}</p><p><strong>Date and hours:</strong> {contract.date}, {contract.startTime}–{contract.endTime}</p><p><strong>Hourly rate:</strong> {money(contract.hourlyRate)}/hr; estimated gross pay {money(contract.grossPay)} before deductions.</p><p><strong>Payment terms:</strong> {contract.paymentTerms}</p><p><strong>Work and duties:</strong> {contract.description}</p>{contract.requirements.length>0&&<><p><strong>Requirements:</strong></p><ul>{contract.requirements.map((item,index)=><li key={'er'+index}>{item}</li>)}</ul></>}{contract.preferences.length>0&&<><p><strong>Preferred qualifications:</strong></p><ul>{contract.preferences.map((item,index)=><li key={'ep'+index}>{item}</li>)}</ul></>}{contract.perks.length>0&&<><p><strong>Perks:</strong></p><ul>{contract.perks.map((item,index)=><li key={'ek'+index}>{item}</li>)}</ul></>}<p>{contract.records}</p><p>{contract.cancellation}</p></div></details>}
 function ShiftList({shifts,allShifts=shifts,role,apply,selectedDate,onRefresh}){
+ const [viewerLocation,setViewerLocation]=useState(null);
+ const [shiftCoordinates,setShiftCoordinates]=useState({});
+ useEffect(()=>{
+  if(!navigator.geolocation)return;
+  navigator.geolocation.getCurrentPosition(position=>setViewerLocation({lat:position.coords.latitude,lng:position.coords.longitude}),()=>{}, {enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+ },[]);
+ useEffect(()=>{
+  let active=true;
+  const pending=(shifts||[]).filter(s=>!Number.isFinite(Number(s.latitude??s.lat))||!Number.isFinite(Number(s.longitude??s.lng)) ).map(s=>({id:s.id,postcode:String(s.postcode||s.location||'').match(/[A-Z]{1,2}[0-9][A-Z0-9]?\\s*[0-9][A-Z]{2}/i)?.[0]})).filter(x=>x.postcode&&!shiftCoordinates[x.id]);
+  if(!pending.length)return;
+  Promise.all(pending.map(async item=>{
+   try{const response=await fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(item.postcode));const data=await response.json();if(data.status===200&&data.result)return [item.id,{lat:data.result.latitude,lng:data.result.longitude}]}catch{}
+   return null;
+  })).then(results=>{if(active){const found=Object.fromEntries(results.filter(Boolean));if(Object.keys(found).length)setShiftCoordinates(current=>({...current,...found}));}});
+  return ()=>{active=false};
+ },[shifts,shiftCoordinates]);
+ const distanceForShift=s=>{
+  if(!viewerLocation)return null;
+  const lat=Number(s.latitude??s.lat??shiftCoordinates[s.id]?.lat),lng=Number(s.longitude??s.lng??shiftCoordinates[s.id]?.lng);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng))return null;
+  const rad=value=>value*Math.PI/180, dLat=rad(lat-viewerLocation.lat),dLng=rad(lng-viewerLocation.lng);
+  const a=Math.sin(dLat/2)**2+Math.cos(rad(viewerLocation.lat))*Math.cos(rad(lat))*Math.sin(dLng/2)**2;
+  return 6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+ };
  const parseShiftList=value=>{if(Array.isArray(value))return value.filter(Boolean);if(typeof value==="string"){try{const parsed=JSON.parse(value);if(Array.isArray(parsed))return parsed.filter(Boolean)}catch{}return value.split(/[\n;,]+/).map(item=>item.trim()).filter(Boolean)}if(value&&typeof value==="object")return Object.values(value).filter(Boolean);return []};
  return <DataList items={shifts} empty="There are no shifts to display." render={s=>{
   const hours=Math.max(0,(new Date(s.ends_at)-new Date(s.starts_at))/3600000-Number(s.break_minutes||0)/60);
@@ -942,6 +966,7 @@ function ShiftList({shifts,allShifts=shifts,role,apply,selectedDate,onRefresh}){
     <div className="shift-detail-item"><span className="shift-meta-label">JOB ROLE</span><strong>{s.title||'Shift role'}</strong></div>
     <div className="shift-detail-item"><span className="shift-meta-label">COMPANY</span><strong>{s.business_name||'Employer'}</strong></div>
     <div className="shift-detail-item"><span className="shift-meta-label">LOCATION</span><strong>{s.location||'To be confirmed'}</strong></div>
+    <div className="shift-detail-item shift-distance-item"><span className="shift-meta-label">DISTANCE</span><strong>{distanceForShift(s)!=null?distanceForShift(s).toFixed(1)+' km':viewerLocation?'Not available':'Allow location access'}</strong></div>
    </section>
    <section className="shift-grid-cell shift-grid-schedule">
     <div className="shift-detail-item"><span className="shift-meta-label">DATE</span><strong>{new Date(s.starts_at).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'})}</strong></div>
