@@ -973,11 +973,11 @@ function ShiftList({shifts,allShifts=shifts,role,apply,selectedDate,onRefresh}){
    <section className="shift-grid-cell shift-grid-schedule">
     <div className="shift-detail-item"><span className="shift-meta-label">DATE</span><strong>{new Date(s.starts_at).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'})}</strong></div>
     <div className="shift-detail-item"><span className="shift-meta-label">TIME</span><strong>{new Date(s.starts_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} – {new Date(s.ends_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</strong></div>
-    <div className="shift-detail-item"><span className="shift-meta-label">TOTAL SHIFT RATE</span><strong>{money(perWorkerTotal)}</strong></div>
    </section>
    <section className="shift-grid-cell shift-grid-pay">
     <span className="shift-meta-label">HOURLY RATE</span>
     <strong className="shift-grid-hourly-rate">{money(s.hourly_pay)}<small>/hr</small></strong>
+    <div className="shift-grid-total-rate"><span className="shift-meta-label">TOTAL SHIFT RATE</span><strong>{money(perWorkerTotal)}</strong></div>
     <div className="shift-pay-action-row">{role==='worker'&&<button className="apply-for-shift-button" onClick={()=>apply(s.id)}>Apply for shift</button>}<span className={'instant-pay-badge '+(instantPayAvailable?'available':'unavailable')} title={instantPayAvailable?'Instant Pay is available for this shift':`Instant Pay unavailable: ${paymentLabel}`}>{instantPayAvailable?'Instant Pay available':`Instant Pay unavailable · ${paymentLabel}`}</span></div>
    </section>
   </article>
