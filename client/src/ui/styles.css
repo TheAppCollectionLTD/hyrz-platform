@@ -12780,3 +12780,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   background:#F5F5F5!important;
   border-top:1px solid #E5E7EB!important;
 }
+
+/* Availability subsection tabs should scroll with the page, not remain pinned. */
+.app:is(.worker,.employer,.admin) main:not(.page-dashboard) .availability-subsection-tabs{
+  position:static!important;
+  top:auto!important;
+  z-index:auto!important;
+  background:transparent!important;
+}
