@@ -971,6 +971,7 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  const [[strikeState]]=await db.execute('SELECT COUNT(*) AS strikes FROM worker_strikes WHERE worker_id=?',[req.user.id]);
  if(Number(strikeState?.strikes||0)>=3)return res.status(403).json({error:'Your account has reached three strikes and cannot book more shifts. Please appeal your strikes through Contact Hyrz support and wait for an administrator review.'});
  await ensureShiftPublishingColumns; await ensureApplicationPreferencesColumn; await ensureApplicationRateNegotiation; await ensureShiftContractColumns; await ensurePrivateShiftOffers;
+ await db.query(`CREATE TABLE IF NOT EXISTS shift_confirmation_invites (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,shift_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,worker_id BIGINT UNSIGNED NOT NULL,employer_user_id BIGINT UNSIGNED NOT NULL,invite_type ENUM('manual','automatic') NOT NULL DEFAULT 'manual',status ENUM('pending','confirmed','declined','expired') NOT NULL DEFAULT 'pending',created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,responded_at DATETIME NULL,UNIQUE KEY uq_shift_confirmation_worker(shift_id,worker_id),KEY idx_shift_confirmation_worker_status(worker_id,status),KEY idx_shift_confirmation_shift_status(shift_id,status),FOREIGN KEY(shift_id) REFERENCES shifts(id) ON DELETE CASCADE,FOREIGN KEY(application_id) REFERENCES applications(id) ON DELETE CASCADE,FOREIGN KEY(worker_id) REFERENCES users(id) ON DELETE CASCADE,FOREIGN KEY(employer_user_id) REFERENCES users(id) ON DELETE CASCADE) ENGINE=InnoDB`);
  if(req.body?.contractAccepted!==true)return res.status(400).json({error:'You must agree to the shift contract before applying.'});
  let contractSnapshot='';try{const parsed=JSON.parse(String(req.body?.contractSnapshot||''));if(!parsed||parsed.version!=='hyrz-shift-contract-v1')throw new Error();contractSnapshot=JSON.stringify(parsed);if(contractSnapshot.length>20000)throw new Error();}catch{return res.status(400).json({error:'A valid shift contract must be reviewed and accepted before applying.'});}
  const [s]=await db.execute('SELECT shifts.*,businesses.name AS business_name FROM shifts JOIN businesses ON businesses.id=shifts.business_id WHERE shifts.id=?',[req.params.id]);
@@ -985,6 +986,9 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  const confirmedPreferencesJson=JSON.stringify(confirmedPreferences);
  const requestedRate=req.body?.requestedHourlyRate==null||req.body.requestedHourlyRate===''?null:Number(req.body.requestedHourlyRate);const rateMessage=String(req.body?.rateMessage||'').trim();if(requestedRate!==null&&(!Number.isFinite(requestedRate)||requestedRate<Number(s[0].hourly_pay||8)||requestedRate>500))return res.status(400).json({error:'A counter-offer must be at least the advertised hourly rate and no more than £500 per hour.'});if(rateMessage.length>1000)return res.status(400).json({error:'The optional message must be 1,000 characters or fewer.'});
  const nextStatus=requestedRate!==null?'pending':(s[0].auto_approve?'approved':'pending');
+ const timeUntilShiftStart=new Date(contractShift.starts_at).getTime()-Date.now();
+ const requiresWorkerConfirmation=nextStatus==='approved'&&timeUntilShiftStart>=0&&timeUntilShiftStart<=16*60*60*1000;
+ const applicationStatus=requiresWorkerConfirmation?'pending':nextStatus;
  if(nextStatus==='approved'){
   const conn=await db.getConnection();
   try{
@@ -996,13 +1000,15 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
    const [counts]=await conn.execute("SELECT COUNT(*) AS approved_count FROM applications WHERE shift_id=? AND status='approved'",[req.params.id]);
    if(Number(counts[0]?.approved_count||0)>=Number(lockedShifts[0].slots||1)){await conn.rollback();return res.status(409).json({error:'This shift has no remaining worker positions.'});}
    if(existingApprovedFlow.length){
-    await conn.execute('UPDATE applications SET status=?,cancellation_fee=0,confirmed_preferences=?,requested_hourly_rate=?,rate_message=?,rate_decision=NULL,negotiated_hourly_rate=NULL,contract_accepted_at=UTC_TIMESTAMP(),contract_snapshot=? WHERE id=?',[nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,contractSnapshot,existingApprovedFlow[0].id]);
+    await conn.execute('UPDATE applications SET status=?,cancellation_fee=0,confirmed_preferences=?,requested_hourly_rate=?,rate_message=?,rate_decision=NULL,negotiated_hourly_rate=NULL,contract_accepted_at=UTC_TIMESTAMP(),contract_snapshot=? WHERE id=?',[applicationStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,contractSnapshot,existingApprovedFlow[0].id]);
+    if(requiresWorkerConfirmation)await conn.execute(`INSERT INTO shift_confirmation_invites(shift_id,application_id,worker_id,employer_user_id,invite_type,status) VALUES(?,?,?,?, 'manual','pending') ON DUPLICATE KEY UPDATE application_id=VALUES(application_id),employer_user_id=VALUES(employer_user_id),invite_type='manual',status='pending',created_at=CURRENT_TIMESTAMP,responded_at=NULL`,[req.params.id,existingApprovedFlow[0].id,req.user.id,contractShift.created_by]);
     await conn.commit();
-    return res.status(200).json({id:existingApprovedFlow[0].id,status:nextStatus});
+    return res.status(200).json({id:existingApprovedFlow[0].id,status:requiresWorkerConfirmation?'awaiting_confirmation':nextStatus,confirmationRequired:requiresWorkerConfirmation});
    }
-   const [created]=await conn.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences,requested_hourly_rate,rate_message,rate_decision,contract_accepted_at,contract_snapshot) VALUES(?,?,?,?,?,?,?,UTC_TIMESTAMP(),?)',[req.params.id,req.user.id,nextStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,null,contractSnapshot]);
+   const [created]=await conn.execute('INSERT INTO applications(shift_id,worker_id,status,confirmed_preferences,requested_hourly_rate,rate_message,rate_decision,contract_accepted_at,contract_snapshot) VALUES(?,?,?,?,?,?,?,UTC_TIMESTAMP(),?)',[req.params.id,req.user.id,applicationStatus,confirmedPreferencesJson,requestedRate,rateMessage||null,null,contractSnapshot]);
+   if(requiresWorkerConfirmation)await conn.execute(`INSERT INTO shift_confirmation_invites(shift_id,application_id,worker_id,employer_user_id,invite_type,status) VALUES(?,?,?,?, 'manual','pending') ON DUPLICATE KEY UPDATE application_id=VALUES(application_id),employer_user_id=VALUES(employer_user_id),invite_type='manual',status='pending',created_at=CURRENT_TIMESTAMP,responded_at=NULL`,[req.params.id,created.insertId,req.user.id,contractShift.created_by]);
    await conn.commit();
-   return res.status(201).json({id:created.insertId,status:nextStatus});
+   return res.status(201).json({id:created.insertId,status:requiresWorkerConfirmation?'awaiting_confirmation':nextStatus,confirmationRequired:requiresWorkerConfirmation});
   }catch(error){
    try{await conn.rollback();}catch(_){}
    if(error.code==='ER_DUP_ENTRY')return res.status(409).json({error:'Already applied'});
