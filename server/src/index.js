@@ -23,12 +23,19 @@ const allowedClientOrigins = new Set(String(process.env.CLIENT_ORIGIN || 'http:/
   .split(',').map(origin => origin.trim()).filter(Boolean));
 app.use(cors({
   origin(origin, callback) {
-    // Native clients and same-origin requests may not send an Origin header.
-    // Permit arbitrary localhost ports for local Vite sessions, but require an
-    // explicit CLIENT_ORIGIN allow-list for deployed browser frontends.
-    if (!origin || allowedClientOrigins.has(origin) || /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
-      return callback(null, true);
+    // Native clients may not send Origin. Permit private-LAN Vite origins for Expo Go development.
+    // Public deployed browser origins still require CLIENT_ORIGIN.
+    const isLocalhost = /^https?:\\/\\/(localhost|127\\.0\\.0\\.1):\\d+$/.test(origin || '');
+    let isPrivateLanVite = false;
+    if (origin) {
+      try {
+        const url = new URL(origin);
+        const host = url.hostname;
+        const privateIpv4 = /^(10\\.|192\\.168\\.|172\\.(1[6-9]|2\\d|3[01])\\.)/.test(host);
+        isPrivateLanVite = url.protocol === 'http:' && privateIpv4 && ['5173','4173'].includes(url.port);
+      } catch {}
     }
+    if (!origin || allowedClientOrigins.has(origin) || isLocalhost || isPrivateLanVite) return callback(null, true);
     return callback(null, false);
   }
 }));
