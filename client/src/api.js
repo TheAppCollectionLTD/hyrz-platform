@@ -10,7 +10,8 @@ function resolveApiUrl() {
    // A LAN-loaded Expo WebView cannot use the computer's localhost alias.
    // Preserve the configured API port/path but substitute the Vite host.
    if (!pageIsLoopback && apiIsLoopback) configured.hostname = pageHost;
-   return configured.toString().replace(/\\/$/, '');
+   const resolvedUrl = configured.toString();
+   return resolvedUrl.endsWith('/') ? resolvedUrl.slice(0, -1) : resolvedUrl;
   } catch { return configuredApiUrl; }
  }
  // Standard local API runs on 4000; the isolated test API uses .env.test (4001).
