@@ -784,7 +784,7 @@ app.get('/api/shift-templates/mine',auth,allow('employer'),asyncRoute(async(req,
  const templates=rows.map(row=>{
   let data=row.template_data;
   if(typeof data==='string'){try{data=JSON.parse(data)}catch{data={}}}
-  return {id:Number(row.id),name:row.name,shift:data?.shift||{},requirements:Array.isArray(data?.requirements)?data.requirements:[],perks:Array.isArray(data?.perks)?data.perks:[],preferences:Array.isArray(data?.preferences)?data.preferences:[],startTime:data?.startTime||'09:00',endTime:data?.endTime||'17:00',createdAt:row.created_at};
+  return {id:Number(row.id),name:row.name,shift:data?.shift||{},requirements:Array.isArray(data?.requirements)?data.requirements:[],perks:Array.isArray(data?.perks)?data.perks:[],preferences:Array.isArray(data?.preferences)?data.preferences:[],autoAcceptEnabled:Boolean(data?.autoAcceptEnabled),autoAcceptCriteria:data?.autoAcceptCriteria&&typeof data.autoAcceptCriteria==='object'?data.autoAcceptCriteria:{requirements:true,favourites:false,highRating:false,cancellation24h:false},startTime:data?.startTime||'09:00',endTime:data?.endTime||'17:00',createdAt:row.created_at};
  });
  res.json({templates});
 }));
@@ -808,9 +808,12 @@ app.post('/api/shift-templates',auth,allow('employer'),asyncRoute(async(req,res)
  const additionalNotes=String(req.body?.shift?.additionalNotes||'').trim();
  const cleanList=value=>Array.isArray(value)?value.map(item=>String(item||'').trim()).filter(Boolean).slice(0,10):[];
  const requirements=cleanList(req.body?.requirements),perks=cleanList(req.body?.perks),preferences=cleanList(req.body?.preferences);
- const templateData=JSON.stringify({shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},requirements,perks,preferences,startTime,endTime});
+ const autoAcceptEnabled=Boolean(req.body?.autoAcceptEnabled);
+ const criteria=req.body?.autoAcceptCriteria&&typeof req.body.autoAcceptCriteria==='object'?req.body.autoAcceptCriteria:{};
+ const autoAcceptCriteria={requirements:Boolean(criteria.requirements),favourites:Boolean(criteria.favourites),highRating:Boolean(criteria.highRating),cancellation24h:Boolean(criteria.cancellation24h)};
+ const templateData=JSON.stringify({shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},requirements,perks,preferences,autoAcceptEnabled,autoAcceptCriteria,startTime,endTime});
  const [result]=await db.execute('INSERT INTO shift_templates(employer_user_id,name,template_data) VALUES(?,?,?)',[req.user.id,name,templateData]);
- res.status(201).json({template:{id:Number(result.insertId),name,shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},requirements,perks,preferences,startTime,endTime,createdAt:new Date().toISOString()}});
+ res.status(201).json({template:{id:Number(result.insertId),name,shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},requirements,perks,preferences,autoAcceptEnabled,autoAcceptCriteria,startTime,endTime,createdAt:new Date().toISOString()}});
 }));
 app.delete('/api/shift-templates/:id',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureShiftTemplates;
