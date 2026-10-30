@@ -12634,12 +12634,3 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  }
 }
 
-
-/* Lift the pay details slightly within each compact mobile shift segment. */
-@media(max-width:760px){
- #root .app .shift-card-six-grid .shift-grid-total-rate,
- #root .app .shift-card-six-grid .shift-grid-pay{
-  position:relative!important;
-  top:-8px!important;
- }
-}
