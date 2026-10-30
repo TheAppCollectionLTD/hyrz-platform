@@ -163,14 +163,15 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     await db.query("CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, employer_mode VARCHAR(20) NOT NULL DEFAULT 'all', preferred_employer_ids JSON NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE) ENGINE=InnoDB");
     const [workers] = await db.execute(`
       SELECT u.id,u.email,u.first_name,wa.timings,wa.roles,wa.shift_types,wa.min_hourly_rate,wa.min_total_pay,
-             wa.employer_mode,wa.preferred_employer_ids
+             wa.employer_mode,wa.preferred_employer_ids,
+             EXISTS(SELECT 1 FROM worker_employer_favourites wf WHERE wf.worker_user_id=u.id AND wf.business_id=?) AS employer_is_favourite
       FROM worker_availability wa JOIN users u ON u.id=wa.user_id
       WHERE u.role='worker' AND u.status='active' AND wa.automatic_enabled=1
-    `);
+    `, [shift.business_id]);
     const eligible = workers.filter(worker => {
       if (!availabilityMatches(worker, shift)) return false;
       if (worker.employer_mode === 'selected') return parseJson(worker.preferred_employer_ids).map(Number).includes(Number(shift.business_id));
-      if (worker.employer_mode === 'favourites') return false; // Employer selection is not a worker favourite list; do not silently broaden this mode.
+      if (worker.employer_mode === 'favourites' && !Number(worker.employer_is_favourite)) return false;
       return true;
     });
     const conn = await db.getConnection();
