@@ -124,7 +124,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       const [[counts]] = await conn.execute("SELECT COUNT(*) AS approved_count FROM applications WHERE shift_id=? AND status='approved'", [shiftId]);
       if (Number(counts.approved_count || 0) >= Number(shift.slots || 1)) {
         await conn.execute("UPDATE shift_confirmation_invites SET status='expired',responded_at=UTC_TIMESTAMP() WHERE shift_id=? AND status='pending'", [shiftId]);
-        await conn.execute("UPDATE applications SET status='rejected' WHERE shift_id=? AND status='pending'", [shiftId]);
+        await conn.execute("UPDATE applications a JOIN shift_confirmation_invites i ON i.application_id=a.id SET a.status='rejected' WHERE i.shift_id=? AND i.status='expired' AND a.status='pending'", [shiftId]);
         await conn.commit(); return response.status(409).json({ error: 'All positions for this shift have already been filled.' });
       }
       if (invite.invite_type === 'automatic') {
@@ -141,7 +141,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       const [after] = await conn.execute("SELECT COUNT(*) AS approved_count FROM applications WHERE shift_id=? AND status='approved'", [shiftId]);
       if (Number(after[0].approved_count || 0) >= Number(shift.slots || 1)) {
         await conn.execute("UPDATE shift_confirmation_invites SET status='expired',responded_at=UTC_TIMESTAMP() WHERE shift_id=? AND status='pending'", [shiftId]);
-        await conn.execute("UPDATE applications SET status='rejected' WHERE shift_id=? AND status='pending'", [shiftId]);
+        await conn.execute("UPDATE applications a JOIN shift_confirmation_invites i ON i.application_id=a.id SET a.status='rejected' WHERE i.shift_id=? AND i.status='expired' AND a.status='pending'", [shiftId]);
       }
       await conn.commit();
     } catch (error) {
@@ -156,7 +156,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     if (request.user.role !== 'employer') return response.status(403).json({ error: 'Employer accounts only.' });
     const shiftId = Number(request.params.id);
     const [shifts] = await db.execute(`
-      SELECT s.*,b.owner_user_id,b.name AS business_name,
+      SELECT s.*,b.owner_user_id,b.name AS business_name,b.postcode AS employer_postcode,
              DATE_FORMAT(s.starts_at,'%Y-%m-%d') AS shift_date,
              DATE_FORMAT(s.starts_at,'%H:%i') AS shift_start,
              DATE_FORMAT(s.ends_at,'%H:%i') AS shift_end,
