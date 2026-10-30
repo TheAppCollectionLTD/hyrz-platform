@@ -1031,14 +1031,15 @@ app.get('/api/applications/mine',auth,asyncRoute(async(req,res)=>{
 }));
 app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
  await ensureApplicationRateNegotiation;
+ await db.query(`CREATE TABLE IF NOT EXISTS shift_confirmation_invites (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,shift_id BIGINT UNSIGNED NOT NULL,application_id BIGINT UNSIGNED NOT NULL,worker_id BIGINT UNSIGNED NOT NULL,employer_user_id BIGINT UNSIGNED NOT NULL,invite_type ENUM('manual','automatic') NOT NULL DEFAULT 'manual',status ENUM('pending','confirmed','declined','expired') NOT NULL DEFAULT 'pending',created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,responded_at DATETIME NULL,UNIQUE KEY uq_shift_confirmation_worker(shift_id,worker_id),KEY idx_shift_confirmation_worker_status(worker_id,status),KEY idx_shift_confirmation_shift_status(shift_id,status),FOREIGN KEY(shift_id) REFERENCES shifts(id) ON DELETE CASCADE,FOREIGN KEY(application_id) REFERENCES applications(id) ON DELETE CASCADE,FOREIGN KEY(worker_id) REFERENCES users(id) ON DELETE CASCADE,FOREIGN KEY(employer_user_id) REFERENCES users(id) ON DELETE CASCADE) ENGINE=InnoDB`);
  const acceptRequestedRate=req.body?.acceptRequestedRate===true;
  const status=req.body.status;
  if(!['approved','rejected'].includes(status))return res.status(400).json({error:'Invalid status'});
  const conn=await db.getConnection();
- let auditDetails;
+ let auditDetails,confirmationRequired=false;
  try {
   await conn.beginTransaction();
-  const [rows]=await conn.execute('SELECT a.id,a.status AS application_status,a.shift_id,a.requested_hourly_rate,s.slots FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=? AND b.owner_user_id=? FOR UPDATE',[req.params.id,req.user.id]);
+  const [rows]=await conn.execute('SELECT a.id,a.status AS application_status,a.shift_id,a.requested_hourly_rate,s.slots,s.starts_at FROM applications a JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=? AND b.owner_user_id=? FOR UPDATE',[req.params.id,req.user.id]);
   if(!rows.length){await conn.rollback();return res.status(404).json({error:'Application not found'});}
   const application=rows[0];
   const requested=application.requested_hourly_rate;
@@ -1050,19 +1051,31 @@ app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asy
     return res.status(409).json({error:'This shift has no remaining worker positions. Increase the worker count or choose another applicant.'});
    }
   }
-  if(acceptRequestedRate){
-   await conn.execute("UPDATE applications SET status='approved',rate_decision='accepted',negotiated_hourly_rate=requested_hourly_rate WHERE id=?",[req.params.id]);
-  }else{
-   await conn.execute("UPDATE applications SET status=?,rate_decision=CASE WHEN requested_hourly_rate IS NOT NULL THEN 'declined' ELSE rate_decision END WHERE id=?",[status,req.params.id]);
+  if(status==='approved'&&application.application_status!=='approved'){
+   const hoursUntilStart=new Date(application.starts_at).getTime()-Date.now();
+   if(hoursUntilStart>=0&&hoursUntilStart<=16*60*60*1000){
+    await conn.execute(`INSERT INTO shift_confirmation_invites(shift_id,application_id,worker_id,employer_user_id,invite_type,status)
+      VALUES(?,?,?,?,'manual','pending')
+      ON DUPLICATE KEY UPDATE application_id=VALUES(application_id),employer_user_id=VALUES(employer_user_id),invite_type='manual',status='pending',created_at=CURRENT_TIMESTAMP,responded_at=NULL`,
+      [application.shift_id,application.id,application.worker_id,req.user.id]);
+    confirmationRequired=true;
+   }
   }
-  auditDetails={requestedHourlyRate:requested||null,acceptRequestedRate,previousStatus:application.application_status,status};
+  if(!confirmationRequired){
+   if(acceptRequestedRate){
+    await conn.execute("UPDATE applications SET status='approved',rate_decision='accepted',negotiated_hourly_rate=requested_hourly_rate WHERE id=?",[req.params.id]);
+   }else{
+    await conn.execute("UPDATE applications SET status=?,rate_decision=CASE WHEN requested_hourly_rate IS NOT NULL THEN 'declined' ELSE rate_decision END WHERE id=?",[status,req.params.id]);
+   }
+  }
+  auditDetails={requestedHourlyRate:requested||null,acceptRequestedRate,previousStatus:application.application_status,status:confirmationRequired?'awaiting_worker_confirmation':status,confirmationRequired};
   await conn.commit();
  } catch(error) {
   try{await conn.rollback();}catch(_){}
   throw error;
  } finally {conn.release();}
- await audit(req,acceptRequestedRate?'application.rate_counter_accepted':'application.'+status,'application',req.params.id,auditDetails);
- res.json({ok:true});
+ await audit(req,confirmationRequired?'application.confirmation_requested':(acceptRequestedRate?'application.rate_counter_accepted':'application.'+status),'application',req.params.id,auditDetails);
+ res.json({ok:true,confirmationRequired,status:confirmationRequired?'awaiting_confirmation':status});
 }));
 app.delete('/api/applications/:id',auth,allow('employer'),requireVerification,asyncRoute(async(req,res)=>{
  await ensureApplicationCancellationFee;
@@ -1311,6 +1324,7 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
  sql+=' ORDER BY d.created_at DESC';const [rows]=await db.execute(sql,args);res.json({disputes:rows});
 }));
 require('./user-message-routes')(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta });
+require('./shift-confirmation-routes')(app, { db, asyncRoute, audit, resend });
 require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta });
 
 app.get('/api/admin/overview',auth,allow('admin'),asyncRoute(async(req,res)=>{
