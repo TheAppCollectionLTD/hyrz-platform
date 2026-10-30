@@ -778,7 +778,7 @@ app.get('/api/shift-templates/mine',auth,allow('employer'),asyncRoute(async(req,
  const templates=rows.map(row=>{
   let data=row.template_data;
   if(typeof data==='string'){try{data=JSON.parse(data)}catch{data={}}}
-  return {id:Number(row.id),name:row.name,shift:data?.shift||{},startTime:data?.startTime||'09:00',endTime:data?.endTime||'17:00',createdAt:row.created_at};
+  return {id:Number(row.id),name:row.name,shift:data?.shift||{},requirements:Array.isArray(data?.requirements)?data.requirements:[],perks:Array.isArray(data?.perks)?data.perks:[],preferences:Array.isArray(data?.preferences)?data.preferences:[],startTime:data?.startTime||'09:00',endTime:data?.endTime||'17:00',createdAt:row.created_at};
  });
  res.json({templates});
 }));
