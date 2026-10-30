@@ -1,7 +1,7 @@
 const { auth, allow, requireVerification } = require('./middleware');
 const { normalizePostcode, extractPostcode, distanceMiles, lookupPostcodeCoordinates } = require('./postcode-distance');
 
-module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute, audit, resend }) {
+module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute, audit, resend, ensureWorkerAvailabilityTable }) {
   const ensureShiftConfirmationInvites = db.query(`
     CREATE TABLE IF NOT EXISTS shift_confirmation_invites (
       id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -170,10 +170,11 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     const hoursUntilStart = new Date(shift.starts_at).getTime() - Date.now();
     if (hoursUntilStart < 0 || hoursUntilStart > 16 * 60 * 60 * 1000) return response.status(409).json({ error: 'Automatic confirmation invitations can only be sent within 16 hours of the shift start.' });
     await db.query("CREATE TABLE IF NOT EXISTS worker_employer_favourites (worker_user_id BIGINT UNSIGNED NOT NULL,business_id BIGINT UNSIGNED NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(worker_user_id,business_id)) ENGINE=InnoDB");
-    await db.query("CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, employer_mode VARCHAR(20) NOT NULL DEFAULT 'all', preferred_employer_ids JSON NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE) ENGINE=InnoDB");
+    await ensureWorkerAvailabilityTable;
     const [workers] = await db.execute(`
       SELECT u.id,u.email,u.first_name,wa.timings,wa.roles,wa.shift_types,wa.min_hourly_rate,wa.min_total_pay,
-             wa.employer_mode,wa.preferred_employer_ids,wa.max_distance,
+             wa.employer_mode,wa.preferred_employer_ids,wa.max_distance,wa.max_weekly_hours,
+             (SELECT COALESCE(SUM(GREATEST(0,TIMESTAMPDIFF(MINUTE,ss.starts_at,ss.ends_at)-COALESCE(ss.break_minutes,0))/60),0) FROM applications aa JOIN shifts ss ON ss.id=aa.shift_id WHERE aa.worker_id=u.id AND aa.status IN ('approved','completed') AND YEARWEEK(ss.starts_at,3)=YEARWEEK(s.starts_at,3)) AS allocated_hours_this_week,
              COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS worker_postcode,
              b.postcode AS employer_postcode,s.location AS shift_location,
              EXISTS(SELECT 1 FROM worker_employer_favourites wf WHERE wf.worker_user_id=u.id AND wf.business_id=?) AS employer_is_favourite
