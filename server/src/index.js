@@ -800,9 +800,11 @@ app.post('/api/shift-templates',auth,allow('employer'),asyncRoute(async(req,res)
  // Templates deliberately persist only role, shift type, rate and times—not shift dates or headcount.
  const description=String(req.body?.shift?.description||'').trim();
  const additionalNotes=String(req.body?.shift?.additionalNotes||'').trim();
- const templateData=JSON.stringify({shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},startTime,endTime});
+ const cleanList=value=>Array.isArray(value)?value.map(item=>String(item||'').trim()).filter(Boolean).slice(0,10):[];
+ const requirements=cleanList(req.body?.requirements),perks=cleanList(req.body?.perks),preferences=cleanList(req.body?.preferences);
+ const templateData=JSON.stringify({shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},requirements,perks,preferences,startTime,endTime});
  const [result]=await db.execute('INSERT INTO shift_templates(employer_user_id,name,template_data) VALUES(?,?,?)',[req.user.id,name,templateData]);
- res.status(201).json({template:{id:Number(result.insertId),name,shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},startTime,endTime,createdAt:new Date().toISOString()}});
+ res.status(201).json({template:{id:Number(result.insertId),name,shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},requirements,perks,preferences,startTime,endTime,createdAt:new Date().toISOString()}});
 }));
 app.delete('/api/shift-templates/:id',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureShiftTemplates;
