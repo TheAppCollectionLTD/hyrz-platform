@@ -12396,3 +12396,66 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+
+/* Notification preferences: keep labels and descriptions clearly visible on mobile. */
+.app.worker .worker-notifications-panel .notification-setting-row{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto;
+ align-items:center;
+ gap:16px;
+ padding:18px 20px;
+ background:#FFFFFF;
+ border:1px solid #D8D8D8;
+ color:#111111;
+}
+.app.worker .worker-notifications-panel .notification-setting-copy{
+ display:block;
+ min-width:0;
+ visibility:visible;
+ opacity:1;
+}
+.app.worker .worker-notifications-panel .notification-setting-copy strong{
+ display:block;
+ color:#111111;
+ font-size:15px;
+ line-height:1.35;
+}
+.app.worker .worker-notifications-panel .notification-setting-copy p{
+ display:block;
+ margin:5px 0 0;
+ color:#555555;
+ font-size:12px;
+ line-height:1.5;
+}
+.app.worker .worker-notifications-panel .notification-channel-toggles{
+ display:flex;
+ align-items:center;
+ gap:14px;
+}
+.app.worker .worker-notifications-panel .notification-toggle-option{
+ color:#222222;
+}
+@media(max-width:640px){
+ .app.worker .worker-notifications-panel .notification-setting-row{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:12px;
+  padding:15px;
+  background:#FFFFFF;
+ }
+ .app.worker .worker-notifications-panel .notification-setting-copy,
+ .app.worker .worker-notifications-panel .notification-setting-copy strong,
+ .app.worker .worker-notifications-panel .notification-setting-copy p{
+  display:block;
+  visibility:visible;
+  opacity:1;
+ }
+ .app.worker .worker-notifications-panel .notification-channel-toggles{
+  width:100%;
+  justify-content:flex-start;
+  padding-top:10px;
+  border-top:1px solid #E5E5E5;
+ }
+}
