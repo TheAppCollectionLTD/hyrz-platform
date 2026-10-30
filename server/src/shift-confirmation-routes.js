@@ -1,4 +1,5 @@
 const { auth, allow, requireVerification } = require('./middleware');
+const { normalizePostcode, extractPostcode, distanceMiles, lookupPostcodeCoordinates } = require('./postcode-distance');
 
 module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute, audit, resend }) {
   const ensureShiftConfirmationInvites = db.query(`
@@ -170,13 +171,27 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     await db.query("CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, employer_mode VARCHAR(20) NOT NULL DEFAULT 'all', preferred_employer_ids JSON NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE) ENGINE=InnoDB");
     const [workers] = await db.execute(`
       SELECT u.id,u.email,u.first_name,wa.timings,wa.roles,wa.shift_types,wa.min_hourly_rate,wa.min_total_pay,
-             wa.employer_mode,wa.preferred_employer_ids,
+             wa.employer_mode,wa.preferred_employer_ids,wa.max_distance,
+             COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS worker_postcode,
+             b.postcode AS employer_postcode,s.location AS shift_location,
              EXISTS(SELECT 1 FROM worker_employer_favourites wf WHERE wf.worker_user_id=u.id AND wf.business_id=?) AS employer_is_favourite
       FROM worker_availability wa JOIN users u ON u.id=wa.user_id
+      LEFT JOIN worker_profiles wp ON wp.user_id=u.id
+      JOIN businesses b ON b.id=? JOIN shifts s ON s.id=?
       WHERE u.role='worker' AND u.status='active' AND wa.automatic_enabled=1
-    `, [shift.business_id]);
+    `, [shift.business_id, shift.business_id, shiftId]);
+    const postcodes = [...new Set(workers.flatMap(worker => [normalizePostcode(worker.worker_postcode), extractPostcode(worker.shift_location) || normalizePostcode(worker.employer_postcode)]).filter(Boolean))];
+    const coordinates = await lookupPostcodeCoordinates(postcodes);
+    const destinationPostcode = extractPostcode(shift.location) || normalizePostcode(shift.employer_postcode);
+    const destinationCoordinates = coordinates.get(destinationPostcode) || null;
     const eligible = workers.filter(worker => {
       if (!availabilityMatches(worker, shift)) return false;
+      const originPostcode = normalizePostcode(worker.worker_postcode);
+      const originCoordinates = coordinates.get(originPostcode) || null;
+      if (originCoordinates && destinationCoordinates) {
+        const miles = distanceMiles(originCoordinates, destinationCoordinates);
+        if (Number.isFinite(miles) && miles > Number(worker.max_distance || 10)) return false;
+      }
       if (worker.employer_mode === 'selected') return parseJson(worker.preferred_employer_ids).map(Number).includes(Number(shift.business_id));
       if (worker.employer_mode === 'favourites' && !Number(worker.employer_is_favourite)) return false;
       return true;
