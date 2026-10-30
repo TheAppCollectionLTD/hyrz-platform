@@ -12541,3 +12541,82 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .shift-card-six-grid .shift-detail-item strong{font-size:11px!important;line-height:1.2!important}
 #root .app .shift-card-six-grid .shift-meta-label{font-size:8px!important;letter-spacing:.7px!important}
 #root .app .shift-card-six-grid .shift-distance-item strong{color:#C2410C!important;font-weight:800!important}
+
+
+/* Compact mobile shift segments and group the pay information together. */
+#root .app .shift-card-six-grid .shift-grid-total-rate{
+ display:flex!important;
+ flex-direction:column!important;
+ align-items:flex-start!important;
+ gap:2px!important;
+ margin:2px 0 0!important;
+}
+#root .app .shift-card-six-grid .shift-grid-total-rate>strong{
+ color:#292929!important;
+ font-size:14px!important;
+ font-weight:850!important;
+ line-height:1.2!important;
+}
+@media(max-width:760px){
+ #root .app .shift-card-six-grid{
+  gap:6px!important;
+  padding:8px!important;
+  margin:8px 0!important;
+ }
+ #root .app .shift-card-six-grid>.shift-grid-cell{
+  min-height:0!important;
+  padding:7px!important;
+  gap:5px!important;
+ }
+ #root .app .shift-card-six-grid>.shift-grid-profile{
+  min-height:0!important;
+  gap:5px!important;
+ }
+ #root .app .shift-card-six-grid .shift-grid-profile .shift-employer-avatar{
+  height:70px!important;
+  min-height:70px!important;
+ }
+ #root .app .shift-card-six-grid .shift-grid-company-name{
+  font-size:10px!important;
+  line-height:1.2!important;
+ }
+ #root .app .shift-card-six-grid .shift-grid-role,
+ #root .app .shift-card-six-grid .shift-grid-schedule{
+  gap:6px!important;
+ }
+ #root .app .shift-card-six-grid .shift-detail-item strong{
+  font-size:10px!important;
+  line-height:1.2!important;
+ }
+ #root .app .shift-card-six-grid .shift-meta-label{
+  font-size:7px!important;
+  letter-spacing:.55px!important;
+  line-height:1.15!important;
+ }
+ #root .app .shift-card-six-grid .shift-grid-hourly-rate{
+  font-size:21px!important;
+  line-height:1.05!important;
+ }
+ #root .app .shift-card-six-grid .shift-grid-total-rate>strong{
+  font-size:13px!important;
+ }
+ #root .app .shift-card-six-grid .shift-grid-pay{
+  justify-content:flex-start!important;
+  align-content:start!important;
+  gap:5px!important;
+ }
+ #root .app .shift-card-six-grid .shift-pay-action-row{
+  gap:5px!important;
+  margin-top:2px!important;
+ }
+ #root .app .shift-card-six-grid .shift-pay-action-row .apply-for-shift-button{
+  min-height:34px!important;
+  padding:7px 9px!important;
+  font-size:10px!important;
+ }
+ #root .app .shift-card-six-grid .shift-pay-action-row .instant-pay-badge{
+  padding:5px 6px!important;
+  font-size:8px!important;
+  line-height:1.2!important;
+ }
+}
