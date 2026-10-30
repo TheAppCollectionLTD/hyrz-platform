@@ -796,15 +796,15 @@ function AccountSettings({user,setUser,action,busy,setNotice,onPasswordChanged,p
  function setDefaultDemoPaymentMethod(id){const next=paymentMethods.map(m=>({...m,default:String(m.id)===String(id)}));setPaymentMethods(next);localStorage.setItem('hyrz_demo_payment_methods',JSON.stringify(next));setPaymentMethodNotice('Default payment method updated.');}
  function saveWorkerPayoutAccount(e){
   e.preventDefault();
-  const registeredName=[user.first_name||user.firstName,user.last_name||user.lastName].filter(Boolean).join(' ').trim().replace(/\\s+/g,' ');
-  const accountHolder=String(payoutDraft.accountHolder||'').trim().replace(/\\s+/g,' ');
-  const normalizeName=value=>String(value||'').trim().toLocaleLowerCase().replace(/\\s+/g,' ');
+  const registeredName=[user.first_name||user.firstName,user.last_name||user.lastName].filter(Boolean).join(' ').trim().replace(/\s+/g,' ');
+  const accountHolder=String(payoutDraft.accountHolder||'').trim().replace(/\s+/g,' ');
+  const normalizeName=value=>String(value||'').trim().toLocaleLowerCase().replace(/\s+/g,' ');
   if(!registeredName||normalizeName(accountHolder)!==normalizeName(registeredName)){
    setPayoutNotice('The account holder name must exactly match your name on your Hyrz profile: '+(registeredName||'your registered profile name')+'.');
    return;
   }
-  const sortCode=String(payoutDraft.sortCode||'').replace(/\\D/g,'').slice(0,6);
-  const accountNumber=String(payoutDraft.accountNumber||'').replace(/\\D/g,'').slice(0,8);
+  const sortCode=String(payoutDraft.sortCode||'').replace(/\D/g,'').slice(0,6);
+  const accountNumber=String(payoutDraft.accountNumber||'').replace(/\D/g,'').slice(0,8);
   if(sortCode.length!==6){setPayoutNotice('Enter a valid 6-digit UK sort code.');return;}
   if(accountNumber.length!==8){setPayoutNotice('Enter a valid 8-digit UK account number.');return;}
   if(payoutAccounts.some(account=>account.sortCode===sortCode&&account.accountNumber===accountNumber)){
@@ -909,14 +909,14 @@ function AccountSettings({user,setUser,action,busy,setNotice,onPasswordChanged,p
    <div className="account-password-heading"><div><h2>Payment accounts</h2><p className="muted">Add multiple UK bank accounts in your name and choose which one should receive your shift payments. Only one account can be active at a time.</p></div><button type="button" className="secondary" onClick={()=>{setShowAddPayoutAccount(value=>!value);setPayoutNotice('');}}>{showAddPayoutAccount?'Cancel':'＋ Add bank account'}</button></div>
    {payoutAccounts.length>0?<div className="profile-payment-method-list">{payoutAccounts.map(account=><article className="profile-payment-method-card" key={account.id}>
     <div className="profile-payment-card-icon">▰</div>
-    <div className="profile-payment-card-details"><strong>{account.accountHolder}</strong><span>Sort code: {String(account.sortCode||'').replace(/(\\d{2})(\\d{2})(\\d{2})/,'$1-$2-$3')}</span><span>Account ending {String(account.accountNumber||'').slice(-4)}</span>{account.active&&<small className="profile-payment-default">Selected to receive payments</small>}</div>
+    <div className="profile-payment-card-details"><strong>{account.accountHolder}</strong><span>Sort code: {String(account.sortCode||'').replace(/(\d{2})(\d{2})(\d{2})/,'$1-$2-$3')}</span><span>Account ending {String(account.accountNumber||'').slice(-4)}</span>{account.active&&<small className="profile-payment-default">Selected to receive payments</small>}</div>
     <div className="profile-payment-card-actions"><button type="button" className="textbutton" aria-pressed={Boolean(account.active)} onClick={()=>toggleWorkerPayoutAccount(account.id)}>{account.active?'Turn off':'Use this account'}</button></div>
    </article>)}</div>:<div className="profile-payment-empty"><span>▱</span><strong>No bank accounts added</strong><p>Add a UK bank account in your own name to choose where shift payments should be sent.</p></div>}
    {showAddPayoutAccount&&<form className="profile-add-payment-form" onSubmit={saveWorkerPayoutAccount}>
     <h3>Add a bank account</h3>
     <p>The account holder name must match your registered Hyrz profile name.</p>
     <label>Account holder name<input autoComplete="name" maxLength={100} value={payoutDraft.accountHolder} onChange={e=>setPayoutDraft(current=>({...current,accountHolder:e.target.value}))} placeholder="Your registered full name" required/></label>
-    <div className="payment-preference-grid"><label>UK sort code<input inputMode="numeric" autoComplete="off" maxLength={8} value={payoutDraft.sortCode} onChange={e=>setPayoutDraft(current=>({...current,sortCode:e.target.value.replace(/[^0-9 -]/g,'').slice(0,8)}))} placeholder="12-34-56" required/></label><label>Account number<input inputMode="numeric" autoComplete="off" maxLength={8} value={payoutDraft.accountNumber} onChange={e=>setPayoutDraft(current=>({...current,accountNumber:e.target.value.replace(/\\D/g,'').slice(0,8)}))} placeholder="8 digits" required/></label></div>
+    <div className="payment-preference-grid"><label>UK sort code<input inputMode="numeric" autoComplete="off" maxLength={8} value={payoutDraft.sortCode} onChange={e=>setPayoutDraft(current=>({...current,sortCode:e.target.value.replace(/[^0-9 -]/g,'').slice(0,8)}))} placeholder="12-34-56" required/></label><label>Account number<input inputMode="numeric" autoComplete="off" maxLength={8} value={payoutDraft.accountNumber} onChange={e=>setPayoutDraft(current=>({...current,accountNumber:e.target.value.replace(/\D/g,'').slice(0,8)}))} placeholder="8 digits" required/></label></div>
     <button className="primary" type="submit">Add bank account</button>
    </form>}
    {payoutNotice&&<p className="payment-preferences-feedback" role="status">{payoutNotice}</p>}
