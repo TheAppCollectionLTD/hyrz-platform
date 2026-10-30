@@ -3284,7 +3284,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
     bottom:0;
     width:100%;
     display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-columns:repeat(5,minmax(0,1fr));
     gap:0;
     padding-top:7px;
     padding-bottom:calc(7px + env(safe-area-inset-bottom));
