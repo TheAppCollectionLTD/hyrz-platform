@@ -6,6 +6,21 @@ function handleMessageEnter(event){if(event.key!=='Enter'||event.shiftKey||event
 
 export default function App(){
 
+ // Close any open dropdown, popover or expandable panel when the user clicks elsewhere.
+ useEffect(()=>{
+  function closeOpenSections(event){
+   const openTriggers=[...document.querySelectorAll('[aria-expanded="true"]')];
+   const containers=['.role-multi-filter','.shift-type-multi-filter','.availability-employer-preferences','.workchat-settings','.shift-use-template','.workchat-participant-picker','.workchat-message-bubble','.favourite-worker-card','.applicant-profile-actions','.applicant-card','.worker-profile-card'];
+   openTriggers.forEach(trigger=>{
+    if(trigger===event.target||trigger.contains(event.target))return;
+    const container=trigger.closest(containers.join(','))||trigger.parentElement;
+    if(container&&container.contains(event.target))return;
+    trigger.click();
+   });
+  }
+  document.addEventListener('pointerdown',closeOpenSections,true);
+  return()=>document.removeEventListener('pointerdown',closeOpenSections,true);
+ },[]);
 
  const [publicIntroSlide,setPublicIntroSlide]=useState(0),[user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[shiftValidation,setShiftValidation]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
  const [adminBroadcasts,setAdminBroadcasts]=useState([]);
