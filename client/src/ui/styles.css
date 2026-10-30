@@ -12692,3 +12692,29 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  #root .app .shift-confirmation-actions{display:grid;grid-template-columns:1fr 1fr}
  #root .app .shift-confirmation-actions button{width:100%;padding:10px 8px}
 }
+
+/* Make the automatic-matching confirmation copy clearly readable on mobile. */
+#root .app.worker .worker-availability-panel .availability-confirm-dialog{
+  background:#FFFFFF!important;
+  color:#171717!important;
+  border:2px solid #F97316!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.12)!important;
+}
+#root .app.worker .worker-availability-panel .availability-confirm-dialog h3,
+#root .app.worker .worker-availability-panel .availability-confirm-dialog p{
+  color:#171717!important;
+  -webkit-text-fill-color:#171717!important;
+  opacity:1!important;
+  visibility:visible!important;
+  text-shadow:none!important;
+}
+#root .app.worker .worker-availability-panel .availability-confirm-dialog h3{
+  font-size:18px!important;
+  line-height:1.35!important;
+  font-weight:800!important;
+}
+#root .app.worker .worker-availability-panel .availability-confirm-dialog p{
+  font-size:14px!important;
+  line-height:1.55!important;
+  font-weight:500!important;
+}
