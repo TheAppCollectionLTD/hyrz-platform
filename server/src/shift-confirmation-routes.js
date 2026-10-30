@@ -1,3 +1,5 @@
+const { auth, allow, requireVerification } = require('./middleware');
+
 module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute, audit, resend }) {
   const ensureShiftConfirmationInvites = db.query(`
     CREATE TABLE IF NOT EXISTS shift_confirmation_invites (
@@ -62,7 +64,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     } catch (error) { console.error('Shift confirmation email failed:', error.message); }
   }
 
-  app.get('/api/shift-confirmations/mine', (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
+  app.get('/api/shift-confirmations/mine', auth, allow('worker'), (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
     if (request.user.role !== 'worker') return response.status(403).json({ error: 'Worker accounts only.' });
     const [rows] = await db.execute(`
       SELECT i.id AS invite_id,i.invite_type,i.created_at AS invited_at,
@@ -80,7 +82,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     response.json({ confirmations: rows });
   }))(req,res,next).catch(next));
 
-  app.post('/api/shift-confirmations/:id/respond', (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
+  app.post('/api/shift-confirmations/:id/respond', auth, allow('worker'), requireVerification, (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
     if (request.user.role !== 'worker') return response.status(403).json({ error: 'Worker accounts only.' });
     const decision = request.body?.decision;
     if (!['confirm','decline'].includes(decision)) return response.status(400).json({ error: 'Choose confirm or decline.' });
@@ -147,7 +149,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     response.json({ ok: true, status: 'approved' });
   }))(req,res,next).catch(next));
 
-  app.post('/api/shifts/:id/automatic-invites', (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
+  app.post('/api/shifts/:id/automatic-invites', auth, allow('employer'), requireVerification, (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
     if (request.user.role !== 'employer') return response.status(403).json({ error: 'Employer accounts only.' });
     const shiftId = Number(request.params.id);
     const [shifts] = await db.execute(`
