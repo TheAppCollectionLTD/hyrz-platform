@@ -6,6 +6,7 @@ export default function App(){
 
 
  const [publicIntroSlide,setPublicIntroSlide]=useState(0),[user,setUser]=useState(null),[page,setPage]=useState('home'),[error,setError]=useState(''),[shiftValidation,setShiftValidation]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[onboarding,setOnboarding]=useState(null),[onboardingLoading,setOnboardingLoading]=useState(false);
+ const [adminBroadcasts,setAdminBroadcasts]=useState([]);
  const [pageHistory,setPageHistory]=useState([]),[applicationReviewMode,setApplicationReviewMode]=useState('apply');
  const [passwordResetToken,setPasswordResetToken]=useState(''),[resetPasswordValue,setResetPasswordValue]=useState(''),[resetPasswordConfirm,setResetPasswordConfirm]=useState('');
  const [publicContactOpen,setPublicContactOpen]=useState(false),[publicContactEmail,setPublicContactEmail]=useState(''),[publicContactMessage,setPublicContactMessage]=useState(''),[publicContactSending,setPublicContactSending]=useState(false),[publicContactSent,setPublicContactSent]=useState(false),[publicContactError,setPublicContactError]=useState('');
