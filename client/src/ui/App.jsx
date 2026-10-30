@@ -199,6 +199,7 @@ const [shift,setShift]=useState({title:'',description:'',additionalNotes:'',shif
     return;
   }
 
+  if(params.get('private-offers')==='1'){navigateTo('jobs');setJobFilter('private');window.history.replaceState({},'',window.location.pathname);}
   load();
 }, []);
  useEffect(()=>{
