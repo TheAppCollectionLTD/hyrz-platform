@@ -163,7 +163,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
              DATE_FORMAT(s.ends_at,'%Y-%m-%d') AS shift_end_date,
              COALESCE(s.shift_type,'hospitality') AS shift_type
       FROM shifts s JOIN businesses b ON b.id=s.business_id
-      WHERE s.id=? AND b.owner_user_id=? AND s.status='open'
+      WHERE s.id=? AND b.owner_user_id=? AND s.status='open' AND COALESCE(s.private_only,0)=0
     `, [shiftId, request.user.id]);
     if (!shifts.length) return response.status(404).json({ error: 'Open shift not found.' });
     const shift = shifts[0];
