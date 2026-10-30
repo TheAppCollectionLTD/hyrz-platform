@@ -143,7 +143,7 @@ const ensureClockCheckoutColumns = (async()=>{
   await addColumn('checkouts','worker_adjustment_reason TEXT NULL','checkout worker time adjustment reason');
   await addColumn('checkouts','is_test TINYINT(1) NOT NULL DEFAULT 0','test checkout marker');
 })();
-const ensureWorkerAvailabilityTable = (async()=>{await createTable(`CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, employer_mode VARCHAR(20) NOT NULL DEFAULT 'all', preferred_employer_ids JSON NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`,'worker availability');await addColumn('worker_availability',"employer_mode VARCHAR(20) NOT NULL DEFAULT 'all'",'worker availability employer mode');await addColumn('worker_availability','preferred_employer_ids JSON NULL','worker availability preferred employers');})();
+const ensureWorkerAvailabilityTable = (async()=>{await createTable(`CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, employer_mode VARCHAR(20) NOT NULL DEFAULT 'all', preferred_employer_ids JSON NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)`,'worker availability');await addColumn('worker_availability',"employer_mode VARCHAR(20) NOT NULL DEFAULT 'all'",'worker availability employer mode');await addColumn('worker_availability','preferred_employer_ids JSON NULL','worker availability preferred employers');await addColumn('worker_availability','min_weekly_hours INT UNSIGNED NOT NULL DEFAULT 20','minimum requested weekly hours');await addColumn('worker_availability','max_weekly_hours INT UNSIGNED NOT NULL DEFAULT 40','maximum requested weekly hours');})();
 const ensureWorkerIdentifierColumns = (async()=>{
   await addColumn('worker_profiles','national_insurance_hash CHAR(64) NULL','worker National Insurance hash');
   await addColumn('worker_profiles','worker_permit_hash CHAR(64) NULL','worker permit hash');
@@ -638,23 +638,24 @@ app.put('/api/worker/notification-preferences',auth,allow('worker'),asyncRoute(a
 app.get('/api/worker/availability',auth,asyncRoute(async(req,res)=>{
  if(req.user.role!=='worker') return res.status(403).json({error:'Worker accounts only.'});
  await ensureWorkerAvailabilityTable;
- const [rows]=await db.execute('SELECT timings,min_hourly_rate,min_total_pay,max_distance,roles,shift_types,automatic_enabled,employer_mode,preferred_employer_ids FROM worker_availability WHERE user_id=?',[req.user.id]);
+ const [rows]=await db.execute('SELECT timings,min_hourly_rate,min_total_pay,max_distance,roles,shift_types,automatic_enabled,employer_mode,preferred_employer_ids,min_weekly_hours,max_weekly_hours FROM worker_availability WHERE user_id=?',[req.user.id]);
  const row=rows[0];
- res.json({availability:row?{timings:typeof row.timings==='string'?JSON.parse(row.timings):row.timings,minHourlyRate:Number(row.min_hourly_rate),minTotalPay:Number(row.min_total_pay),maxDistance:Number(row.max_distance),roles:typeof row.roles==='string'?JSON.parse(row.roles):row.roles,shiftTypes:typeof row.shift_types==='string'?JSON.parse(row.shift_types):row.shift_types,automatic:Boolean(row.automatic_enabled),employerMode:row.employer_mode||'all',preferredEmployerIds:row.preferred_employer_ids?(typeof row.preferred_employer_ids==='string'?JSON.parse(row.preferred_employer_ids):row.preferred_employer_ids):[]}:{timings:{},minHourlyRate:8,minTotalPay:20,maxDistance:10,roles:[],shiftTypes:[],automatic:false,employerMode:'all',preferredEmployerIds:[]}});
+ res.json({availability:row?{timings:typeof row.timings==='string'?JSON.parse(row.timings):row.timings,minHourlyRate:Number(row.min_hourly_rate),minTotalPay:Number(row.min_total_pay),maxDistance:Number(row.max_distance),roles:typeof row.roles==='string'?JSON.parse(row.roles):row.roles,shiftTypes:typeof row.shift_types==='string'?JSON.parse(row.shift_types):row.shift_types,automatic:Boolean(row.automatic_enabled),minWeeklyHours:Number(row.min_weekly_hours??20),maxWeeklyHours:Number(row.max_weekly_hours??40),employerMode:row.employer_mode||'all',preferredEmployerIds:row.preferred_employer_ids?(typeof row.preferred_employer_ids==='string'?JSON.parse(row.preferred_employer_ids):row.preferred_employer_ids):[]}:{timings:{},minHourlyRate:8,minTotalPay:20,maxDistance:10,roles:[],shiftTypes:[],automatic:false,minWeeklyHours:20,maxWeeklyHours:40,employerMode:'all',preferredEmployerIds:[]}});
 }));
 app.put('/api/worker/availability',auth,asyncRoute(async(req,res)=>{
  if(req.user.role!=='worker') return res.status(403).json({error:'Worker accounts only.'});
  await ensureWorkerAvailabilityTable;
  const timings=req.body.timings&&typeof req.body.timings==='object'&&!Array.isArray(req.body.timings)?req.body.timings:{};
- const minHourlyRate=Number(req.body.minHourlyRate??8),minTotalPay=Number(req.body.minTotalPay??20),maxDistance=Number(req.body.maxDistance??10);
+ const minHourlyRate=Number(req.body.minHourlyRate??8),minTotalPay=Number(req.body.minTotalPay??20),maxDistance=Number(req.body.maxDistance??10),minWeeklyHours=Number(req.body.minWeeklyHours??20),maxWeeklyHours=Number(req.body.maxWeeklyHours??40);
  const roles=Array.isArray(req.body.roles)?req.body.roles:[],shiftTypes=Array.isArray(req.body.shiftTypes)?req.body.shiftTypes:[],employerMode=req.body.employerMode==='favourites'?'favourites':'all',preferredEmployerIds=Array.isArray(req.body.preferredEmployerIds)?[...new Set(req.body.preferredEmployerIds.map(Number).filter(id=>Number.isSafeInteger(id)&&id>0))]:[];
  if(!Number.isFinite(minHourlyRate)||minHourlyRate<8||!Number.isFinite(minTotalPay)||minTotalPay<8||!Number.isInteger(maxDistance)||maxDistance<1) return res.status(400).json({error:'Minimum hourly rate and total shift pay must be at least £8; distance must be at least 1 mile.'});
+ if(!Number.isInteger(minWeeklyHours)||!Number.isInteger(maxWeeklyHours)||minWeeklyHours<0||maxWeeklyHours<1||minWeeklyHours>80||maxWeeklyHours>80||maxWeeklyHours<minWeeklyHours)return res.status(400).json({error:'Requested weekly hours must be whole numbers between 0 and 80, and the maximum cannot be lower than the minimum.'});
  const datePattern=/^\d{4}-\d{2}-\d{2}$/;
  for(const [date,timing] of Object.entries(timings)){
    if(!datePattern.test(date)||!timing||typeof timing.start!=='string'||typeof timing.end!=='string'||!/^([01]\d|2[0-3]):[0-5]\d$/.test(timing.start)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(timing.end)||timing.start>=timing.end) return res.status(400).json({error:'Each availability date must have valid start and end times.'});
  }
- await db.execute(`INSERT INTO worker_availability (user_id,timings,min_hourly_rate,min_total_pay,max_distance,roles,shift_types,automatic_enabled,employer_mode,preferred_employer_ids) VALUES (?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE timings=VALUES(timings),min_hourly_rate=VALUES(min_hourly_rate),min_total_pay=VALUES(min_total_pay),max_distance=VALUES(max_distance),roles=VALUES(roles),shift_types=VALUES(shift_types),automatic_enabled=VALUES(automatic_enabled),employer_mode=VALUES(employer_mode),preferred_employer_ids=VALUES(preferred_employer_ids)`,[req.user.id,JSON.stringify(timings),minHourlyRate,minTotalPay,maxDistance,JSON.stringify(roles),JSON.stringify(shiftTypes),req.body.automatic?1:0,employerMode,JSON.stringify(preferredEmployerIds)]);
- res.json({ok:true,availability:{timings,minHourlyRate,minTotalPay,maxDistance,roles,shiftTypes,automatic:Boolean(req.body.automatic),employerMode,preferredEmployerIds}});
+ await db.execute(`INSERT INTO worker_availability (user_id,timings,min_hourly_rate,min_total_pay,max_distance,roles,shift_types,automatic_enabled,employer_mode,preferred_employer_ids,min_weekly_hours,max_weekly_hours) VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE timings=VALUES(timings),min_hourly_rate=VALUES(min_hourly_rate),min_total_pay=VALUES(min_total_pay),max_distance=VALUES(max_distance),roles=VALUES(roles),shift_types=VALUES(shift_types),automatic_enabled=VALUES(automatic_enabled),employer_mode=VALUES(employer_mode),preferred_employer_ids=VALUES(preferred_employer_ids),min_weekly_hours=VALUES(min_weekly_hours),max_weekly_hours=VALUES(max_weekly_hours)`,[req.user.id,JSON.stringify(timings),minHourlyRate,minTotalPay,maxDistance,JSON.stringify(roles),JSON.stringify(shiftTypes),req.body.automatic?1:0,employerMode,JSON.stringify(preferredEmployerIds),minWeeklyHours,maxWeeklyHours]);
+ res.json({ok:true,availability:{timings,minHourlyRate,minTotalPay,maxDistance,roles,shiftTypes,automatic:Boolean(req.body.automatic),minWeeklyHours,maxWeeklyHours,employerMode,preferredEmployerIds}});
 }));
 app.get('/api/profile',auth,asyncRoute(async(req,res)=>{
  await ensureWorkerPhoneVisibilityColumn;
@@ -738,11 +739,16 @@ app.get('/api/employer/workers/search',auth,allow('employer'),asyncRoute(async(r
  res.json({workers,searchTerm:q});
 }));
 app.get('/api/employer/workers/favourites',auth,allow('employer'),asyncRoute(async(req,res)=>{
- await Promise.all([ensureEmployerWorkerFavourites,ensureProfilePictureColumn,ensureUserAddressColumns]);
+ await Promise.all([ensureEmployerWorkerFavourites,ensureProfilePictureColumn,ensureUserAddressColumns,ensureWorkerAvailabilityTable]);
  const [workers]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.profile_picture,
- COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode
+ COALESCE(NULLIF(TRIM(wp.postcode),''),NULLIF(TRIM(u.address_postcode),'')) AS postcode,
+ COALESCE(wa.automatic_enabled,0) AS automated_matching,COALESCE(wa.min_weekly_hours,20) AS requested_min_hours,COALESCE(wa.max_weekly_hours,40) AS requested_max_hours,
+ COALESCE(hrs.allocated_hours,0) AS allocated_hours_this_week,
+ GREATEST(0,COALESCE(wa.max_weekly_hours,40)-COALESCE(hrs.allocated_hours,0)) AS remaining_hours_this_week
  FROM employer_worker_favourites f JOIN users u ON u.id=f.worker_user_id
  LEFT JOIN worker_profiles wp ON wp.user_id=u.id
+ LEFT JOIN worker_availability wa ON wa.user_id=u.id
+ LEFT JOIN (SELECT a.worker_id,SUM(GREATEST(0,TIMESTAMPDIFF(MINUTE,s.starts_at,s.ends_at)-COALESCE(s.break_minutes,0))/60) AS allocated_hours FROM applications a JOIN shifts s ON s.id=a.shift_id WHERE a.status IN ('approved','completed') AND YEARWEEK(s.starts_at,3)=YEARWEEK(UTC_DATE(),3) GROUP BY a.worker_id) hrs ON hrs.worker_id=u.id
  WHERE f.employer_user_id=? AND u.role='worker' AND u.status='active'
  ORDER BY u.first_name,u.last_name`,[req.user.id]);
  res.json({workers:workers.map(worker=>({...worker,isFavourite:true}))});
