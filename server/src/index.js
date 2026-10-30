@@ -1059,6 +1059,7 @@ app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asy
       ON DUPLICATE KEY UPDATE application_id=VALUES(application_id),employer_user_id=VALUES(employer_user_id),invite_type='manual',status='pending',created_at=CURRENT_TIMESTAMP,responded_at=NULL`,
       [application.shift_id,application.id,application.worker_id,req.user.id]);
     confirmationRequired=true;
+    if(acceptRequestedRate)await conn.execute("UPDATE applications SET rate_decision='accepted',negotiated_hourly_rate=requested_hourly_rate WHERE id=?",[req.params.id]);
    }
   }
   if(!confirmationRequired){
