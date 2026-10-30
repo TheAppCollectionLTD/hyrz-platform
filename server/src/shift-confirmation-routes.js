@@ -55,8 +55,8 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     return start >= availableStart && shiftEnd <= availableEnd;
   }
   async function sendInviteEmail(worker, shift, businessName) {
-    if (!resend || !process.env.EMAIL_FROM || !worker.email) return;
-    const appUrl = process.env.APP_URL || 'https://hyrz.co.uk';
+    if (!resend || !process.env.EMAIL_FROM || !process.env.APP_URL || !worker.email) return;
+    const appUrl = process.env.APP_URL;
     const safe = value => String(value || '').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
     try {
       await resend.emails.send({
