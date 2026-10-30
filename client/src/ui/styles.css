@@ -12461,7 +12461,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 
 
-/* Three simple strike circles: grey X by default, red X when a strike is applied. */
+/* Three strike circles drawn with CSS so the X is identical on every device/font. */
 .app.worker .worker-three-strikes-indicators{
  display:flex;
  align-items:center;
@@ -12470,32 +12470,47 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  margin:0;
 }
 .app.worker .worker-three-strikes-indicators span{
- display:inline-flex;
- align-items:center;
- justify-content:center;
- width:27px;
- height:27px;
- flex:0 0 27px;
- box-sizing:border-box;
- border:1.5px solid #AEB4BA;
- border-radius:50%;
- background:#FFFFFF;
- color:#AEB4BA;
- font-size:18px;
- font-weight:800;
- line-height:1;
+ position:relative!important;
+ display:inline-flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ width:27px!important;
+ height:27px!important;
+ flex:0 0 27px!important;
+ box-sizing:border-box!important;
+ border:1.5px solid #AEB4BA!important;
+ border-radius:50%!important;
+ background:#FFFFFF!important;
+ color:transparent!important;
+ font-size:0!important;
+ line-height:0!important;
 }
-.app.worker .worker-three-strikes-indicators span.is-clear{
- border-color:#AEB4BA;
- background:#FFFFFF;
- color:#AEB4BA;
+.app.worker .worker-three-strikes-indicators span::before,
+.app.worker .worker-three-strikes-indicators span::after{
+ content:""!important;
+ position:absolute!important;
+ display:block!important;
+ left:50%!important;
+ top:50%!important;
+ width:13px!important;
+ height:2px!important;
+ margin:0!important;
+ border:0!important;
+ border-radius:2px!important;
+ background:#AEB4BA!important;
+ transform-origin:center!important;
 }
-.app.worker .worker-three-strikes-indicators span.is-used{
- border-color:#AEB4BA;
- background:#FFFFFF;
- color:#C62828;
+.app.worker .worker-three-strikes-indicators span::before{
+ transform:translate(-50%,-50%) rotate(45deg)!important;
 }
- 
+.app.worker .worker-three-strikes-indicators span::after{
+ transform:translate(-50%,-50%) rotate(-45deg)!important;
+}
+.app.worker .worker-three-strikes-indicators span.is-used::before,
+.app.worker .worker-three-strikes-indicators span.is-used::after{
+ background:#C62828!important;
+}
+
 /* Shift-card profile image: rectangular and filling the top-left profile quadrant. */
 #root .app .shift-card-six-grid>.shift-grid-profile{
  align-items:stretch!important;
