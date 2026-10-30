@@ -1083,12 +1083,12 @@ app.patch('/api/applications/:id',auth,allow('employer'),requireVerification,asy
   throw error;
  } finally {conn.release();}
  await audit(req,confirmationRequired?'application.confirmation_requested':(acceptRequestedRate?'application.rate_counter_accepted':'application.'+status),'application',req.params.id,auditDetails);
- if(confirmationRequired&&resend&&process.env.EMAIL_FROM){
+ if(confirmationRequired&&resend&&process.env.EMAIL_FROM&&process.env.APP_URL){
   try{
    const [noticeRows]=await db.execute('SELECT u.email,u.first_name,s.title,s.starts_at,b.name AS business_name FROM applications a JOIN users u ON u.id=a.worker_id JOIN shifts s ON s.id=a.shift_id JOIN businesses b ON b.id=s.business_id WHERE a.id=?',[req.params.id]);
    if(noticeRows.length&&noticeRows[0].email){
     const n=noticeRows[0],safe=value=>String(value||'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
-    const appUrl=process.env.APP_URL||'https://hyrz.co.uk';
+    const appUrl=process.env.APP_URL;
     await resend.emails.send({from:process.env.EMAIL_FROM,to:n.email,subject:'Please confirm your shift on hyrz',html:'<p>Hello '+safe(n.first_name||'there')+',</p><p>'+safe(n.business_name)+' has approved your application for '+safe(n.title)+'. As the shift starts within 16 hours, please confirm it in your hyrz account before the position is allocated.</p><p><a href="'+safe(appUrl)+'">Open hyrz and confirm your shift</a></p>'});
    }
   }catch(error){console.error('Manual shift confirmation email failed:',error.message);}
