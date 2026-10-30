@@ -12294,3 +12294,57 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .app.worker .worker-inbox-panel .direct-message-compose textarea::placeholder{
   color:#68758A !important;
 }
+
+
+/* Mobile / Expo WebView authentication: prevent horizontal panning when the
+   Android/iOS keyboard focuses an input. Keep the form inside the visual width. */
+@media (max-width: 760px) {
+  html,
+  body,
+  #root,
+  #root > .app.auth-layout {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  #root > .app.auth-layout > main {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    overflow-x: clip;
+  }
+
+  #root > .app.auth-layout > main > .panel.auth {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 540px;
+    min-width: 0;
+    margin: 24px auto;
+    padding: 28px 20px;
+  }
+
+  #root > .app.auth-layout .panel.auth form,
+  #root > .app.auth-layout .panel.auth form > label,
+  #root > .app.auth-layout .panel.auth form > label input,
+  #root > .app.auth-layout .panel.auth form > label select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #root > .app.auth-layout .panel.auth form > label input,
+  #root > .app.auth-layout .panel.auth form > label select {
+    font-size: 16px;
+    scroll-margin-block: 24px;
+  }
+
+  #root > .app.auth-layout .panel.auth form > label input:focus {
+    scroll-margin-inline: 0;
+  }
+}
