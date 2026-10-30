@@ -798,9 +798,11 @@ app.post('/api/shift-templates',auth,allow('employer'),asyncRoute(async(req,res)
  if(!Number.isFinite(hourlyPay)||hourlyPay<8||hourlyPay>500)return res.status(400).json({error:'Template hourly pay must be between £8.00 and £500.00.'});
  if(!validTime(startTime)||!validTime(endTime)||startTime===endTime)return res.status(400).json({error:'Choose valid start and end times that are different.'});
  // Templates deliberately persist only role, shift type, rate and times—not shift dates or headcount.
- const templateData=JSON.stringify({shift:{title,shiftType,hourlyPay:String(hourlyPay)},startTime,endTime});
+ const description=String(req.body?.shift?.description||'').trim();
+ const additionalNotes=String(req.body?.shift?.additionalNotes||'').trim();
+ const templateData=JSON.stringify({shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},startTime,endTime});
  const [result]=await db.execute('INSERT INTO shift_templates(employer_user_id,name,template_data) VALUES(?,?,?)',[req.user.id,name,templateData]);
- res.status(201).json({template:{id:Number(result.insertId),name,shift:{title,shiftType,hourlyPay:String(hourlyPay)},startTime,endTime,createdAt:new Date().toISOString()}});
+ res.status(201).json({template:{id:Number(result.insertId),name,shift:{title,shiftType,hourlyPay:String(hourlyPay),description,additionalNotes},startTime,endTime,createdAt:new Date().toISOString()}});
 }));
 app.delete('/api/shift-templates/:id',auth,allow('employer'),asyncRoute(async(req,res)=>{
  await ensureShiftTemplates;
