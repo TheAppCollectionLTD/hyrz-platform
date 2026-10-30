@@ -285,7 +285,9 @@ async function submitPasswordReset(e){
     shift:{
       title:String(source?.title||'').trim(),
       shiftType:String(source?.shiftType||'').trim(),
-      hourlyPay:String(source?.hourlyPay??'')
+      hourlyPay:String(source?.hourlyPay??''),
+      description:String(source?.description||'').trim(),
+      additionalNotes:String(source?.additionalNotes||'').trim()
     },
     startTime:start,
     endTime:end
@@ -298,9 +300,9 @@ async function submitPasswordReset(e){
     return saved;
   }catch(error){setError(error.message||'Could not save the shift template.');return false;}
  }
- function applyTemplateToCurrentShift(item){setShift(current=>({...current,title:item.shift?.title||'',description:'',additionalNotes:'',shiftType:item.shift?.shiftType||'hospitality',hourlyPay:String(item.shift?.hourlyPay??15),slots:1,startsAt:'',endsAt:''}));setShiftRequirements(['']);setShiftPerks(['']);setShiftPreferences(['']);setPostStartTime(item.startTime||'09:00');setPostEndTime(item.endTime||'17:00');setPostDates([]);setShiftValidation({});setTemplateName('');setTemplateSetupOpen(false);setUseTemplateOpen(false);setNotice('Template loaded. Choose the dates and worker count, then complete any additional details before publishing.');setError('');}
+ function applyTemplateToCurrentShift(item){setShift(current=>({...current,title:item.shift?.title||'',description:item.shift?.description||'',additionalNotes:item.shift?.additionalNotes||'',shiftType:item.shift?.shiftType||'hospitality',hourlyPay:String(item.shift?.hourlyPay??15),slots:1,startsAt:'',endsAt:''}));setShiftRequirements(['']);setShiftPerks(['']);setShiftPreferences(['']);setPostStartTime(item.startTime||'09:00');setPostEndTime(item.endTime||'17:00');setPostDates([]);setShiftValidation({});setTemplateName('');setTemplateSetupOpen(false);setUseTemplateOpen(false);setNotice('Template loaded. Choose the dates and worker count, then complete any additional details before publishing.');setError('');}
  function useShiftTemplate(item){
-  setShift({...shift,title:item.shift?.title||'',description:'',additionalNotes:'',shiftType:item.shift?.shiftType||'hospitality',hourlyPay:String(item.shift?.hourlyPay??15),slots:1,startsAt:'',endsAt:''});
+  setShift({...shift,title:item.shift?.title||'',description:item.shift?.description||'',additionalNotes:item.shift?.additionalNotes||'',shiftType:item.shift?.shiftType||'hospitality',hourlyPay:String(item.shift?.hourlyPay??15),slots:1,startsAt:'',endsAt:''});
   setShiftRequirements(['']);setShiftPerks(['']);setShiftPreferences(['']);
   setPostStartTime(item.startTime||'09:00');setPostEndTime(item.endTime||'17:00');setTemplateName(item.name||'');setPostDates([]);setShiftSection('new');setShiftCluster([]);navigateTo('post');
  }
@@ -313,7 +315,7 @@ async function submitPasswordReset(e){
  async function savePublishedShiftAsTemplate(item){
   const starts=new Date(item.starts_at),ends=new Date(item.ends_at);
   const time=value=>String(value.getHours()).padStart(2,'0')+':'+String(value.getMinutes()).padStart(2,'0');
-  const source={title:item.title||'',shiftType:item.shift_type||item.shiftType||'hospitality',hourlyPay:String(item.hourly_pay??item.hourlyPay??15)};
+  const source={title:item.title||'',description:item.description||'',additionalNotes:item.additional_notes||item.additionalNotes||'',shiftType:item.shift_type||item.shiftType||'hospitality',hourlyPay:String(item.hourly_pay??item.hourlyPay??15)};
   const suggested=String(item.title||'Shift')+' template';
   const name=window.prompt('Name this shift template:',suggested);
   if(name===null)return;
