@@ -12255,3 +12255,42 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  color:#626b75;font-size:13px;text-align:left;
 }
 
+
+
+/* Worker inbox direct-message thread contrast fixes. */
+.app.worker .worker-inbox-panel .direct-message-history{
+  gap:12px;
+  padding:14px 2px;
+}
+.app.worker .worker-inbox-panel .direct-message-bubble{
+  background:#F1F4F8 !important;
+  border:1px solid #D7DFEA !important;
+  color:#172033 !important;
+  box-shadow:0 1px 3px rgba(20,35,60,.08);
+}
+.app.worker .worker-inbox-panel .direct-message-bubble p{
+  color:#172033 !important;
+  font-size:13px;
+  line-height:1.55;
+}
+.app.worker .worker-inbox-panel .direct-message-bubble small{
+  color:#566277 !important;
+  font-size:10px;
+}
+.app.worker .worker-inbox-panel .direct-message-bubble.sent{
+  background:#2457D6 !important;
+  border-color:#1946B5 !important;
+  color:#FFFFFF !important;
+}
+.app.worker .worker-inbox-panel .direct-message-bubble.sent p,
+.app.worker .worker-inbox-panel .direct-message-bubble.sent small{
+  color:#FFFFFF !important;
+}
+.app.worker .worker-inbox-panel .direct-message-compose textarea{
+  background:#FFFFFF !important;
+  color:#172033 !important;
+  border:1px solid #B9C5D6 !important;
+}
+.app.worker .worker-inbox-panel .direct-message-compose textarea::placeholder{
+  color:#68758A !important;
+}
