@@ -12530,3 +12530,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .shift-card-six-grid .shift-grid-profile .shift-grid-company-name{
  text-align:left!important;
 }
+
+
+/* Compact shift cards: target roughly 70% of the previous vertical footprint. */
+#root .app .shift-card-six-grid{gap:8px!important;padding:9px!important}
+#root .app .shift-card-six-grid>.shift-grid-cell{min-height:105px!important;padding:9px!important;gap:6px!important}
+#root .app .shift-card-six-grid .shift-grid-profile{min-height:105px!important}
+#root .app .shift-card-six-grid .shift-grid-profile .shift-employer-avatar{height:82px!important;min-height:82px!important}
+#root .app .shift-card-six-grid .shift-detail-item{gap:2px!important}
+#root .app .shift-card-six-grid .shift-detail-item strong{font-size:11px!important;line-height:1.2!important}
+#root .app .shift-card-six-grid .shift-meta-label{font-size:8px!important;letter-spacing:.7px!important}
+#root .app .shift-card-six-grid .shift-distance-item strong{color:#C2410C!important;font-weight:800!important}
