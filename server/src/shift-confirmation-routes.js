@@ -23,6 +23,8 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     ) ENGINE=InnoDB
   `);
 
+  const withConfirmationTable = handler => (req,res,next) => ensureShiftConfirmationInvites.then(() => handler(req,res,next)).catch(next);
+
   function parseJson(value, fallback = []) {
     if (Array.isArray(value)) return value;
     if (typeof value === 'string') { try { const parsed = JSON.parse(value); return Array.isArray(parsed) ? parsed : fallback; } catch {} }
@@ -65,7 +67,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     } catch (error) { console.error('Shift confirmation email failed:', error.message); }
   }
 
-  app.get('/api/shift-confirmations/mine', auth, allow('worker'), (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
+  app.get('/api/shift-confirmations/mine', auth, allow('worker'), withConfirmationTable(asyncRoute(async (request, response) => {
     if (request.user.role !== 'worker') return response.status(403).json({ error: 'Worker accounts only.' });
     const [rows] = await db.execute(`
       SELECT i.id AS invite_id,i.invite_type,i.created_at AS invited_at,
@@ -81,9 +83,9 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       ORDER BY s.starts_at,i.created_at
     `, [request.user.id]);
     response.json({ confirmations: rows });
-  }))(req,res,next).catch(next));
+  })));
 
-  app.post('/api/shift-confirmations/:id/respond', auth, allow('worker'), requireVerification, (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
+  app.post('/api/shift-confirmations/:id/respond', auth, allow('worker'), requireVerification, withConfirmationTable(asyncRoute(async (request, response) => {
     if (request.user.role !== 'worker') return response.status(403).json({ error: 'Worker accounts only.' });
     const decision = request.body?.decision;
     if (!['confirm','decline'].includes(decision)) return response.status(400).json({ error: 'Choose confirm or decline.' });
@@ -148,9 +150,9 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     } finally { conn.release(); }
     await audit(request, 'shift.confirmation_accepted', 'application', applicationId, { shiftId });
     response.json({ ok: true, status: 'approved' });
-  }))(req,res,next).catch(next));
+  })));
 
-  app.post('/api/shifts/:id/automatic-invites', auth, allow('employer'), requireVerification, (req, res, next) => ensureShiftConfirmationInvites.then(() => asyncRoute(async (request, response) => {
+  app.post('/api/shifts/:id/automatic-invites', auth, allow('employer'), requireVerification, withConfirmationTable(asyncRoute(async (request, response) => {
     if (request.user.role !== 'employer') return response.status(403).json({ error: 'Employer accounts only.' });
     const shiftId = Number(request.params.id);
     const [shifts] = await db.execute(`
@@ -229,5 +231,5 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     for (const worker of invited) await sendInviteEmail(worker, shift, shift.business_name);
     await audit(request, 'shift.automatic_confirmation_invites_sent', 'shift', shiftId, { invitedWorkers: invited.length, availablePositions: Number(shift.slots || 1) });
     response.status(201).json({ ok: true, invitedWorkers: invited.length, message: invited.length ? 'Confirmation invitations sent to all eligible workers.' : 'No workers with matching confirmed automatic availability were found.' });
-  }))(req,res,next).catch(next));
+  })));
 };
