@@ -12646,3 +12646,23 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  }
 }
 
+
+
+/* Worker workchat: focused, compact conversation layout on mobile. */
+#root .app main.page-workchats .worker-workchat-panel .workchat-conversation{margin-top:0!important;border:1px solid #eee3da!important;border-radius:16px!important;background:#fff!important;box-shadow:0 5px 22px rgba(28,24,20,.06)!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-back-row{padding:12px 14px 0!important;border:0!important;border-radius:16px 16px 0 0!important;background:#fff!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-back-row button{width:38px!important;min-width:38px!important;height:38px!important;min-height:38px!important;padding:8px!important;border:1px solid #e9e2dc!important;border-radius:50%!important;background:#fff!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-conversation-header{display:flex!important;align-items:center!important;justify-content:space-between!important;flex-direction:row!important;gap:12px!important;padding:13px 16px 16px!important;border:0!important;border-bottom:1px solid #f0e9e3!important;background:#fff!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-conversation-title h3{margin:0!important;color:#171717!important;font-size:18px!important;font-weight:800!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-conversation-title p{margin:4px 0 0!important;color:#777!important;font-size:11px!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-settings-button{width:38px!important;min-width:38px!important;height:38px!important;min-height:38px!important;padding:0!important;border:1px solid #eee3da!important;border-radius:50%!important;background:#fff!important;color:#292929!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-settings-button span{display:none!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-section{padding:12px 14px!important;background:#fff9f4!important;border-bottom:1px solid #f0e5dc!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-section h4{margin:0 0 8px!important;color:#28211d!important;font-size:12px!important;font-weight:800!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-item{flex-basis:min(235px,82%)!important;padding:10px 11px!important;border:1px solid #f0e1d5!important;border-radius:10px!important;background:#fff!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-list{min-height:300px!important;max-height:52vh!important;padding:16px 13px!important;gap:14px!important;background:#fff!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-row{max-width:94%!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-bubble{padding:10px 12px!important;border-radius:14px 14px 14px 4px!important;font-size:13px!important;line-height:1.5!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-row.mine .workchat-message-bubble{border-radius:14px 14px 4px 14px!important;background:#222!important;color:#fff!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-composer{padding:12px!important;border-top:1px solid #f0e9e3!important;background:#fff!important}
+@media(max-width:650px){#root .app main.page-workchats .worker-workchat-panel .workchat-conversation-header{align-items:center!important;flex-direction:row!important}#root .app main.page-workchats .worker-workchat-panel .workchat-message-list{max-height:48vh!important}}
