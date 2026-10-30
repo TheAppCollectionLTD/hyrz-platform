@@ -12666,3 +12666,29 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .worker-workchat-panel .workchat-message-row.mine .workchat-message-bubble{border-radius:14px 14px 4px 14px!important;background:#222!important;color:#fff!important}
 #root .app main.page-workchats .worker-workchat-panel .workchat-composer{padding:12px!important;border-top:1px solid #f0e9e3!important;background:#fff!important}
 @media(max-width:650px){#root .app main.page-workchats .worker-workchat-panel .workchat-conversation-header{align-items:center!important;flex-direction:row!important}#root .app main.page-workchats .worker-workchat-panel .workchat-message-list{max-height:48vh!important}}
+
+
+/* Shift confirmation requests: clear priority card for workers. */
+#root .app .shift-confirmation-panel{border:1px solid #f2d8c8!important;border-radius:16px!important;background:#fff!important;box-shadow:0 5px 22px rgba(28,24,20,.05)!important}
+#root .app .shift-confirmation-panel>h2{margin:5px 0 7px!important;color:#171717!important;font-size:22px!important}
+#root .app .shift-confirmation-panel>p{color:#555!important;font-size:13px!important;line-height:1.5!important}
+#root .app .shift-confirmation-card{margin-top:14px;padding:16px;border:1px solid #f0e2d8;border-radius:12px;background:#fffaf6}
+#root .app .shift-confirmation-card-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+#root .app .shift-confirmation-card-heading>div{display:grid;gap:4px;min-width:0}
+#root .app .shift-confirmation-card-heading strong{color:#171717;font-size:15px}
+#root .app .shift-confirmation-card-heading small{color:#666;font-size:12px}
+#root .app .shift-confirmation-details{display:flex;flex-wrap:wrap;gap:8px 15px;margin:13px 0;color:#333;font-size:12px}
+#root .app .shift-confirmation-details strong{color:#c2410c;font-size:14px}
+#root .app .shift-confirmation-contract{margin-top:12px;padding:12px;border:1px solid #eee0d6;border-radius:9px;background:#fff}
+#root .app .shift-confirmation-contract>strong{color:#171717;font-size:13px}
+#root .app .shift-confirmation-contract p{margin:7px 0;color:#555;font-size:12px;line-height:1.5}
+#root .app .shift-confirmation-accept{display:flex!important;grid-template-columns:18px 1fr!important;align-items:center!important;gap:9px!important;margin:12px 0 0!important;color:#222!important;font-size:12px!important}
+#root .app .shift-confirmation-accept input{width:17px!important;height:17px!important;margin:0!important;accent-color:#c2410c}
+#root .app .shift-confirmation-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
+#root .app .shift-confirmation-actions button{min-height:40px}
+@media(max-width:600px){
+ #root .app .shift-confirmation-card{padding:13px}
+ #root .app .shift-confirmation-card-heading{flex-direction:column}
+ #root .app .shift-confirmation-actions{display:grid;grid-template-columns:1fr 1fr}
+ #root .app .shift-confirmation-actions button{width:100%;padding:10px 8px}
+}
