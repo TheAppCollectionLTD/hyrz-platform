@@ -1343,7 +1343,7 @@ function WorkerInbox({user,action,busy,setNotice,setError,goBack}) {
    setActiveInboxMessage(message);setInboxReplyDraft('');
    if(Number(message.sender_id)===Number(user.id)||message.read_at)return;
    setMessages(current=>current.map(item=>item.id===message.id?{...item,read_at:new Date().toISOString()}:item));
-   try{await request('/messages/'+message.id+'/read');await refreshMessages();}
+   try{await request('/messages/'+message.id+'/read',{method:'POST',body:JSON.stringify({})});await refreshMessages();}
    catch(error){setError(error.message||'Could not mark message as read.');await refreshMessages();}
  }
  return <section className="panel worker-inbox-panel">
