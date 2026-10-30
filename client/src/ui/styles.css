@@ -12459,3 +12459,41 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   border-top:1px solid #E5E5E5;
  }
 }
+
+
+/* Make the three-strike indicators unmistakable: green ticks for clear slots,
+   red crosses for strikes received. Use CSS glyphs to avoid missing-font boxes. */
+.app.worker .worker-three-strikes-indicators{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ grid-column:1/-1;
+ margin:0;
+}
+.app.worker .worker-three-strikes-indicators span{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ width:27px;
+ height:27px;
+ flex:0 0 27px;
+ border-radius:50%;
+ font-size:0;
+ font-weight:900;
+ line-height:1;
+}
+.app.worker .worker-three-strikes-indicators span::before{
+ display:block;
+ font-size:19px;
+ line-height:1;
+}
+.app.worker .worker-three-strikes-indicators span.is-clear{
+ color:#16803C;
+ background:#E8F6EC;
+}
+.app.worker .worker-three-strikes-indicators span.is-clear::before{content:"✓"}
+.app.worker .worker-three-strikes-indicators span.is-used{
+ color:#C62828;
+ background:#FDECEC;
+}
+.app.worker .worker-three-strikes-indicators span.is-used::before{content:"✕"}
