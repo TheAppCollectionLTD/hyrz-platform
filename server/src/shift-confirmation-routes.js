@@ -181,7 +181,8 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       WHERE u.role='worker' AND u.status='active' AND wa.automatic_enabled=1
     `, [shift.business_id, shift.business_id, shiftId]);
     const postcodes = [...new Set(workers.flatMap(worker => [normalizePostcode(worker.worker_postcode), extractPostcode(worker.shift_location) || normalizePostcode(worker.employer_postcode)]).filter(Boolean))];
-    const coordinates = await lookupPostcodeCoordinates(postcodes);
+    let coordinates = new Map();
+    try { coordinates = await lookupPostcodeCoordinates(postcodes); } catch (error) { console.warn('Could not calculate automatic-match distances:', error.message); }
     const destinationPostcode = extractPostcode(shift.location) || normalizePostcode(shift.employer_postcode);
     const destinationCoordinates = coordinates.get(destinationPostcode) || null;
     const eligible = workers.filter(worker => {
