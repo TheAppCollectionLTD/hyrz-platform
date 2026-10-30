@@ -39,12 +39,17 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     res.json({messages});
   }));
 
-  app.post('/api/messages/:id/read', auth, allow('employer'), asyncRoute(async(req,res) => {
+  app.post('/api/messages/:id/read', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
     await ensureAdminMessageMeta;
     await ensureEmployerMessageReadColumn;
-    const [rows]=await db.execute('SELECT m.conversation_key FROM messages m JOIN admin_message_meta meta ON meta.message_id=m.id WHERE m.id=? AND meta.recipient_id=? AND m.sender_id<>? LIMIT 1',[req.params.id,req.user.id,req.user.id]);
-    if(!rows.length)return res.status(404).json({error:'Unread support conversation not found.'});
-    await db.execute("UPDATE admin_message_meta meta JOIN messages m ON m.id=meta.message_id JOIN users sender ON sender.id=m.sender_id SET meta.employer_read_at=COALESCE(meta.employer_read_at,UTC_TIMESTAMP()) WHERE m.conversation_key=? AND meta.recipient_id=? AND sender.role='admin'",[rows[0].conversation_key,req.user.id]);
+    const [rows]=await db.execute('SELECT m.conversation_key,sender.role AS sender_role FROM messages m JOIN admin_message_meta meta ON meta.message_id=m.id JOIN users sender ON sender.id=m.sender_id WHERE m.id=? AND meta.recipient_id=? AND m.sender_id<>? LIMIT 1',[req.params.id,req.user.id,req.user.id]);
+    if(!rows.length)return res.status(404).json({error:'Unread message not found.'});
+    if(req.user.role==='worker'){
+      if(rows[0].sender_role!=='admin')return res.status(403).json({error:'You can only mark admin messages as read here.'});
+      await db.execute("UPDATE admin_message_meta meta JOIN messages m ON m.id=meta.message_id JOIN users sender ON sender.id=m.sender_id SET meta.read_at=COALESCE(meta.read_at,UTC_TIMESTAMP()) WHERE m.conversation_key=? AND meta.recipient_id=? AND sender.role='admin'",[rows[0].conversation_key,req.user.id]);
+    }else{
+      await db.execute("UPDATE admin_message_meta meta JOIN messages m ON m.id=meta.message_id JOIN users sender ON sender.id=m.sender_id SET meta.employer_read_at=COALESCE(meta.employer_read_at,UTC_TIMESTAMP()) WHERE m.conversation_key=? AND meta.recipient_id=? AND sender.role='admin'",[rows[0].conversation_key,req.user.id]);
+    }
     res.json({ok:true,conversationKey:rows[0].conversation_key});
   }));
   // Direct employer-worker conversations, separate from support/admin messages.
