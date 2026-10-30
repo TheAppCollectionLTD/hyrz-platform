@@ -12718,3 +12718,65 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   line-height:1.55!important;
   font-weight:500!important;
 }
+
+/* Keep the worker availability role selector readable (including its labels). */
+#root .app.worker .worker-availability-panel .role-picker-panel{
+  background:#FFFFFF!important;
+  color:#171717!important;
+  border:1px solid #D1D5DB!important;
+  border-radius:10px!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.22)!important;
+}
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-options,
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-group,
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-group legend,
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-option,
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-option span,
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-footer,
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-footer span{
+  color:#171717!important;
+  -webkit-text-fill-color:#171717!important;
+  background-color:transparent!important;
+  opacity:1!important;
+  visibility:visible!important;
+  text-shadow:none!important;
+}
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-option{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-height:36px!important;
+  padding:7px 8px!important;
+  border-radius:6px!important;
+}
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-option:hover{
+  background:#FFF1E8!important;
+}
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-option input[type="checkbox"]{
+  appearance:checkbox!important;
+  -webkit-appearance:checkbox!important;
+  display:inline-block!important;
+  flex:0 0 16px!important;
+  width:16px!important;
+  height:16px!important;
+  min-height:16px!important;
+  margin:0!important;
+  accent-color:#F97316!important;
+  opacity:1!important;
+}
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-panel>input[type="search"],
+#root .app.worker .worker-availability-panel .role-picker-panel input[type="search"]{
+  background:#FFFFFF!important;
+  color:#171717!important;
+  -webkit-text-fill-color:#171717!important;
+  border:1px solid #BFC5CE!important;
+}
+#root .app.worker .worker-availability-panel .role-picker-panel input[type="search"]::placeholder{
+  color:#666666!important;
+  -webkit-text-fill-color:#666666!important;
+  opacity:1!important;
+}
+#root .app.worker .worker-availability-panel .role-picker-panel .role-picker-footer{
+  background:#F5F5F5!important;
+  border-top:1px solid #E5E7EB!important;
+}
