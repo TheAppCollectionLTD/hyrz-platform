@@ -12640,6 +12640,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  #root .app .shift-card-six-grid .shift-grid-total-rate,
  #root .app .shift-card-six-grid .shift-grid-pay{
   position:relative!important;
-  top:-8px!important;
+  top:-16px!important;
  }
 }
