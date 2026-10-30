@@ -716,7 +716,7 @@ async function apply(id){const target=shifts.find(item=>Number(item.id)===Number
  {user?.role==='worker'&&page==='dashboard'&&<WorkerTodaysShift applications={applications} checkouts={checkouts} action={action} busy={busy} onRefresh={async()=>{const r=await request('/checkouts/mine');setCheckouts(r.checkouts||[]);}} setNotice={setNotice}/>}
  {user?.role==='worker'&&page==='dashboard'&&(<section className="worker-section-nav panel"><div><span className="eyebrow">YOUR WORKSPACE</span><h2>Dashboard sections</h2></div><div className="worker-section-links job-tabs-squares">{[['inbox','Inbox (0)'],['checkouts',`Checkouts (${checkouts.filter(c=>!['approved','paid','completed'].includes(String(c.status||'').toLowerCase())).length})`],['invoices','Invoices'],['finances','Finances'],['availability','Availability'],['favourites','Favourites'],['complaints','Complaints'],['timetable','Timetable'],['workchats','Workchats'],['notifications','Notifications (0)']].map(([id,label])=><button key={id} className="secondary" onClick={()=>{setPageHistory(previous=>page===id?previous:[...previous,page]);setPage(id);window.scrollTo({top:0,behavior:'auto'});}}>{label}</button>)}</div></section>)}
  {user&&user.role==='worker'&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='dashboard'&&<></>}
- {user?.role==='worker'&&page==='jobs'&&<ShiftConfirmationRequests setNotice={setNotice} setError={setError}/>}
+ {user?.role==='worker'&&page==='jobs'&&<ShiftConfirmationRequests setNotice={setNotice} setError={setError} onRefresh={load}/>}
  {user?.role==='worker'&&page==='jobs'&&<WorkerTodaysShift applications={applications} checkouts={checkouts} action={action} busy={busy} onRefresh={async()=>{const r=await request('/checkouts/mine');setCheckouts(r.checkouts||[]);}} setNotice={setNotice}/>}
  {user?.role==='worker'&&page==='jobs'&&!jobSectionOpen&&<section className="stats worker-dashboard-stats upcoming-shifts-dashboard-card"><button type="button" className="stat worker-dashboard-stat" onClick={()=>{setJobFilter('upcoming');setJobSectionOpen(true);}}><small>UPCOMING SHIFTS</small><strong>{applications.filter(app=>app.status==='approved'&&new Date(app.starts_at)>=new Date()).length}</strong><span>View upcoming shifts →</span></button></section>}
  {user&&(onboarding?.canAccessPlatform||user.role==='admin')&&page==='jobs'&&<section className="panel find-shifts-panel">
@@ -1453,7 +1453,7 @@ function checkoutDateTimeLocal(value){
  const local=new Date(date.getTime()-date.getTimezoneOffset()*60000);
  return local.toISOString().slice(0,16);
 }
-function ShiftConfirmationRequests({setNotice,setError}) {
+function ShiftConfirmationRequests({setNotice,setError,onRefresh}) {
  const [items,setItems]=useState([]);
  const [loaded,setLoaded]=useState(false);
  const [accepted,setAccepted]=useState({});
@@ -1467,6 +1467,7 @@ function ShiftConfirmationRequests({setNotice,setError}) {
    const result=await request('/shift-confirmations/'+item.invite_id+'/respond',{method:'POST',body:JSON.stringify({decision,contractAccepted:decision==='confirm'&&item.invite_type==='automatic'})});
    setItems(current=>current.filter(entry=>Number(entry.invite_id)!==Number(item.invite_id)));
    setNotice(decision==='confirm'?'Shift confirmed. You have been allocated this position.': 'You declined the shift invitation.');
+   if(onRefresh)await onRefresh();
    if(result.status==='approved')window.dispatchEvent(new CustomEvent('hyrz:shift-confirmed'));
   }catch(error){setError(error.message||'Could not respond to this shift invitation.');await load();}
   finally{setBusyId(null);}
