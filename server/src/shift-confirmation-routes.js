@@ -101,6 +101,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       const invite = invites[0]; shiftId = invite.shift_id; applicationId = invite.application_id; workerId = invite.worker_id;
       if (new Date(invite.starts_at).getTime() <= Date.now() || invite.shift_status !== 'open') {
         await conn.execute("UPDATE shift_confirmation_invites SET status='expired',responded_at=UTC_TIMESTAMP() WHERE id=?", [invite.id]);
+        await conn.execute("UPDATE applications SET status='rejected' WHERE id=? AND status='pending'", [invite.application_id]);
         await conn.commit(); return response.status(409).json({ error: 'This shift confirmation has expired.' });
       }
       if (decision === 'decline') {
@@ -118,6 +119,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       const [[counts]] = await conn.execute("SELECT COUNT(*) AS approved_count FROM applications WHERE shift_id=? AND status='approved'", [shiftId]);
       if (Number(counts.approved_count || 0) >= Number(shift.slots || 1)) {
         await conn.execute("UPDATE shift_confirmation_invites SET status='expired',responded_at=UTC_TIMESTAMP() WHERE shift_id=? AND status='pending'", [shiftId]);
+        await conn.execute("UPDATE applications SET status='rejected' WHERE shift_id=? AND status='pending'", [shiftId]);
         await conn.commit(); return response.status(409).json({ error: 'All positions for this shift have already been filled.' });
       }
       if (invite.invite_type === 'automatic') {
@@ -134,6 +136,7 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
       const [after] = await conn.execute("SELECT COUNT(*) AS approved_count FROM applications WHERE shift_id=? AND status='approved'", [shiftId]);
       if (Number(after[0].approved_count || 0) >= Number(shift.slots || 1)) {
         await conn.execute("UPDATE shift_confirmation_invites SET status='expired',responded_at=UTC_TIMESTAMP() WHERE shift_id=? AND status='pending'", [shiftId]);
+        await conn.execute("UPDATE applications SET status='rejected' WHERE shift_id=? AND status='pending'", [shiftId]);
       }
       await conn.commit();
     } catch (error) {
@@ -159,7 +162,9 @@ module.exports = function registerShiftConfirmationRoutes(app, { db, asyncRoute,
     `, [shiftId, request.user.id]);
     if (!shifts.length) return response.status(404).json({ error: 'Open shift not found.' });
     const shift = shifts[0];
-    if (new Date(shift.starts_at).getTime() <= Date.now()) return response.status(409).json({ error: 'This shift has already started.' });
+    const hoursUntilStart = new Date(shift.starts_at).getTime() - Date.now();
+    if (hoursUntilStart < 0 || hoursUntilStart > 16 * 60 * 60 * 1000) return response.status(409).json({ error: 'Automatic confirmation invitations can only be sent within 16 hours of the shift start.' });
+    await db.query("CREATE TABLE IF NOT EXISTS worker_employer_favourites (worker_user_id BIGINT UNSIGNED NOT NULL,business_id BIGINT UNSIGNED NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(worker_user_id,business_id)) ENGINE=InnoDB");
     await db.query("CREATE TABLE IF NOT EXISTS worker_availability (user_id BIGINT UNSIGNED PRIMARY KEY, timings JSON NOT NULL, min_hourly_rate DECIMAL(8,2) NOT NULL DEFAULT 8.00, min_total_pay DECIMAL(8,2) NOT NULL DEFAULT 20.00, max_distance INT NOT NULL DEFAULT 10, roles JSON NOT NULL, shift_types JSON NOT NULL, automatic_enabled TINYINT(1) NOT NULL DEFAULT 0, employer_mode VARCHAR(20) NOT NULL DEFAULT 'all', preferred_employer_ids JSON NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE) ENGINE=InnoDB");
     const [workers] = await db.execute(`
       SELECT u.id,u.email,u.first_name,wa.timings,wa.roles,wa.shift_types,wa.min_hourly_rate,wa.min_total_pay,
