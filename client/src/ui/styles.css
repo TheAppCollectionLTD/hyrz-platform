@@ -12172,3 +12172,39 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .app.employer .cluster-save-template .template-setup-panel button{margin-top:10px}
 .app.employer .shift-cluster-add-button{width:100%;margin:0 0 10px;font-weight:700}
 @media(max-width:600px){.app.employer .shift-cluster-overview .shift-cluster-heading{align-items:flex-start}.app.employer .shift-cluster-count{flex-basis:58px;width:58px;height:58px}}
+
+/* Keep availability shift-type choices readable on mobile and desktop. */
+.worker-availability-panel .shift-type-picker-panel{
+ background:#fff!important;
+ border:1px solid #d9dce3!important;
+ color:#171916!important;
+}
+.worker-availability-panel .shift-type-picker-option,
+.worker-availability-panel .shift-type-picker-option span{
+ color:#171916!important;
+ opacity:1!important;
+ visibility:visible!important;
+}
+.worker-availability-panel .shift-type-picker-option{
+ display:flex!important;
+ flex-direction:row!important;
+ justify-content:flex-start!important;
+ align-items:center!important;
+ gap:10px!important;
+ min-height:38px;
+}
+.worker-availability-panel .shift-type-picker-option input[type="checkbox"]{
+ appearance:checkbox!important;
+ -webkit-appearance:checkbox!important;
+ display:inline-block!important;
+ flex:0 0 16px!important;
+ width:16px!important;
+ height:16px!important;
+ min-height:16px!important;
+ margin:0!important;
+ accent-color:#f97316;
+}
+.worker-availability-panel .shift-type-picker-option:hover{background:#f3f4f6!important}
+.worker-availability-panel .shift-type-picker-footer{border-top:1px solid #e5e7eb!important}
+.worker-availability-panel .shift-type-picker-footer button:first-child{color:#c2410c!important}
+
