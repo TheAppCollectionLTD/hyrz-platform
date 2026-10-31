@@ -250,7 +250,12 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
       (SELECT COUNT(*) FROM workchat_message_reads mr WHERE mr.message_id=m.id AND mr.user_id<>m.sender_id) AS read_by_count,
       (SELECT COUNT(*) FROM workchat_participants rp WHERE rp.workchat_id=m.workchat_id AND rp.user_id<>m.sender_id) AS recipient_count
       FROM workchat_messages m JOIN users u ON u.id=m.sender_id LEFT JOIN workchat_messages reply ON reply.id=m.reply_to_message_id AND reply.workchat_id=m.workchat_id LEFT JOIN users replyUser ON replyUser.id=reply.sender_id LEFT JOIN workchat_pins wp ON wp.message_id=m.id AND wp.workchat_id=m.workchat_id WHERE m.workchat_id=? ORDER BY m.id ASC`,[id]);
-    const [participants]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture,EXISTS(SELECT 1 FROM workchat_admins wa WHERE wa.workchat_id=p.workchat_id AND wa.user_id=p.user_id) AS is_admin FROM workchat_participants p JOIN users u ON u.id=p.user_id JOIN workchats w ON w.id=p.workchat_id WHERE p.workchat_id=? ORDER BY CASE WHEN p.user_id=w.employer_user_id THEN 0 WHEN EXISTS(SELECT 1 FROM workchat_admins wa2 WHERE wa2.workchat_id=p.workchat_id AND wa2.user_id=p.user_id) THEN 1 ELSE 2 END, p.added_at, u.first_name, u.last_name`,[id]);
+    const [participants]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture,
+      CASE WHEN COALESCE(pref.last_seen_visibility,'everyone')='everyone' THEN u.last_seen_at ELSE NULL END AS last_seen_at,
+      EXISTS(SELECT 1 FROM workchat_admins wa WHERE wa.workchat_id=p.workchat_id AND wa.user_id=p.user_id) AS is_admin
+      FROM workchat_participants p JOIN users u ON u.id=p.user_id JOIN workchats w ON w.id=p.workchat_id
+      LEFT JOIN user_messaging_preferences pref ON pref.user_id=u.id
+      WHERE p.workchat_id=? ORDER BY CASE WHEN p.user_id=w.employer_user_id THEN 0 WHEN EXISTS(SELECT 1 FROM workchat_admins wa2 WHERE wa2.workchat_id=p.workchat_id AND wa2.user_id=p.user_id) THEN 1 ELSE 2 END, p.added_at, u.first_name, u.last_name`,[id]);
     const [reactionRows]=await db.execute(`SELECT message_id,emoji,COUNT(*) AS count,GROUP_CONCAT(user_id) AS user_ids FROM workchat_message_reactions WHERE workchat_id=? GROUP BY message_id,emoji`,[id]);
     const reactionsByMessage={};for(const row of reactionRows){((reactionsByMessage[row.message_id] ||= [])).push({emoji:row.emoji,count:Number(row.count),reacted_by_me:String(row.user_ids||'').split(',').includes(String(req.user.id))});}
     res.json({workchat:chat,messages:messages.map(m=>({...m,reactions:reactionsByMessage[m.id]||[]})),participants:participants.map(p=>({...p,id:Number(p.id),name:[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email}))});
