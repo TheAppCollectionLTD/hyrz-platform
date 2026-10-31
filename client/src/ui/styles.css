@@ -13587,3 +13587,82 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   #root .app .messaging-chat-copy strong{font-size:14px!important}
   #root .app .messaging-chat-copy small{font-size:12px!important}
 }
+
+
+/* Final specificity pass for the worker/employer Inbox on narrow screens. */
+#root .app nav.inbox-category-tabs,
+#root .app .inbox-category-tabs{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ width:100%!important;min-height:52px!important;box-sizing:border-box!important;
+ padding:5px!important;margin:0 0 14px!important;gap:5px!important;
+ overflow:visible!important;background:#111b21!important;
+ border:1px solid #3b494f!important;border-radius:13px!important;
+}
+#root .app nav.inbox-category-tabs>button,
+#root .app .inbox-category-tabs>button,
+#root .app nav.inbox-category-tabs>button:not(.active){
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;min-width:0!important;min-height:40px!important;height:auto!important;
+ padding:7px 3px!important;margin:0!important;
+ background:#26343b!important;border:1px solid #46545b!important;border-radius:9px!important;
+ color:#f5f7f8!important;opacity:1!important;
+ font-size:12px!important;font-weight:800!important;line-height:1.2!important;
+ text-align:center!important;white-space:nowrap!important;
+}
+#root .app nav.inbox-category-tabs>button.active,
+#root .app .inbox-category-tabs>button.active{
+ background:#f97316!important;border:1px solid #f97316!important;
+ color:#171b1e!important;opacity:1!important;
+}
+#root .app .inbox-all-workchats,
+#root .app .inbox-all-admin-messages,
+#root .app .worker-direct-inbox,
+#root .app .worker-inbox-messages,
+#root .app .direct-conversation-list{
+ background:#111b21!important;color:#f4f7f8!important;
+}
+#root .app .inbox-all-workchats h3,
+#root .app .inbox-all-admin-messages h3{
+ display:block!important;visibility:visible!important;opacity:1!important;
+ padding:15px 16px 10px!important;margin:0!important;
+ background:#1b282e!important;color:#ff9a5c!important;
+ font-size:12px!important;font-weight:850!important;letter-spacing:.08em!important;
+}
+#root .app .worker-inbox-panel .worker-direct-conversation-list .messaging-chat-row,
+#root .app .worker-inbox-panel .messaging-chat-row,
+#root .app .inbox-all-workchats .messaging-chat-row{
+ background:#111b21!important;color:#f4f7f8!important;
+ border-bottom:1px solid #344148!important;
+}
+#root .app .worker-inbox-panel .messaging-chat-copy strong,
+#root .app .worker-inbox-panel .messaging-chat-copy strong *,
+#root .app .inbox-all-workchats .messaging-chat-copy strong{
+ color:#f7f9fa!important;font-size:14px!important;font-weight:800!important;
+}
+#root .app .worker-inbox-panel .messaging-chat-copy small,
+#root .app .inbox-all-workchats .messaging-chat-copy small{
+ color:#c2cdd2!important;font-size:12px!important;
+}
+#root .app .worker-inbox-panel .inbox-chat-search{
+ min-height:44px!important;margin:12px 14px!important;padding:0 13px!important;
+ border:1px solid #46545b!important;border-radius:12px!important;
+ background:#26343b!important;color:#e7edf0!important;
+}
+#root .app .worker-inbox-panel .inbox-chat-search input{
+ width:100%!important;min-width:0!important;background:transparent!important;
+ color:#f7f9fa!important;font-size:13px!important;
+}
+#root .app .worker-inbox-panel .inbox-chat-search input::placeholder{color:#c0cbd0!important;opacity:1!important}
+#root .app .worker-inbox-panel .worker-inbox-message-button,
+#root .app .worker-inbox-panel .worker-inbox-message-button *{
+ color:#f0f4f5!important;
+}
+#root .app .worker-inbox-panel .worker-inbox-message-preview{color:#c2cdd2!important}
+#root .app .worker-inbox-panel .worker-inbox-message-button .worker-inbox-message-top small,
+#root .app .worker-inbox-panel .worker-inbox-message-button>small{color:#ffad7d!important}
+#root .app .worker-inbox-panel .empty-state,
+#root .app .worker-inbox-panel .muted{color:#c2cdd2!important}
+@media(max-width:600px){
+ #root .app nav.inbox-category-tabs>button,
+ #root .app .inbox-category-tabs>button{font-size:11px!important;padding:6px 1px!important}
+}
