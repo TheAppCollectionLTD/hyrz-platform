@@ -12794,3 +12794,117 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .employer-bottom-nav .bottom-nav-icon{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:22px}
 .worker-bottom-nav .bottom-nav-svg,.employer-bottom-nav .bottom-nav-svg{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .bottom-nav-notification{position:absolute;top:-8px;right:-13px;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;border:1.5px solid #10120f;border-radius:999px;background:#F97316;color:#FFFFFF;font:800 9px/1 'DM Sans',sans-serif;font-style:normal;box-sizing:border-box}
+
+
+/* WhatsApp-inspired workchat experience: retain Hyrz orange/cobalt palette. */
+#root .app main.page-workchats .worker-workchat-panel{
+  width:100%;max-width:900px;margin:0 auto;padding:0 0 18px!important;
+}
+#root .app main.page-workchats .worker-workchat-page-heading{
+  display:flex!important;align-items:flex-end!important;justify-content:space-between!important;gap:12px!important;
+  margin:0 0 16px!important;padding:4px 2px 0!important;
+}
+#root .app main.page-workchats .worker-workchat-page-heading h2{
+  margin:2px 0 4px!important;font-size:25px!important;font-weight:850!important;letter-spacing:-.7px!important;color:#171717!important;
+}
+#root .app main.page-workchats .worker-workchat-page-heading p{margin:0!important;color:#737373!important;font-size:12px!important}
+#root .app main.page-workchats .workchat-total-count{
+  flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#fff0e6;color:#c2410c;font-size:11px;font-weight:800;
+}
+#root .app main.page-workchats .workchat-list-search{
+  display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;box-sizing:border-box!important;
+  min-height:44px!important;margin:0 0 12px!important;padding:0 14px!important;border:1px solid #e9e5e1!important;
+  border-radius:12px!important;background:#f6f6f6!important;color:#777!important;
+}
+#root .app main.page-workchats .workchat-list-search svg{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+#root .app main.page-workchats .workchat-list-search input{
+  width:100%!important;min-width:0!important;border:0!important;outline:0!important;box-shadow:none!important;
+  background:transparent!important;color:#171717!important;font-size:13px!important;padding:10px 0!important;
+}
+#root .app main.page-workchats .worker-workchat-panel>.workchat-list{
+  display:flex!important;flex-direction:column!important;gap:0!important;margin:0!important;padding:0!important;
+  overflow:hidden!important;border:1px solid #eee9e4!important;border-radius:14px!important;background:#fff!important;
+  box-shadow:0 4px 18px rgba(25,20,16,.045)!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-item{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:13px!important;
+  min-height:82px!important;padding:13px 15px!important;border:0!important;border-bottom:1px solid #f0eeeb!important;
+  border-radius:0!important;background:#fff!important;box-shadow:none!important;cursor:pointer!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-item:last-child{border-bottom:0!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-item:hover{background:#fffaf6!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-list-company{display:flex!important;align-items:center!important;gap:13px!important;width:100%!important;min-width:0!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-list-company-avatar{
+  width:52px!important;height:52px!important;flex:0 0 52px!important;border-radius:50%!important;
+  border:0!important;background:#fff0e6!important;color:#c2410c!important;font-size:18px!important;font-weight:800!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-list-company-details{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:3px 10px!important;
+  flex:1!important;min-width:0!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-list-company-name{
+  grid-column:1!important;grid-row:1!important;font-size:14px!important;line-height:1.25!important;font-weight:800!important;color:#171717!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-list-chat-name{
+  grid-column:1!important;grid-row:2!important;font-size:11px!important;line-height:1.25!important;font-weight:600!important;color:#888!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-list-meta{
+  grid-column:2!important;grid-row:1!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;
+  gap:7px!important;font-size:10px!important;color:#8a8a8a!important;white-space:nowrap!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-unread-count{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;
+  padding:0 5px!important;border-radius:999px!important;background:#c2410c!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-list-last-message{
+  grid-column:1/-1!important;grid-row:3!important;display:block!important;min-width:0!important;max-width:100%!important;
+  margin-top:2px!important;color:#777!important;font-size:11px!important;line-height:1.35!important;white-space:nowrap!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-list-last-sender{color:#555!important;font-size:11px!important;font-weight:700!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-conversation{
+  border:1px solid #e9e3dc!important;border-radius:16px!important;overflow:hidden!important;background:#fff!important;
+  box-shadow:0 6px 24px rgba(25,20,16,.06)!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-conversation-header{
+  position:sticky!important;top:0!important;z-index:3!important;display:flex!important;align-items:center!important;
+  justify-content:space-between!important;gap:12px!important;padding:12px 15px!important;background:#fff!important;
+  border-bottom:1px solid #eee9e4!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-list{
+  min-height:360px!important;max-height:58vh!important;padding:18px 15px!important;gap:12px!important;
+  background-color:#f7f5f2!important;
+  background-image:radial-gradient(rgba(194,65,12,.055) .7px,transparent .7px)!important;background-size:14px 14px!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-row{max-width:86%!important;gap:7px!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-row.mine{align-self:flex-end!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-bubble{
+  padding:10px 13px!important;border:1px solid #eee8e1!important;border-radius:14px 14px 14px 4px!important;
+  background:#fff!important;color:#222!important;box-shadow:0 1px 2px rgba(0,0,0,.045)!important;font-size:13px!important;line-height:1.5!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-row.mine .workchat-message-bubble{
+  border-color:#f4c8ad!important;border-radius:14px 14px 4px 14px!important;background:#fff0e6!important;color:#292929!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-meta{gap:8px!important;margin:0 3px 3px!important;font-size:10px!important;color:#777!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-meta strong{color:#c2410c!important;font-size:10px!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-composer{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:9px!important;
+  padding:11px 12px!important;background:#fff!important;border-top:1px solid #eee9e4!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-composer textarea{
+  min-height:44px!important;max-height:120px!important;resize:vertical!important;padding:12px 14px!important;
+  border:1px solid #e7e1da!important;border-radius:22px!important;background:#f7f7f7!important;font-size:13px!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-composer>button[type="submit"]{
+  width:auto!important;min-width:76px!important;min-height:42px!important;padding:10px 15px!important;border-radius:22px!important;
+  background:#c2410c!important;color:#fff!important;font-size:12px!important;font-weight:800!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-typing{background:#f7f5f2!important}
+@media(max-width:650px){
+ #root .app main.page-workchats .worker-workchat-panel .workchat-item{min-height:76px!important;padding:11px 12px!important}
+ #root .app main.page-workchats .worker-workchat-panel .workchat-list-company-avatar{width:46px!important;height:46px!important;flex-basis:46px!important}
+ #root .app main.page-workchats .worker-workchat-panel .workchat-message-list{min-height:320px!important;max-height:52vh!important;padding:13px 10px!important}
+ #root .app main.page-workchats .worker-workchat-panel .workchat-message-row{max-width:92%!important}
+ #root .app main.page-workchats .worker-workchat-panel .workchat-composer{grid-template-columns:minmax(0,1fr) auto!important}
+ #root .app main.page-workchats .worker-workchat-panel .workchat-composer>button[type="submit"]{width:auto!important;min-width:66px!important}
+}
