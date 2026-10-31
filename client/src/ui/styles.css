@@ -14275,3 +14275,174 @@ html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-meta t
   width:42px!important;height:42px!important;min-width:42px!important;
  }
 }
+
+
+/* Inbox conversation rows — shared WhatsApp-inspired layout for every category. */
+html body #root .app .worker-inbox-panel .workchat-wa-row,
+html body #root .app .employer-direct-inbox .workchat-wa-row,
+html body #root .app .workchat-list .workchat-wa-row,
+html body #root .app .employer-workchat-panel .workchat-wa-row{
+ position:relative!important;
+ display:grid!important;
+ grid-template-columns:56px minmax(0,1fr) auto!important;
+ align-items:center!important;
+ column-gap:14px!important;row-gap:0!important;
+ width:100%!important;min-width:0!important;min-height:88px!important;
+ box-sizing:border-box!important;
+ margin:0!important;padding:12px 0!important;
+ border:0!important;border-radius:0!important;
+ background:#fff!important;color:#111!important;
+ text-align:left!important;text-decoration:none!important;
+ box-shadow:none!important;cursor:pointer!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row::after,
+html body #root .app .employer-direct-inbox .workchat-wa-row::after,
+html body #root .app .workchat-list .workchat-wa-row::after,
+html body #root .app .employer-workchat-panel .workchat-wa-row::after{
+ content:""!important;position:absolute!important;
+ left:70px!important;right:0!important;bottom:0!important;
+ height:1px!important;background:#d7dadd!important;
+ pointer-events:none!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row:last-child::after,
+html body #root .app .employer-direct-inbox .workchat-wa-row:last-child::after,
+html body #root .app .workchat-list .workchat-wa-row:last-child::after,
+html body #root .app .employer-workchat-panel .workchat-wa-row:last-child::after{
+ background:transparent!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row:hover,
+html body #root .app .employer-direct-inbox .workchat-wa-row:hover,
+html body #root .app .workchat-list .workchat-wa-row:hover,
+html body #root .app .employer-workchat-panel .workchat-wa-row:hover{
+ background:#fafafa!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-avatar,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-avatar,
+html body #root .app .workchat-list .workchat-wa-row .workchat-wa-avatar,
+html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-avatar{
+ grid-column:1!important;grid-row:1!important;align-self:center!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:54px!important;height:54px!important;min-width:54px!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;
+ border:0!important;border-radius:50%!important;
+ background:#ffeadb!important;color:#171717!important;
+ font-size:19px!important;font-weight:700!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-avatar img,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-avatar img,
+html body #root .app .workchat-list .workchat-wa-row .workchat-wa-avatar img,
+html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-avatar img{
+ display:block!important;width:100%!important;height:100%!important;
+ object-fit:cover!important;border-radius:50%!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-avatar b,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-avatar b,
+html body #root .app .workchat-list .workchat-wa-row .workchat-wa-avatar b,
+html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-avatar b{
+ color:#171717!important;-webkit-text-fill-color:#171717!important;
+ font-size:19px!important;font-weight:700!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy,
+html body #root .app .workchat-list .workchat-wa-row .workchat-wa-copy,
+html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-copy{
+ grid-column:2!important;grid-row:1!important;
+ display:flex!important;flex-direction:column!important;
+ align-items:flex-start!important;justify-content:center!important;
+ gap:5px!important;width:100%!important;min-width:0!important;
+ margin:0!important;padding:0!important;text-align:left!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy>strong,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy>strong,
+html body #root .app .workchat-list .workchat-wa-row .workchat-wa-copy>strong,
+html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-copy>strong{
+ display:block!important;width:100%!important;min-width:0!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;
+ color:#111!important;-webkit-text-fill-color:#111!important;
+ font-size:16px!important;font-weight:750!important;line-height:1.25!important;
+ text-align:left!important;white-space:nowrap!important;text-overflow:ellipsis!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy>small,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy>small,
+html body #root .app .workchat-list .workchat-wa-row .workchat-wa-copy>small,
+html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-copy>small{
+ display:block!important;width:100%!important;min-width:0!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;
+ color:#687078!important;-webkit-text-fill-color:#687078!important;
+ font-size:14px!important;font-weight:400!important;line-height:1.35!important;
+ text-align:left!important;white-space:nowrap!important;text-overflow:ellipsis!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-meta,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-meta,
+html body #root .app .workchat-list .workchat-wa-row .workchat-wa-meta,
+html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-meta{
+ grid-column:3!important;grid-row:1!important;
+ display:flex!important;flex-direction:column!important;
+ align-items:flex-end!important;justify-content:center!important;
+ gap:7px!important;min-width:38px!important;margin:0!important;padding:0!important;
+ color:#687078!important;-webkit-text-fill-color:#687078!important;
+ font-size:12px!important;text-align:right!important;white-space:nowrap!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-meta time,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-meta time,
+html body #root .app .workchat-list .workchat-wa-row .workchat-wa-meta time,
+html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-meta time{
+ color:#687078!important;-webkit-text-fill-color:#687078!important;
+ font-size:12px!important;font-weight:400!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .direct-unread-count,
+html body #root .app .employer-direct-inbox .workchat-wa-row .direct-unread-count,
+html body #root .app .workchat-list .workchat-wa-row .workchat-unread-count{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ min-width:22px!important;height:22px!important;padding:0 6px!important;
+ border-radius:999px!important;background:#ff7900!important;color:#fff!important;
+ font-size:12px!important;font-weight:700!important;
+}
+html body #root .app .worker-inbox-panel .direct-conversation-list,
+html body #root .app .worker-inbox-panel .worker-direct-conversation-list,
+html body #root .app .worker-inbox-panel .worker-inbox-messages,
+html body #root .app .worker-inbox-panel .inbox-all-conversations,
+html body #root .app .employer-direct-inbox .direct-conversation-list,
+html body #root .app .employer-direct-inbox .employer-conversation-list,
+html body #root .app .employer-direct-inbox .inbox-all-conversations,
+html body #root .app .workchat-list{
+ display:flex!important;flex-direction:column!important;gap:0!important;
+ width:100%!important;background:#fff!important;
+}
+html body #root .app .worker-inbox-panel .inbox-all-conversations>h3,
+html body #root .app .employer-direct-inbox .inbox-all-conversations>h3{
+ display:none!important;
+}
+@media(max-width:600px){
+ html body #root .app .worker-inbox-panel .workchat-wa-row,
+ html body #root .app .employer-direct-inbox .workchat-wa-row,
+ html body #root .app .workchat-list .workchat-wa-row,
+ html body #root .app .employer-workchat-panel .workchat-wa-row{
+  grid-template-columns:52px minmax(0,1fr) auto!important;
+  column-gap:12px!important;min-height:84px!important;padding:11px 0!important;
+ }
+ html body #root .app .worker-inbox-panel .workchat-wa-row::after,
+ html body #root .app .employer-direct-inbox .workchat-wa-row::after,
+ html body #root .app .workchat-list .workchat-wa-row::after,
+ html body #root .app .employer-workchat-panel .workchat-wa-row::after{
+  left:64px!important;
+ }
+ html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-avatar,
+ html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-avatar,
+ html body #root .app .workchat-list .workchat-wa-row .workchat-wa-avatar,
+ html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-avatar{
+  width:50px!important;height:50px!important;min-width:50px!important;
+ }
+ html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy>strong,
+ html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy>strong,
+ html body #root .app .workchat-list .workchat-wa-row .workchat-wa-copy>strong,
+ html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-copy>strong{
+  font-size:15px!important;
+ }
+ html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy>small,
+ html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy>small,
+ html body #root .app .workchat-list .workchat-wa-row .workchat-wa-copy>small,
+ html body #root .app .employer-workchat-panel .workchat-wa-row .workchat-wa-copy>small{
+  font-size:13px!important;
+ }
+}
