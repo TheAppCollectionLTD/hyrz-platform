@@ -15261,3 +15261,19 @@ html body #root .app.inbox-screen .workchat-conversation-header .workchat-profil
   stroke:currentColor!important;stroke-width:2.6!important;stroke-linecap:round!important;stroke-linejoin:round!important;
  }
 }
+
+
+/* Centre the large Workchat back button in the Inbox heading row. */
+@media(max-width:650px){
+ html body #root .app.inbox-screen>main.page-inbox>header{
+  position:relative!important;
+ }
+ html body #root .app.inbox-screen>main.page-inbox>header .workchat-top-back{
+  position:absolute!important;
+  left:50%!important;
+  right:auto!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  z-index:3!important;
+ }
+}
