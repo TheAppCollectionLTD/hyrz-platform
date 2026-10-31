@@ -125,7 +125,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   ]);
 
   app.get('/api/conversations/mine', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
-    await ensureDirectMessages;
+    await ensureDirectMessages;await ensureDirectReadVisibilityColumn();
     const isEmployer=req.user.role==='employer';
     const ownerColumn=isEmployer?'c.employer_user_id':'c.worker_user_id';
     const [rows]=await db.execute(`
