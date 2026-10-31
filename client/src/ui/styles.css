@@ -12792,4 +12792,5 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 /* Unread workchat count badge on the Dashboard bottom-navigation icon. */
 .worker-bottom-nav .bottom-nav-icon,
 .employer-bottom-nav .bottom-nav-icon{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:22px}
+.worker-bottom-nav .bottom-nav-svg,.employer-bottom-nav .bottom-nav-svg{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .bottom-nav-notification{position:absolute;top:-8px;right:-13px;min-width:16px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;border:1.5px solid #10120f;border-radius:999px;background:#F97316;color:#FFFFFF;font:800 9px/1 'DM Sans',sans-serif;font-style:normal;box-sizing:border-box}
