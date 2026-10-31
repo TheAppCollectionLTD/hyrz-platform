@@ -13112,3 +13112,19 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  #root .app main.page-workchats .workchat-composer{align-items:stretch!important;flex-direction:column!important}
  #root .app main.page-workchats .workchat-composer button{width:100%!important}
 }
+
+
+/* Match employer-side Inbox conversations to the same flat chat-list treatment. */
+#root .app.employer .employer-direct-inbox .employer-conversation-list{display:flex!important;flex-direction:column!important;gap:0!important;margin-top:12px!important;border-top:1px solid #eee9e4!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list>h3{margin:10px 0!important;font-size:14px!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list .messaging-chat-row{display:grid!important;grid-template-columns:48px minmax(0,1fr) auto!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:76px!important;padding:10px 6px!important;margin:0!important;border:0!important;border-bottom:1px solid #eee9e4!important;border-radius:0!important;background:#fff!important;text-align:left!important;box-shadow:none!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list .messaging-chat-row:hover{background:#faf8f6!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list .messaging-chat-avatar{width:46px!important;height:46px!important;flex-basis:46px!important;border-radius:50%!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list .messaging-chat-copy{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list .messaging-chat-copy strong{font-size:14px!important;color:#171717!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list .messaging-chat-copy small{font-size:11px!important;color:#777!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list .messaging-chat-meta{display:flex!important;flex-direction:column!important;align-items:flex-end!important;gap:6px!important}
+#root .app.employer .employer-direct-inbox .employer-conversation-list .messaging-chat-meta time{font-size:10px!important;color:#888!important}
+#root .app.employer main.page-workchats .employer-workchat-card>.workchat-list{display:flex!important;flex-direction:column!important;gap:0!important;border-top:1px solid #eee9e4!important}
+#root .app.employer main.page-workchats .employer-workchat-card .workchat-item-minimal{display:grid!important;grid-template-columns:48px minmax(0,1fr) auto!important;align-items:center!important;gap:12px!important;padding:12px 6px!important;border:0!important;border-bottom:1px solid #eee9e4!important;border-radius:0!important;background:#fff!important;box-shadow:none!important}
+#root .app.employer main.page-workchats .employer-workchat-card .workchat-item-minimal:hover{background:#faf8f6!important}
