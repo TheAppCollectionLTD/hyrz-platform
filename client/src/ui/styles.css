@@ -13375,3 +13375,27 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  #root .app .inbox-category-tabs>button{padding:7px 13px!important;font-size:11px!important}
  #root .app .messaging-chat-row{min-height:72px!important;padding:10px 12px!important}
 }
+
+
+/* Inbox unified list refinements. */
+#root .app .inbox-all-workchats{display:flex!important;flex-direction:column!important;gap:0!important;padding:0 0 8px!important}
+#root .app .inbox-all-workchats h3,#root .app .inbox-all-admin-messages h3{
+ margin:13px 14px 5px!important;color:#777!important;font-size:11px!important;font-weight:800!important;
+ letter-spacing:.04em!important;text-transform:uppercase!important;
+}
+#root .app .inbox-all-workchats .messaging-chat-row{min-height:72px!important}
+#root .app .worker-workchat-page-heading{display:none!important}
+#root .app .worker-workchat-panel>.workchat-list-search{display:none!important}
+#root .app .employer-welcome>.employer-hero,
+#root .app .employer-welcome>.workchat-critical-info{display:none!important}
+#root .app .employer-welcome{padding:0!important;background:transparent!important}
+#root .app .employer-welcome .employer-workchat-card{margin-top:0!important}
+#root .app .employer-direct-inbox .inbox-worker-search{padding:10px 14px!important;border-bottom:1px solid #eeeae6!important}
+#root .app .employer-direct-inbox .inbox-worker-search h3{margin:0 0 6px!important;font-size:12px!important}
+#root .app .employer-direct-inbox .inbox-worker-search label{font-size:10px!important}
+#root .app .employer-direct-inbox .inbox-worker-search input{min-height:36px!important}
+#root .app .hyrz-admin-inbox{padding:10px 14px!important;border-top:1px solid #eeeae6!important}
+#root .app .hyrz-admin-inbox-intro{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important}
+#root .app .hyrz-admin-inbox-intro h3{margin:0!important;font-size:13px!important}
+#root .app .hyrz-admin-inbox-intro p{margin:3px 0!important;color:#777!important;font-size:11px!important}
+#root .app .hyrz-admin-inbox-intro .primary{padding:7px 10px!important;font-size:10px!important}
