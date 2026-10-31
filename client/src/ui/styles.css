@@ -13399,3 +13399,28 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .hyrz-admin-inbox-intro h3{margin:0!important;font-size:13px!important}
 #root .app .hyrz-admin-inbox-intro p{margin:3px 0!important;color:#777!important;font-size:11px!important}
 #root .app .hyrz-admin-inbox-intro .primary{padding:7px 10px!important;font-size:10px!important}
+
+
+/* Dark WhatsApp-style Inbox list skin, using Hyrz orange for the active state. */
+#root .app .inbox-global-search{background:#2b302d!important;border-color:#383f3b!important;color:#b9c1bc!important}
+#root .app .inbox-global-search input{color:#f5f6f5!important}
+#root .app .inbox-global-search input::placeholder{color:#aeb7b1!important}
+#root .app .inbox-category-tabs>button{background:#191d1a!important;border-color:#3b433e!important;color:#c5ccc7!important}
+#root .app .inbox-category-tabs>button.active{background:#4a2819!important;border-color:#a94d1c!important;color:#ffad7d!important}
+#root .app .worker-inbox-panel,#root .app .employer-direct-inbox{background:#171b18!important;border-color:#292f2b!important;color:#f2f4f2!important}
+#root .app .messaging-chat-row{background:#171b18!important;border-bottom-color:#303733!important;color:#f5f6f5!important}
+#root .app .messaging-chat-row:hover{background:#242a26!important}
+#root .app .messaging-chat-copy strong{color:#f4f5f4!important}
+#root .app .messaging-chat-copy small,#root .app .messaging-chat-meta{color:#aeb7b1!important}
+#root .app .inbox-all-workchats h3,#root .app .inbox-all-admin-messages h3{color:#aeb7b1!important}
+#root .app .inbox-all-admin-messages>button{background:#171b18!important;border-bottom-color:#303733!important;color:#f2f4f2!important}
+#root .app .worker-inbox-message-top strong{color:#f4f5f4!important}
+#root .app .worker-inbox-message-preview,#root .app .worker-inbox-message-card>small{color:#aeb7b1!important}
+#root .app .worker-inbox-message-card{background:#171b18!important;border-bottom-color:#303733!important}
+#root .app .employer-direct-inbox .inbox-worker-search{border-bottom-color:#303733!important}
+#root .app .employer-direct-inbox .inbox-worker-search h3,
+#root .app .employer-direct-inbox .inbox-worker-search label{color:#e6eae7!important}
+#root .app .employer-direct-inbox .inbox-worker-search input{background:#2b302d!important;border-color:#3d4640!important;color:#fff!important}
+#root .app .hyrz-admin-inbox{border-top-color:#303733!important;color:#e9eeeb!important}
+#root .app .hyrz-admin-inbox-intro h3{color:#f4f5f4!important}
+#root .app .hyrz-admin-inbox-intro p{color:#aeb7b1!important}
