@@ -15244,3 +15244,20 @@ html body #root .app.inbox-screen .workchat-conversation-header .workchat-profil
 html body #root .app.inbox-screen .workchat-conversation-header .workchat-profile-avatar span{
  color:#171b1e!important;-webkit-text-fill-color:#171b1e!important;font-weight:850!important;
 }
+
+
+/* Reuse the original large back-button treatment in the Inbox heading row. */
+@media(max-width:650px){
+ html body #root .app.inbox-screen>main.page-inbox>header .workchat-top-back{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 44px!important;width:44px!important;min-width:44px!important;height:44px!important;
+  min-height:44px!important;margin:0!important;padding:0!important;
+  border:1px solid #d9dee3!important;border-radius:11px!important;
+  background:#fff!important;color:#111820!important;
+  box-shadow:0 1px 3px rgba(0,0,0,.16)!important;
+ }
+ html body #root .app.inbox-screen>main.page-inbox>header .workchat-top-back svg{
+  display:block!important;width:25px!important;height:25px!important;fill:none!important;
+  stroke:currentColor!important;stroke-width:2.6!important;stroke-linecap:round!important;stroke-linejoin:round!important;
+ }
+}
