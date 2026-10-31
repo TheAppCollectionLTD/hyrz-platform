@@ -14869,3 +14869,32 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
   background:#f0f1f2!important;
  }
 }
+
+
+/* Worker Inbox compose actions and employer recipient picker */
+.worker-inbox-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.worker-inbox-compose-button{flex:0 0 auto;min-width:112px}
+.worker-inbox-compose-heading,.worker-employer-compose-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}
+.worker-inbox-compose-heading h3,.worker-employer-compose-heading h3{margin:0 0 4px}
+.worker-inbox-compose-heading p,.worker-employer-compose-heading p{margin:0}
+.worker-employer-compose{padding:18px;border:1px solid #e2e5e8;border-radius:16px;background:#fff;box-shadow:0 5px 18px rgba(20,30,40,.07)}
+.worker-employer-search{display:flex;gap:10px;align-items:center;margin:14px 0 18px}
+.worker-employer-search input{flex:1;min-width:0;min-height:46px;padding:10px 14px;border:1px solid #cbd1d6;border-radius:10px;background:#fff;color:#15191d;font:inherit}
+.worker-employer-picker-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.worker-employer-picker-columns>div{min-width:0}
+.worker-employer-picker-columns h4{margin:0 0 10px;font-size:14px;font-weight:800;color:#263238}
+.worker-employer-choice{display:flex;width:100%;align-items:center;gap:11px;padding:10px;margin:0 0 8px;border:1px solid #e4e7e9;border-radius:12px;background:#fff;color:#15191d;text-align:left;cursor:pointer}
+.worker-employer-choice:hover,.worker-employer-choice.selected{background:#fff5ec;border-color:#ff7900}
+.worker-employer-choice>span:nth-child(2){display:flex;min-width:0;flex:1;flex-direction:column;gap:3px}
+.worker-employer-choice strong{font-size:14px;color:#15191d}
+.worker-employer-choice small{font-size:12px;color:#68727b}
+.worker-employer-first-message{display:grid;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid #e7e9eb}
+.worker-employer-first-message p{margin:0;color:#29343b}
+.worker-employer-first-message textarea{width:100%;min-height:110px;box-sizing:border-box;padding:12px;border:1px solid #cbd1d6;border-radius:10px;background:#fff;color:#15191d;font:inherit;resize:vertical}
+@media(max-width:640px){
+ .worker-inbox-heading{align-items:flex-start}
+ .worker-inbox-compose-button{min-width:94px;padding:10px 14px}
+ .worker-employer-compose{padding:13px}
+ .worker-employer-picker-columns{grid-template-columns:1fr}
+ .worker-employer-compose-heading{align-items:flex-start}
+}
