@@ -14997,3 +14997,42 @@ html body #root .app.inbox-screen:has(.worker-inbox-panel .hyrz-direct-chat) .pa
  html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer{gap:6px!important;padding:9px 8px calc(9px + env(safe-area-inset-bottom))!important}
  html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer button.primary{min-width:62px!important;padding:0 14px!important}
 }
+
+
+/* Apply the same full-height shell to worker-to-employer direct conversations */
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .page-inbox>header,
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .page-inbox>.worker-subsection-toolbar,
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .page-inbox>.inbox-global-search,
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .page-inbox>.inbox-category-tabs{display:none!important}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .worker-inbox-panel{
+ display:flex!important;flex-direction:column!important;gap:0!important;width:100%!important;max-width:none!important;
+ min-height:calc(100dvh - 74px)!important;height:calc(100dvh - 74px)!important;max-height:none!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+ background:#080808!important;color:#fff!important;box-shadow:none!important;overflow:hidden!important;
+}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .worker-inbox-heading{display:none!important}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .worker-direct-inbox{
+ display:flex!important;flex:1 1 auto!important;flex-direction:column!important;min-height:0!important;
+ width:100%!important;margin:0!important;padding:0!important;background:#080808!important;
+}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .direct-thread-heading{
+ flex:0 0 auto!important;min-height:76px!important;padding:12px 18px!important;
+ border:0!important;border-bottom:1px solid #303030!important;background:#111!important;
+}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .direct-thread-heading h4{color:#fff!important;font-size:18px!important}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .direct-thread-heading small{color:#aaa!important}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .direct-thread-heading .icon-back-button{width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;background:#222!important;color:#fff!important}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .direct-thread-heading .icon-back-button svg{stroke:#fff!important;stroke-width:2.5!important}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .worker-direct-inbox .hyrz-direct-chat{
+ flex:1 1 auto!important;min-height:0!important;max-height:none!important;margin:0!important;padding:22px 18px!important;
+ border:0!important;border-radius:0!important;background:#080808!important;
+}
+html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .worker-direct-inbox .hyrz-direct-composer{
+ flex:0 0 auto!important;width:100%!important;margin:0!important;padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;
+ border:0!important;border-top:1px solid #303030!important;border-radius:0!important;background:#111!important;
+}
+@media(max-width:760px){
+ html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .worker-inbox-panel{min-height:calc(100dvh - 62px)!important;height:calc(100dvh - 62px)!important}
+ html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .worker-direct-inbox .hyrz-direct-chat{padding:16px 12px!important}
+ html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .direct-thread-heading{min-height:68px!important;padding:10px 14px!important}
+}
