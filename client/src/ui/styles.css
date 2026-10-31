@@ -13952,3 +13952,150 @@ html body #root .app .inbox-all-workchats .messaging-chat-row:hover{
  html body #root .app .employer-direct-inbox .messaging-chat-copy small,
  html body #root .app .inbox-all-workchats .messaging-chat-copy small{font-size:12px!important}
 }
+
+
+/* Final Inbox parity pass: Admins and Employers use the same clear list treatment as Workchats. */
+html body #root .app .worker-inbox-panel,
+html body #root .app .employer-direct-inbox{
+ background:#fff!important;color:#172126!important;border-color:#e1e6e8!important;
+}
+html body #root .app .worker-inbox-panel .worker-direct-inbox,
+html body #root .app .worker-inbox-panel .direct-conversation-list,
+html body #root .app .worker-inbox-panel .worker-direct-conversation-list,
+html body #root .app .worker-inbox-panel .worker-inbox-messages,
+html body #root .app .worker-inbox-panel .inbox-all-workchats,
+html body #root .app .worker-inbox-panel .inbox-all-admin-messages,
+html body #root .app .employer-direct-inbox .inbox-workers-section,
+html body #root .app .employer-direct-inbox .employer-conversation-list,
+html body #root .app .employer-direct-inbox .inbox-all-workchats,
+html body #root .app .employer-direct-inbox .hyrz-admin-inbox{
+ background:#fff!important;color:#172126!important;
+}
+html body #root .app .worker-inbox-panel .messaging-chat-row,
+html body #root .app .employer-direct-inbox .messaging-chat-row,
+html body #root .app .worker-inbox-panel .inbox-all-workchats .messaging-chat-row,
+html body #root .app .employer-direct-inbox .inbox-all-workchats .messaging-chat-row{
+ background:#fff!important;color:#172126!important;border-color:#e1e6e8!important;
+}
+html body #root .app .worker-inbox-panel .messaging-chat-copy strong,
+html body #root .app .employer-direct-inbox .messaging-chat-copy strong,
+html body #root .app .worker-inbox-panel .inbox-all-workchats .messaging-chat-copy strong,
+html body #root .app .employer-direct-inbox .inbox-all-workchats .messaging-chat-copy strong{
+ color:#172126!important;-webkit-text-fill-color:#172126!important;
+}
+html body #root .app .worker-inbox-panel .messaging-chat-copy small,
+html body #root .app .employer-direct-inbox .messaging-chat-copy small,
+html body #root .app .worker-inbox-panel .messaging-chat-meta,
+html body #root .app .employer-direct-inbox .messaging-chat-meta{
+ color:#59666d!important;-webkit-text-fill-color:#59666d!important;
+}
+html body #root .app .worker-inbox-panel .messaging-chat-avatar,
+html body #root .app .employer-direct-inbox .messaging-chat-avatar{
+ background:#e8eef0!important;color:#24333a!important;
+}
+html body #root .app .worker-inbox-panel .messaging-chat-avatar b,
+html body #root .app .employer-direct-inbox .messaging-chat-avatar b{
+ color:#24333a!important;-webkit-text-fill-color:#24333a!important;
+}
+/* Worker support-message cards: white card, visible title, preview and sender metadata. */
+html body #root .app .worker-inbox-panel .worker-inbox-message-card{
+ display:flex!important;align-items:center!important;gap:12px!important;
+ width:100%!important;min-height:78px!important;box-sizing:border-box!important;
+ padding:12px 14px!important;margin:0!important;
+ background:#fff!important;border:0!important;border-bottom:1px solid #e1e6e8!important;
+ color:#172126!important;border-radius:0!important;box-shadow:none!important;
+}
+html body #root .app .worker-inbox-panel .worker-inbox-message-button{
+ display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
+ align-items:flex-start!important;gap:5px!important;min-width:0!important;
+ padding:0!important;background:transparent!important;color:#172126!important;
+ text-align:left!important;
+}
+html body #root .app .worker-inbox-panel .worker-inbox-message-top strong{
+ color:#172126!important;-webkit-text-fill-color:#172126!important;
+ font-size:14px!important;font-weight:800!important;
+}
+html body #root .app .worker-inbox-panel .worker-inbox-message-top small,
+html body #root .app .worker-inbox-panel .worker-inbox-message-button>small,
+html body #root .app .worker-inbox-panel .worker-inbox-message-card>small{
+ color:#68757c!important;-webkit-text-fill-color:#68757c!important;
+ font-size:11px!important;
+}
+html body #root .app .worker-inbox-panel .worker-inbox-message-preview{
+ color:#4d5b62!important;-webkit-text-fill-color:#4d5b62!important;
+ font-size:13px!important;line-height:1.4!important;
+}
+html body #root .app .worker-inbox-panel .worker-inbox-delete-message{
+ color:#a63d16!important;background:#fff!important;border:1px solid #efc4ae!important;
+}
+/* Employer support messages: same white card and dark readable text. */
+html body #root .app.employer .hyrz-admin-inbox{
+ margin:0!important;padding:12px 14px!important;background:#fff!important;
+ border-top:1px solid #e1e6e8!important;color:#172126!important;
+}
+html body #root .app.employer .hyrz-admin-inbox-intro h3{
+ color:#172126!important;-webkit-text-fill-color:#172126!important;
+}
+html body #root .app.employer .hyrz-admin-inbox-intro p{
+ color:#59666d!important;-webkit-text-fill-color:#59666d!important;
+}
+html body #root .app.employer .hyrz-admin-message-feed{
+ display:flex!important;flex-direction:column!important;gap:0!important;
+ background:#fff!important;
+}
+html body #root .app.employer .hyrz-admin-message-item{
+ display:grid!important;grid-template-columns:44px minmax(0,1fr) auto!important;
+ grid-template-rows:auto auto auto!important;align-items:center!important;
+ gap:4px 12px!important;width:100%!important;min-height:78px!important;
+ box-sizing:border-box!important;padding:12px 8px!important;margin:0!important;
+ border:0!important;border-bottom:1px solid #e1e6e8!important;
+ border-radius:0!important;background:#fff!important;color:#172126!important;
+ text-align:left!important;box-shadow:none!important;
+}
+html body #root .app.employer .hyrz-admin-message-item::before{
+ content:"H"!important;grid-column:1!important;grid-row:1 / span 3!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:44px!important;height:44px!important;border-radius:50%!important;
+ background:#e8eef0!important;color:#24333a!important;font-weight:800!important;
+}
+html body #root .app.employer .hyrz-admin-message-item strong{
+ grid-column:2!important;grid-row:1!important;color:#172126!important;
+ -webkit-text-fill-color:#172126!important;font-size:14px!important;font-weight:800!important;
+}
+html body #root .app.employer .hyrz-admin-message-item small{
+ grid-column:2!important;grid-row:2!important;color:#68757c!important;
+ -webkit-text-fill-color:#68757c!important;font-size:11px!important;
+}
+html body #root .app.employer .hyrz-admin-message-item span{
+ grid-column:2!important;grid-row:3!important;color:#4d5b62!important;
+ -webkit-text-fill-color:#4d5b62!important;font-size:13px!important;
+ line-height:1.35!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ white-space:nowrap!important;
+}
+html body #root .app.employer .hyrz-admin-message-item em{
+ grid-column:3!important;grid-row:1!important;align-self:start!important;
+ color:#8a3d13!important;background:#fff1e8!important;font-size:10px!important;
+}
+html body #root .app .worker-inbox-panel .inbox-all-admin-messages>button{
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+ gap:5px!important;width:100%!important;min-height:78px!important;
+ padding:12px 14px!important;background:#fff!important;color:#172126!important;
+ border:0!important;border-bottom:1px solid #e1e6e8!important;border-radius:0!important;
+ text-align:left!important;
+}
+html body #root .app .worker-inbox-panel .inbox-all-admin-messages>button strong{
+ color:#172126!important;-webkit-text-fill-color:#172126!important;
+}
+html body #root .app .worker-inbox-panel .inbox-all-admin-messages>button small{
+ color:#68757c!important;-webkit-text-fill-color:#68757c!important;
+}
+html body #root .app .worker-inbox-panel .inbox-all-admin-messages>button span{
+ color:#4d5b62!important;-webkit-text-fill-color:#4d5b62!important;
+}
+html body #root .app .worker-inbox-panel .hyrz-admin-inbox-intro h3,
+html body #root .app .worker-inbox-panel .inbox-all-admin-messages h3,
+html body #root .app .worker-inbox-panel .inbox-all-workchats h3,
+html body #root .app .employer-direct-inbox .hyrz-admin-inbox-intro h3,
+html body #root .app .employer-direct-inbox .inbox-all-workchats h3{
+ color:#26343b!important;-webkit-text-fill-color:#26343b!important;
+}
