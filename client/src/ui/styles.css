@@ -15275,3 +15275,29 @@ html body #root .app.inbox-screen:has(.workchat-conversation) .workchat-gif-pane
  html body #root .app.inbox-screen:has(.workchat-conversation) .workchat-composer-tools{gap:1px!important}
  html body #root .app.inbox-screen:has(.workchat-conversation) .workchat-send-button{width:36px!important;height:36px!important;flex-basis:36px!important}
 }
+
+
+/* Employer inbox workchat uses the same immersive group-chat viewport */
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .page-inbox>header,
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .page-inbox>.worker-subsection-toolbar,
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .page-inbox>.inbox-global-search,
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .page-inbox>.inbox-category-tabs{display:none!important}
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .page-inbox{padding:0!important;min-height:0!important}
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .employer-welcome{
+ display:flex!important;flex-direction:column!important;gap:0!important;width:100%!important;min-height:calc(100dvh - 70px)!important;
+ height:calc(100dvh - 70px)!important;margin:0!important;padding:0!important;background:#080808!important;
+}
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .employer-hero,
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .workchat-critical-info,
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .employer-chat-icon,
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .employer-workchat-card>.eyebrow,
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .employer-workchat-card>h3,
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .employer-workchat-card>.workchat-section-tabs{display:none!important}
+html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .employer-workchat-card{
+ display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:0!important;width:100%!important;
+ min-height:0!important;height:100%!important;margin:0!important;padding:0!important;border:0!important;
+ border-radius:0!important;background:#080808!important;color:#fff!important;box-shadow:none!important;overflow:hidden!important;
+}
+@media(max-width:760px){
+ html body #root .app.inbox-screen:has(.employer-welcome .workchat-conversation) .employer-welcome{min-height:calc(100dvh - 62px)!important;height:calc(100dvh - 62px)!important}
+}
