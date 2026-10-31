@@ -701,7 +701,7 @@ app.get('/api/worker/employers/search',auth,allow('worker'),asyncRoute(async(req
  await ensureBusinessAddressColumns; await ensureWorkerEmployerFavourites;
  const q=String(req.query.q||'').trim(), role=String(req.query.role||'').trim(), location=String(req.query.location||'').trim(), past=req.query.past==='1';
  const args=[req.user.id,req.user.id];
- let sql=`SELECT b.id AS business_id,b.name AS company_name,
+ let sql=`SELECT b.id AS business_id,b.owner_user_id AS employer_user_id,b.name AS company_name,
  COALESCE(NULLIF(CONCAT_WS(', ',NULLIF(b.address_line_1,''),NULLIF(b.city,'')),''),'') AS company_location,
  GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR '||') AS roles_available,
  MAX(s.starts_at) AS latest_shift,
@@ -718,7 +718,7 @@ app.get('/api/worker/employers/search',auth,allow('worker'),asyncRoute(async(req
 }));
 app.get('/api/worker/employers/favourites',auth,allow('worker'),asyncRoute(async(req,res)=>{
  await ensureBusinessAddressColumns; await ensureWorkerEmployerFavourites;
- const [rows]=await db.execute(`SELECT b.id AS business_id,b.name AS company_name,COALESCE(NULLIF(CONCAT_WS(', ',NULLIF(b.address_line_1,''),NULLIF(b.city,'')),''),'') AS company_location,GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR '||') AS roles_available,MAX(s.starts_at) AS latest_shift FROM worker_employer_favourites f JOIN businesses b ON b.id=f.business_id LEFT JOIN shifts s ON s.business_id=b.id WHERE f.worker_user_id=? GROUP BY b.id,b.name,b.address_line_1,b.city ORDER BY b.name`,[req.user.id]);
+ const [rows]=await db.execute(`SELECT b.id AS business_id,b.owner_user_id AS employer_user_id,b.name AS company_name,COALESCE(NULLIF(CONCAT_WS(', ',NULLIF(b.address_line_1,''),NULLIF(b.city,'')),''),'') AS company_location,GROUP_CONCAT(DISTINCT s.title ORDER BY s.title SEPARATOR '||') AS roles_available,MAX(s.starts_at) AS latest_shift FROM worker_employer_favourites f JOIN businesses b ON b.id=f.business_id LEFT JOIN shifts s ON s.business_id=b.id WHERE f.worker_user_id=? GROUP BY b.id,b.name,b.address_line_1,b.city ORDER BY b.name`,[req.user.id]);
  res.json({employers:rows.map(row=>({...row,rolesAvailable:row.roles_available?row.roles_available.split('||'):[],isFavourite:true}))});
 }));
 app.get('/api/worker/employers/favourited-me',auth,allow('worker'),asyncRoute(async(req,res)=>{
