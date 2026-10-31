@@ -1461,7 +1461,7 @@ function WorkerInbox({user,action,busy,setNotice,setError,goBack,inboxTab='all',
 const d=item.data;
 const title=item.kind==='workchat'?(d.name||'Workchat'):item.kind==='employer'?([d.participant_first_name,d.participant_last_name].filter(Boolean).join(' ')||'Employer'):(d.subject||'Hyrz support');
 const preview=d.last_message||d.latest_message||d.body||'No messages yet';
-const avatar=item.kind==='workchat'?workchatAvatar(d):item.kind==='employer'?d.participant_profile_picture:null;
+const avatar=item.kind==='workchat'?(d.profile_picture||''):item.kind==='employer'?(d.participant_profile_picture||''):null;
 const unread=Number(d.unread_count||0)||(item.kind==='admin'&&!d.read_at&&Number(d.sender_id)!==Number(user.id)?1:0);
 return <button type="button" key={item.kind+'-'+item.id} className="workchat-wa-row" onClick={()=>item.kind==='workchat'?onOpenWorkchat(d.id):item.kind==='employer'?setActiveDirectConversation(Number(d.id)):openInboxMessage(d)}>
 <span className="workchat-wa-avatar">{avatar?<img src={avatar} alt=""/>:<b>{item.kind==='workchat'?workchatInitials(d.name):item.kind==='employer'?(d.participant_first_name||'E').charAt(0).toUpperCase():'H'}</b>}</span>
