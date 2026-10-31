@@ -39,7 +39,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     if(lastSeenVisibility!==undefined){updates.push('last_seen_visibility=?');values.push(lastSeenVisibility);}
     values.push(req.user.id);
     await db.execute('UPDATE user_messaging_preferences SET '+updates.join(',')+' WHERE user_id=?',values);
-    if(readReceiptsEnabled===0){await ensureDirectMessages;await ensureDirectReadVisibilityColumn();await db.execute('UPDATE employer_worker_messages m JOIN employer_worker_conversations c ON c.id=m.conversation_id SET m.read_receipt_visible=0 WHERE m.sender_id<>? AND m.read_at IS NOT NULL AND (c.worker_user_id=? OR c.employer_user_id=?)',[req.user.id,req.user.id,req.user.id]);}
+    if(readReceiptsEnabled===0){await ensureDirectMessages;await ensureDirectReadVisibilityColumn();await db.execute('UPDATE employer_worker_messages m JOIN employer_worker_conversations c ON c.id=m.conversation_id SET m.read_receipt_visible=0 WHERE m.sender_id<>? AND m.read_at IS NOT NULL AND (c.worker_user_id=? OR c.employer_user_id=?)',[req.user.id,req.user.id,req.user.id]);await ensureWorkchatReads;await db.execute('DELETE FROM workchat_message_reads WHERE user_id=?',[req.user.id]);}
     const p=await getMessagingPreferences(req.user.id);
     res.json({ok:true,readReceiptsEnabled:Boolean(p.read_receipts_enabled),lastSeenVisibility:p.last_seen_visibility});
   }));
@@ -250,7 +250,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await db.execute('UPDATE workchat_participants SET last_read_at=UTC_TIMESTAMP() WHERE workchat_id=? AND user_id=?',[id,req.user.id]);
     if(privacy.read_receipts_enabled)await db.execute('INSERT IGNORE INTO workchat_message_reads(message_id,user_id) SELECT id,? FROM workchat_messages WHERE workchat_id=? AND sender_id<>? AND deleted_at IS NULL',[req.user.id,id,req.user.id]);
     const [messages]=await db.execute(`SELECT m.id,m.workchat_id,m.sender_id,m.body,m.created_at,u.first_name sender_first_name,u.last_name sender_last_name,u.role sender_role,u.profile_picture sender_profile_picture,m.deleted_at,m.deleted_by,m.reply_to_message_id,reply.body AS reply_body,reply.deleted_at AS reply_deleted_at,replyUser.first_name AS reply_sender_first_name,replyUser.last_name AS reply_sender_last_name,wp.pinned_at,wp.pinned_by,
-      (SELECT COUNT(*) FROM workchat_message_reads mr WHERE mr.message_id=m.id AND mr.user_id<>m.sender_id) AS read_by_count,
+      (SELECT COUNT(*) FROM workchat_message_reads mr JOIN workchat_participants rp ON rp.workchat_id=m.workchat_id AND rp.user_id=mr.user_id WHERE mr.message_id=m.id AND mr.user_id<>m.sender_id) AS read_by_count,
       (SELECT COUNT(*) FROM workchat_participants rp WHERE rp.workchat_id=m.workchat_id AND rp.user_id<>m.sender_id) AS recipient_count
       FROM workchat_messages m JOIN users u ON u.id=m.sender_id LEFT JOIN workchat_messages reply ON reply.id=m.reply_to_message_id AND reply.workchat_id=m.workchat_id LEFT JOIN users replyUser ON replyUser.id=reply.sender_id LEFT JOIN workchat_pins wp ON wp.message_id=m.id AND wp.workchat_id=m.workchat_id WHERE m.workchat_id=? ORDER BY m.id ASC`,[id]);
     const [participants]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture,
