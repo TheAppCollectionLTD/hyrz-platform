@@ -2,6 +2,50 @@ const { auth, allow } = require('./middleware');
 
 module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta }) {
   const ensureEmployerMessageReadColumn=addColumn('admin_message_meta','employer_read_at DATETIME NULL','employer inbox read state');
+  const ensureLastSeenColumn=addColumn('users','last_seen_at DATETIME NULL','messaging last seen');
+  const ensureMessagingPrivacy=db.query(`CREATE TABLE IF NOT EXISTS user_messaging_preferences (
+    user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    read_receipts_enabled TINYINT(1) NOT NULL DEFAULT 1,
+    last_seen_visibility ENUM('everyone','nobody') NOT NULL DEFAULT 'everyone',
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB`);
+  const ensureWorkchatReads=db.query(`CREATE TABLE IF NOT EXISTS workchat_message_reads (
+    message_id BIGINT UNSIGNED NOT NULL,
+    user_id BIGINT UNSIGNED NOT NULL,
+    read_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(message_id,user_id),
+    KEY idx_workchat_reads_user(user_id,read_at)
+  ) ENGINE=InnoDB`);
+  async function ensureMessaging(){await Promise.all([ensureLastSeenColumn,ensureMessagingPrivacy,ensureWorkchatReads]);}
+  async function getMessagingPreferences(userId){
+    await ensureMessaging();
+    await db.execute('INSERT IGNORE INTO user_messaging_preferences(user_id) VALUES(?)',[userId]);
+    const [rows]=await db.execute('SELECT read_receipts_enabled,last_seen_visibility FROM user_messaging_preferences WHERE user_id=?',[userId]);
+    return rows[0]||{read_receipts_enabled:1,last_seen_visibility:'everyone'};
+  }
+  app.get('/api/messaging/privacy',auth,asyncRoute(async(req,res)=>{
+    const p=await getMessagingPreferences(req.user.id);
+    res.json({readReceiptsEnabled:Boolean(p.read_receipts_enabled),lastSeenVisibility:p.last_seen_visibility});
+  }));
+  app.patch('/api/messaging/privacy',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await getMessagingPreferences(req.user.id);
+    const readReceiptsEnabled=req.body.readReceiptsEnabled===undefined?undefined:(req.body.readReceiptsEnabled?1:0);
+    const lastSeenVisibility=req.body.lastSeenVisibility===undefined?undefined:String(req.body.lastSeenVisibility);
+    if(lastSeenVisibility!==undefined&&!['everyone','nobody'].includes(lastSeenVisibility))return res.status(400).json({error:'Choose a valid last-seen visibility.'});
+    if(readReceiptsEnabled===undefined&&lastSeenVisibility===undefined)return res.status(400).json({error:'Choose a privacy setting to update.'});
+    const updates=[],values=[];
+    if(readReceiptsEnabled!==undefined){updates.push('read_receipts_enabled=?');values.push(readReceiptsEnabled);}
+    if(lastSeenVisibility!==undefined){updates.push('last_seen_visibility=?');values.push(lastSeenVisibility);}
+    values.push(req.user.id);
+    await db.execute('UPDATE user_messaging_preferences SET '+updates.join(',')+' WHERE user_id=?',values);
+    const p=await getMessagingPreferences(req.user.id);
+    res.json({ok:true,readReceiptsEnabled:Boolean(p.read_receipts_enabled),lastSeenVisibility:p.last_seen_visibility});
+  }));
+  app.post('/api/messaging/presence',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureMessaging();
+    await db.execute('UPDATE users SET last_seen_at=UTC_TIMESTAMP() WHERE id=?',[req.user.id]);
+    res.json({ok:true});
+  }));
   // Share the API's schema queue so this metadata migration cannot race the
   // user/profile migrations performed during server startup.
 
@@ -74,6 +118,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
       KEY idx_direct_messages_conversation (conversation_id,created_at),
       KEY idx_direct_messages_unread (conversation_id,read_at)
     ) ENGINE=InnoDB`)
+    ,ensureMessaging()
   ]);
 
   app.get('/api/conversations/mine', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
