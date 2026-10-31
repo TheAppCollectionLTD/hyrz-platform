@@ -14939,3 +14939,25 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
 #root .app .worker-inbox-thread-reply textarea{flex:1!important;min-width:0!important;min-height:44px!important;border:0!important;border-radius:999px!important;background:#171717!important;color:#fff!important}
 #root .app .worker-inbox-thread-reply button{min-height:42px!important;border-radius:999px!important;background:#ff7900!important;color:#fff!important}
 @media(max-width:760px){#root .app .hyrz-direct-chat{min-height:260px!important;max-height:58vh!important;padding:14px 10px!important;border-radius:14px!important}#root .app .hyrz-direct-message-content{max-width:88%!important;padding:10px 12px!important}#root .app .hyrz-direct-composer{gap:6px!important;padding:7px!important}#root .app .hyrz-direct-composer .hyrz-chat-tool{flex-basis:36px!important;width:36px!important;height:36px!important}#root .app .hyrz-direct-composer button.primary{min-width:58px!important;padding:8px 12px!important}#root .app .worker-inbox-thread-reply{flex-direction:row!important;align-items:center!important}}
+
+
+/* Admin support conversations share the same Hyrz chat treatment */
+#root .app .worker-inbox-thread{gap:12px!important;padding:12px!important;border:1px solid #343434!important;border-radius:18px!important;background:#090909!important}
+#root .app .worker-inbox-thread-message{display:flex!important;flex-direction:column!important;gap:5px!important;width:fit-content!important;max-width:min(78%,620px)!important;margin:0!important;padding:12px 15px!important;border:1px solid #414141!important;border-radius:16px 16px 16px 4px!important;background:#242424!important;color:#fff!important}
+#root .app .worker-inbox-thread-message.sent{align-self:flex-end!important;border-color:#ff7900!important;border-radius:16px 16px 4px 16px!important;background:#ff7900!important;color:#fff!important}
+#root .app .worker-inbox-thread-message p{margin:0!important;color:inherit!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important}
+#root .app .worker-inbox-thread-message small{align-self:flex-end!important;color:rgba(255,255,255,.7)!important;font-size:10px!important}
+#root .app .worker-inbox-thread-heading small{color:#aaa!important}
+#root .app .worker-inbox-thread-reply{padding:8px!important;border:1px solid #454545!important;border-radius:999px!important;background:#171717!important}
+#root .app .worker-inbox-thread-reply textarea{padding:10px 14px!important;background:transparent!important;color:#fff!important}
+#root .app .worker-inbox-thread-reply label{display:none!important}
+#root .app .worker-inbox-thread-reply button{padding:9px 18px!important;background:#ff7900!important;color:#fff!important}
+#root .app .inbox-chat-overlay .inbox-chatbox{display:flex!important;flex-direction:column!important;gap:12px!important;border:1px solid #3c3c3c!important;border-radius:18px!important;background:#090909!important;color:#fff!important}
+#root .app .inbox-chat-overlay .direct-thread-heading{padding:12px!important}
+#root .app .inbox-chat-overlay .direct-thread-heading h3{color:#fff!important}
+#root .app .inbox-chat-overlay .direct-message-history{display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:12px!important;max-height:55vh!important;overflow-y:auto!important;padding:18px!important;border:1px solid #343434!important;border-radius:14px!important;background:#101010!important}
+#root .app .inbox-chat-overlay .direct-message-history>p{align-self:flex-start!important;max-width:80%!important;margin:0!important;padding:12px 15px!important;border:1px solid #414141!important;border-radius:16px 16px 16px 4px!important;background:#242424!important;color:#fff!important;white-space:pre-wrap!important}
+#root .app .inbox-chat-overlay .direct-message-compose{display:flex!important;flex-direction:row!important;align-items:center!important;gap:9px!important;padding:9px!important;border:1px solid #454545!important;border-radius:999px!important;background:#171717!important}
+#root .app .inbox-chat-overlay .direct-message-compose textarea{flex:1!important;min-width:0!important;min-height:44px!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#fff!important}
+#root .app .inbox-chat-overlay .direct-message-compose button{min-height:42px!important;padding:9px 18px!important;border:0!important;border-radius:999px!important;background:#ff7900!important;color:#fff!important}
+@media(max-width:600px){#root .app .worker-inbox-thread-message{max-width:88%!important}#root .app .worker-inbox-thread-reply{flex-direction:row!important;align-items:center!important}#root .app .inbox-chat-overlay .direct-message-compose{flex-direction:row!important;align-items:center!important}}
