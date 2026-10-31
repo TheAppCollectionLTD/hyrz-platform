@@ -2,6 +2,7 @@ const { auth, allow } = require('./middleware');
 
 module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta }) {
   const ensureEmployerMessageReadColumn=addColumn('admin_message_meta','employer_read_at DATETIME NULL','employer inbox read state');
+  const ensureDirectReadVisibilityColumn=addColumn('employer_worker_messages','read_receipt_visible TINYINT(1) NOT NULL DEFAULT 1','direct message read receipt visibility');
   const ensureLastSeenColumn=addColumn('users','last_seen_at DATETIME NULL','messaging last seen');
   const ensureMessagingPrivacy=db.query(`CREATE TABLE IF NOT EXISTS user_messaging_preferences (
     user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
@@ -38,6 +39,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     if(lastSeenVisibility!==undefined){updates.push('last_seen_visibility=?');values.push(lastSeenVisibility);}
     values.push(req.user.id);
     await db.execute('UPDATE user_messaging_preferences SET '+updates.join(',')+' WHERE user_id=?',values);
+    if(readReceiptsEnabled===0)await db.execute('UPDATE employer_worker_messages m JOIN employer_worker_conversations c ON c.id=m.conversation_id SET m.read_receipt_visible=0 WHERE m.sender_id<>? AND m.read_at IS NOT NULL AND (c.worker_user_id=? OR c.employer_user_id=?)',[req.user.id,req.user.id,req.user.id]);
     const p=await getMessagingPreferences(req.user.id);
     res.json({ok:true,readReceiptsEnabled:Boolean(p.read_receipts_enabled),lastSeenVisibility:p.last_seen_visibility});
   }));
@@ -114,11 +116,12 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
       sender_id BIGINT UNSIGNED NOT NULL,
       body TEXT NOT NULL,
       read_at DATETIME NULL,
+      read_receipt_visible TINYINT(1) NOT NULL DEFAULT 1,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       KEY idx_direct_messages_conversation (conversation_id,created_at),
       KEY idx_direct_messages_unread (conversation_id,read_at)
     ) ENGINE=InnoDB`)
-    ,ensureMessaging()
+    ,ensureMessaging(),ensureDirectReadVisibilityColumn
   ]);
 
   app.get('/api/conversations/mine', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
@@ -159,8 +162,8 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const [conversations]=await db.execute('SELECT id FROM employer_worker_conversations WHERE id=? AND (employer_user_id=? OR worker_user_id=?)',[id,req.user.id,req.user.id]);
     if(!conversations.length)return res.status(404).json({error:'Conversation not found.'});
     const privacy=await getMessagingPreferences(req.user.id);
-    if(privacy.read_receipts_enabled)await db.execute('UPDATE employer_worker_messages SET read_at=COALESCE(read_at,UTC_TIMESTAMP()) WHERE conversation_id=? AND sender_id<>? AND read_at IS NULL',[id,req.user.id]);
-    const [messages]=await db.execute(`SELECT m.id,m.conversation_id,m.sender_id,m.body,m.read_at,m.created_at,u.first_name AS sender_first_name,u.last_name AS sender_last_name,u.role AS sender_role
+    await db.execute('UPDATE employer_worker_messages SET read_at=COALESCE(read_at,UTC_TIMESTAMP()),read_receipt_visible=? WHERE conversation_id=? AND sender_id<>? AND read_at IS NULL',[privacy.read_receipts_enabled?1:0,id,req.user.id]);
+    const [messages]=await db.execute(`SELECT m.id,m.conversation_id,m.sender_id,m.body,CASE WHEN m.read_receipt_visible=1 THEN m.read_at ELSE NULL END AS read_at,m.created_at,u.first_name AS sender_first_name,u.last_name AS sender_last_name,u.role AS sender_role
       FROM employer_worker_messages m JOIN users u ON u.id=m.sender_id
       WHERE m.conversation_id=? ORDER BY m.created_at ASC,m.id ASC`,[id]);
     res.json({messages});
