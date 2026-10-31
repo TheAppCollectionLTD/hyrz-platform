@@ -3,6 +3,7 @@ import JOB_ROLE_GROUPS from '../../../shared/job-roles.json';
 const JOB_ROLES=JOB_ROLE_GROUPS.flatMap(([,roles])=>roles);
 const money=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(n||0));
 function handleMessageEnter(event){if(event.key!=='Enter'||event.shiftKey||event.nativeEvent?.isComposing)return;event.preventDefault();const form=event.currentTarget.form;if(form&&!form.querySelector('button[type="submit"]:disabled'))form.requestSubmit();}
+function workchatInitials(name){return String(name||'W').trim().split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();}
 function messagingPresenceLabel(value){if(!value)return '';const date=new Date(value);if(Number.isNaN(date.getTime()))return '';const age=Date.now()-date.getTime();if(age<120000)return 'online';return 'last seen '+date.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' at '+date.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 
 export default function App(){
