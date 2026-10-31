@@ -14198,3 +14198,80 @@ html body #root .app .employer-conversation-list{
   width:40px!important;height:40px!important;min-width:40px!important;
  }
 }
+
+
+/* Inbox categories deliberately reuse the exact Workchats list-row component. */
+html body #root .app .worker-inbox-panel .workchat-wa-row,
+html body #root .app .employer-direct-inbox .workchat-wa-row{
+ display:grid!important;
+ grid-template-columns:48px minmax(0,1fr) auto!important;
+ align-items:center!important;gap:12px!important;
+ width:100%!important;min-width:0!important;min-height:78px!important;
+ box-sizing:border-box!important;padding:12px 8px!important;margin:0!important;
+ border:0!important;border-bottom:1px solid #eeeae6!important;
+ border-radius:0!important;background:#fff!important;color:#171717!important;
+ text-align:left!important;box-shadow:none!important;cursor:pointer!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row:hover,
+html body #root .app .employer-direct-inbox .workchat-wa-row:hover{
+ background:#faf8f6!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-avatar,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-avatar{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:46px!important;height:46px!important;min-width:46px!important;
+ overflow:hidden!important;border-radius:50%!important;
+ background:#fce9dd!important;color:#a83c0b!important;
+ font-size:17px!important;font-weight:800!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-avatar img,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-avatar img{
+ display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-avatar b,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-avatar b{
+ color:#a83c0b!important;-webkit-text-fill-color:#a83c0b!important;
+ font-size:17px!important;font-weight:800!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy{
+ display:flex!important;flex-direction:column!important;gap:4px!important;
+ min-width:0!important;width:100%!important;margin:0!important;padding:0!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy>strong,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy>strong{
+ display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ white-space:nowrap!important;color:#161616!important;-webkit-text-fill-color:#161616!important;
+ font-size:14px!important;font-weight:800!important;line-height:1.25!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy>small,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy>small{
+ display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ white-space:nowrap!important;color:#777!important;-webkit-text-fill-color:#777!important;
+ font-size:11px!important;line-height:1.4!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-copy>small b,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-copy>small b{
+ color:#555!important;-webkit-text-fill-color:#555!important;font-weight:700!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-meta,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-meta{
+ display:flex!important;flex-direction:column!important;align-items:flex-end!important;
+ justify-content:center!important;gap:6px!important;min-width:0!important;
+ white-space:nowrap!important;color:#888!important;
+}
+html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-meta time,
+html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-meta time{
+ color:#888!important;-webkit-text-fill-color:#888!important;font-size:10px!important;
+}
+@media(max-width:650px){
+ html body #root .app .worker-inbox-panel .workchat-wa-row,
+ html body #root .app .employer-direct-inbox .workchat-wa-row{
+  grid-template-columns:44px minmax(0,1fr) auto!important;
+  min-height:72px!important;padding:10px 5px!important;gap:10px!important;
+ }
+ html body #root .app .worker-inbox-panel .workchat-wa-row .workchat-wa-avatar,
+ html body #root .app .employer-direct-inbox .workchat-wa-row .workchat-wa-avatar{
+  width:42px!important;height:42px!important;min-width:42px!important;
+ }
+}
