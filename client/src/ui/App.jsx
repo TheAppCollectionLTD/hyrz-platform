@@ -951,7 +951,7 @@ function AccountSettings({user,setUser,action,busy,setNotice,onPasswordChanged,p
    {payoutAccounts.length>0?<div className="profile-payment-method-list">{payoutAccounts.map(account=><article className="profile-payment-method-card" key={account.id}>
     <div className="profile-payment-card-icon">▰</div>
     <div className="profile-payment-card-details"><strong>{account.accountHolder}</strong><span>Sort code: {String(account.sortCode||'').replace(/(\d{2})(\d{2})(\d{2})/,'$1-$2-$3')}</span><span>Account ending {String(account.accountNumber||'').slice(-4)}</span>{account.active&&<small className="profile-payment-default">Selected to receive payments</small>}</div>
-    <div className="profile-payment-card-actions"><button type="button" className="textbutton" aria-pressed={Boolean(account.active)} onClick={()=>toggleWorkerPayoutAccount(account.id)}>{account.active?'Turn off':'Use this account'}</button></div>
+    <div className="profile-payment-card-actions"><button type="button" role="switch" className="payout-account-switch" aria-checked={Boolean(account.active)} aria-label={(account.active?'Disable':'Use')+' '+account.accountHolder+' account ending '+String(account.accountNumber||'').slice(-4)} onClick={()=>toggleWorkerPayoutAccount(account.id)}><span className="payout-account-switch-track" aria-hidden="true"><span className="payout-account-switch-thumb"/></span></button></div>
    </article>)}</div>:<div className="profile-payment-empty"><span>▱</span><strong>No bank accounts added</strong><p>Add a UK bank account in your own name to choose where shift payments should be sent.</p></div>}
    {showAddPayoutAccount&&<form className="profile-add-payment-form" onSubmit={saveWorkerPayoutAccount}>
     <h3>Add a bank account</h3>
