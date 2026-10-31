@@ -13666,3 +13666,100 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  #root .app nav.inbox-category-tabs>button,
  #root .app .inbox-category-tabs>button{font-size:11px!important;padding:6px 1px!important}
 }
+
+
+/* Inbox readability correction: light conversation surface with strong text contrast. */
+#root .app .inbox-global-search{
+ min-height:48px!important;padding:0 15px!important;margin:0 0 12px!important;
+ background:#f3f4f4!important;border:1px solid #cbd2d5!important;
+ border-radius:13px!important;color:#39434a!important;
+}
+#root .app .inbox-global-search svg{color:#39434a!important;stroke:#39434a!important}
+#root .app .inbox-global-search input{
+ min-height:44px!important;background:transparent!important;color:#172126!important;
+ font-size:14px!important;font-weight:600!important;
+}
+#root .app .inbox-global-search input::placeholder{color:#59666d!important;opacity:1!important}
+#root .app .inbox-category-tabs{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ padding:5px!important;gap:6px!important;margin:0 0 14px!important;
+ background:#202a30!important;border:1px solid #202a30!important;border-radius:13px!important;
+}
+#root .app .inbox-category-tabs>button,
+#root .app nav.inbox-category-tabs>button{
+ min-width:0!important;min-height:42px!important;padding:8px 4px!important;
+ border:1px solid #526068!important;border-radius:9px!important;
+ background:#35434a!important;color:#ffffff!important;opacity:1!important;
+ font-size:12px!important;font-weight:800!important;text-align:center!important;
+}
+#root .app .inbox-category-tabs>button.active,
+#root .app nav.inbox-category-tabs>button.active{
+ background:#f97316!important;border-color:#f97316!important;color:#171b1e!important;
+}
+#root .app .worker-inbox-panel,
+#root .app .employer-direct-inbox{
+ background:#ffffff!important;border:1px solid #d9dfe2!important;
+ color:#172126!important;border-radius:15px!important;
+}
+#root .app .worker-inbox-panel .worker-direct-inbox,
+#root .app .worker-inbox-panel .direct-conversation-list,
+#root .app .worker-inbox-panel .worker-direct-conversation-list,
+#root .app .worker-inbox-panel .inbox-all-workchats,
+#root .app .worker-inbox-panel .inbox-all-admin-messages,
+#root .app .employer-direct-inbox .direct-conversation-list,
+#root .app .employer-direct-inbox .inbox-all-workchats{
+ background:#ffffff!important;color:#172126!important;
+}
+#root .app .worker-inbox-panel .messaging-chat-row,
+#root .app .employer-direct-inbox .messaging-chat-row,
+#root .app .inbox-all-workchats .messaging-chat-row{
+ min-height:76px!important;background:#ffffff!important;color:#172126!important;
+ border-bottom:1px solid #e1e6e8!important;
+}
+#root .app .worker-inbox-panel .messaging-chat-row:hover,
+#root .app .employer-direct-inbox .messaging-chat-row:hover,
+#root .app .inbox-all-workchats .messaging-chat-row:hover{background:#f4f6f7!important}
+#root .app .worker-inbox-panel .messaging-chat-copy strong,
+#root .app .employer-direct-inbox .messaging-chat-copy strong,
+#root .app .inbox-all-workchats .messaging-chat-copy strong{
+ color:#172126!important;font-size:15px!important;font-weight:800!important;
+}
+#root .app .worker-inbox-panel .messaging-chat-copy small,
+#root .app .employer-direct-inbox .messaging-chat-copy small,
+#root .app .inbox-all-workchats .messaging-chat-copy small{
+ color:#526169!important;font-size:13px!important;font-weight:500!important;
+}
+#root .app .worker-inbox-panel .messaging-chat-meta,
+#root .app .employer-direct-inbox .messaging-chat-meta{
+ color:#526169!important;font-size:11px!important;
+}
+#root .app .inbox-all-workchats h3,
+#root .app .inbox-all-admin-messages h3,
+#root .app .employer-direct-inbox .direct-conversation-list>h3{
+ display:block!important;margin:0!important;padding:14px 16px!important;
+ background:#f1f3f4!important;border-bottom:1px solid #dfe4e6!important;
+ color:#26343b!important;font-size:12px!important;font-weight:850!important;
+ letter-spacing:.06em!important;text-transform:uppercase!important;
+}
+#root .app .worker-inbox-panel .inbox-chat-search{display:none!important}
+#root .app .worker-inbox-panel .worker-inbox-message-button,
+#root .app .worker-inbox-panel .worker-inbox-message-button *{
+ color:#172126!important;
+}
+#root .app .worker-inbox-panel .worker-inbox-message-preview{color:#526169!important}
+#root .app .worker-inbox-panel .worker-inbox-message-button .worker-inbox-message-top small,
+#root .app .worker-inbox-panel .worker-inbox-message-button>small{color:#8a3d13!important}
+#root .app .worker-inbox-panel .empty-state,
+#root .app .employer-direct-inbox .empty-state{color:#526169!important}
+#root .app .worker-inbox-panel .messaging-chat-avatar,
+#root .app .employer-direct-inbox .messaging-chat-avatar{
+ background:#e7ecee!important;color:#26343b!important;
+}
+#root .app .worker-inbox-panel .messaging-chat-avatar b,
+#root .app .employer-direct-inbox .messaging-chat-avatar b{color:#26343b!important}
+@media(max-width:600px){
+ #root .app .inbox-category-tabs>button,
+ #root .app nav.inbox-category-tabs>button{font-size:11px!important;padding:7px 2px!important}
+ #root .app .messaging-chat-copy strong{font-size:14px!important}
+ #root .app .messaging-chat-copy small{font-size:12px!important}
+}
