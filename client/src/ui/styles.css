@@ -14099,3 +14099,102 @@ html body #root .app .employer-direct-inbox .hyrz-admin-inbox-intro h3,
 html body #root .app .employer-direct-inbox .inbox-all-workchats h3{
  color:#26343b!important;-webkit-text-fill-color:#26343b!important;
 }
+
+
+/* One identical conversation-card component treatment across All, Workchats, Admins and Employers. */
+html body #root .app .worker-inbox-panel button.inbox-chat-segment,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment{
+ display:grid!important;
+ grid-template-columns:44px minmax(0,1fr) auto!important;
+ grid-template-rows:minmax(0,auto)!important;
+ align-items:center!important;
+ column-gap:12px!important;row-gap:0!important;
+ width:100%!important;min-width:0!important;min-height:76px!important;
+ box-sizing:border-box!important;
+ margin:0 0 7px!important;padding:10px 11px!important;
+ border:1px solid #aeb4b7!important;border-radius:0!important;
+ background:#f0f0f0!important;color:#172126!important;
+ text-align:left!important;text-decoration:none!important;
+ box-shadow:none!important;outline-offset:2px!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-avatar,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-avatar{
+ grid-column:1!important;grid-row:1!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:42px!important;height:42px!important;min-width:42px!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;
+ overflow:hidden!important;background:#fce8dc!important;color:#172126!important;
+ font-size:15px!important;font-weight:800!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-avatar img,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-avatar img{
+ display:block!important;width:100%!important;height:100%!important;
+ object-fit:cover!important;border-radius:50%!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-avatar b,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-avatar b{
+ color:#172126!important;-webkit-text-fill-color:#172126!important;
+ font-size:15px!important;font-weight:800!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-copy,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-copy{
+ grid-column:2!important;grid-row:1!important;
+ display:flex!important;flex-direction:column!important;
+ align-items:flex-start!important;justify-content:center!important;
+ gap:4px!important;width:100%!important;min-width:0!important;
+ margin:0!important;padding:0!important;text-align:left!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-copy strong,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-copy strong{
+ display:block!important;width:100%!important;min-width:0!important;
+ margin:0!important;padding:0!important;
+ color:#171b1e!important;-webkit-text-fill-color:#171b1e!important;
+ font-size:14px!important;font-weight:800!important;line-height:1.25!important;
+ text-align:left!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-copy small,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-copy small{
+ display:block!important;width:100%!important;min-width:0!important;
+ margin:0!important;padding:0!important;
+ color:#515b60!important;-webkit-text-fill-color:#515b60!important;
+ font-size:11px!important;font-weight:400!important;line-height:1.35!important;
+ text-align:left!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-meta,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-meta{
+ grid-column:3!important;grid-row:1!important;
+ display:flex!important;flex-direction:column!important;align-items:flex-end!important;
+ justify-content:center!important;gap:5px!important;
+ min-width:32px!important;margin:0!important;padding:0!important;
+ color:#515b60!important;-webkit-text-fill-color:#515b60!important;
+ font-size:10px!important;text-align:right!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-meta time,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-meta time{
+ color:#515b60!important;-webkit-text-fill-color:#515b60!important;
+ font-size:10px!important;white-space:nowrap!important;
+}
+html body #root .app .worker-inbox-panel button.inbox-chat-segment:hover,
+html body #root .app .employer-direct-inbox button.inbox-chat-segment:hover{
+ background:#e8e8e8!important;
+}
+html body #root .app .worker-inbox-panel .direct-conversation-list,
+html body #root .app .worker-inbox-panel .worker-direct-conversation-list,
+html body #root .app .worker-inbox-panel .inbox-all-workchats,
+html body #root .app .worker-inbox-panel .inbox-all-admin-messages,
+html body #root .app .hyrz-admin-message-feed,
+html body #root .app .employer-conversation-list{
+ display:flex!important;flex-direction:column!important;gap:0!important;
+ background:#fff!important;
+}
+@media(max-width:600px){
+ html body #root .app .worker-inbox-panel button.inbox-chat-segment,
+ html body #root .app .employer-direct-inbox button.inbox-chat-segment{
+  grid-template-columns:42px minmax(0,1fr) auto!important;
+  min-height:74px!important;padding:9px!important;column-gap:10px!important;
+ }
+ html body #root .app .worker-inbox-panel button.inbox-chat-segment .messaging-chat-avatar,
+ html body #root .app .employer-direct-inbox button.inbox-chat-segment .messaging-chat-avatar{
+  width:40px!important;height:40px!important;min-width:40px!important;
+ }
+}
