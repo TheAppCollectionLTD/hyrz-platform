@@ -13128,3 +13128,24 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app.employer main.page-workchats .employer-workchat-card>.workchat-list{display:flex!important;flex-direction:column!important;gap:0!important;border-top:1px solid #eee9e4!important}
 #root .app.employer main.page-workchats .employer-workchat-card .workchat-item-minimal{display:grid!important;grid-template-columns:48px minmax(0,1fr) auto!important;align-items:center!important;gap:12px!important;padding:12px 6px!important;border:0!important;border-bottom:1px solid #eee9e4!important;border-radius:0!important;background:#fff!important;box-shadow:none!important}
 #root .app.employer main.page-workchats .employer-workchat-card .workchat-item-minimal:hover{background:#faf8f6!important}
+
+
+/* Keep the Chats and Admins section switcher permanently visible. */
+#root .app .worker-inbox-panel nav.inbox-section-tabs{
+ display:flex!important;visibility:visible!important;opacity:1!important;position:relative!important;
+ width:100%!important;min-width:0!important;overflow:visible!important;flex-wrap:nowrap!important;
+ align-items:stretch!important;justify-content:flex-start!important;gap:0!important;
+ padding:0 16px!important;margin:0!important;background:#fff!important;
+ border:0!important;border-bottom:1px solid #eee9e4!important;
+}
+#root .app .worker-inbox-panel nav.inbox-section-tabs>button{
+ display:flex!important;visibility:visible!important;opacity:1!important;flex:1 1 50%!important;
+ width:50%!important;min-width:0!important;max-width:50%!important;min-height:46px!important;
+ align-items:center!important;justify-content:center!important;margin:0!important;padding:10px 8px!important;
+ border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;
+ background:transparent!important;color:#777!important;font-size:13px!important;font-weight:750!important;
+ white-space:nowrap!important;box-shadow:none!important;
+}
+#root .app .worker-inbox-panel nav.inbox-section-tabs>button.active{
+ border-bottom-color:#c2410c!important;background:#fff!important;color:#171717!important;
+}
