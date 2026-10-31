@@ -146,14 +146,22 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     res.json({conversations:rows.map(row=>({...row,unread_count:Number(row.unread_count||0)}))});
   }));
 
-  app.post('/api/conversations', auth, allow('employer'), asyncRoute(async(req,res) => {
+  app.post('/api/conversations', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
     await ensureDirectMessages;
-    const workerId=Number(req.body.workerId);
-    if(!Number.isInteger(workerId)||workerId<1)return res.status(400).json({error:'Choose a worker to start a conversation.'});
-    const [workers]=await db.execute("SELECT id FROM users WHERE id=? AND role='worker' AND status='active'",[workerId]);
-    if(!workers.length)return res.status(404).json({error:'Active worker not found.'});
-    await db.execute('INSERT IGNORE INTO employer_worker_conversations(employer_user_id,worker_user_id) VALUES(?,?)',[req.user.id,workerId]);
-    const [rows]=await db.execute('SELECT id FROM employer_worker_conversations WHERE employer_user_id=? AND worker_user_id=?',[req.user.id,workerId]);
+    let employerId,workerId;
+    if(req.user.role==='employer'){
+      employerId=Number(req.user.id);workerId=Number(req.body.workerId);
+      if(!Number.isInteger(workerId)||workerId<1)return res.status(400).json({error:'Choose a worker to start a conversation.'});
+      const [workers]=await db.execute("SELECT id FROM users WHERE id=? AND role='worker' AND status='active'",[workerId]);
+      if(!workers.length)return res.status(404).json({error:'Active worker not found.'});
+    }else{
+      employerId=Number(req.body.employerUserId);workerId=Number(req.user.id);
+      if(!Number.isInteger(employerId)||employerId<1)return res.status(400).json({error:'Choose an employer to start a conversation.'});
+      const [employers]=await db.execute("SELECT u.id FROM users u WHERE u.id=? AND u.role='employer' AND u.status='active' AND EXISTS(SELECT 1 FROM businesses b WHERE b.owner_user_id=u.id)",[employerId]);
+      if(!employers.length)return res.status(404).json({error:'Active employer not found.'});
+    }
+    await db.execute('INSERT IGNORE INTO employer_worker_conversations(employer_user_id,worker_user_id) VALUES(?,?)',[employerId,workerId]);
+    const [rows]=await db.execute('SELECT id FROM employer_worker_conversations WHERE employer_user_id=? AND worker_user_id=?',[employerId,workerId]);
     res.status(201).json({conversationId:Number(rows[0].id)});
   }));
 
