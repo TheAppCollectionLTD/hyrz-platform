@@ -127,11 +127,15 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const ownerColumn=isEmployer?'c.employer_user_id':'c.worker_user_id';
     const [rows]=await db.execute(`
       SELECT c.id,c.employer_user_id,c.worker_user_id,c.created_at,c.last_message_at,
-        u.id AS participant_id,u.first_name AS participant_first_name,u.last_name AS participant_last_name,u.email AS participant_email,
+        u.id AS participant_id,u.first_name AS participant_first_name,u.last_name AS participant_last_name,u.email AS participant_email,u.profile_picture AS participant_profile_picture,
+        CASE WHEN COALESCE(pref.last_seen_visibility,'everyone')='everyone' THEN u.last_seen_at ELSE NULL END AS participant_last_seen_at,
         (SELECT COUNT(*) FROM employer_worker_messages m WHERE m.conversation_id=c.id AND m.sender_id<>? AND m.read_at IS NULL) AS unread_count,
-        (SELECT m.body FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message
+        (SELECT m.body FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message,
+        (SELECT m.sender_id FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message_sender_id,
+        (SELECT m.created_at FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message_created_at
       FROM employer_worker_conversations c
       JOIN users u ON u.id=IF(?=1,c.worker_user_id,c.employer_user_id)
+      LEFT JOIN user_messaging_preferences pref ON pref.user_id=u.id
       WHERE ${ownerColumn}=?
       ORDER BY COALESCE(c.last_message_at,c.created_at) DESC,c.id DESC
     `,[req.user.id,isEmployer?1:0,req.user.id]);
@@ -154,7 +158,8 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const id=Number(req.params.id);
     const [conversations]=await db.execute('SELECT id FROM employer_worker_conversations WHERE id=? AND (employer_user_id=? OR worker_user_id=?)',[id,req.user.id,req.user.id]);
     if(!conversations.length)return res.status(404).json({error:'Conversation not found.'});
-    await db.execute('UPDATE employer_worker_messages SET read_at=NOW() WHERE conversation_id=? AND sender_id<>? AND read_at IS NULL',[id,req.user.id]);
+    const privacy=await getMessagingPreferences(req.user.id);
+    if(privacy.read_receipts_enabled)await db.execute('UPDATE employer_worker_messages SET read_at=COALESCE(read_at,UTC_TIMESTAMP()) WHERE conversation_id=? AND sender_id<>? AND read_at IS NULL',[id,req.user.id]);
     const [messages]=await db.execute(`SELECT m.id,m.conversation_id,m.sender_id,m.body,m.read_at,m.created_at,u.first_name AS sender_first_name,u.last_name AS sender_last_name,u.role AS sender_role
       FROM employer_worker_messages m JOIN users u ON u.id=m.sender_id
       WHERE m.conversation_id=? ORDER BY m.created_at ASC,m.id ASC`,[id]);
@@ -230,9 +235,15 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await audit(req,'workchat.created','workchat',id,{participantCount:ids.length});res.status(201).json({workchatId:id});
   }));
   app.get('/api/workchats/:id/messages',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
-    await Promise.all([ensureWorkchatMessageDeletionColumns(),ensureProfilePictureColumn]);const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);if(!chat)return res.status(404).json({error:'Workchat not found.'});
-    await db.execute('UPDATE workchat_participants SET last_read_at=NOW() WHERE workchat_id=? AND user_id=?',[id,req.user.id]);
-    const [messages]=await db.execute(`SELECT m.id,m.workchat_id,m.sender_id,m.body,m.created_at,u.first_name sender_first_name,u.last_name sender_last_name,u.role sender_role,u.profile_picture sender_profile_picture,m.deleted_at,m.deleted_by,m.reply_to_message_id,reply.body AS reply_body,reply.deleted_at AS reply_deleted_at,replyUser.first_name AS reply_sender_first_name,replyUser.last_name AS reply_sender_last_name,wp.pinned_at,wp.pinned_by FROM workchat_messages m JOIN users u ON u.id=m.sender_id LEFT JOIN workchat_messages reply ON reply.id=m.reply_to_message_id AND reply.workchat_id=m.workchat_id LEFT JOIN users replyUser ON replyUser.id=reply.sender_id LEFT JOIN workchat_pins wp ON wp.message_id=m.id AND wp.workchat_id=m.workchat_id WHERE m.workchat_id=? ORDER BY m.id ASC`,[id]);
+    await Promise.all([ensureWorkchatMessageDeletionColumns(),ensureProfilePictureColumn,ensureMessaging()]);
+    const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);if(!chat)return res.status(404).json({error:'Workchat not found.'});
+    const privacy=await getMessagingPreferences(req.user.id);
+    await db.execute('UPDATE workchat_participants SET last_read_at=UTC_TIMESTAMP() WHERE workchat_id=? AND user_id=?',[id,req.user.id]);
+    if(privacy.read_receipts_enabled)await db.execute('INSERT IGNORE INTO workchat_message_reads(message_id,user_id) SELECT id,? FROM workchat_messages WHERE workchat_id=? AND sender_id<>? AND deleted_at IS NULL',[req.user.id,id,req.user.id]);
+    const [messages]=await db.execute(`SELECT m.id,m.workchat_id,m.sender_id,m.body,m.created_at,u.first_name sender_first_name,u.last_name sender_last_name,u.role sender_role,u.profile_picture sender_profile_picture,m.deleted_at,m.deleted_by,m.reply_to_message_id,reply.body AS reply_body,reply.deleted_at AS reply_deleted_at,replyUser.first_name AS reply_sender_first_name,replyUser.last_name AS reply_sender_last_name,wp.pinned_at,wp.pinned_by,
+      (SELECT COUNT(*) FROM workchat_message_reads mr WHERE mr.message_id=m.id AND mr.user_id<>m.sender_id) AS read_by_count,
+      (SELECT COUNT(*) FROM workchat_participants rp WHERE rp.workchat_id=m.workchat_id AND rp.user_id<>m.sender_id) AS recipient_count
+      FROM workchat_messages m JOIN users u ON u.id=m.sender_id LEFT JOIN workchat_messages reply ON reply.id=m.reply_to_message_id AND reply.workchat_id=m.workchat_id LEFT JOIN users replyUser ON replyUser.id=reply.sender_id LEFT JOIN workchat_pins wp ON wp.message_id=m.id AND wp.workchat_id=m.workchat_id WHERE m.workchat_id=? ORDER BY m.id ASC`,[id]);
     const [participants]=await db.execute(`SELECT u.id,u.first_name,u.last_name,u.email,u.role,u.profile_picture,EXISTS(SELECT 1 FROM workchat_admins wa WHERE wa.workchat_id=p.workchat_id AND wa.user_id=p.user_id) AS is_admin FROM workchat_participants p JOIN users u ON u.id=p.user_id JOIN workchats w ON w.id=p.workchat_id WHERE p.workchat_id=? ORDER BY CASE WHEN p.user_id=w.employer_user_id THEN 0 WHEN EXISTS(SELECT 1 FROM workchat_admins wa2 WHERE wa2.workchat_id=p.workchat_id AND wa2.user_id=p.user_id) THEN 1 ELSE 2 END, p.added_at, u.first_name, u.last_name`,[id]);
     const [reactionRows]=await db.execute(`SELECT message_id,emoji,COUNT(*) AS count,GROUP_CONCAT(user_id) AS user_ids FROM workchat_message_reactions WHERE workchat_id=? GROUP BY message_id,emoji`,[id]);
     const reactionsByMessage={};for(const row of reactionRows){((reactionsByMessage[row.message_id] ||= [])).push({emoji:row.emoji,count:Number(row.count),reacted_by_me:String(row.user_ids||'').split(',').includes(String(req.user.id))});}
