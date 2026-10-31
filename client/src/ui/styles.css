@@ -14961,3 +14961,39 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
 #root .app .inbox-chat-overlay .direct-message-compose textarea{flex:1!important;min-width:0!important;min-height:44px!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#fff!important}
 #root .app .inbox-chat-overlay .direct-message-compose button{min-height:42px!important;padding:9px 18px!important;border:0!important;border-radius:999px!important;background:#ff7900!important;color:#fff!important}
 @media(max-width:600px){#root .app .worker-inbox-thread-message{max-width:88%!important}#root .app .worker-inbox-thread-reply{flex-direction:row!important;align-items:center!important}#root .app .inbox-chat-overlay .direct-message-compose{flex-direction:row!important;align-items:center!important}}
+
+
+/* Full-screen individual chat view: remove inbox chrome while a thread is open */
+html body #root .app.inbox-screen:has(.hyrz-admin-thread) .page-inbox>header,
+html body #root .app.inbox-screen:has(.hyrz-admin-thread) .page-inbox>.worker-subsection-toolbar,
+html body #root .app.inbox-screen:has(.hyrz-admin-thread) .page-inbox>.inbox-global-search,
+html body #root .app.inbox-screen:has(.hyrz-admin-thread) .page-inbox>.inbox-category-tabs{display:none!important}
+html body #root .app.inbox-screen:has(.hyrz-admin-thread) .page-inbox{padding-top:0!important}
+html body #root .app.inbox-screen:has(.hyrz-admin-thread) .worker-inbox-panel{display:flex!important;flex-direction:column!important;gap:0!important;width:100%!important;max-width:none!important;min-height:calc(100dvh - 74px)!important;height:calc(100dvh - 74px)!important;max-height:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#080808!important;color:#fff!important;box-shadow:none!important;overflow:hidden!important}
+html body #root .app.inbox-screen .worker-inbox-panel:has(.hyrz-admin-thread) .worker-inbox-heading{display:none!important}
+html body #root .app.inbox-screen .worker-inbox-panel .hyrz-admin-thread{display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:0!important;width:100%!important;min-width:0!important;min-height:0!important;height:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#080808!important;color:#fff!important;box-shadow:none!important;overflow:hidden!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading{display:flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:space-between!important;min-height:76px!important;padding:12px 18px!important;border:0!important;border-bottom:1px solid #303030!important;border-radius:0!important;background:#111!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-thread-identity{display:flex!important;align-items:center!important;gap:12px!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-thread-avatar{display:flex!important;align-items:center!important;justify-content:center!important;width:46px!important;height:46px!important;flex:0 0 46px!important;border-radius:50%!important;background:#ff7900!important;color:#fff!important;font-size:19px!important;font-weight:900!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading h3{margin:0!important;color:#fff!important;font-size:18px!important;font-weight:800!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading small{display:block!important;margin-top:4px!important;color:#aaa!important;font-size:12px!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .icon-back-button{display:flex!important;align-items:center!important;justify-content:center!important;width:44px!important;height:44px!important;min-width:44px!important;padding:0!important;border:1px solid #454545!important;border-radius:50%!important;background:#222!important;color:#fff!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .icon-back-button svg{width:23px!important;height:23px!important;stroke:#fff!important;stroke-width:2.5!important;fill:none!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-chat{display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:16px!important;width:100%!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;margin:0!important;padding:22px 18px!important;border:0!important;border-radius:0!important;background:#080808!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-message-content{max-width:min(78%,620px)!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer{display:flex!important;flex:0 0 auto!important;flex-direction:row!important;align-items:center!important;gap:10px!important;width:100%!important;margin:0!important;padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;border:0!important;border-top:1px solid #303030!important;border-radius:0!important;background:#111!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer textarea{min-height:46px!important;max-height:120px!important;padding:12px 16px!important;border:1px solid #444!important;border-radius:24px!important;background:#202020!important;color:#fff!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer .hyrz-chat-tool{width:44px!important;height:44px!important;flex:0 0 44px!important;border:0!important;background:transparent!important;color:#ff7900!important;font-size:28px!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer button.primary{min-height:44px!important;padding:0 20px!important;border:0!important;border-radius:24px!important;background:#ff7900!important;color:#fff!important;font-weight:800!important}
+html body #root .app.inbox-screen:has(.worker-inbox-panel .hyrz-direct-chat) .page-inbox>header,
+html body #root .app.inbox-screen:has(.worker-inbox-panel .hyrz-direct-chat) .page-inbox>.worker-subsection-toolbar,
+html body #root .app.inbox-screen:has(.worker-inbox-panel .hyrz-direct-chat) .page-inbox>.inbox-global-search,
+html body #root .app.inbox-screen:has(.worker-inbox-panel .hyrz-direct-chat) .page-inbox>.inbox-category-tabs{display:none!important}
+@media(max-width:760px){
+ html body #root .app.inbox-screen:has(.hyrz-admin-thread) .worker-inbox-panel{min-height:calc(100dvh - 62px)!important;height:calc(100dvh - 62px)!important}
+ html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading{min-height:68px!important;padding:10px 14px!important}
+ html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-chat{padding:16px 12px!important}
+ html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-message-content{max-width:88%!important}
+ html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer{gap:6px!important;padding:9px 8px calc(9px + env(safe-area-inset-bottom))!important}
+ html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer button.primary{min-width:62px!important;padding:0 14px!important}
+}
