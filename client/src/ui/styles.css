@@ -15206,3 +15206,41 @@ html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .w
  #root .app .workchat-conversation-title-copy p{font-size:9px!important}
  #root .app .workchat-conversation-actions .workchat-header-icon{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important}
 }
+
+
+/* Workchat back control sits in the Inbox title row, between title and sign-out. */
+@media(max-width:650px){
+ html body #root .app.inbox-screen>main.page-inbox>header{
+  display:flex!important;align-items:center!important;gap:9px!important;
+ }
+ html body #root .app.inbox-screen>main.page-inbox>header>div{flex:1 1 auto!important}
+ html body #root .app.inbox-screen .workchat-top-back{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 38px!important;width:38px!important;min-width:38px!important;height:38px!important;
+  margin:0!important;padding:0!important;border:1px solid #d7dce0!important;border-radius:10px!important;
+  background:#fff!important;color:#172027!important;box-shadow:0 1px 3px rgba(0,0,0,.12)!important;
+ }
+ html body #root .app.inbox-screen .workchat-top-back svg{
+  display:block!important;width:22px!important;height:22px!important;fill:none!important;
+  stroke:currentColor!important;stroke-width:2.4!important;stroke-linecap:round!important;stroke-linejoin:round!important;
+ }
+}
+html body #root .app.inbox-screen .workchat-conversation-header{
+ background:#202522!important;color:#fff!important;
+}
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-conversation-title-copy h3,
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-conversation-title-copy h3 *,
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-conversation-title-copy p{
+ color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important;
+ text-shadow:0 1px 2px rgba(0,0,0,.35)!important;
+}
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-conversation-title-copy p{
+ color:#e1e8e3!important;-webkit-text-fill-color:#e1e8e3!important;
+ font-weight:600!important;
+}
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-profile-avatar{
+ background:#f97316!important;color:#171b1e!important;border:2px solid #fff!important;
+}
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-profile-avatar span{
+ color:#171b1e!important;-webkit-text-fill-color:#171b1e!important;font-weight:850!important;
+}
