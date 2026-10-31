@@ -14842,3 +14842,30 @@ html body #root .app.inbox-screen .hyrz-mobile-bottom-nav{
  }
  html body #root .app.inbox-screen .hyrz-mobile-bottom-nav>button.selected svg{stroke:#080808!important}
 }
+
+
+/* Subtle interaction feedback for every inbox conversation row */
+html body #root .app.inbox-screen .workchat-wa-row,
+html body #root .app.inbox-screen .workchat-wa-row-past{
+ transition:background-color 140ms ease, box-shadow 140ms ease!important;
+}
+html body #root .app.inbox-screen .workchat-wa-row:hover,
+html body #root .app.inbox-screen .workchat-wa-row-past:hover{
+ background:#f4f5f6!important;
+}
+html body #root .app.inbox-screen .workchat-wa-row:active,
+html body #root .app.inbox-screen .workchat-wa-row-past:active{
+ background:#eceff1!important;
+}
+html body #root .app.inbox-screen .workchat-wa-row:focus-visible,
+html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
+ outline:2px solid rgba(255,121,0,.55)!important;
+ outline-offset:-2px!important;
+ background:#f4f5f6!important;
+}
+@media(hover:none){
+ html body #root .app.inbox-screen .workchat-wa-row:active,
+ html body #root .app.inbox-screen .workchat-wa-row-past:active{
+  background:#f0f1f2!important;
+ }
+}
