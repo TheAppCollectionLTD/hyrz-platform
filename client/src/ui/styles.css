@@ -15037,3 +15037,73 @@ html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .w
  html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .direct-thread-heading{min-height:68px!important;padding:10px 14px!important}
 }
 
+
+
+/* Make Inbox category tabs fully visible above the chat search. */
+#root .app .inbox-category-tabs{
+  display:grid!important;
+  position:relative!important;
+  inset:auto!important;
+  z-index:2!important;
+  visibility:visible!important;
+  opacity:1!important;
+  transform:none!important;
+  clip-path:none!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:54px!important;
+  max-height:none!important;
+  flex:none!important;
+  gap:6px!important;
+  margin:0 0 12px!important;
+  padding:5px!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+  border:1px solid #35413c!important;
+  border-radius:14px!important;
+  background:#111b21!important;
+}
+#root .app .inbox-category-tabs>button{
+  display:flex!important;
+  position:relative!important;
+  visibility:visible!important;
+  opacity:1!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:42px!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:8px 4px!important;
+  overflow:visible!important;
+  border:1px solid #53616a!important;
+  border-radius:10px!important;
+  background:#26343c!important;
+  color:#f1f5f6!important;
+  font-size:12px!important;
+  font-weight:800!important;
+  line-height:1.2!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+#root .app .inbox-category-tabs>button.active{
+  border-color:#f97316!important;
+  background:#f97316!important;
+  color:#171b1e!important;
+  box-shadow:0 2px 8px rgba(249,115,22,.25)!important;
+}
+#root .app .inbox-global-search{
+  position:relative!important;
+  z-index:1!important;
+  display:flex!important;
+  width:100%!important;
+  min-height:48px!important;
+  height:auto!important;
+  margin:0 0 14px!important;
+  box-sizing:border-box!important;
+}
