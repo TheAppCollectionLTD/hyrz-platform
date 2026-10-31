@@ -15107,3 +15107,45 @@ html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .w
   margin:0 0 14px!important;
   box-sizing:border-box!important;
 }
+
+
+/* Keep the Inbox sign-out control within its heading row on mobile. */
+@media(max-width:650px){
+  html body #root .app.inbox-screen>main.page-inbox>header{
+    position:relative!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    min-height:54px!important;
+    height:auto!important;
+    margin:0 0 12px!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+  html body #root .app.inbox-screen>main.page-inbox>header>div{
+    flex:1 1 auto!important;
+    min-width:0!important;
+  }
+  html body #root .app.inbox-screen>main.page-inbox>header h1{
+    font-size:30px!important;
+    line-height:1.1!important;
+    letter-spacing:-1px!important;
+  }
+  html body #root .app.inbox-screen .content-signout-icon{
+    position:relative!important;
+    inset:auto!important;
+    flex:0 0 42px!important;
+    width:42px!important;
+    min-width:42px!important;
+    height:42px!important;
+    min-height:42px!important;
+    margin:0!important;
+    padding:0!important;
+    border-radius:10px!important;
+  }
+  html body #root .app.inbox-screen .content-signout-icon svg{
+    width:22px!important;
+    height:22px!important;
+  }
+}
