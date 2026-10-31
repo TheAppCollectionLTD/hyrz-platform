@@ -13149,3 +13149,58 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .worker-inbox-panel nav.inbox-section-tabs>button.active{
  border-bottom-color:#c2410c!important;background:#fff!important;color:#171717!important;
 }
+
+
+/* Refined pinned-message shelf: clear pin mark, hierarchy and tap target. */
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-section{
+ display:block!important;padding:13px 14px 14px!important;background:#fff!important;
+ border-top:1px solid #eee8e2!important;border-bottom:1px solid #eee8e2!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-heading{
+ display:flex!important;align-items:center!important;gap:10px!important;margin:0 0 11px!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pin-icon{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:34px!important;height:34px!important;flex:0 0 34px!important;border-radius:11px!important;
+ background:#fff0e7!important;color:#bd4a16!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pin-icon svg{display:block!important;width:19px!important;height:19px!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-heading>span:last-child{
+ display:flex!important;flex-direction:column!important;gap:2px!important;min-width:0!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-heading strong{
+ color:#211d1a!important;font-size:12px!important;font-weight:800!important;line-height:1.2!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-heading small{
+ color:#89817b!important;font-size:10px!important;line-height:1.2!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-items{
+ display:flex!important;flex-direction:column!important;gap:8px!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-item{
+ display:flex!important;flex:1 1 auto!important;flex-direction:column!important;align-items:stretch!important;
+ gap:7px!important;width:100%!important;min-width:0!important;padding:11px 12px!important;
+ border:1px solid #eee6df!important;border-left:3px solid #d45a22!important;border-radius:10px!important;
+ background:#fffdfb!important;color:#29231f!important;text-align:left!important;box-shadow:0 1px 3px rgba(35,20,10,.035)!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-item:hover{
+ background:#fff7f1!important;border-color:#e9c7b4!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-item-top{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-item-top strong{
+ color:#332a24!important;font-size:11px!important;font-weight:800!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-item-top small{
+ color:#938982!important;font-size:9px!important;white-space:nowrap!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-preview{
+ display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;
+ overflow:hidden!important;color:#514943!important;font-size:11px!important;line-height:1.45!important;overflow-wrap:anywhere!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-open{
+ display:flex!important;align-items:center!important;gap:5px!important;margin-top:1px!important;
+ color:#b94b19!important;font-size:10px!important;font-weight:800!important;
+}
+#root .app main.page-workchats .worker-workchat-panel .workchat-pinned-open svg{width:14px!important;height:14px!important}
