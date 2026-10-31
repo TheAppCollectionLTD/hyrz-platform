@@ -12908,3 +12908,55 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  #root .app main.page-workchats .worker-workchat-panel .workchat-composer{grid-template-columns:minmax(0,1fr) auto!important}
  #root .app main.page-workchats .worker-workchat-panel .workchat-composer>button[type="submit"]{width:auto!important;min-width:66px!important}
 }
+
+
+/* Employer workchat list: compact conversation rows and familiar chat controls. */
+#root .app main.page-workchats .employer-welcome{max-width:960px!important;margin:0 auto!important}
+#root .app main.page-workchats .employer-hero{padding:18px 20px!important;border-radius:16px!important}
+#root .app main.page-workchats .employer-hero h2{font-size:clamp(22px,4vw,30px)!important;line-height:1.12!important}
+#root .app main.page-workchats .workchat-critical-info{gap:10px!important;margin:12px 0!important}
+#root .app main.page-workchats .workchat-critical-box{padding:12px 14px!important;border-radius:12px!important}
+#root .app main.page-workchats .employer-workchat-card{padding:16px!important;border:1px solid #eee9e4!important;border-radius:16px!important;background:#fff!important;box-shadow:0 5px 20px rgba(25,20,16,.05)!important}
+#root .app main.page-workchats .employer-workchat-card>.eyebrow,
+#root .app main.page-workchats .employer-workchat-card>h3{display:none!important}
+#root .app main.page-workchats .workchat-section-tabs{
+  display:flex!important;gap:5px!important;padding:5px!important;margin:0 0 13px!important;border:0!important;border-radius:12px!important;background:#f5f3f1!important;
+}
+#root .app main.page-workchats .workchat-section-tabs button{
+  flex:1 1 0!important;min-width:0!important;padding:10px 8px!important;border:0!important;border-radius:9px!important;
+  background:transparent!important;color:#666!important;font-size:11px!important;font-weight:750!important;text-align:center!important;
+}
+#root .app main.page-workchats .workchat-section-tabs button.selected{background:#fff!important;color:#c2410c!important;box-shadow:0 1px 4px rgba(0,0,0,.09)!important}
+#root .app main.page-workchats .employer-workchat-search{margin-bottom:12px!important}
+#root .app main.page-workchats .employer-workchat-card>.workchat-list{
+  display:flex!important;flex-direction:column!important;gap:0!important;margin:0!important;padding:0!important;
+  overflow:hidden!important;border:1px solid #eee9e4!important;border-radius:13px!important;background:#fff!important;
+}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-minimal{
+  display:grid!important;grid-template-columns:46px minmax(0,1fr) auto!important;align-items:center!important;gap:12px!important;
+  min-height:74px!important;padding:12px 13px!important;border:0!important;border-bottom:1px solid #f0eeeb!important;
+  border-radius:0!important;background:#fff!important;box-shadow:none!important;
+}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-minimal:last-child{border-bottom:0!important}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-minimal:hover{background:#fffaf6!important}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-avatar{
+  width:46px!important;height:46px!important;border:0!important;border-radius:50%!important;background:#fff0e6!important;color:#c2410c!important;
+}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-copy{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-copy strong{font-size:13px!important;font-weight:800!important;color:#171717!important}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-copy small{
+  display:block!important;margin:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+  color:#777!important;font-size:11px!important;line-height:1.35!important;
+}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-copy small b{color:#555!important}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-trailing{display:flex!important;flex-direction:column!important;align-items:flex-end!important;gap:7px!important}
+#root .app main.page-workchats .employer-workchat-card .workchat-item-trailing time{font-size:10px!important;color:#888!important;white-space:nowrap!important}
+#root .app main.page-workchats .employer-workchat-card .workchat-unread-count{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;
+  padding:0 5px!important;border-radius:999px!important;background:#c2410c!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
+}
+@media(max-width:650px){
+ #root .app main.page-workchats .employer-hero{padding:14px!important}
+ #root .app main.page-workchats .employer-workchat-card{padding:11px!important}
+ #root .app main.page-workchats .workchat-section-tabs button{font-size:10px!important;padding:9px 4px!important}
+}
