@@ -135,7 +135,8 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
         (SELECT COUNT(*) FROM employer_worker_messages m WHERE m.conversation_id=c.id AND m.sender_id<>? AND m.read_at IS NULL) AS unread_count,
         (SELECT m.body FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message,
         (SELECT m.sender_id FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message_sender_id,
-        (SELECT m.created_at FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message_created_at
+        (SELECT m.created_at FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message_created_at,
+        (SELECT CASE WHEN m.read_receipt_visible=1 THEN m.read_at ELSE NULL END FROM employer_worker_messages m WHERE m.conversation_id=c.id ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS last_message_read_at
       FROM employer_worker_conversations c
       JOIN users u ON u.id=IF(?=1,c.worker_user_id,c.employer_user_id)
       LEFT JOIN user_messaging_preferences pref ON pref.user_id=u.id
@@ -218,7 +219,9 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
       (SELECT body FROM workchat_messages m WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message,
       (SELECT m.sender_id FROM workchat_messages m WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message_sender_id,
       (SELECT m.created_at FROM workchat_messages m WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message_created_at,
-      (SELECT CONCAT_WS(' ',u.first_name,u.last_name) FROM workchat_messages m JOIN users u ON u.id=m.sender_id WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message_sender_name
+      (SELECT CONCAT_WS(' ',u.first_name,u.last_name) FROM workchat_messages m JOIN users u ON u.id=m.sender_id WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message_sender_name,
+      (SELECT COUNT(*) FROM workchat_message_reads mr JOIN workchat_messages lm ON lm.id=mr.message_id JOIN workchat_participants rp ON rp.workchat_id=lm.workchat_id AND rp.user_id=mr.user_id WHERE lm.workchat_id=w.id AND lm.id=(SELECT MAX(mx.id) FROM workchat_messages mx WHERE mx.workchat_id=w.id) AND mr.user_id<>lm.sender_id) last_message_read_count,
+      (SELECT COUNT(*) FROM workchat_participants rp JOIN workchat_messages lm ON lm.workchat_id=rp.workchat_id WHERE lm.workchat_id=w.id AND lm.id=(SELECT MAX(mx.id) FROM workchat_messages mx WHERE mx.workchat_id=w.id) AND rp.user_id<>lm.sender_id) last_message_recipient_count
       FROM workchats w LEFT JOIN workchat_settings ws ON ws.workchat_id=w.id
       WHERE w.employer_user_id=? OR EXISTS(SELECT 1 FROM workchat_participants p WHERE p.workchat_id=w.id AND p.user_id=?) ORDER BY COALESCE(w.last_message_at,w.created_at) DESC,w.id DESC`,[req.user.id,req.user.id,req.user.id,req.user.id]);
     const ids=rows.map(x=>Number(x.id));let members={};
