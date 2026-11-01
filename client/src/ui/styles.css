@@ -10824,7 +10824,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 @media(max-width:760px){.app.employer .employer-todays-overview .worker-todays-shift-card{padding:11px 12px;gap:5px 9px}.app.employer .employer-todays-overview .worker-todays-shift-card>span{flex-basis:130px;font-size:10px}.app.employer .employer-dashboard-sections{padding:14px}}
 
 
-/* Hyrz brand refresh: orange, black and white. Keep the palette consistent across public, worker, employer and admin screens. */
+/* Hyrz brand refresh: raspberry red and white. Keep the palette consistent across public, worker, employer and admin screens. */
 :root{--hyrz-orange:#C2184B;--hyrz-orange-hover:#A3133D;--hyrz-black:#111111;--hyrz-white:#FFFFFF;--hyrz-page:#F7F7F7;--hyrz-border:#E5E5E5;--hyrz-muted:#666666;}
 :root{color:var(--hyrz-black);background:var(--hyrz-page)}
 body{background:var(--hyrz-page);color:var(--hyrz-black)}
@@ -10876,7 +10876,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .worker-bottom-nav,#root .app .mobile-bottom-nav,#root .app .worker-mobile-nav,#root .app .bottom-nav{background:#111111!important;}
 
 
-/* Contract acceptance switch: make the accepted/on state unmistakably Hyrz orange. */
+/* Contract acceptance switch: use the refined Hyrz raspberry-red brand. */
 #root .shift-application-contract-agreement input[type="checkbox"]:checked,
 #root .shift-contract-agreement input[type="checkbox"]:checked,
 #root .shift-application-contract-agreement input:checked {
@@ -11091,16 +11091,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   color:#343a32!important;
 }
 #root .app.worker .shift-filters input[type="checkbox"]{
-  accent-color:#f97316!important;
+  accent-color:#C2184B!important;
   opacity:1!important;
 }
 #root .app.worker .shift-filters input:focus,
 #root .app.worker .shift-filters select:focus,
 #root .app.worker .shift-filters .shift-type-picker-toggle:focus-visible,
 #root .app.worker .shift-filters .role-picker-toggle:focus-visible{
-  outline:2px solid #f97316!important;
+  outline:2px solid #C2184B!important;
   outline-offset:2px!important;
-  border-color:#f97316!important;
+  border-color:#C2184B!important;
 }
 @media(max-width:600px){
   #root .app.worker .shift-filters{
@@ -11175,7 +11175,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   padding:18px!important;
   background:#000!important;
   color:#fff!important;
-  border:2px solid #f97316!important;
+  border:2px solid #C2184B!important;
   border-radius:14px!important;
   box-shadow:none!important;
 }
@@ -11218,7 +11218,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   color:#000!important;
   -webkit-text-fill-color:#000!important;
   caret-color:#000!important;
-  border:2px solid #f97316!important;
+  border:2px solid #C2184B!important;
   border-radius:8px!important;
   box-shadow:none!important;
   font-size:13px!important;
@@ -11258,7 +11258,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   box-sizing:border-box!important;
   background:#fff!important;
   color:#000!important;
-  border:2px solid #f97316!important;
+  border:2px solid #C2184B!important;
   border-radius:10px!important;
   box-shadow:none!important;
   z-index:1000!important;
@@ -11286,19 +11286,19 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-option:hover,
 #root .app.worker .find-shifts-panel .shift-filters .role-picker-option:hover{
-  background:#f97316!important;
+  background:#C2184B!important;
 }
 #root .app.worker .find-shifts-panel .shift-filters input[type="checkbox"]{
-  accent-color:#f97316!important;
+  accent-color:#C2184B!important;
   opacity:1!important;
 }
 #root .app.worker .find-shifts-panel .shift-filters .shift-type-picker-footer button,
 #root .app.worker .find-shifts-panel .shift-filters .role-picker-footer button,
 #root .app.worker .find-shifts-panel .shift-filters .role-picker-footer button:hover{
-  background:#f97316!important;
+  background:#C2184B!important;
   color:#000!important;
   -webkit-text-fill-color:#000!important;
-  border:1px solid #f97316!important;
+  border:1px solid #C2184B!important;
   border-radius:7px!important;
   font-weight:700!important;
 }
@@ -11307,13 +11307,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   color:#fff!important;
   -webkit-text-fill-color:#fff!important;
   background:#000!important;
-  border:1px solid #f97316!important;
+  border:1px solid #C2184B!important;
   border-radius:7px!important;
 }
 #root .app.worker .find-shifts-panel .shift-filters input:focus,
 #root .app.worker .find-shifts-panel .shift-filters select:focus,
 #root .app.worker .find-shifts-panel .shift-filters button:focus-visible{
-  outline:2px solid #f97316!important;
+  outline:2px solid #C2184B!important;
   outline-offset:2px!important;
 }
 @media(max-width:600px){
@@ -12099,7 +12099,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .app.employer .shift-cluster-item strong{color:#171916;overflow-wrap:anywhere}
 .app.employer .shift-cluster-item span{color:#68706a;font-size:.82rem;line-height:1.4}
 .app.employer .shift-cluster-item button{flex:0 0 auto}
-.app.employer .shift-cluster-add-button{width:100%;margin:.25rem 0 .5rem;border-color:#f97316}
+.app.employer .shift-cluster-add-button{width:100%;margin:.25rem 0 .5rem;border-color:#C2184B}
 .app.employer .shift-cluster-builder>small{display:block;color:#68706a;line-height:1.45}
 @media(max-width:560px){
  .app.employer .shift-cluster-builder{padding:.75rem}
@@ -12136,7 +12136,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 /* Clear entry points for the two shift creation workflows. */
 .app.employer .shift-creation-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
 .app.employer .shift-creation-choice{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:190px;padding:20px;border:1px solid #e6ddce;border-radius:14px;background:#fffdf8;color:#171717;text-align:left;cursor:pointer;transition:border-color .18s,box-shadow .18s,transform .18s}
-.app.employer .shift-creation-choice:hover,.app.employer .shift-creation-choice:focus-visible{border-color:#f97316;box-shadow:0 5px 18px #00000012;transform:translateY(-2px);outline:none}
+.app.employer .shift-creation-choice:hover,.app.employer .shift-creation-choice:focus-visible{border-color:#C2184B;box-shadow:0 5px 18px #00000012;transform:translateY(-2px);outline:none}
 .app.employer .shift-creation-choice strong{font-size:1.2rem}
 .app.employer .shift-creation-choice>span:not(.eyebrow){color:#687386;line-height:1.5}
 .app.employer .shift-creation-choice b{margin-top:auto;color:#d94b08}
@@ -12166,7 +12166,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .app.employer .shift-cluster-overview .shift-cluster-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .app.employer .shift-cluster-overview .shift-cluster-heading h3{margin:3px 0 5px}
 .app.employer .shift-cluster-overview .shift-cluster-heading p{margin:0;color:#687386}
-.app.employer .shift-cluster-count{display:grid;place-items:center;flex:0 0 66px;width:66px;height:66px;border-radius:12px;background:#fff0e6;color:#c94708}
+.app.employer .shift-cluster-count{display:grid;place-items:center;flex:0 0 66px;width:66px;height:66px;border-radius:12px;background:#FCE8EF;color:#c94708}
 .app.employer .shift-cluster-count strong{font-size:1.55rem;line-height:1}
 .app.employer .shift-cluster-count span{font-size:.68rem;font-weight:700}
 .app.employer .cluster-current-shift-heading{grid-column:1/-1;padding:12px 14px;border-left:4px solid #e95a13;background:#fff8f2;border-radius:8px}
@@ -12206,11 +12206,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  height:16px!important;
  min-height:16px!important;
  margin:0!important;
- accent-color:#f97316;
+ accent-color:#C2184B;
 }
 .worker-availability-panel .shift-type-picker-option:hover{background:#f3f4f6!important}
 .worker-availability-panel .shift-type-picker-footer{border-top:1px solid #e5e7eb!important}
-.worker-availability-panel .shift-type-picker-footer button:first-child{color:#c2410c!important}
+.worker-availability-panel .shift-type-picker-footer button:first-child{color:#A3133D!important}
 
 /* Clear, always-visible choices when selecting individual favourite employers. */
 .worker-availability-panel .availability-favourite-employer-list{
@@ -12225,7 +12225,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .worker-availability-panel .availability-favourite-employer-option input[type="checkbox"]{
  display:inline-block!important;appearance:checkbox!important;-webkit-appearance:checkbox!important;
  flex:0 0 17px!important;width:17px!important;height:17px!important;min-height:17px!important;
- margin:0!important;accent-color:#f97316;
+ margin:0!important;accent-color:#C2184B;
 }
 .worker-availability-panel .availability-favourite-employer-option>span{
  display:grid;gap:2px;color:#171916!important;
@@ -12233,7 +12233,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .worker-availability-panel .availability-favourite-employer-option strong{font-size:13px;color:#171916!important}
 .worker-availability-panel .availability-favourite-employer-option small{font-size:11px;color:#626b75!important}
 .worker-availability-panel .availability-favourite-employer-option:has(input:checked){
- border-color:#f97316;background:#fff7f1;
+ border-color:#C2184B;background:#fff7f1;
 }
 
 /* Worker inbox: employer conversation cards must be readable on the light inbox surface. */
@@ -12249,7 +12249,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .app.worker .worker-direct-inbox .direct-conversation-item small,
 .app.worker .worker-direct-inbox .direct-conversation-item span{color:#626b75!important;font-size:11px;overflow-wrap:anywhere}
 .app.worker .worker-direct-inbox .direct-conversation-item:hover,
-.app.worker .worker-direct-inbox .direct-conversation-item.selected{border-color:#f97316;background:#fffaf6}
+.app.worker .worker-direct-inbox .direct-conversation-item.selected{border-color:#C2184B;background:#fffaf6}
 .app.worker .worker-direct-inbox .empty-state{
  margin:8px 0 0;padding:0;border:0;border-radius:0;background:transparent;
  color:#626b75;font-size:13px;text-align:left;
@@ -12678,12 +12678,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .shift-confirmation-card-heading strong{color:#171717;font-size:15px}
 #root .app .shift-confirmation-card-heading small{color:#666;font-size:12px}
 #root .app .shift-confirmation-details{display:flex;flex-wrap:wrap;gap:8px 15px;margin:13px 0;color:#333;font-size:12px}
-#root .app .shift-confirmation-details strong{color:#c2410c;font-size:14px}
+#root .app .shift-confirmation-details strong{color:#A3133D;font-size:14px}
 #root .app .shift-confirmation-contract{margin-top:12px;padding:12px;border:1px solid #eee0d6;border-radius:9px;background:#fff}
 #root .app .shift-confirmation-contract>strong{color:#171717;font-size:13px}
 #root .app .shift-confirmation-contract p{margin:7px 0;color:#555;font-size:12px;line-height:1.5}
 #root .app .shift-confirmation-accept{display:flex!important;grid-template-columns:18px 1fr!important;align-items:center!important;gap:9px!important;margin:12px 0 0!important;color:#222!important;font-size:12px!important}
-#root .app .shift-confirmation-accept input{width:17px!important;height:17px!important;margin:0!important;accent-color:#c2410c}
+#root .app .shift-confirmation-accept input{width:17px!important;height:17px!important;margin:0!important;accent-color:#A3133D}
 #root .app .shift-confirmation-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
 #root .app .shift-confirmation-actions button{min-height:40px}
 @media(max-width:600px){
@@ -12809,7 +12809,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app main.page-workchats .worker-workchat-page-heading p{margin:0!important;color:#737373!important;font-size:12px!important}
 #root .app main.page-workchats .workchat-total-count{
-  flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#fff0e6;color:#c2410c;font-size:11px;font-weight:800;
+  flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#FCE8EF;color:#A3133D;font-size:11px;font-weight:800;
 }
 #root .app main.page-workchats .workchat-list-search{
   display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;box-sizing:border-box!important;
@@ -12836,7 +12836,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .worker-workchat-panel .workchat-list-company{display:flex!important;align-items:center!important;gap:13px!important;width:100%!important;min-width:0!important}
 #root .app main.page-workchats .worker-workchat-panel .workchat-list-company-avatar{
   width:52px!important;height:52px!important;flex:0 0 52px!important;border-radius:50%!important;
-  border:0!important;background:#fff0e6!important;color:#c2410c!important;font-size:18px!important;font-weight:800!important;
+  border:0!important;background:#FCE8EF!important;color:#A3133D!important;font-size:18px!important;font-weight:800!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-list-company-details{
   display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:3px 10px!important;
@@ -12854,7 +12854,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-unread-count{
   display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;
-  padding:0 5px!important;border-radius:999px!important;background:#c2410c!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
+  padding:0 5px!important;border-radius:999px!important;background:#A3133D!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-list-last-message{
   grid-column:1/-1!important;grid-row:3!important;display:block!important;min-width:0!important;max-width:100%!important;
@@ -12883,10 +12883,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   background:#fff!important;color:#222!important;box-shadow:0 1px 2px rgba(0,0,0,.045)!important;font-size:13px!important;line-height:1.5!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-message-row.mine .workchat-message-bubble{
-  border-color:#f4c8ad!important;border-radius:14px 14px 4px 14px!important;background:#fff0e6!important;color:#292929!important;
+  border-color:#f4c8ad!important;border-radius:14px 14px 4px 14px!important;background:#FCE8EF!important;color:#292929!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-message-meta{gap:8px!important;margin:0 3px 3px!important;font-size:10px!important;color:#777!important}
-#root .app main.page-workchats .worker-workchat-panel .workchat-message-meta strong{color:#c2410c!important;font-size:10px!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-meta strong{color:#A3133D!important;font-size:10px!important}
 #root .app main.page-workchats .worker-workchat-panel .workchat-composer{
   display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:9px!important;
   padding:11px 12px!important;background:#fff!important;border-top:1px solid #eee9e4!important;
@@ -12897,7 +12897,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-composer>button[type="submit"]{
   width:auto!important;min-width:76px!important;min-height:42px!important;padding:10px 15px!important;border-radius:22px!important;
-  background:#c2410c!important;color:#fff!important;font-size:12px!important;font-weight:800!important;
+  background:#A3133D!important;color:#fff!important;font-size:12px!important;font-weight:800!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-typing{background:#f7f5f2!important}
 @media(max-width:650px){
@@ -12926,7 +12926,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   flex:1 1 0!important;min-width:0!important;padding:10px 8px!important;border:0!important;border-radius:9px!important;
   background:transparent!important;color:#666!important;font-size:11px!important;font-weight:750!important;text-align:center!important;
 }
-#root .app main.page-workchats .workchat-section-tabs button.selected{background:#fff!important;color:#c2410c!important;box-shadow:0 1px 4px rgba(0,0,0,.09)!important}
+#root .app main.page-workchats .workchat-section-tabs button.selected{background:#fff!important;color:#A3133D!important;box-shadow:0 1px 4px rgba(0,0,0,.09)!important}
 #root .app main.page-workchats .employer-workchat-search{margin-bottom:12px!important}
 #root .app main.page-workchats .employer-workchat-card>.workchat-list{
   display:flex!important;flex-direction:column!important;gap:0!important;margin:0!important;padding:0!important;
@@ -12940,7 +12940,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .employer-workchat-card .workchat-item-minimal:last-child{border-bottom:0!important}
 #root .app main.page-workchats .employer-workchat-card .workchat-item-minimal:hover{background:#fffaf6!important}
 #root .app main.page-workchats .employer-workchat-card .workchat-item-avatar{
-  width:46px!important;height:46px!important;border:0!important;border-radius:50%!important;background:#fff0e6!important;color:#c2410c!important;
+  width:46px!important;height:46px!important;border:0!important;border-radius:50%!important;background:#FCE8EF!important;color:#A3133D!important;
 }
 #root .app main.page-workchats .employer-workchat-card .workchat-item-copy{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important}
 #root .app main.page-workchats .employer-workchat-card .workchat-item-copy strong{font-size:13px!important;font-weight:800!important;color:#171717!important}
@@ -12953,7 +12953,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .employer-workchat-card .workchat-item-trailing time{font-size:10px!important;color:#888!important;white-space:nowrap!important}
 #root .app main.page-workchats .employer-workchat-card .workchat-unread-count{
   display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;
-  padding:0 5px!important;border-radius:999px!important;background:#c2410c!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
+  padding:0 5px!important;border-radius:999px!important;background:#A3133D!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
 }
 @media(max-width:650px){
  #root .app main.page-workchats .employer-hero{padding:14px!important}
@@ -12971,7 +12971,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .messaging-chat-row:hover{background:#fffaf6!important}
 #root .app .messaging-chat-avatar{
  display:flex!important;align-items:center!important;justify-content:center!important;width:46px!important;height:46px!important;
- flex:0 0 46px!important;overflow:hidden!important;border-radius:50%!important;background:#fff0e6!important;color:#c2410c!important;font-size:17px!important;font-weight:800!important;
+ flex:0 0 46px!important;overflow:hidden!important;border-radius:50%!important;background:#FCE8EF!important;color:#A3133D!important;font-size:17px!important;font-weight:800!important;
 }
 #root .app .messaging-chat-avatar img{width:100%!important;height:100%!important;object-fit:cover!important}
 #root .app .messaging-chat-copy{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important}
@@ -12979,7 +12979,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .messaging-chat-copy small{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#777!important;font-size:12px!important;line-height:1.35!important}
 #root .app .messaging-chat-meta{display:flex!important;flex-direction:column!important;align-items:flex-end!important;justify-content:center!important;gap:7px!important;white-space:nowrap!important}
 #root .app .messaging-chat-meta time{font-size:10px!important;color:#888!important}
-#root .app .messaging-chat-meta .direct-unread-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:50px!important;background:#c2410c!important;color:#fff!important;font-size:10px!important;font-weight:800!important}
+#root .app .messaging-chat-meta .direct-unread-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:50px!important;background:#A3133D!important;color:#fff!important;font-size:10px!important;font-weight:800!important}
 #root .app .direct-read-ticks{display:inline-block!important;margin-left:4px!important;color:#8b8b8b!important;font-size:14px!important;font-weight:900!important;letter-spacing:-3px!important}
 #root .app .direct-read-ticks.is-read{color:#1687e8!important}
 #root .app .workchat-read-receipt{display:block!important;align-self:flex-end!important;margin:-5px 7px 0 0!important;color:#888!important;font-size:14px!important;font-weight:900!important;letter-spacing:-3px!important}
@@ -13009,7 +13009,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  background:#fff!important;color:#222!important;box-shadow:0 1px 2px rgba(0,0,0,.045)!important;overflow-wrap:anywhere!important;
 }
 #root .app .direct-message-bubble.sent{
- align-self:flex-end!important;border-color:#f4c8ad!important;border-radius:14px 14px 4px 14px!important;background:#fff0e6!important;color:#292929!important;
+ align-self:flex-end!important;border-color:#f4c8ad!important;border-radius:14px 14px 4px 14px!important;background:#FCE8EF!important;color:#292929!important;
 }
 #root .app .direct-message-bubble p{margin:0 0 6px!important;white-space:pre-wrap!important;line-height:1.5!important}
 #root .app .direct-message-bubble small{display:block!important;color:#777!important;font-size:10px!important;text-align:right!important}
@@ -13021,7 +13021,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  min-height:44px!important;max-height:120px!important;resize:vertical!important;padding:12px 14px!important;
  border:1px solid #e7e1da!important;border-radius:22px!important;background:#f7f7f7!important;font-size:13px!important;
 }
-#root .app .direct-message-compose button{min-height:42px!important;border-radius:22px!important;background:#c2410c!important;color:#fff!important;font-weight:800!important}
+#root .app .direct-message-compose button{min-height:42px!important;border-radius:22px!important;background:#A3133D!important;color:#fff!important;font-weight:800!important}
 #root .app .direct-thread-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:12px 14px!important;background:#fff!important;border-bottom:1px solid #eee9e4!important}
 #root .app .direct-thread-heading h3,#root .app .direct-thread-heading h4{margin:0!important;color:#171717!important;font-size:16px!important;font-weight:800!important}
 #root .app .direct-thread-heading>div{min-width:0!important}
@@ -13055,12 +13055,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .workchat-wa-meta{display:flex!important;flex-direction:column!important;align-items:flex-end!important;justify-content:center!important;gap:6px!important;white-space:nowrap!important}
 #root .app .workchat-wa-meta time{color:#888!important;font-size:10px!important}
 #root .app .workchat-wa-meta>small{color:#999!important;font-size:9px!important}
-#root .app main.page-workchats .worker-workchat-panel .workchat-unread-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:50px!important;background:#c2410c!important;color:white!important;font-size:10px!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-unread-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:50px!important;background:#A3133D!important;color:white!important;font-size:10px!important}
 #root .app .worker-inbox-panel{padding:0!important;overflow:hidden!important;background:#fff!important;border:1px solid #eee9e4!important;border-radius:15px!important}
 #root .app .worker-inbox-panel>.worker-inbox-heading{padding:18px 18px 10px!important;margin:0!important}
 #root .app .worker-inbox-panel .inbox-section-tabs{display:flex!important;gap:22px!important;padding:0 18px!important;margin:0!important;border-bottom:1px solid #eee9e4!important;background:#fff!important}
 #root .app .worker-inbox-panel .inbox-section-tabs button{padding:12px 0!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;background:transparent!important;color:#777!important;font-size:13px!important;font-weight:700!important}
-#root .app .worker-inbox-panel .inbox-section-tabs button.active{border-bottom-color:#c2410c!important;color:#171717!important}
+#root .app .worker-inbox-panel .inbox-section-tabs button.active{border-bottom-color:#A3133D!important;color:#171717!important}
 #root .app .worker-inbox-panel .inbox-tabs{display:flex!important;gap:8px!important;padding:12px 16px!important;margin:0!important;background:#fff!important;border-bottom:1px solid #f0ece8!important}
 #root .app .worker-inbox-panel .inbox-tabs button{padding:7px 13px!important;border:1px solid #e9e5e1!important;border-radius:20px!important;background:#fff!important;color:#555!important;font-size:11px!important;font-weight:700!important}
 #root .app .worker-inbox-panel .inbox-tabs button.active{border-color:#f5d1bf!important;background:#fff1e9!important;color:#a83c0b!important}
@@ -13081,7 +13081,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .worker-inbox-panel .direct-message-bubble small{display:block!important;text-align:right!important;color:#888!important;font-size:9px!important}
 #root .app .worker-inbox-panel .direct-message-compose{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:9px!important;padding:12px 4px!important;border-top:1px solid #eee9e4!important;background:#fff!important}
 #root .app .worker-inbox-panel .direct-message-compose textarea{min-height:43px!important;border:1px solid #e7e1da!important;border-radius:22px!important;background:#f7f7f7!important;padding:11px 14px!important;font-size:13px!important}
-#root .app .worker-inbox-panel .direct-message-compose button{min-height:42px!important;padding:0 18px!important;border-radius:22px!important;background:#c2410c!important;color:#fff!important;font-weight:800!important}
+#root .app .worker-inbox-panel .direct-message-compose button{min-height:42px!important;padding:0 18px!important;border-radius:22px!important;background:#A3133D!important;color:#fff!important;font-weight:800!important}
 #root .app main.page-workchats .workchat-conversation{overflow:hidden!important;border:1px solid #eee9e4!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important}
 #root .app main.page-workchats .workchat-conversation-header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:12px 15px!important;background:#fff!important;border-bottom:1px solid #eee9e4!important}
 #root .app main.page-workchats .workchat-conversation-title h3{margin:0!important;color:#171717!important;font-size:16px!important;font-weight:800!important}
@@ -13098,7 +13098,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .workchat-message-row.mine .workchat-message-bubble{border-color:#f3d0bd!important;border-radius:14px 14px 4px 14px!important;background:#fff0e7!important}
 #root .app main.page-workchats .workchat-composer{display:flex!important;align-items:center!important;gap:9px!important;padding:12px!important;border-top:1px solid #eee9e4!important;background:#fff!important}
 #root .app main.page-workchats .workchat-composer textarea{min-height:43px!important;max-height:110px!important;border:1px solid #e7e1da!important;border-radius:22px!important;background:#f7f7f7!important;padding:11px 14px!important;font-size:13px!important}
-#root .app main.page-workchats .workchat-composer button{min-height:42px!important;border-radius:22px!important;background:#c2410c!important;color:#fff!important;font-weight:800!important}
+#root .app main.page-workchats .workchat-composer button{min-height:42px!important;border-radius:22px!important;background:#A3133D!important;color:#fff!important;font-weight:800!important}
 @media(max-width:650px){
  #root .app main.page-workchats .worker-workchat-panel .workchat-wa-row{grid-template-columns:44px minmax(0,1fr) auto!important;min-height:72px!important;padding:10px 5px!important;gap:10px!important}
  #root .app .workchat-wa-avatar{width:42px!important;height:42px!important}
@@ -13147,7 +13147,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  white-space:nowrap!important;box-shadow:none!important;
 }
 #root .app .worker-inbox-panel nav.inbox-section-tabs>button.active{
- border-bottom-color:#c2410c!important;background:#fff!important;color:#171717!important;
+ border-bottom-color:#A3133D!important;background:#fff!important;color:#171717!important;
 }
 
 
@@ -13449,7 +13449,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   white-space:nowrap!important;box-shadow:none!important;
 }
 #root .app .inbox-category-tabs>button.active{
-  border-color:#f97316!important;background:#f97316!important;color:#171b1e!important;
+  border-color:#C2184B!important;background:#C2184B!important;color:#171b1e!important;
   box-shadow:0 2px 8px rgba(249,115,22,.22)!important;
 }
 #root .app .worker-inbox-panel,
@@ -13472,7 +13472,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .inbox-all-workchats h3,
 #root .app .inbox-all-admin-messages h3{
   margin:0!important;padding:15px 16px 9px!important;
-  color:#f97316!important;font-size:12px!important;font-weight:800!important;
+  color:#C2184B!important;font-size:12px!important;font-weight:800!important;
   letter-spacing:.07em!important;text-transform:uppercase!important;
 }
 #root .app .messaging-chat-row{
@@ -13516,7 +13516,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .workchat-unread-count{
   display:inline-flex!important;align-items:center!important;justify-content:center!important;
   min-width:21px!important;height:21px!important;padding:0 6px!important;
-  border-radius:20px!important;background:#f97316!important;color:#171b1e!important;
+  border-radius:20px!important;background:#C2184B!important;color:#171b1e!important;
   font-size:11px!important;font-weight:800!important;
 }
 #root .app .inbox-all-admin-messages>button,
@@ -13611,7 +13611,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app nav.inbox-category-tabs>button.active,
 #root .app .inbox-category-tabs>button.active{
- background:#f97316!important;border:1px solid #f97316!important;
+ background:#C2184B!important;border:1px solid #C2184B!important;
  color:#171b1e!important;opacity:1!important;
 }
 #root .app .inbox-all-workchats,
@@ -13694,7 +13694,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app .inbox-category-tabs>button.active,
 #root .app nav.inbox-category-tabs>button.active{
- background:#f97316!important;border-color:#f97316!important;color:#171b1e!important;
+ background:#C2184B!important;border-color:#C2184B!important;color:#171b1e!important;
 }
 #root .app .worker-inbox-panel,
 #root .app .employer-direct-inbox{
@@ -13783,7 +13783,7 @@ html body #root nav.inbox-category-tabs[aria-label="Inbox categories"] > button:
  text-align:center!important;text-shadow:none!important;
 }
 html body #root nav.inbox-category-tabs[aria-label="Inbox categories"] > button.active{
- background:#f97316!important;border-color:#f97316!important;
+ background:#C2184B!important;border-color:#C2184B!important;
  color:#171b1e!important;-webkit-text-fill-color:#171b1e!important;
 }
 html body #root .worker-inbox-panel nav.inbox-section-tabs > button,
@@ -13793,7 +13793,7 @@ html body #root .worker-inbox-panel nav.inbox-section-tabs > button:not(.active)
 }
 html body #root .worker-inbox-panel nav.inbox-section-tabs > button.active{
  color:#171b1e!important;-webkit-text-fill-color:#171b1e!important;
- background:#f97316!important;border-color:#f97316!important;
+ background:#C2184B!important;border-color:#C2184B!important;
 }
 @media(max-width:600px){
  html body #root nav.inbox-category-tabs[aria-label="Inbox categories"] > button{
@@ -13821,7 +13821,7 @@ html body #root nav.inbox-category-tabs[aria-label="Inbox categories"] > button:
  font-size:12px!important;font-weight:900!important;
 }
 html body #root nav.inbox-category-tabs[aria-label="Inbox categories"] > button.active{
- background:#f97316!important;border-color:#f97316!important;
+ background:#C2184B!important;border-color:#C2184B!important;
  color:#171b1e!important;-webkit-text-fill-color:#171b1e!important;
 }
 /* Worker and employer mobile navigation: equal-width, evenly distributed items. */
@@ -14395,7 +14395,7 @@ html body #root .app .employer-direct-inbox .workchat-wa-row .direct-unread-coun
 html body #root .app .workchat-list .workchat-wa-row .workchat-unread-count{
  display:flex!important;align-items:center!important;justify-content:center!important;
  min-width:22px!important;height:22px!important;padding:0 6px!important;
- border-radius:999px!important;background:#ff7900!important;color:#fff!important;
+ border-radius:999px!important;background:#C2184B!important;color:#fff!important;
  font-size:12px!important;font-weight:700!important;
 }
 html body #root .app .worker-inbox-panel .direct-conversation-list,
@@ -14540,7 +14540,7 @@ html body #root .app.inbox-screen nav.inbox-category-tabs[aria-label="Inbox cate
  box-shadow:none!important;
 }
 html body #root .app.inbox-screen nav.inbox-category-tabs[aria-label="Inbox categories"]>button.active{
- background:#ff7900!important;border:0!important;border-radius:18px!important;
+ background:#C2184B!important;border:0!important;border-radius:18px!important;
  color:#080808!important;-webkit-text-fill-color:#080808!important;
 }
 html body #root .app.inbox-screen .worker-inbox-panel,
@@ -14674,7 +14674,7 @@ html body #root .app.inbox-screen .workchat-unread-count{
  width:clamp(30px,4.8vw,49px)!important;height:clamp(30px,4.8vw,49px)!important;
  min-width:clamp(30px,4.8vw,49px)!important;min-height:0!important;
  margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;
- background:#ff7900!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
+ background:#C2184B!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
  font-size:clamp(16px,2.8vw,27px)!important;font-weight:750!important;line-height:1!important;
 }
 html body #root .app.inbox-screen .hyrz-admin-message-feed .workchat-wa-row .workchat-wa-avatar{
@@ -14804,7 +14804,7 @@ html body #root .app.inbox-screen .hyrz-mobile-bottom-nav{
   stroke-linecap:round!important;stroke-linejoin:round!important;
  }
  html body #root .app.inbox-screen .hyrz-mobile-bottom-nav>button.selected{
-  flex:1.15 1 0!important;background:#ff7900!important;
+  flex:1.15 1 0!important;background:#C2184B!important;
   color:#080808!important;-webkit-text-fill-color:#080808!important;
  }
  html body #root .app.inbox-screen .hyrz-mobile-bottom-nav>button.selected svg{
@@ -14837,7 +14837,7 @@ html body #root .app.inbox-screen .hyrz-mobile-bottom-nav{
   stroke-linecap:round!important;stroke-linejoin:round!important;
  }
  html body #root .app.inbox-screen .hyrz-mobile-bottom-nav>button.selected{
-  flex:1.15 1 0!important;background:#ff7900!important;
+  flex:1.15 1 0!important;background:#C2184B!important;
   color:#080808!important;-webkit-text-fill-color:#080808!important;
  }
  html body #root .app.inbox-screen .hyrz-mobile-bottom-nav>button.selected svg{stroke:#080808!important}
@@ -14884,7 +14884,7 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
 .worker-employer-picker-columns>div{min-width:0}
 .worker-employer-picker-columns h4{margin:0 0 10px;font-size:14px;font-weight:800;color:#263238}
 .worker-employer-choice{display:flex;width:100%;align-items:center;gap:11px;padding:10px;margin:0 0 8px;border:1px solid #e4e7e9;border-radius:12px;background:#fff;color:#15191d;text-align:left;cursor:pointer}
-.worker-employer-choice:hover,.worker-employer-choice.selected{background:#fff5ec;border-color:#ff7900}
+.worker-employer-choice:hover,.worker-employer-choice.selected{background:#fff5ec;border-color:#C2184B}
 .worker-employer-choice>span:nth-child(2){display:flex;min-width:0;flex:1;flex-direction:column;gap:3px}
 .worker-employer-choice strong{font-size:14px;color:#15191d}
 .worker-employer-choice small{font-size:12px;color:#68727b}
@@ -14904,7 +14904,7 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
 .profile-payment-card-actions .payout-account-switch{display:inline-flex;align-items:center;justify-content:center;width:48px;height:30px;min-width:48px;padding:0;border:0;background:transparent;cursor:pointer}
 .payout-account-switch-track{position:relative;display:block;width:46px;height:26px;border-radius:999px;background:#c9cdd1;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:background .18s ease}
 .payout-account-switch-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.22);transition:transform .18s ease}
-.payout-account-switch[aria-checked="true"] .payout-account-switch-track{background:#ff7900}
+.payout-account-switch[aria-checked="true"] .payout-account-switch-track{background:#C2184B}
 .payout-account-switch[aria-checked="true"] .payout-account-switch-thumb{transform:translateX(20px)}
 .payout-account-switch:focus-visible{outline:3px solid rgba(255,121,0,.35);outline-offset:3px;border-radius:999px}
 .profile-payment-card-actions .payout-account-switch:hover .payout-account-switch-track{filter:brightness(.96)}
@@ -14912,12 +14912,12 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
 
 
 /* Hyrz individual Admin and Employer conversations — orange / black / white */
-#root .app .hyrz-direct-chat{display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:14px!important;min-height:260px!important;max-height:min(62vh,680px)!important;overflow-y:auto!important;margin:14px 0!important;padding:22px 18px!important;border:1px solid #343434!important;border-radius:18px!important;background:#090909!important;scrollbar-color:#ff7900 #171717!important}
+#root .app .hyrz-direct-chat{display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:14px!important;min-height:260px!important;max-height:min(62vh,680px)!important;overflow-y:auto!important;margin:14px 0!important;padding:22px 18px!important;border:1px solid #343434!important;border-radius:18px!important;background:#090909!important;scrollbar-color:#C2184B #171717!important}
 #root .app .hyrz-direct-message{display:flex!important;align-items:flex-start!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
 #root .app .hyrz-direct-message.received{justify-content:flex-start!important}
 #root .app .hyrz-direct-message.sent{justify-content:flex-end!important}
 #root .app .hyrz-direct-message-content{display:flex!important;flex-direction:column!important;gap:5px!important;width:fit-content!important;max-width:min(78%,620px)!important;padding:12px 15px!important;border:1px solid #414141!important;border-radius:16px 16px 16px 4px!important;background:#242424!important;color:#fff!important;overflow-wrap:anywhere!important}
-#root .app .hyrz-direct-message.sent .hyrz-direct-message-content{border-color:#ff7900!important;border-radius:16px 16px 4px 16px!important;background:#ff7900!important;color:#fff!important}
+#root .app .hyrz-direct-message.sent .hyrz-direct-message-content{border-color:#C2184B!important;border-radius:16px 16px 4px 16px!important;background:#C2184B!important;color:#fff!important}
 #root .app .hyrz-direct-sender{display:block!important;margin:0 0 2px!important;color:#ff9a3c!important;font-size:12px!important;font-weight:800!important;line-height:1.2!important}
 #root .app .hyrz-direct-message p{margin:0!important;color:inherit!important;font-size:15px!important;line-height:1.5!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important}
 #root .app .hyrz-direct-message small{align-self:flex-end!important;margin:0!important;color:rgba(255,255,255,.68)!important;font-size:10px!important;line-height:1.2!important}
@@ -14926,7 +14926,7 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
 #root .app .hyrz-direct-composer textarea{flex:1 1 auto!important;min-width:0!important;min-height:44px!important;max-height:130px!important;resize:vertical!important;padding:11px 13px!important;border:0!important;outline:0!important;border-radius:999px!important;background:transparent!important;color:#fff!important;font:inherit!important;box-shadow:none!important}
 #root .app .hyrz-direct-composer textarea::placeholder{color:#a5a5a5!important}
 #root .app .hyrz-direct-composer .hyrz-chat-tool{display:flex!important;flex:0 0 42px!important;align-items:center!important;justify-content:center!important;width:42px!important;height:42px!important;padding:0!important;border:1px solid #4a4a4a!important;border-radius:50%!important;background:#222!important;color:#fff!important;font-size:24px!important;cursor:pointer!important}
-#root .app .hyrz-direct-composer button.primary{flex:0 0 auto!important;min-width:76px!important;min-height:42px!important;padding:9px 17px!important;border:0!important;border-radius:999px!important;background:#ff7900!important;color:#fff!important;font-weight:800!important}
+#root .app .hyrz-direct-composer button.primary{flex:0 0 auto!important;min-width:76px!important;min-height:42px!important;padding:9px 17px!important;border:0!important;border-radius:999px!important;background:#C2184B!important;color:#fff!important;font-weight:800!important}
 #root .app .direct-thread-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:12px 4px 16px!important;border-bottom:1px solid #343434!important}
 #root .app .direct-thread-heading h3,#root .app .direct-thread-heading h4{margin:0!important;color:#fff!important;font-size:20px!important;font-weight:800!important}
 #root .app .direct-thread-heading small{display:block!important;margin-top:4px!important;color:#bcbcbc!important}
@@ -14937,21 +14937,21 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
 #root .app .worker-inbox-thread-heading h3{margin:0!important;color:#fff!important}
 #root .app .worker-inbox-thread-reply{display:flex!important;flex-direction:row!important;align-items:center!important;gap:9px!important}
 #root .app .worker-inbox-thread-reply textarea{flex:1!important;min-width:0!important;min-height:44px!important;border:0!important;border-radius:999px!important;background:#171717!important;color:#fff!important}
-#root .app .worker-inbox-thread-reply button{min-height:42px!important;border-radius:999px!important;background:#ff7900!important;color:#fff!important}
+#root .app .worker-inbox-thread-reply button{min-height:42px!important;border-radius:999px!important;background:#C2184B!important;color:#fff!important}
 @media(max-width:760px){#root .app .hyrz-direct-chat{min-height:260px!important;max-height:58vh!important;padding:14px 10px!important;border-radius:14px!important}#root .app .hyrz-direct-message-content{max-width:88%!important;padding:10px 12px!important}#root .app .hyrz-direct-composer{gap:6px!important;padding:7px!important}#root .app .hyrz-direct-composer .hyrz-chat-tool{flex-basis:36px!important;width:36px!important;height:36px!important}#root .app .hyrz-direct-composer button.primary{min-width:58px!important;padding:8px 12px!important}#root .app .worker-inbox-thread-reply{flex-direction:row!important;align-items:center!important}}
 
 
 /* Admin support conversations share the same Hyrz chat treatment */
 #root .app .worker-inbox-thread{gap:12px!important;padding:12px!important;border:1px solid #343434!important;border-radius:18px!important;background:#090909!important}
 #root .app .worker-inbox-thread-message{display:flex!important;flex-direction:column!important;gap:5px!important;width:fit-content!important;max-width:min(78%,620px)!important;margin:0!important;padding:12px 15px!important;border:1px solid #414141!important;border-radius:16px 16px 16px 4px!important;background:#242424!important;color:#fff!important}
-#root .app .worker-inbox-thread-message.sent{align-self:flex-end!important;border-color:#ff7900!important;border-radius:16px 16px 4px 16px!important;background:#ff7900!important;color:#fff!important}
+#root .app .worker-inbox-thread-message.sent{align-self:flex-end!important;border-color:#C2184B!important;border-radius:16px 16px 4px 16px!important;background:#C2184B!important;color:#fff!important}
 #root .app .worker-inbox-thread-message p{margin:0!important;color:inherit!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important}
 #root .app .worker-inbox-thread-message small{align-self:flex-end!important;color:rgba(255,255,255,.7)!important;font-size:10px!important}
 #root .app .worker-inbox-thread-heading small{color:#aaa!important}
 #root .app .worker-inbox-thread-reply{padding:8px!important;border:1px solid #454545!important;border-radius:999px!important;background:#171717!important}
 #root .app .worker-inbox-thread-reply textarea{padding:10px 14px!important;background:transparent!important;color:#fff!important}
 #root .app .worker-inbox-thread-reply label{display:none!important}
-#root .app .worker-inbox-thread-reply button{padding:9px 18px!important;background:#ff7900!important;color:#fff!important}
+#root .app .worker-inbox-thread-reply button{padding:9px 18px!important;background:#C2184B!important;color:#fff!important}
 #root .app .inbox-chat-overlay .inbox-chatbox{display:flex!important;flex-direction:column!important;gap:12px!important;border:1px solid #3c3c3c!important;border-radius:18px!important;background:#090909!important;color:#fff!important}
 #root .app .inbox-chat-overlay .direct-thread-heading{padding:12px!important}
 #root .app .inbox-chat-overlay .direct-thread-heading h3{color:#fff!important}
@@ -14959,7 +14959,7 @@ html body #root .app.inbox-screen .workchat-wa-row-past:focus-visible{
 #root .app .inbox-chat-overlay .direct-message-history>p{align-self:flex-start!important;max-width:80%!important;margin:0!important;padding:12px 15px!important;border:1px solid #414141!important;border-radius:16px 16px 16px 4px!important;background:#242424!important;color:#fff!important;white-space:pre-wrap!important}
 #root .app .inbox-chat-overlay .direct-message-compose{display:flex!important;flex-direction:row!important;align-items:center!important;gap:9px!important;padding:9px!important;border:1px solid #454545!important;border-radius:999px!important;background:#171717!important}
 #root .app .inbox-chat-overlay .direct-message-compose textarea{flex:1!important;min-width:0!important;min-height:44px!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#fff!important}
-#root .app .inbox-chat-overlay .direct-message-compose button{min-height:42px!important;padding:9px 18px!important;border:0!important;border-radius:999px!important;background:#ff7900!important;color:#fff!important}
+#root .app .inbox-chat-overlay .direct-message-compose button{min-height:42px!important;padding:9px 18px!important;border:0!important;border-radius:999px!important;background:#C2184B!important;color:#fff!important}
 @media(max-width:600px){#root .app .worker-inbox-thread-message{max-width:88%!important}#root .app .worker-inbox-thread-reply{flex-direction:row!important;align-items:center!important}#root .app .inbox-chat-overlay .direct-message-compose{flex-direction:row!important;align-items:center!important}}
 
 
@@ -14974,7 +14974,7 @@ html body #root .app.inbox-screen .worker-inbox-panel:has(.hyrz-admin-thread) .w
 html body #root .app.inbox-screen .worker-inbox-panel .hyrz-admin-thread{display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:0!important;width:100%!important;min-width:0!important;min-height:0!important;height:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#080808!important;color:#fff!important;box-shadow:none!important;overflow:hidden!important}
 html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading{display:flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:space-between!important;min-height:76px!important;padding:12px 18px!important;border:0!important;border-bottom:1px solid #303030!important;border-radius:0!important;background:#111!important}
 html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-thread-identity{display:flex!important;align-items:center!important;gap:12px!important}
-html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-thread-avatar{display:flex!important;align-items:center!important;justify-content:center!important;width:46px!important;height:46px!important;flex:0 0 46px!important;border-radius:50%!important;background:#ff7900!important;color:#fff!important;font-size:19px!important;font-weight:900!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-thread-avatar{display:flex!important;align-items:center!important;justify-content:center!important;width:46px!important;height:46px!important;flex:0 0 46px!important;border-radius:50%!important;background:#C2184B!important;color:#fff!important;font-size:19px!important;font-weight:900!important}
 html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading h3{margin:0!important;color:#fff!important;font-size:18px!important;font-weight:800!important}
 html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading small{display:block!important;margin-top:4px!important;color:#aaa!important;font-size:12px!important}
 html body #root .app.inbox-screen .hyrz-admin-thread .icon-back-button{display:flex!important;align-items:center!important;justify-content:center!important;width:44px!important;height:44px!important;min-width:44px!important;padding:0!important;border:1px solid #454545!important;border-radius:50%!important;background:#222!important;color:#fff!important}
@@ -14983,8 +14983,8 @@ html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-chat{display:f
 html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-message-content{max-width:min(78%,620px)!important}
 html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer{display:flex!important;flex:0 0 auto!important;flex-direction:row!important;align-items:center!important;gap:10px!important;width:100%!important;margin:0!important;padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;border:0!important;border-top:1px solid #303030!important;border-radius:0!important;background:#111!important}
 html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer textarea{min-height:46px!important;max-height:120px!important;padding:12px 16px!important;border:1px solid #444!important;border-radius:24px!important;background:#202020!important;color:#fff!important}
-html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer .hyrz-chat-tool{width:44px!important;height:44px!important;flex:0 0 44px!important;border:0!important;background:transparent!important;color:#ff7900!important;font-size:28px!important}
-html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer button.primary{min-height:44px!important;padding:0 20px!important;border:0!important;border-radius:24px!important;background:#ff7900!important;color:#fff!important;font-weight:800!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer .hyrz-chat-tool{width:44px!important;height:44px!important;flex:0 0 44px!important;border:0!important;background:transparent!important;color:#C2184B!important;font-size:28px!important}
+html body #root .app.inbox-screen .hyrz-admin-thread .hyrz-direct-composer button.primary{min-height:44px!important;padding:0 20px!important;border:0!important;border-radius:24px!important;background:#C2184B!important;color:#fff!important;font-weight:800!important}
 html body #root .app.inbox-screen:has(.worker-inbox-panel .hyrz-direct-chat) .page-inbox>header,
 html body #root .app.inbox-screen:has(.worker-inbox-panel .hyrz-direct-chat) .page-inbox>.worker-subsection-toolbar,
 html body #root .app.inbox-screen:has(.worker-inbox-panel .hyrz-direct-chat) .page-inbox>.inbox-global-search,
@@ -15092,8 +15092,8 @@ html body #root .app.inbox-screen:has(.worker-direct-inbox .hyrz-direct-chat) .w
   box-shadow:none!important;
 }
 #root .app .inbox-category-tabs>button.active{
-  border-color:#f97316!important;
-  background:#f97316!important;
+  border-color:#C2184B!important;
+  background:#C2184B!important;
   color:#171b1e!important;
   box-shadow:0 2px 8px rgba(249,115,22,.25)!important;
 }
@@ -15239,7 +15239,7 @@ html body #root .app.inbox-screen .workchat-conversation-header .workchat-conver
  font-weight:600!important;
 }
 html body #root .app.inbox-screen .workchat-conversation-header .workchat-profile-avatar{
- background:#f97316!important;color:#171b1e!important;border:2px solid #fff!important;
+ background:#C2184B!important;color:#171b1e!important;border:2px solid #fff!important;
 }
 html body #root .app.inbox-screen .workchat-conversation-header .workchat-profile-avatar span{
  color:#171b1e!important;-webkit-text-fill-color:#171b1e!important;font-weight:850!important;
