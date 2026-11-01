@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
-:root{font-family:'DM Sans',sans-serif;color:#171916;background:#F7F7F7;font-synthesis:none;text-rendering:optimizeLegibility}*{box-sizing:border-box}body{margin:0}.app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:#10120f;color:#F7F7F7;padding:34px 23px;display:flex;flex-direction:column;z-index:2}.brand{font:800 38px Manrope,sans-serif;letter-spacing:-2px;color:#fff;text-decoration:none;cursor:pointer}.brand span,.green{color:#C2184B}.tag{font-size:12px;line-height:1.7;color:#a5a89f;margin:4px 0 40px}.sidebar nav{display:grid;gap:7px}.sidebar nav button,.sidebottom button{background:transparent;border:0;color:#aeb2a8;text-align:left;padding:12px;border-radius:9px;cursor:pointer;font:inherit;font-size:13px}.sidebar nav button.selected,.sidebar nav button:hover{background:#111111;color:#C2184B}.sidebottom{margin-top:auto;display:grid;gap:8px}.sidebottom small{color:#777f70;font-size:11px;overflow-wrap:anywhere}main{margin-left:245px;padding:36px 5vw 20px;max-width:1700px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px;gap:15px}h1,h2,p{margin-top:0}h1{font:700 30px Manrope,sans-serif;letter-spacing:-1px;margin:7px 0 0}h2{font:700 22px Manrope,sans-serif;letter-spacing:-.6px;margin-bottom:9px}.eyebrow{font-size:10px;font-weight:700;letter-spacing:1.8px;color:#858a7f}.userpill,.pill{border:1px solid #FCE8EF;border-radius:30px;padding:9px 13px;font-size:11px;color:#646a60}.hero{min-height:450px;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:8%;padding:45px 0 80px}.hero-copy h2{font-size:clamp(42px,5vw,68px);line-height:1.1;letter-spacing:-3px;margin:28px 0 20px}.hero-copy h2 em{font-style:normal;color:#292929}.hero-copy p{max-width:440px;line-height:1.8;color:#686d64}.pill{background:#FCE8EF;border:0;color:#292929;font-weight:700;letter-spacing:1px}.actions{display:flex;gap:10px;align-items:center;margin-top:26px}.primary,.secondary,.shiftpay button,.row button{border:0;border-radius:8px;padding:12px 17px;font:600 12px 'DM Sans';cursor:pointer}.primary{background:#C2184B;color:#111111}.primary:hover{background:#A3133D}.primary:disabled{opacity:.6}.secondary{background:#FCE8EF;color:#272a24}.hero-card{background:#111111;color:white;border-radius:18px;padding:26px;box-shadow:0 25px 65px #1c251b18;transform:rotate(1deg)}.card-top{display:flex;justify-content:space-between;color:#969d8e;font-size:10px;letter-spacing:1.4px}.live{color:#C2184B}.big-stat{font:500 30px Manrope;line-height:1.3;padding:44px 0}.big-stat strong{color:#C2184B}.mini-shift{border-top:1px solid #34382f;display:flex;align-items:center;justify-content:space-between;padding:17px 0}.mini-shift b,.mini-shift small{display:block}.mini-shift small{color:#9b9f95;margin-top:5px;font-size:11px}.mini-shift>span{color:#C2184B;font-size:22px}.panel{background:white;border:1px solid #FCE8EF;border-radius:14px;padding:25px;margin-bottom:22px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px}.panel-head h2{margin:5px 0 0}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:23px}.stat{background:#fff;border:1px solid #FCE8EF;border-radius:12px;padding:21px}.stat small{display:block;color:#8a8e85;font-size:9px;letter-spacing:1.1px;font-weight:700}.stat strong{display:block;font:700 30px Manrope;margin-top:12px}.shiftrow,.row{display:flex;align-items:center;gap:16px;padding:17px 0;border-top:1px solid #FCE8EF}.shiftdate{background:#FCE8EF;color:#292929;padding:12px 10px;border-radius:8px;font-weight:700;font-size:12px;min-width:58px;text-align:center}.shiftmain{display:grid;gap:5px;flex:1;min-width:0}.shiftmain b,.row b{font-size:13px}.shiftmain small,.row small{display:block;color:#898e84;font-size:11px;line-height:1.5}.shiftpay{display:grid;justify-items:end;gap:7px}.shiftpay strong{font-size:16px}.shiftpay strong small{font-size:10px;color:#777}.shiftpay button,.row button{background:#FCE8EF;color:#292929;padding:9px 12px}.row>div:first-child{flex:1;min-width:0}.row>strong{font-size:13px}.status{font-size:10px;border-radius:20px;background:#f0f1ee;color:#555;padding:6px 9px;text-transform:capitalize}.status.approved,.status.paid{background:#FCE8EF;color:#292929}.status.rejected,.status.disputed,.status.overdue{background:#fbe8e4;color:#9c4032}.empty{padding:30px 0;color:#858a80;font-size:13px;text-align:center}label{display:grid;gap:7px;color:#4f554a;font-size:12px;font-weight:600;margin-bottom:15px}input,select,textarea{width:100%;border:1px solid #FCE8EF;border-radius:7px;background:#fff;padding:12px;font:inherit;font-size:13px;color:#222;outline:none}input:focus,select:focus,textarea:focus{border-color:#A3133D}textarea{min-height:90px;resize:vertical}.auth{max-width:560px;margin:0 auto 70px}.auth form{margin-top:25px}.grid2,.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.formgrid .wide{grid-column:1/-1}.formgrid .primary{justify-self:start;margin-bottom:5px}.search{max-width:240px}.textbutton{display:block;border:0;background:none;margin-top:15px;cursor:pointer;color:#292929}.alert{border-radius:8px;padding:12px 15px;margin-bottom:16px;font-size:12px}.error{background:#ffe8e4;color:#8e3128}.success{background:#FCE8EF;color:#292929}footer{display:flex;justify-content:space-between;gap:12px;padding:40px 0 10px;color:#959a90;font-size:10px}footer>span:first-child{font:800 17px Manrope;color:#111111}.worker{background:#111111;color:#F7F7F7}.worker main{color:#F7F7F7}.worker header h1{color:#F7F7F7}.worker .userpill{border-color:#353a30;color:#c6cabe}.worker .panel,.worker .stat{background:#171a15;border-color:#2a2e26;color:#F7F7F7}.worker .stat small,.worker .shiftmain small,.worker .row small{color:#a1a799}.worker .shiftrow,.worker .row{border-color:#2d3229}.worker .shiftdate{background:#111111;color:#C2184B}.worker .secondary{background:#2c3028;color:#F7F7F7}.worker .status{background:#2a2e26;color:#ddd}.worker .status.approved{background:#111111;color:#C2184B}.worker .empty{color:#a1a799}.worker footer{color:#777e70}.worker .eyebrow{color:#a4ab9b}
+:root{font-family:'DM Sans',sans-serif;color:#171916;background:#F7F7F7;font-synthesis:none;text-rendering:optimizeLegibility}*{box-sizing:border-box}body{margin:0}.app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:#10120f;color:#F7F7F7;padding:34px 23px;display:flex;flex-direction:column;z-index:2}.brand{font:800 38px Manrope,sans-serif;letter-spacing:-2px;color:#fff;text-decoration:none;cursor:pointer}.brand span,.green{color:#C2184B}.tag{font-size:12px;line-height:1.7;color:#a5a89f;margin:4px 0 40px}.sidebar nav{display:grid;gap:7px}.sidebar nav button,.sidebottom button{background:transparent;border:0;color:#aeb2a8;text-align:left;padding:12px;border-radius:9px;cursor:pointer;font:inherit;font-size:13px}.sidebar nav button.selected,.sidebar nav button:hover{background:#111111;color:#C2184B}.sidebottom{margin-top:auto;display:grid;gap:8px}.sidebottom small{color:#777f70;font-size:11px;overflow-wrap:anywhere}main{margin-left:245px;padding:36px 5vw 20px;max-width:1700px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px;gap:15px}h1,h2,p{margin-top:0}h1{font:700 30px Manrope,sans-serif;letter-spacing:-1px;margin:7px 0 0}h2{font:700 22px Manrope,sans-serif;letter-spacing:-.6px;margin-bottom:9px}.eyebrow{font-size:10px;font-weight:700;letter-spacing:1.8px;color:#858a7f}.userpill,.pill{border:1px solid #FCE8EF;border-radius:30px;padding:9px 13px;font-size:11px;color:#646a60}.hero{min-height:450px;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:8%;padding:45px 0 80px}.hero-copy h2{font-size:clamp(42px,5vw,68px);line-height:1.1;letter-spacing:-3px;margin:28px 0 20px}.hero-copy h2 em{font-style:normal;color:#292929}.hero-copy p{max-width:440px;line-height:1.8;color:#686d64}.pill{background:#FCE8EF;border:0;color:#292929;font-weight:700;letter-spacing:1px}.actions{display:flex;gap:10px;align-items:center;margin-top:26px}.primary,.secondary,.shiftpay button,.row button{border:0;border-radius:8px;padding:12px 17px;font:600 12px 'DM Sans';cursor:pointer}.primary{background:#C2184B;color:#111111}.primary:hover{background:#C2184B}.primary:disabled{opacity:.6}.secondary{background:#FCE8EF;color:#272a24}.hero-card{background:#111111;color:white;border-radius:18px;padding:26px;box-shadow:0 25px 65px #1c251b18;transform:rotate(1deg)}.card-top{display:flex;justify-content:space-between;color:#969d8e;font-size:10px;letter-spacing:1.4px}.live{color:#C2184B}.big-stat{font:500 30px Manrope;line-height:1.3;padding:44px 0}.big-stat strong{color:#C2184B}.mini-shift{border-top:1px solid #34382f;display:flex;align-items:center;justify-content:space-between;padding:17px 0}.mini-shift b,.mini-shift small{display:block}.mini-shift small{color:#9b9f95;margin-top:5px;font-size:11px}.mini-shift>span{color:#C2184B;font-size:22px}.panel{background:white;border:1px solid #FCE8EF;border-radius:14px;padding:25px;margin-bottom:22px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px}.panel-head h2{margin:5px 0 0}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:23px}.stat{background:#fff;border:1px solid #FCE8EF;border-radius:12px;padding:21px}.stat small{display:block;color:#8a8e85;font-size:9px;letter-spacing:1.1px;font-weight:700}.stat strong{display:block;font:700 30px Manrope;margin-top:12px}.shiftrow,.row{display:flex;align-items:center;gap:16px;padding:17px 0;border-top:1px solid #FCE8EF}.shiftdate{background:#FCE8EF;color:#292929;padding:12px 10px;border-radius:8px;font-weight:700;font-size:12px;min-width:58px;text-align:center}.shiftmain{display:grid;gap:5px;flex:1;min-width:0}.shiftmain b,.row b{font-size:13px}.shiftmain small,.row small{display:block;color:#898e84;font-size:11px;line-height:1.5}.shiftpay{display:grid;justify-items:end;gap:7px}.shiftpay strong{font-size:16px}.shiftpay strong small{font-size:10px;color:#777}.shiftpay button,.row button{background:#FCE8EF;color:#292929;padding:9px 12px}.row>div:first-child{flex:1;min-width:0}.row>strong{font-size:13px}.status{font-size:10px;border-radius:20px;background:#f0f1ee;color:#555;padding:6px 9px;text-transform:capitalize}.status.approved,.status.paid{background:#FCE8EF;color:#292929}.status.rejected,.status.disputed,.status.overdue{background:#fbe8e4;color:#9c4032}.empty{padding:30px 0;color:#858a80;font-size:13px;text-align:center}label{display:grid;gap:7px;color:#4f554a;font-size:12px;font-weight:600;margin-bottom:15px}input,select,textarea{width:100%;border:1px solid #FCE8EF;border-radius:7px;background:#fff;padding:12px;font:inherit;font-size:13px;color:#222;outline:none}input:focus,select:focus,textarea:focus{border-color:#C2184B}textarea{min-height:90px;resize:vertical}.auth{max-width:560px;margin:0 auto 70px}.auth form{margin-top:25px}.grid2,.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.formgrid .wide{grid-column:1/-1}.formgrid .primary{justify-self:start;margin-bottom:5px}.search{max-width:240px}.textbutton{display:block;border:0;background:none;margin-top:15px;cursor:pointer;color:#292929}.alert{border-radius:8px;padding:12px 15px;margin-bottom:16px;font-size:12px}.error{background:#ffe8e4;color:#8e3128}.success{background:#FCE8EF;color:#292929}footer{display:flex;justify-content:space-between;gap:12px;padding:40px 0 10px;color:#959a90;font-size:10px}footer>span:first-child{font:800 17px Manrope;color:#111111}.worker{background:#111111;color:#F7F7F7}.worker main{color:#F7F7F7}.worker header h1{color:#F7F7F7}.worker .userpill{border-color:#353a30;color:#c6cabe}.worker .panel,.worker .stat{background:#171a15;border-color:#2a2e26;color:#F7F7F7}.worker .stat small,.worker .shiftmain small,.worker .row small{color:#a1a799}.worker .shiftrow,.worker .row{border-color:#2d3229}.worker .shiftdate{background:#111111;color:#C2184B}.worker .secondary{background:#2c3028;color:#F7F7F7}.worker .status{background:#2a2e26;color:#ddd}.worker .status.approved{background:#111111;color:#C2184B}.worker .empty{color:#a1a799}.worker footer{color:#777e70}.worker .eyebrow{color:#a4ab9b}
 @media(max-width:900px){.sidebar{width:190px;padding:25px 14px}main{margin-left:190px;padding:25px}.hero{grid-template-columns:1fr;gap:30px;padding:20px 0 45px}.hero-card{max-width:500px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.sidebar{position:static;width:auto;height:auto;padding:12px 18px;display:flex;flex-direction:row;align-items:center;gap:15px}.brand{font-size:28px}.tag{display:none}.sidebar nav{display:flex;overflow:auto;gap:3px;margin-left:auto}.sidebar nav button{white-space:nowrap;padding:8px;font-size:11px}.sidebottom{margin:0}.sidebottom small{display:none}.sidebottom button{padding:8px}main{margin:0;padding:24px 16px}.hero-copy h2{font-size:44px}.stats{gap:8px}.stat{padding:15px}.stat strong{font-size:25px}.panel{padding:17px}.panel-head{align-items:flex-start;flex-direction:column}.shiftrow{gap:10px}.shiftpay strong{font-size:14px}.grid2,.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}.row{flex-wrap:wrap}footer{flex-wrap:wrap}}
 
 
@@ -150,7 +150,7 @@
 
 .auth-layout .auth input:focus,
 .auth-layout .auth select:focus {
-  border-color: #A3133D;
+  border-color: #C2184B;
   box-shadow: 0 0 0 3px rgba(181, 243, 74, .17);
 }
 
@@ -299,7 +299,7 @@
 }
 
 .brand-mark span {
-  color: #A3133D;
+  color: #C2184B;
 }
 
 .welcome-panel h2 {
@@ -365,7 +365,7 @@
 
 .role-card:hover {
   transform: translateY(-4px);
-  border-color: #A3133D;
+  border-color: #C2184B;
   box-shadow: 0 12px 35px #182b1710;
 }
 
@@ -1491,7 +1491,7 @@ footer .brand span {
 .worker-section-nav{margin-bottom:22px}
 .worker-section-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .worker-section-links button{font-size:12px}
-.worker-section-links button.selected{background:#111111;color:#C2184B;border-color:#A3133D}
+.worker-section-links button.selected{background:#111111;color:#C2184B;border-color:#C2184B}
 .job-tabs{margin:14px 0 20px}
 .availability-preview{display:grid;gap:16px;margin-top:20px}
 .availability-preview label{display:block}
@@ -1515,7 +1515,7 @@ footer .brand span {
 
 #root .worker-header-profile-picture{width:42px;height:42px;flex:0 0 42px;padding:0;border:1px solid #FCE8EF;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#F7F7F7;color:#111111;font-size:17px;font-weight:750;cursor:pointer}
 #root .worker-header-profile-picture img{width:100%;height:100%;object-fit:cover}
-#root .worker-header-profile-picture:focus-visible{outline:2px solid #A3133D;outline-offset:3px}
+#root .worker-header-profile-picture:focus-visible{outline:2px solid #C2184B;outline-offset:3px}
 .worker-page-header{align-items:flex-start;margin-bottom:24px}
 .worker-signout{flex-shrink:0;white-space:nowrap}
 .worker-greeting-subtitle{margin:9px 0 0;color:#777f70;font-size:14px}
@@ -1681,7 +1681,7 @@ footer .brand span {
 .rolling-calendar-day strong{font:800 20px Manrope,sans-serif;line-height:1.1}
 .rolling-calendar-day>span{font-size:10px;color:#858b7e}
 .rolling-calendar-day.today{border-color:#C2184B}
-.rolling-calendar-day.selected{background:#C2184B;border-color:#A3133D;color:#111111}
+.rolling-calendar-day.selected{background:#C2184B;border-color:#C2184B;color:#111111}
 .rolling-calendar-day.selected small,.rolling-calendar-day.selected>span{color:#111111}
 .rolling-calendar-day:focus-visible,.calendar-clear:focus-visible{outline:2px solid #292929;outline-offset:2px}
 @media(max-width:520px){.rolling-shift-calendar{padding:12px}.rolling-calendar-days{gap:7px}.rolling-calendar-day{flex-basis:60px;min-width:60px;min-height:76px}.rolling-calendar-day small,.rolling-calendar-day>span{font-size:9px}.rolling-calendar-day strong{font-size:18px}}
@@ -1734,7 +1734,7 @@ footer .brand span {
 .shift-filters label{display:grid;gap:7px;color:#C2184B;font-size:11px;font-weight:700}
 .shift-filters input,.shift-filters select{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:9px 10px;border:1px solid #FCE8EF;border-radius:7px;background:#fff;color:#171916;font:12px 'DM Sans',sans-serif}
 .shift-filters button{align-self:end;justify-self:start}
-.shift-card.selected-date-shift{background:#FCE8EF;border-color:#A3133D;box-shadow:0 0 0 2px #b5f34a55}
+.shift-card.selected-date-shift{background:#FCE8EF;border-color:#C2184B;box-shadow:0 0 0 2px #b5f34a55}
 .shift-card.selected-date-shift .shiftpay{border-color:#C2184B}
 @media(max-width:760px){.find-shifts-search{grid-template-columns:minmax(0,1fr) auto}.shift-filters{grid-template-columns:1fr 1fr;padding:13px;gap:10px}}
 @media(max-width:420px){.shift-filters{grid-template-columns:1fr}}
@@ -1845,7 +1845,7 @@ footer .brand span {
 .app.worker .role-picker-panel>input[type="search"]:focus{
   outline:2px solid #C2184B;
   outline-offset:2px;
-  border-color:#A3133D;
+  border-color:#C2184B;
 }
 .app.worker .role-multi-filter{
   z-index:5;
@@ -2221,7 +2221,7 @@ footer .brand span {
 /* Worker dashboard: three large shortcut cards above the full dashboard section links. */
 .stats.worker-dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:22px}
 .worker-dashboard-stat{display:block;width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer;transition:border-color .15s,transform .15s}
-.worker-dashboard-stat:hover{border-color:#A3133D;transform:translateY(-1px)}
+.worker-dashboard-stat:hover{border-color:#C2184B;transform:translateY(-1px)}
 .worker-dashboard-stat span{display:block;margin-top:10px;font-size:11px;font-weight:700;color:#292929}
 @media(max-width:760px){.stats.worker-dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.worker-dashboard-stat{padding:13px 10px}.worker-dashboard-stat strong{font-size:23px}.worker-dashboard-stat small{font-size:8px;letter-spacing:.4px}.worker-dashboard-stat span{font-size:10px}}
 
@@ -2369,7 +2369,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .timetable-day strong{font-size:21px;line-height:1}
 .timetable-day span{font-size:10px;font-weight:700}
 .timetable-day.free-day{background:#FFFFFF;border-color:#D8DDD5;color:#171916}
-.timetable-day.has-shift{background:#C2184B;border-color:#A3133D;color:#171916}
+.timetable-day.has-shift{background:#C2184B;border-color:#C2184B;color:#171916}
 .timetable-day:hover{filter:brightness(1.08)}
 .timetable-day.selected{outline:3px solid #fff;outline-offset:2px;position:relative;z-index:1}
 .timetable-selected-shifts{margin-top:26px;padding-top:20px;border-top:1px solid #343a2f}
@@ -2415,7 +2415,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 /* Ensure employer shift tabs have high-contrast, readable labels on every state. */
 .employer .employer-shift-tab{color:#111111!important;background:#F7F7F7!important;border-color:#C2184B!important}
 .employer .employer-shift-tab:hover{color:#111111!important;background:#FCE8EF!important}
-.employer .employer-shift-tab.selected{color:#111111!important;background:#C2184B!important;border-color:#A3133D!important}
+.employer .employer-shift-tab.selected{color:#111111!important;background:#C2184B!important;border-color:#C2184B!important}
 .employer .past-shift-card{display:block;margin:14px 0;padding:20px;border:1px solid #FCE8EF;border-radius:12px;background:#fff;color:#111111}
 /* Compact employer published-shift rows, matching the worker available-shifts density. */
 .employer .past-shift-list>.past-shift-card{display:block;margin:8px 0;padding:12px 14px;border-radius:10px;box-shadow:none}
@@ -2684,7 +2684,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .worker-notifications-panel{width:100%;min-width:0;box-sizing:border-box;align-self:stretch;padding:clamp(20px,3vw,38px);border-radius:20px}
 .notification-back{display:inline-flex;align-items:center;gap:8px;margin:0 0 22px;padding:10px 15px;border:1px solid #111111;border-radius:10px;background:#111111;color:#C2184B;font-weight:700;cursor:pointer}
 .notification-page-heading{text-align:center;margin:0 auto 26px}
-.notification-page-heading .eyebrow{display:block;margin-bottom:8px;color:#A3133D;font-size:10px;letter-spacing:2px;font-weight:800}
+.notification-page-heading .eyebrow{display:block;margin-bottom:8px;color:#C2184B;font-size:10px;letter-spacing:2px;font-weight:800}
 .notification-page-heading h2{margin:0;font-size:clamp(26px,3vw,34px);letter-spacing:-.8px}
 .notification-page-heading p{margin:8px 0 0;color:#a6ad9c;font-size:14px}
 .notification-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 28px;padding:6px;border:1px solid #111111;border-radius:14px;background:#111111}
@@ -3947,7 +3947,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .role-selection-top,.register-top-links{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%}
 .role-selection-top>.textbutton,.register-top-links>.textbutton{margin-top:0}
 .how-work-link{flex:0 0 auto;border:1px solid #FCE8EF;border-radius:9px;padding:10px 14px;background:#F7F7F7;color:#292929;font-weight:750;cursor:pointer}
-.how-work-link:hover{background:#FCE8EF;border-color:#A3133D}
+.how-work-link:hover{background:#FCE8EF;border-color:#C2184B}
 .how-work-panel{margin:18px 0 24px;padding:22px 24px;border:1px solid #FCE8EF;border-radius:14px;background:#F7F7F7;color:#111111;box-shadow:0 8px 24px #1b28100a}
 .how-work-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #FCE8EF}
 .how-work-tabs button{border:1px solid #C2184B;border-radius:8px;background:#fff;color:#292929;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer}
@@ -3997,7 +3997,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .download-app-copy h2 em{font-style:normal;color:#C2184B}
 .download-app-copy>p{max-width:510px;margin:0 0 26px;color:#FCE8EF;font-size:16px;line-height:1.7}
 .download-app-actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px}
-.app-store-placeholder{display:flex;align-items:center;gap:10px;min-width:156px;padding:10px 14px;border:1px solid #A3133D;border-radius:8px;background:#111111;color:#fff;text-align:left;opacity:.92}
+.app-store-placeholder{display:flex;align-items:center;gap:10px;min-width:156px;padding:10px 14px;border:1px solid #C2184B;border-radius:8px;background:#111111;color:#fff;text-align:left;opacity:.92}
 .app-store-placeholder:disabled{cursor:default}
 .store-symbol{font-size:24px;line-height:1;color:#C2184B}
 .app-store-placeholder span:last-child{display:flex;flex-direction:column;gap:2px}
@@ -4309,7 +4309,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .workchat-participant-picker .workchat-section-tabs{margin:0 0 14px}
 .workchat-worker-list{display:grid;gap:8px;max-height:280px;overflow:auto;margin-top:12px}
 .workchat-worker-option{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #e3e0d7;border-radius:9px;background:#fff;cursor:pointer}
-.workchat-worker-option.selected{border-color:#A3133D;background:#F7F7F7}
+.workchat-worker-option.selected{border-color:#C2184B;background:#F7F7F7}
 .workchat-worker-option input{width:16px;height:16px;flex:0 0 auto;accent-color:#111111}
 .workchat-worker-option>span:nth-of-type(1){display:grid;gap:3px;min-width:0;flex:1}
 .workchat-worker-option strong{font-size:13px;color:#111111}
@@ -4343,7 +4343,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app .workchat-conversation-header{display:flex;align-items:center;gap:16px;padding:16px;border-bottom:1px solid #e7e0d5;background:#f8f5ef}
 .app .workchat-conversation-header>div{min-width:0}
 .app .workchat-conversation-header h3{margin:0 0 4px;color:#111111;font:700 18px Manrope,sans-serif}
-.app .workchat-conversation-header p{margin:0;color:#A3133D;font-size:12px}
+.app .workchat-conversation-header p{margin:0;color:#C2184B;font-size:12px}
 .app .workchat-message-list{display:flex;flex-direction:column;gap:16px;padding:20px;min-height:250px;max-height:480px;overflow-y:auto;background:#fffdf9}
 .app .workchat-message-row{display:flex;align-items:flex-end;gap:10px;max-width:90%}
 .app .workchat-message-row.mine{align-self:flex-end;flex-direction:row-reverse}
@@ -4351,7 +4351,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app .workchat-avatar img{width:100%;height:100%;object-fit:cover}
 .app .workchat-message-content{min-width:0}
 .app .workchat-message-meta{display:flex;align-items:center;gap:10px;margin:0 0 5px;font-size:11px;color:#292929}
-.app .workchat-message-meta time{font-size:10px;color:#A3133D}
+.app .workchat-message-meta time{font-size:10px;color:#C2184B}
 .app .workchat-message-bubble{padding:10px 13px;border-radius:12px 12px 12px 3px;background:#FCE8EF;color:#111111;font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
 .app .workchat-message-row.mine .workchat-message-bubble{border-radius:12px 12px 3px 12px;background:#111111;color:#fff}
 .app .workchat-message-bubble.tone-0{background:#FCE8EF;color:#292929}
@@ -4363,7 +4363,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app .workchat-message-row.mine .workchat-message-bubble{background:#111111;color:#fff}
 .app .workchat-typing{min-height:26px;padding:0 20px;color:#292929;font-size:12px}
 .app .typing-dots{display:inline-flex;gap:3px;margin-right:7px;vertical-align:middle}
-.app .typing-dots i{width:5px;height:5px;border-radius:50%;background:#A3133D;animation:workchat-pulse 1s infinite ease-in-out}
+.app .typing-dots i{width:5px;height:5px;border-radius:50%;background:#C2184B;animation:workchat-pulse 1s infinite ease-in-out}
 .app .typing-dots i:nth-child(2){animation-delay:.15s}.app .typing-dots i:nth-child(3){animation-delay:.3s}
 @keyframes workchat-pulse{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
 .app .workchat-composer{display:flex;align-items:stretch;flex-wrap:wrap;gap:10px;padding:14px;border-top:1px solid #e7e0d5;background:#f8f5ef}
@@ -4659,7 +4659,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
 .app main.page-workchats .workchat-settings-button:hover,
 .app main.page-workchats .workchat-settings-button[aria-expanded="true"]{
   background:#292929;
-  border-color:#A3133D;
+  border-color:#C2184B;
 }
 .app main.page-workchats .workchat-settings-menu{
   position:absolute;
@@ -5161,7 +5161,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   grid-column:1/-1;
   display:block;
   margin:-2px 0 0 2px;
-  color:#A3133D!important;
+  color:#C2184B!important;
   font:500 10px/1.4 'DM Sans',sans-serif!important;
 }
 
@@ -5193,7 +5193,7 @@ main>section.panel:has(>h2:first-child) .admin-record{width:100%;max-width:none;
   font:500 13px 'DM Sans',sans-serif;
 }
 .app main.page-workchats .workchat-message-search span{
-  color:#A3133D;
+  color:#C2184B;
   font-size:11px;
   white-space:nowrap;
 }
@@ -5423,8 +5423,8 @@ input[type="checkbox"]::after{
   transition:transform .16s ease;
 }
 input[type="checkbox"]:checked{
-  background:#A3133D!important;
-  border-color:#A3133D!important;
+  background:#C2184B!important;
+  border-color:#C2184B!important;
 }
 input[type="checkbox"]:checked::after{transform:translateX(17px)}
 input[type="checkbox"]:focus-visible{outline:3px solid rgba(169,233,67,.45);outline-offset:2px}
@@ -5732,13 +5732,13 @@ input[type="checkbox"]:disabled{opacity:.5;cursor:not-allowed}
 /* Hyrz visual polish: warmer canvas, richer accent colours and clearer semantic status colours. */
 :root{
  --hyrz-ink:#111111;
- --hyrz-muted:#A3133D;
+ --hyrz-muted:#C2184B;
  --hyrz-canvas:#F7F7F7;
  --hyrz-surface:#ffffff;
  --hyrz-line:#FCE8EF;
  --hyrz-lime:#C2184B;
  --hyrz-lime-ink:#111111;
- --hyrz-blue:#A3133D;
+ --hyrz-blue:#C2184B;
  --hyrz-blue-soft:#F7F7F7;
  --hyrz-teal:#292929;
  --hyrz-teal-soft:#FCE8EF;
@@ -5757,7 +5757,7 @@ body{background:var(--hyrz-canvas);color:var(--hyrz-ink)}
 }
 .app.worker main .panel p,.app.employer main .panel p{color:var(--hyrz-muted)}
 h1,h2,h3,h4,.panel h2,.panel h3{color:var(--hyrz-ink)}
-.eyebrow{color:#A3133D}
+.eyebrow{color:#C2184B}
 .primary{background:var(--hyrz-lime);color:#111111;box-shadow:0 2px 0 rgba(48,69,26,.06)}
 .primary:hover{background:#C2184B}
 .secondary{background:#F7F7F7;color:#292929;border:1px solid #FCE8EF}
@@ -5987,7 +5987,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .checkout-record{display:flex;flex-direction:column;gap:12px;padding:18px;border:1px solid var(--border,#e7dfd2);border-radius:12px;background:#fffdfa;margin:10px 0;}
 .checkout-record-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
 .checkout-record-head>div{display:flex;flex-direction:column;gap:4px;min-width:0;}
-.checkout-record-head small,.checkout-record>small{overflow-wrap:anywhere;color:var(--muted,#A3133D);}
+.checkout-record-head small,.checkout-record>small{overflow-wrap:anywhere;color:var(--muted,#C2184B);}
 .checkout-clock-times{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
 .checkout-clock-times>span{display:flex;flex-direction:column;gap:5px;padding:12px;border-radius:8px;background:#f7f7f3;font-size:13px;overflow-wrap:anywhere;}
 .checkout-clock-times strong{font-size:11px;text-transform:uppercase;letter-spacing:.05em;}
@@ -6048,7 +6048,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .app.worker main .shifts-critical-info .worker-dashboard-stat small,
 .app.worker main .workchat-critical-info .worker-dashboard-stat small{
   display:block !important;
-  color:#A3133D !important;
+  color:#C2184B !important;
   font-size:9px !important;
   font-weight:800 !important;
   letter-spacing:1.2px !important;
@@ -6106,7 +6106,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   box-shadow:0 2px 5px rgba(39,32,20,.04) !important;
 }
 .app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap>.worker-todays-shift-card>small{
-  color:#A3133D !important;
+  color:#C2184B !important;
 }
 .app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap>.worker-todays-shift-card>strong{
   color:#111111 !important;
@@ -6145,7 +6145,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   box-shadow:0 2px 5px rgba(39,32,20,.04) !important;
 }
 .app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat small{
-  color:#A3133D !important;
+  color:#C2184B !important;
 }
 .app.worker main .stats.worker-dashboard-stats.upcoming-shifts-dashboard-card>.worker-dashboard-stat strong{
   color:#111111 !important;
@@ -6188,7 +6188,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   box-shadow:0 2px 5px rgba(39,32,20,.04) !important;
 }
 .app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap .worker-todays-shift-card small{
-  color:#A3133D !important;
+  color:#C2184B !important;
 }
 .app.worker main .stats.worker-dashboard-stats.worker-todays-shift-wrap .worker-todays-shift-card strong{
   color:#111111 !important;
@@ -6279,7 +6279,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
   cursor:pointer;
 }
 .workchat-reaction:hover{border-color:#b8a58e;background:#f7f0e5}
-.workchat-reaction.selected{border-color:#A3133D;background:#FCE8EF}
+.workchat-reaction.selected{border-color:#C2184B;background:#FCE8EF}
 .workchat-reaction span{font-size:11px;font-weight:750}
 .workchat-message-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
 
@@ -6307,17 +6307,17 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(53,89,168,.35);outli
 .app .workchat-composer .workchat-reply-preview{flex:1 0 100%;box-sizing:border-box;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid #d8c9b5;border-left:4px solid #b87535;border-radius:9px;background:#fffdf9;margin:0}
 .workchat-reply-preview{
   display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
-  padding:9px 12px;margin:0 0 8px;border-left:3px solid #A3133D;
+  padding:9px 12px;margin:0 0 8px;border-left:3px solid #C2184B;
   border-radius:8px;background:#f3f0e9;color:#111111;
 }
 .workchat-reply-preview small,.workchat-quoted-message small{
-  display:block;font-size:11px;font-weight:800;color:#A3133D;margin-bottom:4px;
+  display:block;font-size:11px;font-weight:800;color:#C2184B;margin-bottom:4px;
 }
 .workchat-reply-preview p{margin:0;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
 .workchat-reply-preview>button{border:0;background:transparent;color:#292929;cursor:pointer;font-size:16px}
 .workchat-quoted-message{
   display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:fit-content;
-  max-width:100%;padding:7px 10px;margin:0 0 5px;border:0;border-left:3px solid #A3133D;
+  max-width:100%;padding:7px 10px;margin:0 0 5px;border:0;border-left:3px solid #C2184B;
   border-radius:5px;background:#f0ebe2;color:#111111;text-align:left;cursor:pointer;
 }
 .workchat-quoted-message span{font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
@@ -7412,7 +7412,7 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  -webkit-text-fill-color:#111111!important;opacity:1!important;
 }
 #root .app.worker main>header:not(.worker-page-header) .eyebrow{
- color:#A3133D!important;-webkit-text-fill-color:#A3133D!important;opacity:1!important;
+ color:#C2184B!important;-webkit-text-fill-color:#C2184B!important;opacity:1!important;
 }
 #root .app.worker main>header:not(.worker-page-header) p,
 #root .app.worker main>header:not(.worker-page-header) small{
@@ -7647,7 +7647,7 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
  color:#ffffff!important;
  -webkit-text-fill-color:#ffffff!important;
  caret-color:#ffffff!important;
- border:2px solid #A3133D!important;
+ border:2px solid #C2184B!important;
 }
 #root .app.worker .find-shifts-search input::placeholder,
 #root .app.worker .find-shifts-panel .find-shifts-search input::placeholder,
@@ -7741,7 +7741,7 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 #root nav.employer-bottom-nav,
 #root nav.admin-bottom-nav{
  background:#111111!important;
- border-top:2px solid #A3133D!important;
+ border-top:2px solid #C2184B!important;
 }
 #root nav.worker-bottom-nav button,
 #root nav.employer-bottom-nav button,
@@ -7859,7 +7859,7 @@ html, body, #root, #root > * { background-color:#fff; color:#111; }
 
 /* Employer worker directory: compact, clickable cards with clear ratings and direct chat. */
 .app.employer .favourite-worker-card{display:grid;grid-template-columns:56px minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease}
-.app.employer .favourite-worker-card:hover,.app.employer .favourite-worker-card:focus-visible,.app.employer .favourite-worker-card.is-expanded{border-color:#A3133D;box-shadow:0 0 0 2px rgba(49,89,217,.12);outline:none}
+.app.employer .favourite-worker-card:hover,.app.employer .favourite-worker-card:focus-visible,.app.employer .favourite-worker-card.is-expanded{border-color:#C2184B;box-shadow:0 0 0 2px rgba(49,89,217,.12);outline:none}
 .app.employer .favourite-worker-avatar{width:56px;height:56px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:10px;background:#F7F7F7;color:#292929;font-size:16px;font-weight:800;flex-shrink:0}
 .app.employer .favourite-worker-avatar img{width:100%;height:100%;object-fit:cover}
 .app.employer .favourite-worker-info{gap:5px}
@@ -8515,19 +8515,19 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
 .app .workchat-info-tabs>button.active{background:#292929;color:#fff;border-color:#292929}
 .app .workchat-info-content{flex:1 0 100%;min-width:0;padding:12px 2px 2px;color:#292929}
 .app .workchat-info-content h4{margin:4px 0 10px;font-size:13px}
-.app .workchat-info-content p{margin:6px 0 14px;color:#A3133D;font-size:12px}
+.app .workchat-info-content p{margin:6px 0 14px;color:#C2184B;font-size:12px}
 .app .workchat-info-person{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #eee8df}
 .app .workchat-info-person>span:nth-child(2),.app .workchat-info-person>span:first-child:not(.workchat-info-avatar){display:flex;flex-direction:column;gap:3px;min-width:0}
 .app .workchat-info-person strong{font-size:12px}
-.app .workchat-info-person small{font-size:11px;color:#A3133D!important;overflow-wrap:anywhere}
+.app .workchat-info-person small{font-size:11px;color:#C2184B!important;overflow-wrap:anywhere}
 .app .workchat-info-avatar{display:grid;place-items:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#FCE8EF;color:#292929;font-weight:800;font-size:10px}
 .app .workchat-info-badge{margin-left:auto;padding:4px 7px;border-radius:999px;background:#FCE8EF;color:#292929;font-size:10px;white-space:nowrap}
 .app .workchat-info-dl{display:grid;grid-template-columns:minmax(110px,.6fr) minmax(0,1.4fr);gap:8px 12px;margin:0;font-size:12px}
-.app .workchat-info-dl dt{font-weight:700;color:#A3133D}
+.app .workchat-info-dl dt{font-weight:700;color:#C2184B}
 .app .workchat-info-dl dd{margin:0;overflow-wrap:anywhere}
 .app .workchat-media-list{display:grid;gap:8px}
 .app .workchat-media-list a{display:flex;flex-direction:column;gap:4px;padding:10px;border:1px solid #e7e0d5;border-radius:8px;background:#fff;color:#292929;overflow-wrap:anywhere}
-.app .workchat-media-list small{color:#A3133D!important}
+.app .workchat-media-list small{color:#C2184B!important}
 .app .hyrz-admin-message-feed{display:flex;flex-direction:column;gap:8px}
 .app .hyrz-admin-message-item{display:flex;flex-direction:column;align-items:flex-start;gap:5px;width:100%;text-align:left}
 @media(max-width:600px){.app .workchat-info-dl{grid-template-columns:1fr;gap:4px}.app .workchat-info-dl dd{margin-bottom:8px}}
@@ -8637,27 +8637,27 @@ body{background:var(--hyrz-cream)!important;color:var(--hyrz-ink)!important}
 .private-offers-section .find-shifts-heading{margin:0}
 .private-offers-empty{padding:28px 20px;text-align:center;border:1px dashed #FCE8EF;border-radius:12px;background:#F7F7F7;color:#111111}
 .private-offers-empty strong{display:block;font-size:16px;margin-bottom:6px}
-.private-offers-empty p{margin:0;color:#A3133D;font-size:13px;line-height:1.5}
+.private-offers-empty p{margin:0;color:#C2184B;font-size:13px;line-height:1.5}
 
 
 /* Hyrz brand refresh: Cobalt & Lime */
 /* Core brand tokens */
 :root{
-  --hyrz-cobalt:#A3133D;
+  --hyrz-cobalt:#C2184B;
   --hyrz-cobalt-dark:#292929;
   --hyrz-navy:#111111;
   --hyrz-lime:#C2184B;
-  --hyrz-lime-hover:#A3133D;
+  --hyrz-lime-hover:#C2184B;
   --hyrz-page:#F7F7F7;
   --hyrz-border:#FCE8EF;
   --hyrz-text:#111111;
-  --hyrz-muted:#A3133D;
+  --hyrz-muted:#C2184B;
   --hyrz-success:#292929;
 }
 body{background:var(--hyrz-page);color:var(--hyrz-text)}
 .app{color:var(--hyrz-text)}
 .app:not(.worker):not(.admin) main{color:var(--hyrz-text)}
-.app .eyebrow{color:#A3133D}
+.app .eyebrow{color:#C2184B}
 .app .sidebar{background:var(--hyrz-navy);color:#fff}
 .app .brand span,.app .green,.app .live{color:var(--hyrz-lime)}
 .app .sidebar nav button.selected,.app .sidebar nav button:hover{background:#111111;color:var(--hyrz-lime)}
@@ -8708,17 +8708,17 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 
 /* Complete Cobalt & Lime rollout — final high-contrast overrides */
 :root{
- --hyrz-cobalt:#A3133D;
+ --hyrz-cobalt:#C2184B;
  --hyrz-cobalt-dark:#292929;
  --hyrz-navy:#111111;
  --hyrz-lime:#C2184B;
- --hyrz-lime-hover:#A3133D;
+ --hyrz-lime-hover:#C2184B;
  --hyrz-page:#F7F7F7;
  --hyrz-surface:#FFFFFF;
  --hyrz-border:#FCE8EF;
  --hyrz-text:#111111;
  --hyrz-muted:#292929;
- --hyrz-focus:#A3133D;
+ --hyrz-focus:#C2184B;
 }
 /* Apply the brand consistently to the whole app, not just the first set of controls. */
 #root,.app,body{background:var(--hyrz-page);color:var(--hyrz-text)}
@@ -8787,9 +8787,9 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
  border-color:var(--hyrz-cobalt)!important;outline:0;
  box-shadow:0 0 0 3px rgba(37,78,219,.16)!important;
 }
-#root .app :is(input,textarea)::placeholder{color:#A3133D!important;opacity:1}
+#root .app :is(input,textarea)::placeholder{color:#C2184B!important;opacity:1}
 #root .app :is(label,.field-label,.form-label){color:#292929}
-#root .app :is(.eyebrow,.section-kicker){color:#A3133D}
+#root .app :is(.eyebrow,.section-kicker){color:#C2184B}
 /* Cobalt is the consistent interactive accent; lime is reserved for emphasis/selection. */
 #root .app :is(.green,.live,.accent,.brand-accent,.success-accent){color:#111111}
 #root .app :is(.pill,.badge,.chip,.filter-chip,.role-chip,.shift-type-chip){
@@ -8797,7 +8797,7 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 }
 #root .app :is(.pill,.filter-chip,.role-chip,.shift-type-chip).selected,
 #root .app :is(.pill,.filter-chip,.role-chip,.shift-type-chip)[aria-pressed="true"]{
- background:var(--hyrz-lime)!important;color:var(--hyrz-navy)!important;border-color:#A3133D!important;
+ background:var(--hyrz-lime)!important;color:var(--hyrz-navy)!important;border-color:#C2184B!important;
 }
 #root .app :is(.shiftdate,.date-tile,.calendar-date).selected,
 #root .app :is(.shiftdate,.date-tile,.calendar-date)[aria-pressed="true"]{
@@ -8881,7 +8881,7 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 }
 #root .app.worker main .worker-three-strikes-card .eyebrow,
 #root .app.worker main .worker-dashboard-stats .worker-dashboard-stat>small{
- color:#A3133D!important;-webkit-text-fill-color:#A3133D!important;
+ color:#C2184B!important;-webkit-text-fill-color:#C2184B!important;
 }
 #root .app.worker main .worker-section-nav.panel,
 #root .app.worker main .worker-section-nav.panel.employer-dashboard-sections{
@@ -8895,7 +8895,7 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
  box-shadow:0 3px 10px rgba(17,26,53,.07)!important;
 }
 #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button:hover{
- background:#F7F7F7!important;border-color:#A3133D!important;
+ background:#F7F7F7!important;border-color:#C2184B!important;
 }
 #root .app.worker main .worker-section-nav .worker-section-links.job-tabs-squares>button:focus-visible{
  outline:3px solid rgba(37,78,219,.55)!important;outline-offset:2px;
@@ -8906,7 +8906,7 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 #root nav.worker-bottom-nav,
 #root .app.worker nav.worker-bottom-nav{
  background:#111111!important;
- border-top:2px solid #A3133D!important;
+ border-top:2px solid #C2184B!important;
  box-shadow:0 -8px 24px rgba(17,26,53,.2)!important;
 }
 #root nav.worker-bottom-nav button,
@@ -8935,7 +8935,7 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 /* Use cobalt for worker calendar controls and lime only for clearly selected dates. */
 #root .app.worker main .calendar-strip,
 #root .app.worker main .horizontal-calendar,
-#root .app.worker main .find-shifts-calendar{background:#111111!important;border-color:#A3133D!important}
+#root .app.worker main .find-shifts-calendar{background:#111111!important;border-color:#C2184B!important}
 #root .app.worker main :is(.calendar-strip,.horizontal-calendar,.find-shifts-calendar) :is(button,.date-tile){
  color:#111111!important;-webkit-text-fill-color:#111111!important;
 }
@@ -8948,13 +8948,13 @@ body{background:var(--hyrz-page);color:var(--hyrz-text)}
 /* Final comprehensive Cobalt + Lime pass across public, auth and every signed-in section. */
 /* Normalize legacy palette variables still used by older sections/components. */
 :root{
- --hyrz-teal:#A3133D!important;
+ --hyrz-teal:#C2184B!important;
  --hyrz-coral:#C2184B!important;
  --hyrz-mint:#F7F7F7!important;
  --hyrz-ink:#111111!important;
  --hyrz-cream:#F7F7F7!important;
  --hyrz-border:#FCE8EF!important;
- --hyrz-blue:#A3133D!important;
+ --hyrz-blue:#C2184B!important;
  --hyrz-blue-soft:#F7F7F7!important;
  --hyrz-lime:#C2184B!important;
  --hyrz-lime-ink:#111111!important;
@@ -8968,7 +8968,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
  background:#F7F7F7!important;color:#111111!important;
 }
 #root header.public-home-nav{
- background:#A3133D!important;color:#FFFFFF!important;border-color:#A3133D!important;
+ background:#C2184B!important;color:#FFFFFF!important;border-color:#C2184B!important;
 }
 #root header.public-home-nav .public-home-logo,
 #root header.public-home-nav .public-home-logo span{color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important}
@@ -8991,7 +8991,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 }
 #root header.public-home-nav>nav>.public-nav-signup:hover,
 #root .public-how-work-cta:hover,
-#root .auth-welcome .primary:hover{background:#A3133D!important;border-color:#A3133D!important}
+#root .auth-welcome .primary:hover{background:#C2184B!important;border-color:#C2184B!important}
 #root .public-how-work-panel{
  background:#FFFFFF!important;color:#111111!important;border-color:#FCE8EF!important;
 }
@@ -9048,9 +9048,9 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .download-app-copy>p,
 #root .download-app-note{color:#F7F7F7!important}
 #root .download-app-visual{
- background:radial-gradient(circle at 70% 20%,#A3133D 0,#292929 45%,#111111 85%)!important;
+ background:radial-gradient(circle at 70% 20%,#C2184B 0,#292929 45%,#111111 85%)!important;
 }
-#root .app-visual-phone{border-color:#A3133D!important;background:#FFFFFF!important;color:#111111!important}
+#root .app-visual-phone{border-color:#C2184B!important;background:#FFFFFF!important;color:#111111!important}
 #root .app-visual-confirm{background:#C2184B!important;color:#111111!important}
 #root .app-visual-pay{background:#F7F7F7!important;color:#111111!important}
 #root .app-visual-logo,#root .app-visual-shift-label,#root .app-visual-phone>small,#root .app-visual-pay small{color:#292929!important}
@@ -9062,9 +9062,9 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .auth-welcome :is(.how-work-tabs button.active,.carousel-controls button.active,.pagination button.active){
  background:#C2184B!important;color:#111111!important;border-color:#C2184B!important;
 }
-#root .auth-welcome a:not(.primary):not(.cta){color:#A3133D!important}
+#root .auth-welcome a:not(.primary):not(.cta){color:#C2184B!important}
 #root .auth-welcome input:focus,#root .auth-welcome select:focus,#root .auth-welcome textarea:focus{
- border-color:#A3133D!important;box-shadow:0 0 0 3px rgba(37,78,219,.16)!important;
+ border-color:#C2184B!important;box-shadow:0 0 0 3px rgba(37,78,219,.16)!important;
 }
 
 /* Shared signed-in app palette: workers, employers and all admin tiers. */
@@ -9104,7 +9104,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .app.worker .primary,#root .app.employer .primary,#root .app.admin .primary,
 #root .app.worker .shiftpay button,#root .app.employer .shiftpay button,#root .app.admin .shiftpay button,
 #root .app.worker .row button,#root .app.employer .row button,#root .app.admin .row button{
- background:#A3133D!important;border-color:#A3133D!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;
+ background:#C2184B!important;border-color:#C2184B!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;
 }
 #root .app.worker button.primary:hover,#root .app.employer button.primary:hover,#root .app.admin button.primary:hover,
 #root .app.worker .primary:hover,#root .app.employer .primary:hover,#root .app.admin .primary:hover{
@@ -9117,21 +9117,21 @@ html,body,#root,#root>*,#root .app.auth-layout{
 }
 #root .app.worker button.selected,#root .app.employer button.selected,#root .app.admin button.selected,
 #root .app.worker [aria-pressed="true"],#root .app.employer [aria-pressed="true"],#root .app.admin [aria-pressed="true"]{
- background:#C2184B!important;border-color:#A3133D!important;color:#111111!important;-webkit-text-fill-color:#111111!important;
+ background:#C2184B!important;border-color:#C2184B!important;color:#111111!important;-webkit-text-fill-color:#111111!important;
 }
 #root .app.worker input,#root .app.worker select,#root .app.worker textarea,
 #root .app.employer input,#root .app.employer select,#root .app.employer textarea,
 #root .app.admin input,#root .app.admin select,#root .app.admin textarea{
- background:#FFFFFF!important;border-color:#FCE8EF!important;color:#111111!important;accent-color:#A3133D!important;
+ background:#FFFFFF!important;border-color:#FCE8EF!important;color:#111111!important;accent-color:#C2184B!important;
 }
 #root .app.worker input:focus,#root .app.worker select:focus,#root .app.worker textarea:focus,
 #root .app.employer input:focus,#root .app.employer select:focus,#root .app.employer textarea:focus,
 #root .app.admin input:focus,#root .app.admin select:focus,#root .app.admin textarea:focus{
- border-color:#A3133D!important;box-shadow:0 0 0 3px rgba(37,78,219,.16)!important;
+ border-color:#C2184B!important;box-shadow:0 0 0 3px rgba(37,78,219,.16)!important;
 }
 #root .app.worker .worker-bottom-nav,#root .app.employer .employer-bottom-nav,
 #root .app.worker nav.bottom-nav,#root .app.employer nav.bottom-nav{
- background:#111111!important;border-color:#A3133D!important;color:#F7F7F7!important;
+ background:#111111!important;border-color:#C2184B!important;color:#F7F7F7!important;
 }
 #root .app.worker .worker-bottom-nav button,#root .app.employer .employer-bottom-nav button,
 #root .app.worker nav.bottom-nav button,#root .app.employer nav.bottom-nav button{
@@ -9171,12 +9171,12 @@ html,body,#root,#root>*,#root .app.auth-layout{
  background:#FFF5D9!important;border-color:#F2D38B!important;color:#714B00!important;
 }
 #root .app :is(.workchat-info-tabs>button.active,.workchat-info-tabs>button[aria-selected="true"]){
- background:#A3133D!important;border-color:#A3133D!important;color:#FFFFFF!important;
+ background:#C2184B!important;border-color:#C2184B!important;color:#FFFFFF!important;
 }
 #root .app :is(.workchat-info-avatar,.workchat-item-avatar,.workchat-profile-avatar){
  background:#F7F7F7!important;border-color:#FCE8EF!important;color:#292929!important;
 }
-#root .app :is(.workchat-photo-upload,.workchat-media-list a){color:#A3133D!important}
+#root .app :is(.workchat-photo-upload,.workchat-media-list a){color:#C2184B!important}
 #root .app :is(button,a,[role="button"],input,select,textarea):focus-visible{
  outline:3px solid rgba(37,78,219,.55)!important;outline-offset:2px;
 }
@@ -9200,7 +9200,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .app .workchat-conversation-header{
  display:flex!important;align-items:center!important;justify-content:space-between!important;
  gap:14px!important;padding:18px 20px!important;
- background:#A3133D!important;border:0!important;border-radius:0!important;
+ background:#C2184B!important;border:0!important;border-radius:0!important;
  color:#FFFFFF!important;box-shadow:none!important;
 }
 #root .app .workchat-conversation-title{display:flex!important;align-items:center!important;gap:12px!important;min-width:0!important}
@@ -9267,7 +9267,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .app .workchat-info-tabs>button.active,
 #root .app .workchat-info-tabs>button[aria-selected="true"]{
  background:#F7F7F7!important;color:#292929!important;-webkit-text-fill-color:#292929!important;
- border-color:#A3133D!important;box-shadow:inset 0 0 0 1px #A3133D!important;
+ border-color:#C2184B!important;box-shadow:inset 0 0 0 1px #C2184B!important;
 }
 #root .app .workchat-info-content{background:#FFFFFF!important;color:#111111!important}
 #root .app .workchat-info-content h4{color:#292929!important}
@@ -9299,8 +9299,8 @@ html,body,#root,#root>*,#root .app.auth-layout{
  display:flex!important;align-items:center!important;gap:8px!important;padding:0 4px!important;
  color:#292929!important;font-size:10px!important;line-height:1.3!important;
 }
-#root .app .workchat-message-meta strong{color:#A3133D!important;font-size:10px!important;font-weight:800!important}
-#root .app .workchat-message-meta time{color:#A3133D!important;font-size:10px!important}
+#root .app .workchat-message-meta strong{color:#C2184B!important;font-size:10px!important;font-weight:800!important}
+#root .app .workchat-message-meta time{color:#C2184B!important;font-size:10px!important}
 #root .app .workchat-message-bubble{
  display:block!important;width:fit-content!important;max-width:100%!important;
  padding:10px 13px!important;border:1px solid #FCE8EF!important;border-radius:14px 14px 14px 4px!important;
@@ -9309,7 +9309,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
  white-space:pre-wrap!important;overflow-wrap:anywhere!important;cursor:pointer!important;
 }
 #root .app .workchat-message-row.mine .workchat-message-bubble{
- border-color:#A3133D!important;border-radius:14px 14px 4px 14px!important;
+ border-color:#C2184B!important;border-radius:14px 14px 4px 14px!important;
  background:#C2184B!important;color:#111111!important;-webkit-text-fill-color:#111111!important;
 }
 #root .app .workchat-message-bubble:is(.tone-0,.tone-1,.tone-2,.tone-3,.tone-4,.tone-5){
@@ -9321,10 +9321,10 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .app .workchat-quoted-message{
  display:flex!important;flex-direction:column!important;gap:3px!important;width:100%!important;
  padding:8px 10px!important;margin:0!important;text-align:left!important;
- border:0!important;border-left:3px solid #A3133D!important;border-radius:8px!important;
+ border:0!important;border-left:3px solid #C2184B!important;border-radius:8px!important;
  background:#F7F7F7!important;color:#111111!important;-webkit-text-fill-color:#111111!important;
 }
-#root .app .workchat-quoted-message small{color:#A3133D!important;-webkit-text-fill-color:#A3133D!important;font-weight:800!important}
+#root .app .workchat-quoted-message small{color:#C2184B!important;-webkit-text-fill-color:#C2184B!important;font-weight:800!important}
 #root .app .workchat-quoted-message span{color:#292929!important;-webkit-text-fill-color:#292929!important}
 #root .app .workchat-message-row.mine .workchat-quoted-message{
  background:#C2184B!important;border-left-color:#292929!important;
@@ -9337,7 +9337,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
  color:#111111!important;-webkit-text-fill-color:#111111!important;font-size:13px!important;
 }
 #root .app .workchat-reaction.selected{
- background:#C2184B!important;border-color:#A3133D!important;color:#111111!important;-webkit-text-fill-color:#111111!important;
+ background:#C2184B!important;border-color:#C2184B!important;color:#111111!important;-webkit-text-fill-color:#111111!important;
 }
 #root .app .workchat-message-actions{
  display:flex!important;flex-wrap:wrap!important;gap:5px!important;margin-top:3px!important;padding:6px!important;
@@ -9363,21 +9363,21 @@ html,body,#root,#root>*,#root .app.auth-layout{
  border-radius:14px!important;background:#F7F7F7!important;color:#111111!important;
  font-size:13px!important;line-height:1.45!important;
 }
-#root .app .workchat-composer textarea::placeholder{color:#A3133D!important;opacity:1!important}
+#root .app .workchat-composer textarea::placeholder{color:#C2184B!important;opacity:1!important}
 #root .app .workchat-composer>button[type="submit"]{
  grid-column:2!important;grid-row:1!important;align-self:stretch!important;min-width:112px!important;
- min-height:46px!important;padding:11px 16px!important;border:1px solid #A3133D!important;border-radius:12px!important;
- background:#A3133D!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;font-weight:800!important;
+ min-height:46px!important;padding:11px 16px!important;border:1px solid #C2184B!important;border-radius:12px!important;
+ background:#C2184B!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;font-weight:800!important;
 }
 #root .app .workchat-composer>button[type="submit"]:hover{
  background:#292929!important;border-color:#292929!important;
 }
-#root .app .workchat-enter-hint{grid-column:1/-1!important;grid-row:2!important;color:#A3133D!important;font-size:10px!important;padding-left:4px!important}
+#root .app .workchat-enter-hint{grid-column:1/-1!important;grid-row:2!important;color:#C2184B!important;font-size:10px!important;padding-left:4px!important}
 #root .app .workchat-reply-preview{
  grid-column:1/-1!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;
- padding:10px 12px!important;border-left:4px solid #A3133D!important;border-radius:8px!important;background:#F7F7F7!important;color:#111111!important;
+ padding:10px 12px!important;border-left:4px solid #C2184B!important;border-radius:8px!important;background:#F7F7F7!important;color:#111111!important;
 }
-#root .app .workchat-reply-preview small{color:#A3133D!important;font-weight:800!important}
+#root .app .workchat-reply-preview small{color:#C2184B!important;font-weight:800!important}
 #root .app .workchat-reply-preview p{margin:3px 0 0!important;color:#292929!important;font-size:12px!important}
 #root .app .workchat-pinned-section{padding:10px 14px!important;background:#FFFFFF!important;border-bottom:1px solid #FCE8EF!important}
 #root .app .workchat-pinned-section h4{color:#292929!important}
@@ -9462,7 +9462,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
  color:#292929!important;font-size:11px!important;line-height:1.45!important;overflow-wrap:anywhere!important;
 }
 #root .app .shift-card-six-grid .shift-grid-empty{
- margin:0!important;color:#A3133D!important;font-size:11px!important;line-height:1.5!important;
+ margin:0!important;color:#C2184B!important;font-size:11px!important;line-height:1.5!important;
 }
 #root .app .shift-card-six-grid .shift-contract-preview{
  width:100%!important;margin-top:auto!important;border:1px solid #FCE8EF!important;
@@ -9492,7 +9492,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .app .shift-card-six-grid .shift-pay-action-row .apply-for-shift-button{
  display:flex!important;align-items:center!important;justify-content:center!important;
  width:100%!important;min-height:42px!important;padding:10px 12px!important;
- border:1px solid #A3133D!important;border-radius:9px!important;background:#A3133D!important;
+ border:1px solid #C2184B!important;border-radius:9px!important;background:#C2184B!important;
  color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;font-size:12px!important;font-weight:850!important;
  white-space:normal!important;text-align:center!important;line-height:1.3!important;
 }
@@ -9581,7 +9581,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .app main.page-workchats .worker-workchat-page-heading .eyebrow{
   display:block!important;
   margin:0 0 7px!important;
-  color:#A3133D!important;
+  color:#C2184B!important;
   font-size:10px!important;
   font-weight:800!important;
   letter-spacing:.14em!important;
@@ -9595,7 +9595,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 }
 #root .app main.page-workchats .worker-workchat-page-heading p{
   margin:8px 0 0!important;
-  color:#A3133D!important;
+  color:#C2184B!important;
   font-size:14px!important;
   line-height:1.5!important;
 }
@@ -10247,19 +10247,19 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .shift-application-company-avatar img{width:100%;height:100%;object-fit:cover}
 #root .shift-application-company-header h2{margin:0 72px 8px!important;font-size:clamp(21px,3vw,28px)!important;line-height:1.25!important}
 #root .shift-application-rating{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;color:#292929;font-size:13px;margin:0 0 10px}
-#root .shift-application-rating strong{color:#A3133D;font-size:15px}
+#root .shift-application-rating strong{color:#C2184B;font-size:15px}
 #root .shift-application-company-description{max-width:650px;margin:0 auto!important;color:#292929;line-height:1.6}
 #root .shift-application-section{padding:18px 0;border-bottom:1px solid #FCE8EF}
 #root .shift-application-section:last-of-type{border-bottom:0}
 #root .shift-application-section h3{font-size:16px!important;line-height:1.35!important;margin:0 0 12px!important;color:#111111}
-#root .shift-application-muted{margin:-4px 0 12px!important;color:#A3133D;font-size:13px;line-height:1.5}
+#root .shift-application-muted{margin:-4px 0 12px!important;color:#C2184B;font-size:13px;line-height:1.5}
 #root .shift-application-current-role,#root .shift-application-company-shift{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 15px;border:1px solid #FCE8EF;border-radius:12px;background:#F7F7F7}
 #root .shift-application-current-role>div,#root .shift-application-company-shift>div{display:flex;flex-direction:column;gap:5px;min-width:0}
 #root .shift-application-current-role strong,#root .shift-application-company-shift strong{font-size:14px;line-height:1.4}
-#root .shift-application-current-role span,#root .shift-application-company-shift span{font-size:12px;color:#A3133D;line-height:1.45}
+#root .shift-application-current-role span,#root .shift-application-company-shift span{font-size:12px;color:#C2184B;line-height:1.45}
 #root .shift-application-current-role>strong,#root .shift-application-company-shift>strong{white-space:nowrap;color:#111111}
 #root .shift-application-company-shifts{display:grid;gap:8px}
-#root .shift-application-company-shift.current{border:2px solid #A3133D!important;background:#C2184B!important;box-shadow:0 0 0 2px rgba(155,220,38,.18)!important;color:#111111!important}
+#root .shift-application-company-shift.current{border:2px solid #C2184B!important;background:#C2184B!important;box-shadow:0 0 0 2px rgba(155,220,38,.18)!important;color:#111111!important}
 #root .shift-application-show-all{margin-top:12px}
 #root .shift-application-section .shift-confirm-checklist{margin:0}
 #root .shift-application-section ul{padding-left:22px;margin:8px 0;color:#292929;line-height:1.65}
@@ -10270,9 +10270,9 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .shift-application-contract-agreement small{font-size:12px;color:#292929}
 #root .shift-application-contract-agreement input{appearance:none;-webkit-appearance:none;position:relative;width:42px;height:24px;flex:0 0 42px;margin:0;border:1px solid #C2184B;border-radius:999px;background:#FCE8EF;cursor:pointer;transition:background .18s,border-color .18s}
 #root .shift-application-contract-agreement input::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .18s}
-#root .shift-application-contract-agreement input:checked{background:#C2184B;border-color:#A3133D}
+#root .shift-application-contract-agreement input:checked{background:#C2184B;border-color:#C2184B}
 #root .shift-application-contract-agreement input:checked::after{transform:translateX(18px)}
-#root .shift-application-contract-agreement input:focus-visible{outline:2px solid #A3133D;outline-offset:3px}
+#root .shift-application-contract-agreement input:focus-visible{outline:2px solid #C2184B;outline-offset:3px}
 #root .shift-application-map{width:100%;height:260px;overflow:hidden;border-radius:14px;border:1px solid #FCE8EF;background:#F7F7F7}
 #root .shift-application-map iframe{width:100%;height:100%;border:0}
 #root .shift-application-actions{position:sticky;bottom:0;z-index:2;background:rgba(255,255,255,.97);padding:16px 0 2px;margin-top:0;border-top:1px solid #FCE8EF}
@@ -10469,7 +10469,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 }
 #root .shift-application-contract-details[open]>summary:after{content:"−"!important}
 #root .shift-application-contract-details>summary span{
-  color:#A3133D!important;
+  color:#C2184B!important;
   font-size:12px!important;
   font-weight:450!important;
 }
@@ -10486,12 +10486,12 @@ html,body,#root,#root>*,#root .app.auth-layout{
 }
 #root .shift-application-company-shift-button:hover,
 #root .shift-application-company-shift-button:focus-visible{
-  border-color:#A3133D!important;
+  border-color:#C2184B!important;
   outline:2px solid rgba(168,217,75,.35)!important;
   outline-offset:1px!important;
 }
 #root .shift-application-company-shift-button.current{
-  border-color:#A3133D!important;
+  border-color:#C2184B!important;
   background:#F7F7F7!important;
   box-shadow:inset 0 0 0 1px rgba(166,223,66,.25)!important;
 }
@@ -10502,7 +10502,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
   min-width:0!important;
 }
 #root .shift-application-company-shift-details>strong{font-size:14px!important;line-height:1.4!important}
-#root .shift-application-company-shift-details>span{font-size:12px!important;color:#A3133D!important;line-height:1.45!important}
+#root .shift-application-company-shift-details>span{font-size:12px!important;color:#C2184B!important;line-height:1.45!important}
 #root .shift-application-company-shift-details>.shift-application-select-hint{
   color:#292929!important;
   font-size:11px!important;
@@ -10565,7 +10565,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 }
 #root .shift-confirm-checklist .hyrz-toggle.on{
   border-color:#292929!important;
-  background:#A3133D!important;
+  background:#C2184B!important;
 }
 #root .shift-confirm-checklist .hyrz-toggle.on>span{
   transform:translateX(19px)!important;
@@ -10581,7 +10581,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
   box-shadow:none!important;
 }
 #root .shift-application-contract-agreement input:checked{
-  background:#A3133D!important;
+  background:#C2184B!important;
   border-color:#292929!important;
   box-shadow:0 0 0 3px rgba(132,204,22,.28)!important;
 }
@@ -10677,8 +10677,8 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .worker-workchat-panel .workchat-list-chat-name{font-size:16px;color:#111111;font-weight:800;line-height:1.25;overflow-wrap:anywhere;}
 #root .worker-workchat-panel .workchat-list-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11px;color:#292929;}
 #root .worker-workchat-panel .workchat-unread-count{display:inline-flex;align-items:center;border-radius:999px;padding:3px 7px;background:#C2184B;color:#111111;font-weight:800;}
-#root .worker-workchat-panel .workchat-unread-count.is-read{background:#F7F7F7;color:#A3133D;font-weight:600;}
-#root .worker-workchat-panel .workchat-list-last-message{font-size:12px;color:#A3133D;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
+#root .worker-workchat-panel .workchat-unread-count.is-read{background:#F7F7F7;color:#C2184B;font-weight:600;}
+#root .worker-workchat-panel .workchat-list-last-message{font-size:12px;color:#C2184B;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
 @media(max-width:760px){#root .worker-workchat-panel .workchat-item{padding:14px;}#root .worker-workchat-panel .workchat-list-company-avatar{width:42px;height:42px;flex-basis:42px;}}
 
 
@@ -10759,14 +10759,14 @@ html,body,#root,#root>*,#root .app.auth-layout{
 #root .worker-inbox-message-button:hover,#root .worker-inbox-message-button:focus-visible{background:#F7F7F7;outline:2px solid #FCE8EF;outline-offset:-2px;}
 #root .worker-inbox-message-button .worker-inbox-message-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px;}
 #root .worker-inbox-message-button .worker-inbox-message-top strong{font-size:14px;font-weight:800;overflow-wrap:anywhere;}
-#root .worker-inbox-message-button .worker-inbox-message-top small{font-size:10px;color:#A3133D;white-space:nowrap;}
+#root .worker-inbox-message-button .worker-inbox-message-top small{font-size:10px;color:#C2184B;white-space:nowrap;}
 #root .worker-inbox-message-preview{display:block;font-size:12px;color:#292929;line-height:1.5;margin-bottom:8px;overflow-wrap:anywhere;}
-#root .worker-inbox-message-button>small{font-size:10px;color:#A3133D;}
+#root .worker-inbox-message-button>small{font-size:10px;color:#C2184B;}
 #root .worker-inbox-thread{display:flex;flex-direction:column;gap:12px;padding-top:12px;}
 #root .worker-inbox-thread-back{align-self:flex-start;}
 #root .worker-inbox-thread-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #FCE8EF;}
 #root .worker-inbox-thread-heading h3{margin:0;font-size:17px;overflow-wrap:anywhere;}
-#root .worker-inbox-thread-heading small{font-size:10px;color:#A3133D;}
+#root .worker-inbox-thread-heading small{font-size:10px;color:#C2184B;}
 #root .worker-inbox-thread-message{max-width:92%;padding:12px;border-radius:12px;background:#F7F7F7;align-self:flex-start;overflow-wrap:anywhere;}
 #root .worker-inbox-thread-message.sent{align-self:flex-end;background:#C2184B;}
 #root .worker-inbox-thread-message p{margin:0 0 8px;white-space:pre-wrap;line-height:1.5;font-size:13px;}
@@ -10816,7 +10816,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 .app.employer .employer-todays-overview .worker-todays-shift-actions button{min-height:34px;padding:8px 12px;font-size:11px;}
 .app.employer .employer-dashboard-sections{padding:18px;margin-bottom:22px;}
 .app.employer .employer-dashboard-sections-head{display:block;margin-bottom:0;}
-.app.employer .employer-dashboard-sections-head p{margin:8px 0 0;color:#A3133D;line-height:1.45;}
+.app.employer .employer-dashboard-sections-head p{margin:8px 0 0;color:#C2184B;line-height:1.45;}
 .app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
 .app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button{display:flex;align-items:center;justify-content:center;aspect-ratio:auto;min-height:52px;padding:14px 16px;border:1px solid #FCE8EF;border-radius:10px;background:#fff;color:#111111;text-align:center;font-size:15px;font-weight:750;line-height:1.35;}
 .app.employer .employer-dashboard-sections .worker-section-links.job-tabs-squares>button:after{content:none;display:none;}
@@ -10825,7 +10825,7 @@ html,body,#root,#root>*,#root .app.auth-layout{
 
 
 /* Hyrz brand refresh: raspberry red and white. Keep the palette consistent across public, worker, employer and admin screens. */
-:root{--hyrz-orange:#C2184B;--hyrz-orange-hover:#A3133D;--hyrz-black:#111111;--hyrz-white:#FFFFFF;--hyrz-page:#F7F7F7;--hyrz-border:#E5E5E5;--hyrz-muted:#666666;}
+:root{--hyrz-orange:#C2184B;--hyrz-orange-hover:#C2184B;--hyrz-black:#111111;--hyrz-white:#FFFFFF;--hyrz-page:#F7F7F7;--hyrz-border:#E5E5E5;--hyrz-muted:#666666;}
 :root{color:var(--hyrz-black);background:var(--hyrz-page)}
 body{background:var(--hyrz-page);color:var(--hyrz-black)}
 .sidebar{background:var(--hyrz-black);color:var(--hyrz-white)}
@@ -10836,7 +10836,7 @@ body{background:var(--hyrz-page);color:var(--hyrz-black)}
 .sidebar nav button.selected,.sidebar nav button:hover{background:#292929!important;color:var(--hyrz-white)!important;border-left:3px solid var(--hyrz-orange)}
 .pill{background:#FCE8EF!important;color:#9A3412!important}
 input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!important;box-shadow:0 0 0 2px #C2184B1F}
-.textbutton,.inline-link,.how-work-link{color:#A3133D!important}
+.textbutton,.inline-link,.how-work-link{color:#C2184B!important}
 .status.approved,.status.paid,.success{background:#FCE8EF!important;color:#9A3412!important}
 .error,.status.rejected,.status.disputed,.status.overdue{background:#FEE2E2!important;color:#991B1B!important}
 .worker .primary,.worker .worker-bottom-nav button.active,.worker .mobile-bottom-nav button.active,.worker .worker-nav button.active,.worker .worker-section-links button.active{background:var(--hyrz-orange)!important;color:var(--hyrz-white)!important}
@@ -10853,7 +10853,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 .public-home-logo,.brand{color:var(--hyrz-white)}
 .public-nav-signin{border-color:var(--hyrz-black)!important;color:var(--hyrz-black)!important}
 .public-intro-carousel .active,.public-intro-dots button.active{background:var(--hyrz-orange)!important}
-.public-app-icon-label,.download-app-eyebrow,.how-work-eyebrow{color:#A3133D!important}
+.public-app-icon-label,.download-app-eyebrow,.how-work-eyebrow{color:#C2184B!important}
 .app .selected:not(.sidebar nav button){border-color:var(--hyrz-orange)!important}
 @media(max-width:760px){.app .worker-bottom-nav button.active,.app .mobile-bottom-nav button.active,.app .worker-mobile-nav button.active,.app .bottom-nav button.active{background:var(--hyrz-orange)!important;color:var(--hyrz-white)!important}}
 
@@ -10863,7 +10863,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root header.public-home-nav .public-home-logo,#root header.public-home-nav .public-home-logo span{color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
 #root header.public-home-nav>nav>.public-about-trigger,#root header.public-home-nav>nav>.public-how-work-trigger,#root header.public-home-nav>nav>.public-nav-signin{background:transparent!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;border-color:transparent!important;}
 #root header.public-home-nav>nav>.public-nav-signup,#root .public-how-work-cta,#root .auth-welcome .primary,#root .auth-welcome button.primary,#root .auth-welcome .cta,#root .auth-welcome .header-cta,#root .auth-welcome .signup-button,#root .auth-welcome .sign-up-button,#root .auth-welcome .btn-primary,#root .auth-welcome .button-primary{background:#C2184B!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;border-color:#C2184B!important;}
-#root header.public-home-nav>nav>.public-nav-signup:hover,#root .public-how-work-cta:hover,#root .auth-welcome .primary:hover{background:#A3133D!important;border-color:#A3133D!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
+#root header.public-home-nav>nav>.public-nav-signup:hover,#root .public-how-work-cta:hover,#root .auth-welcome .primary:hover{background:#C2184B!important;border-color:#C2184B!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
 #root .public-intro-carousel .active,#root .public-intro-dots button.active,#root .public-intro-tabs button.active{background:#C2184B!important;border-color:#C2184B!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;}
 #root .public-intro-carousel button,#root .public-intro-tabs button{border-color:#E5E5E5!important;}
 #root .auth-welcome,#root .auth-welcome .welcome-panel,#root .auth-welcome .how-work-page,#root .auth-welcome .how-work-content,#root .auth-welcome .work-how-page,#root .auth-welcome .work-how-content{background:#F7F7F7!important;color:#111111!important;}
@@ -10872,7 +10872,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .auth-welcome .work-carousel,#root .auth-welcome .carousel-overlay{background-color:#111111!important;color:#FFFFFF!important;}
 #root .auth-welcome .work-carousel :is(h1,h2,h3,p,li,strong,em,.eyebrow),#root .auth-welcome .carousel-overlay :is(h1,h2,h3,p,li,strong,em){color:#FFFFFF!important;}
 #root .app .primary,#root .app button.primary,#root .app .worker-section-links button.active,#root .app .job-tabs-squares>button.active{background:#C2184B!important;border-color:#C2184B!important;color:#FFFFFF!important;}
-#root .app .primary:hover,#root .app button.primary:hover{background:#A3133D!important;border-color:#A3133D!important;}
+#root .app .primary:hover,#root .app button.primary:hover{background:#C2184B!important;border-color:#C2184B!important;}
 #root .app .worker-bottom-nav,#root .app .mobile-bottom-nav,#root .app .worker-mobile-nav,#root .app .bottom-nav{background:#111111!important;}
 
 
@@ -10881,7 +10881,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .shift-contract-agreement input[type="checkbox"]:checked,
 #root .shift-application-contract-agreement input:checked {
   background-color: #C2184B !important;
-  border-color: #A3133D !important;
+  border-color: #C2184B !important;
   accent-color: #C2184B !important;
 }
 #root .shift-application-contract-agreement input[type="checkbox"]:checked::after,
@@ -11902,8 +11902,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app button.worker-back-button:hover{
   border-color:#C2184B!important;
   background:#fff!important;
-  color:#A3133D!important;
-  -webkit-text-fill-color:#A3133D!important;
+  color:#C2184B!important;
+  -webkit-text-fill-color:#C2184B!important;
 }
 #root .app button.icon-back-button:focus-visible,
 #root .app .workchat-back-row button:focus-visible,
@@ -11960,9 +11960,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app button.icon-back-button:hover,
 #root .app .workchat-back-row button:hover,
 #root .app button.worker-back-button:hover{
-  border-color:#A3133D!important;
-  color:#A3133D!important;
-  -webkit-text-fill-color:#A3133D!important;
+  border-color:#C2184B!important;
+  color:#C2184B!important;
+  -webkit-text-fill-color:#C2184B!important;
   box-shadow:0 0 0 2px rgba(249,115,22,.16)!important;
 }
 
@@ -12210,7 +12210,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 .worker-availability-panel .shift-type-picker-option:hover{background:#f3f4f6!important}
 .worker-availability-panel .shift-type-picker-footer{border-top:1px solid #e5e7eb!important}
-.worker-availability-panel .shift-type-picker-footer button:first-child{color:#A3133D!important}
+.worker-availability-panel .shift-type-picker-footer button:first-child{color:#C2184B!important}
 
 /* Clear, always-visible choices when selecting individual favourite employers. */
 .worker-availability-panel .availability-favourite-employer-list{
@@ -12552,7 +12552,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .shift-card-six-grid .shift-detail-item{gap:2px!important}
 #root .app .shift-card-six-grid .shift-detail-item strong{font-size:11px!important;line-height:1.2!important}
 #root .app .shift-card-six-grid .shift-meta-label{font-size:8px!important;letter-spacing:.7px!important}
-#root .app .shift-card-six-grid .shift-distance-item strong{color:#A3133D!important;font-weight:800!important}
+#root .app .shift-card-six-grid .shift-distance-item strong{color:#C2184B!important;font-weight:800!important}
 
 
 /* Compact mobile shift segments and group the pay information together. */
@@ -12678,12 +12678,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .shift-confirmation-card-heading strong{color:#171717;font-size:15px}
 #root .app .shift-confirmation-card-heading small{color:#666;font-size:12px}
 #root .app .shift-confirmation-details{display:flex;flex-wrap:wrap;gap:8px 15px;margin:13px 0;color:#333;font-size:12px}
-#root .app .shift-confirmation-details strong{color:#A3133D;font-size:14px}
+#root .app .shift-confirmation-details strong{color:#C2184B;font-size:14px}
 #root .app .shift-confirmation-contract{margin-top:12px;padding:12px;border:1px solid #eee0d6;border-radius:9px;background:#fff}
 #root .app .shift-confirmation-contract>strong{color:#171717;font-size:13px}
 #root .app .shift-confirmation-contract p{margin:7px 0;color:#555;font-size:12px;line-height:1.5}
 #root .app .shift-confirmation-accept{display:flex!important;grid-template-columns:18px 1fr!important;align-items:center!important;gap:9px!important;margin:12px 0 0!important;color:#222!important;font-size:12px!important}
-#root .app .shift-confirmation-accept input{width:17px!important;height:17px!important;margin:0!important;accent-color:#A3133D}
+#root .app .shift-confirmation-accept input{width:17px!important;height:17px!important;margin:0!important;accent-color:#C2184B}
 #root .app .shift-confirmation-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
 #root .app .shift-confirmation-actions button{min-height:40px}
 @media(max-width:600px){
@@ -12809,7 +12809,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app main.page-workchats .worker-workchat-page-heading p{margin:0!important;color:#737373!important;font-size:12px!important}
 #root .app main.page-workchats .workchat-total-count{
-  flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#FCE8EF;color:#A3133D;font-size:11px;font-weight:800;
+  flex:0 0 auto;padding:6px 10px;border-radius:999px;background:#FCE8EF;color:#C2184B;font-size:11px;font-weight:800;
 }
 #root .app main.page-workchats .workchat-list-search{
   display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;box-sizing:border-box!important;
@@ -12836,7 +12836,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .worker-workchat-panel .workchat-list-company{display:flex!important;align-items:center!important;gap:13px!important;width:100%!important;min-width:0!important}
 #root .app main.page-workchats .worker-workchat-panel .workchat-list-company-avatar{
   width:52px!important;height:52px!important;flex:0 0 52px!important;border-radius:50%!important;
-  border:0!important;background:#FCE8EF!important;color:#A3133D!important;font-size:18px!important;font-weight:800!important;
+  border:0!important;background:#FCE8EF!important;color:#C2184B!important;font-size:18px!important;font-weight:800!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-list-company-details{
   display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:3px 10px!important;
@@ -12854,7 +12854,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-unread-count{
   display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;
-  padding:0 5px!important;border-radius:999px!important;background:#A3133D!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
+  padding:0 5px!important;border-radius:999px!important;background:#C2184B!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-list-last-message{
   grid-column:1/-1!important;grid-row:3!important;display:block!important;min-width:0!important;max-width:100%!important;
@@ -12886,7 +12886,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   border-color:#f4c8ad!important;border-radius:14px 14px 4px 14px!important;background:#FCE8EF!important;color:#292929!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-message-meta{gap:8px!important;margin:0 3px 3px!important;font-size:10px!important;color:#777!important}
-#root .app main.page-workchats .worker-workchat-panel .workchat-message-meta strong{color:#A3133D!important;font-size:10px!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-message-meta strong{color:#C2184B!important;font-size:10px!important}
 #root .app main.page-workchats .worker-workchat-panel .workchat-composer{
   display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:9px!important;
   padding:11px 12px!important;background:#fff!important;border-top:1px solid #eee9e4!important;
@@ -12897,7 +12897,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-composer>button[type="submit"]{
   width:auto!important;min-width:76px!important;min-height:42px!important;padding:10px 15px!important;border-radius:22px!important;
-  background:#A3133D!important;color:#fff!important;font-size:12px!important;font-weight:800!important;
+  background:#C2184B!important;color:#fff!important;font-size:12px!important;font-weight:800!important;
 }
 #root .app main.page-workchats .worker-workchat-panel .workchat-typing{background:#f7f5f2!important}
 @media(max-width:650px){
@@ -12926,7 +12926,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
   flex:1 1 0!important;min-width:0!important;padding:10px 8px!important;border:0!important;border-radius:9px!important;
   background:transparent!important;color:#666!important;font-size:11px!important;font-weight:750!important;text-align:center!important;
 }
-#root .app main.page-workchats .workchat-section-tabs button.selected{background:#fff!important;color:#A3133D!important;box-shadow:0 1px 4px rgba(0,0,0,.09)!important}
+#root .app main.page-workchats .workchat-section-tabs button.selected{background:#fff!important;color:#C2184B!important;box-shadow:0 1px 4px rgba(0,0,0,.09)!important}
 #root .app main.page-workchats .employer-workchat-search{margin-bottom:12px!important}
 #root .app main.page-workchats .employer-workchat-card>.workchat-list{
   display:flex!important;flex-direction:column!important;gap:0!important;margin:0!important;padding:0!important;
@@ -12940,7 +12940,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .employer-workchat-card .workchat-item-minimal:last-child{border-bottom:0!important}
 #root .app main.page-workchats .employer-workchat-card .workchat-item-minimal:hover{background:#fffaf6!important}
 #root .app main.page-workchats .employer-workchat-card .workchat-item-avatar{
-  width:46px!important;height:46px!important;border:0!important;border-radius:50%!important;background:#FCE8EF!important;color:#A3133D!important;
+  width:46px!important;height:46px!important;border:0!important;border-radius:50%!important;background:#FCE8EF!important;color:#C2184B!important;
 }
 #root .app main.page-workchats .employer-workchat-card .workchat-item-copy{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important}
 #root .app main.page-workchats .employer-workchat-card .workchat-item-copy strong{font-size:13px!important;font-weight:800!important;color:#171717!important}
@@ -12953,7 +12953,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .employer-workchat-card .workchat-item-trailing time{font-size:10px!important;color:#888!important;white-space:nowrap!important}
 #root .app main.page-workchats .employer-workchat-card .workchat-unread-count{
   display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;
-  padding:0 5px!important;border-radius:999px!important;background:#A3133D!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
+  padding:0 5px!important;border-radius:999px!important;background:#C2184B!important;color:#fff!important;font-size:10px!important;font-weight:800!important;
 }
 @media(max-width:650px){
  #root .app main.page-workchats .employer-hero{padding:14px!important}
@@ -12971,7 +12971,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .messaging-chat-row:hover{background:#fffaf6!important}
 #root .app .messaging-chat-avatar{
  display:flex!important;align-items:center!important;justify-content:center!important;width:46px!important;height:46px!important;
- flex:0 0 46px!important;overflow:hidden!important;border-radius:50%!important;background:#FCE8EF!important;color:#A3133D!important;font-size:17px!important;font-weight:800!important;
+ flex:0 0 46px!important;overflow:hidden!important;border-radius:50%!important;background:#FCE8EF!important;color:#C2184B!important;font-size:17px!important;font-weight:800!important;
 }
 #root .app .messaging-chat-avatar img{width:100%!important;height:100%!important;object-fit:cover!important}
 #root .app .messaging-chat-copy{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important}
@@ -12979,7 +12979,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .messaging-chat-copy small{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#777!important;font-size:12px!important;line-height:1.35!important}
 #root .app .messaging-chat-meta{display:flex!important;flex-direction:column!important;align-items:flex-end!important;justify-content:center!important;gap:7px!important;white-space:nowrap!important}
 #root .app .messaging-chat-meta time{font-size:10px!important;color:#888!important}
-#root .app .messaging-chat-meta .direct-unread-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:50px!important;background:#A3133D!important;color:#fff!important;font-size:10px!important;font-weight:800!important}
+#root .app .messaging-chat-meta .direct-unread-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:50px!important;background:#C2184B!important;color:#fff!important;font-size:10px!important;font-weight:800!important}
 #root .app .direct-read-ticks{display:inline-block!important;margin-left:4px!important;color:#8b8b8b!important;font-size:14px!important;font-weight:900!important;letter-spacing:-3px!important}
 #root .app .direct-read-ticks.is-read{color:#1687e8!important}
 #root .app .workchat-read-receipt{display:block!important;align-self:flex-end!important;margin:-5px 7px 0 0!important;color:#888!important;font-size:14px!important;font-weight:900!important;letter-spacing:-3px!important}
@@ -13021,7 +13021,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  min-height:44px!important;max-height:120px!important;resize:vertical!important;padding:12px 14px!important;
  border:1px solid #e7e1da!important;border-radius:22px!important;background:#f7f7f7!important;font-size:13px!important;
 }
-#root .app .direct-message-compose button{min-height:42px!important;border-radius:22px!important;background:#A3133D!important;color:#fff!important;font-weight:800!important}
+#root .app .direct-message-compose button{min-height:42px!important;border-radius:22px!important;background:#C2184B!important;color:#fff!important;font-weight:800!important}
 #root .app .direct-thread-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:12px 14px!important;background:#fff!important;border-bottom:1px solid #eee9e4!important}
 #root .app .direct-thread-heading h3,#root .app .direct-thread-heading h4{margin:0!important;color:#171717!important;font-size:16px!important;font-weight:800!important}
 #root .app .direct-thread-heading>div{min-width:0!important}
@@ -13055,12 +13055,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .workchat-wa-meta{display:flex!important;flex-direction:column!important;align-items:flex-end!important;justify-content:center!important;gap:6px!important;white-space:nowrap!important}
 #root .app .workchat-wa-meta time{color:#888!important;font-size:10px!important}
 #root .app .workchat-wa-meta>small{color:#999!important;font-size:9px!important}
-#root .app main.page-workchats .worker-workchat-panel .workchat-unread-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:50px!important;background:#A3133D!important;color:white!important;font-size:10px!important}
+#root .app main.page-workchats .worker-workchat-panel .workchat-unread-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:50px!important;background:#C2184B!important;color:white!important;font-size:10px!important}
 #root .app .worker-inbox-panel{padding:0!important;overflow:hidden!important;background:#fff!important;border:1px solid #eee9e4!important;border-radius:15px!important}
 #root .app .worker-inbox-panel>.worker-inbox-heading{padding:18px 18px 10px!important;margin:0!important}
 #root .app .worker-inbox-panel .inbox-section-tabs{display:flex!important;gap:22px!important;padding:0 18px!important;margin:0!important;border-bottom:1px solid #eee9e4!important;background:#fff!important}
 #root .app .worker-inbox-panel .inbox-section-tabs button{padding:12px 0!important;border:0!important;border-bottom:3px solid transparent!important;border-radius:0!important;background:transparent!important;color:#777!important;font-size:13px!important;font-weight:700!important}
-#root .app .worker-inbox-panel .inbox-section-tabs button.active{border-bottom-color:#A3133D!important;color:#171717!important}
+#root .app .worker-inbox-panel .inbox-section-tabs button.active{border-bottom-color:#C2184B!important;color:#171717!important}
 #root .app .worker-inbox-panel .inbox-tabs{display:flex!important;gap:8px!important;padding:12px 16px!important;margin:0!important;background:#fff!important;border-bottom:1px solid #f0ece8!important}
 #root .app .worker-inbox-panel .inbox-tabs button{padding:7px 13px!important;border:1px solid #e9e5e1!important;border-radius:20px!important;background:#fff!important;color:#555!important;font-size:11px!important;font-weight:700!important}
 #root .app .worker-inbox-panel .inbox-tabs button.active{border-color:#f5d1bf!important;background:#fff1e9!important;color:#a83c0b!important}
@@ -13081,7 +13081,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app .worker-inbox-panel .direct-message-bubble small{display:block!important;text-align:right!important;color:#888!important;font-size:9px!important}
 #root .app .worker-inbox-panel .direct-message-compose{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:9px!important;padding:12px 4px!important;border-top:1px solid #eee9e4!important;background:#fff!important}
 #root .app .worker-inbox-panel .direct-message-compose textarea{min-height:43px!important;border:1px solid #e7e1da!important;border-radius:22px!important;background:#f7f7f7!important;padding:11px 14px!important;font-size:13px!important}
-#root .app .worker-inbox-panel .direct-message-compose button{min-height:42px!important;padding:0 18px!important;border-radius:22px!important;background:#A3133D!important;color:#fff!important;font-weight:800!important}
+#root .app .worker-inbox-panel .direct-message-compose button{min-height:42px!important;padding:0 18px!important;border-radius:22px!important;background:#C2184B!important;color:#fff!important;font-weight:800!important}
 #root .app main.page-workchats .workchat-conversation{overflow:hidden!important;border:1px solid #eee9e4!important;border-radius:14px!important;background:#fff!important;box-shadow:none!important}
 #root .app main.page-workchats .workchat-conversation-header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:12px 15px!important;background:#fff!important;border-bottom:1px solid #eee9e4!important}
 #root .app main.page-workchats .workchat-conversation-title h3{margin:0!important;color:#171717!important;font-size:16px!important;font-weight:800!important}
@@ -13098,7 +13098,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
 #root .app main.page-workchats .workchat-message-row.mine .workchat-message-bubble{border-color:#f3d0bd!important;border-radius:14px 14px 4px 14px!important;background:#fff0e7!important}
 #root .app main.page-workchats .workchat-composer{display:flex!important;align-items:center!important;gap:9px!important;padding:12px!important;border-top:1px solid #eee9e4!important;background:#fff!important}
 #root .app main.page-workchats .workchat-composer textarea{min-height:43px!important;max-height:110px!important;border:1px solid #e7e1da!important;border-radius:22px!important;background:#f7f7f7!important;padding:11px 14px!important;font-size:13px!important}
-#root .app main.page-workchats .workchat-composer button{min-height:42px!important;border-radius:22px!important;background:#A3133D!important;color:#fff!important;font-weight:800!important}
+#root .app main.page-workchats .workchat-composer button{min-height:42px!important;border-radius:22px!important;background:#C2184B!important;color:#fff!important;font-weight:800!important}
 @media(max-width:650px){
  #root .app main.page-workchats .worker-workchat-panel .workchat-wa-row{grid-template-columns:44px minmax(0,1fr) auto!important;min-height:72px!important;padding:10px 5px!important;gap:10px!important}
  #root .app .workchat-wa-avatar{width:42px!important;height:42px!important}
@@ -13147,7 +13147,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--hyrz-orange)!importan
  white-space:nowrap!important;box-shadow:none!important;
 }
 #root .app .worker-inbox-panel nav.inbox-section-tabs>button.active{
- border-bottom-color:#A3133D!important;background:#fff!important;color:#171717!important;
+ border-bottom-color:#C2184B!important;background:#fff!important;color:#171717!important;
 }
 
 
@@ -15695,9 +15695,9 @@ html body #root .app.inbox-screen .workchat-whatsapp-composer>textarea{
    employer, admin, inbox, navigation, forms and public-facing app surfaces. */
 :root{
  --hyrz-brand:#C2184B;
- --hyrz-brand-hover:#A3133D;
+ --hyrz-brand-hover:#C2184B;
  --hyrz-brand-soft:#FCE8EF;
- --hyrz-ink:#64152F;
+ --hyrz-ink:#111111;
  --hyrz-navy:#C2184B;
  --hyrz-cream:#FFFFFF;
  --hyrz-cream-deep:#FCE8EF;
@@ -15718,16 +15718,16 @@ html body #root .app.inbox-screen .workchat-whatsapp-composer>textarea{
  --hyrz-amber-soft:#FCE8EF;
  --hyrz-green:#C2184B;
  --hyrz-green-soft:#FCE8EF;
- --hyrz-text-primary:#64152F;
+ --hyrz-text-primary:#111111;
  --hyrz-text-secondary:#8B5266;
  --hyrz-text-on-dark:#FFFFFF;
 }
-html,body,#root{background:#FFFFFF!important;color:#64152F}
+html,body,#root{background:#FFFFFF!important;color:#111111}
 .app,.app.worker,.app.employer,.app.admin-console{
- background:#FFFFFF!important;color:#64152F!important;
+ background:#FFFFFF!important;color:#111111!important;
 }
 .app main,.app.worker main,.app.employer main,.app.admin-console main{
- background:#FFFFFF!important;color:#64152F!important;
+ background:#FFFFFF!important;color:#111111!important;
 }
 .app h1,.app h2,.app h3,.app h4,.app p,.app label,.app legend,
 .app main strong,.app main b,.app main .panel,.app main .stat{
@@ -15755,13 +15755,13 @@ html,body,#root{background:#FFFFFF!important;color:#64152F}
 .app .worker-section-links button.selected,.app .tabs button.selected,
 .app .subsection-tabs button.selected,.app .section-tabs button.selected,
 .app .workchat-section-tabs button.selected,.app .inbox-tabs button.active{
- background:#A3133D!important;color:#FFFFFF!important;border-color:#FFFFFF!important;
+ background:#C2184B!important;color:#FFFFFF!important;border-color:#FFFFFF!important;
 }
 .app .panel,.app .stat,.app .card,.app .section-card,.app .dashboard-card,
 .app .critical-info-box,.app .published-shift-card,.app .workchat-conversation,
 .app .direct-conversation-list,.app .direct-conversation-thread,
 .app .inbox-worker-search,.app .admin-record{
- background:#FFFFFF!important;color:#64152F!important;border-color:#F2C6D4!important;
+ background:#FFFFFF!important;color:#111111!important;border-color:#F2C6D4!important;
 }
 .app .primary,.app button.primary,.app .formgrid .primary,
 .app .shiftpay button,.app .row button,.app .notification-back,
@@ -15770,15 +15770,15 @@ html,body,#root{background:#FFFFFF!important;color:#64152F}
 }
 .app .primary:hover,.app button.primary:hover,
 .app .shiftpay button:hover,.app .row button:hover{
- background:#A3133D!important;border-color:#A3133D!important;color:#FFFFFF!important;
+ background:#C2184B!important;border-color:#C2184B!important;color:#FFFFFF!important;
 }
 .app .secondary,.app button.secondary,.app .pill,.app .tag-pill,
 .app .shiftdate,.app .job-tabs button.selected,.app .checkout-section-cards button.selected{
- background:#FCE8EF!important;border-color:#F2C6D4!important;color:#64152F!important;
+ background:#FCE8EF!important;border-color:#F2C6D4!important;color:#111111!important;
 }
 .app input,.app select,.app textarea,.app .workchat-composer textarea,
 .app .direct-message-compose textarea{
- background:#FFFFFF!important;color:#64152F!important;border-color:#F2C6D4!important;
+ background:#FFFFFF!important;color:#111111!important;border-color:#F2C6D4!important;
 }
 .app input::placeholder,.app textarea::placeholder{color:#B77A8F!important;opacity:1}
 .app input:focus,.app select:focus,.app textarea:focus,
@@ -15793,7 +15793,7 @@ html,body,#root{background:#FFFFFF!important;color:#64152F}
 }
 .app .workchat-message-row:not(.mine) .workchat-message-bubble,
 .app .direct-message-bubble:not(.sent){
- background:#FCE8EF!important;color:#64152F!important;border-color:#F2C6D4!important;
+ background:#FCE8EF!important;color:#111111!important;border-color:#F2C6D4!important;
 }
 .app .workchat-avatar,.app .workchat-profile-avatar,.app .worker-avatar,
 .app .employer-avatar,.app .hyrz-admin-message-icon{
@@ -15826,16 +15826,16 @@ html,body,#root{background:#FFFFFF!important;color:#64152F}
    explicitly override those rules as well as the shared design tokens. */
 :root{
  --hyrz-orange:#C2184B!important;
- --hyrz-orange-hover:#A3133D!important;
+ --hyrz-orange-hover:#C2184B!important;
  --hyrz-black:#C2184B!important;
  --hyrz-white:#FFFFFF!important;
  --hyrz-page:#FFFFFF!important;
  --hyrz-border:#F2C6D4!important;
  --hyrz-muted:#8B5266!important;
  --hyrz-lime:#C2184B!important;
- --hyrz-lime-hover:#A3133D!important;
+ --hyrz-lime-hover:#C2184B!important;
  --hyrz-lime-ink:#FFFFFF!important;
- --hyrz-ink:#64152F!important;
+ --hyrz-ink:#111111!important;
  --hyrz-navy:#C2184B!important;
  --hyrz-cream:#FFFFFF!important;
  --hyrz-cream-deep:#FCE8EF!important;
@@ -15846,7 +15846,7 @@ html body #root .app,
 html body #root .app.worker,
 html body #root .app.employer,
 html body #root .app.admin-console{
- background:#FFFFFF!important;color:#64152F!important;
+ background:#FFFFFF!important;color:#111111!important;
 }
 html body #root .app .primary,
 html body #root .app button.primary,
@@ -15864,7 +15864,7 @@ html body #root .app .employer-bottom-nav button.active{
 html body #root .app .primary:hover,
 html body #root .app button.primary:hover,
 html body #root .app .worker-section-links button:hover{
- background:#A3133D!important;border-color:#A3133D!important;color:#FFFFFF!important;
+ background:#C2184B!important;border-color:#C2184B!important;color:#FFFFFF!important;
 }
 html body #root .app.worker nav.worker-bottom-nav,
 html body #root .app.employer nav.employer-bottom-nav,
@@ -15883,7 +15883,7 @@ html body #root .app .employer-bottom-nav button{
 }
 html body #root .app.worker nav.worker-bottom-nav button.active,
 html body #root .app.employer nav.employer-bottom-nav button.active{
- background:#A3133D!important;color:#FFFFFF!important;
+ background:#C2184B!important;color:#FFFFFF!important;
 }
 html body #root .app .sidebar,
 html body #root .app .sidebar nav button.selected,
@@ -15897,7 +15897,7 @@ html body #root .app .section-card,
 html body #root .app .dashboard-card,
 html body #root .app .critical-info-box,
 html body #root .app .published-shift-card{
- background:#FFFFFF!important;color:#64152F!important;border-color:#F2C6D4!important;
+ background:#FFFFFF!important;color:#111111!important;border-color:#F2C6D4!important;
 }
 html body #root .app .worker-section-links button,
 html body #root .app .job-tabs button,
@@ -15921,18 +15921,18 @@ html body #root .app textarea:focus{
 /* Hyrz refined raspberry and white palette — final override for legacy components. */
 :root{
  --hyrz-brand:#C2184B!important;
- --hyrz-brand-hover:#A3133D!important;
+ --hyrz-brand-hover:#C2184B!important;
  --hyrz-brand-soft:#FCE8EF!important;
  --hyrz-orange:#C2184B!important;
- --hyrz-orange-hover:#A3133D!important;
+ --hyrz-orange-hover:#C2184B!important;
  --hyrz-lime:#C2184B!important;
- --hyrz-lime-hover:#A3133D!important;
+ --hyrz-lime-hover:#C2184B!important;
  --hyrz-lime-ink:#FFFFFF!important;
  --hyrz-black:#C2184B!important;
  --hyrz-white:#FFFFFF!important;
  --hyrz-page:#FFFFFF!important;
  --hyrz-border:#F2C6D4!important;
- --hyrz-ink:#64152F!important;
+ --hyrz-ink:#111111!important;
  --hyrz-navy:#C2184B!important;
  --hyrz-cream:#FFFFFF!important;
  --hyrz-cream-deep:#FCE8EF!important;
@@ -15943,7 +15943,7 @@ html body #root .app,
 html body #root .app.worker,
 html body #root .app.employer,
 html body #root .app.admin-console{
- background:#FFFFFF!important;color:#64152F!important;
+ background:#FFFFFF!important;color:#111111!important;
 }
 html body #root .app .primary,
 html body #root .app button.primary,
@@ -15966,7 +15966,7 @@ html body #root .app .employer-bottom-nav button.active{
 html body #root .app .primary:hover,
 html body #root .app button.primary:hover,
 html body #root .app .worker-section-links button:hover{
- background:#A3133D!important;border-color:#A3133D!important;color:#FFFFFF!important;
+ background:#C2184B!important;border-color:#C2184B!important;color:#FFFFFF!important;
 }
 html body #root .app.worker nav.worker-bottom-nav,
 html body #root .app.employer nav.employer-bottom-nav,
@@ -15992,12 +15992,12 @@ html body #root .app .section-card,
 html body #root .app .dashboard-card,
 html body #root .app .critical-info-box,
 html body #root .app .published-shift-card{
- background:#FFFFFF!important;color:#64152F!important;border-color:#F2C6D4!important;
+ background:#FFFFFF!important;color:#111111!important;border-color:#F2C6D4!important;
 }
 html body #root .app input,
 html body #root .app select,
 html body #root .app textarea{
- background:#FFFFFF!important;color:#64152F!important;border-color:#F2C6D4!important;
+ background:#FFFFFF!important;color:#111111!important;border-color:#F2C6D4!important;
 }
 html body #root .app input:focus,
 html body #root .app select:focus,
@@ -16018,5 +16018,108 @@ html body #root .app .direct-message-bubble.sent{
 }
 html body #root .app .workchat-message-row:not(.mine) .workchat-message-bubble,
 html body #root .app .direct-message-bubble:not(.sent){
- background:#FCE8EF!important;color:#64152F!important;border-color:#F2C6D4!important;
+ background:#FCE8EF!important;color:#111111!important;border-color:#F2C6D4!important;
+}
+
+
+/* Hyrz strict brand palette: raspberry red, black, white and pale background tints only. */
+:root{
+ --hyrz-brand:#C2184B!important;
+ --hyrz-brand-hover:#C2184B!important;
+ --hyrz-brand-soft:#FCE8EF!important;
+ --hyrz-orange:#C2184B!important;
+ --hyrz-orange-hover:#C2184B!important;
+ --hyrz-lime:#C2184B!important;
+ --hyrz-lime-hover:#C2184B!important;
+ --hyrz-lime-ink:#FFFFFF!important;
+ --hyrz-black:#111111!important;
+ --hyrz-white:#FFFFFF!important;
+ --hyrz-page:#FFFFFF!important;
+ --hyrz-border:#F2C6D4!important;
+ --hyrz-ink:#111111!important;
+ --hyrz-navy:#111111!important;
+ --hyrz-cream:#FFFFFF!important;
+ --hyrz-cream-deep:#FCE8EF!important;
+ --hyrz-amber:#C2184B!important;
+ --hyrz-coral:#C2184B!important;
+}
+html body #root .app,
+html body #root .app.worker,
+html body #root .app.employer,
+html body #root .app.admin-console{
+ background:#FFFFFF!important;
+ color:#111111!important;
+}
+html body #root .app :where(h1,h2,h3,h4,h5,h6,p,span,label,strong,b,small,li,dt,dd,legend,th,td){
+ color:inherit;
+}
+html body #root .app :where(.panel,.stat,.card,.section-card,.dashboard-card,.critical-info-box,.published-shift-card,.modal,.dialog,.dropdown-menu,.popover,.worker-inbox-panel,.workchat-panel){
+ background-color:#FFFFFF!important;
+ color:#111111!important;
+ border-color:#F2C6D4!important;
+}
+html body #root .app :where(input,select,textarea){
+ background:#FFFFFF!important;
+ color:#111111!important;
+ border-color:#F2C6D4!important;
+}
+html body #root .app :where(input,select,textarea)::placeholder{color:#666666!important}
+html body #root .app :where(input,select,textarea):focus{
+ border-color:#C2184B!important;
+ box-shadow:0 0 0 3px rgba(194,24,75,.12)!important;
+}
+html body #root .app :where(.primary,button.primary,.send-button,.workchat-send-button,.compose-message-button,.worker-section-links button.active,.worker-section-links button.selected,.job-tabs button.active,.job-tabs button.selected,.inbox-tabs button.active,.workchat-section-tabs button.active,.worker-bottom-nav button.active,.mobile-bottom-nav button.active,.worker-mobile-nav button.active,.bottom-nav button.active,.employer-bottom-nav button.active,.public-nav-signup,.public-intro-cta,.public-how-work-cta){
+ background:#C2184B!important;
+ border-color:#C2184B!important;
+ color:#FFFFFF!important;
+}
+html body #root .app :where(.sidebar,.worker-bottom-nav,.mobile-bottom-nav,.worker-mobile-nav,.bottom-nav,.employer-bottom-nav){
+ background:#111111!important;
+ border-color:#111111!important;
+ color:#FFFFFF!important;
+}
+html body #root .app :where(.sidebar nav button,.worker-bottom-nav button,.mobile-bottom-nav button,.worker-mobile-nav button,.bottom-nav button,.employer-bottom-nav button){
+ color:#FFFFFF!important;
+}
+html body #root .app :where(.brand span,.green,.live,.eyebrow,a,.textbutton,.link-button){
+ color:#C2184B!important;
+}
+html body #root .app :where(.pill,.shiftdate,.status,.tag,.badge,.worker-section-links button,.job-tabs button,.inbox-tabs button,.workchat-section-tabs button){
+ background:#FCE8EF!important;
+ border-color:#F2C6D4!important;
+ color:#111111!important;
+}
+html body #root .app :where(.workchat-message-row.mine .workchat-message-bubble,.direct-message-bubble.sent){
+ background:#C2184B!important;
+ border-color:#C2184B!important;
+ color:#FFFFFF!important;
+}
+html body #root .app :where(.workchat-message-row:not(.mine) .workchat-message-bubble,.direct-message-bubble:not(.sent)){
+ background:#FCE8EF!important;
+ border-color:#F2C6D4!important;
+ color:#111111!important;
+}
+/* Text contrast reverses on hover: black lettering becomes white, white lettering becomes black. */
+html body #root .app :where(a,button,[role="button"],.clickable,.textbutton,.link-button):hover{
+ color:#FFFFFF!important;
+}
+html body #root .app :where(.sidebar nav button,.worker-bottom-nav button,.mobile-bottom-nav button,.worker-mobile-nav button,.bottom-nav button,.employer-bottom-nav button):hover{
+ background:#FFFFFF!important;
+ color:#111111!important;
+}
+html body #root .app :where(.panel button:not(.primary),.card button:not(.primary),.stat button:not(.primary),.worker-section-links button:not(.active):not(.selected),.job-tabs button:not(.active):not(.selected),.inbox-tabs button:not(.active),.workchat-section-tabs button:not(.active)):hover{
+ background:#111111!important;
+ border-color:#111111!important;
+ color:#FFFFFF!important;
+}
+html body #root .app :where(.primary,button.primary,.send-button,.workchat-send-button,.compose-message-button,.public-nav-signup,.public-intro-cta,.public-how-work-cta):hover{
+ background:#111111!important;
+ border-color:#111111!important;
+ color:#FFFFFF!important;
+}
+html body #root .app :where(.sidebar nav button,.worker-bottom-nav button,.mobile-bottom-nav button,.worker-mobile-nav button,.bottom-nav button,.employer-bottom-nav button):hover :where(span,small,strong,svg){
+ color:#111111!important;
+}
+html body #root .app :where(.primary,button.primary,.send-button,.workchat-send-button,.compose-message-button):hover :where(span,small,strong,svg){
+ color:#FFFFFF!important;
 }
