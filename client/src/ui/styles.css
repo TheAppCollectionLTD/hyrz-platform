@@ -16310,3 +16310,10 @@ html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-comp
 .worker-workchat-panel .workchat-conversation:has(> .workchat-group-info) > .workchat-header-search{
  display:none!important;
 }
+
+
+/* Group Information already has its own back-button heading; remove the repeated profile row in the About content. */
+.worker-workchat-panel .workchat-group-info .workchat-info-group-profile,
+.workchat-group-info .workchat-info-group-profile{
+ display:none!important;
+}
