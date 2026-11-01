@@ -16557,3 +16557,169 @@ html body #root .app.inbox-screen nav.worker-bottom-nav>button.active{
 html body #root .app.inbox-screen nav.worker-bottom-nav>button:hover{
  background:rgba(255,255,255,.08)!important;
 }
+
+
+/* Consistent chat canvas: visible, subtle Hyrz wallpaper in both group and 1:1 chats. */
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-message-list,
+html body #root .app.inbox-screen .hyrz-direct-chat{
+ background-color:#fbf7f5!important;
+ background-image:
+  radial-gradient(circle at 18px 18px,rgba(173,23,68,.075) 1.2px,transparent 1.8px),
+  radial-gradient(circle at 54px 54px,rgba(173,23,68,.055) 1px,transparent 1.7px),
+  repeating-linear-gradient(135deg,rgba(173,23,68,.022) 0,rgba(173,23,68,.022) 1px,transparent 1px,transparent 22px)!important;
+ background-size:72px 72px,72px 72px,auto!important;
+ background-position:0 0,0 0,0 0!important;
+}
+
+/* Individual conversations use the same light, rounded message treatment as Workchats. */
+html body #root .app.inbox-screen .hyrz-direct-chat{
+ flex:1 1 0!important;
+ min-height:0!important;
+ max-height:none!important;
+ height:auto!important;
+ overflow-y:auto!important;
+ margin:0!important;
+ padding:16px 12px!important;
+ border:0!important;
+ border-radius:0!important;
+ scrollbar-color:#AD1744 #f7eeee!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-message-content{
+ max-width:min(82%,620px)!important;
+ padding:10px 13px!important;
+ border:1px solid #F2C6D4!important;
+ border-radius:15px 15px 15px 4px!important;
+ background:#FFFFFF!important;
+ color:#171717!important;
+ box-shadow:0 1px 2px rgba(45,20,25,.06)!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-message.sent .hyrz-direct-message-content{
+ border-color:#AD1744!important;
+ border-radius:15px 15px 4px 15px!important;
+ background:#AD1744!important;
+ color:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-sender{
+ color:#AD1744!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-message p{
+ color:inherit!important;
+ font-size:14px!important;
+ line-height:1.45!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-message small{
+ color:#747474!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-message.sent small{
+ color:rgba(255,255,255,.82)!important;
+}
+
+/* Match the Workchat conversation header and composer rather than the old dark direct-message panel. */
+html body #root .app.inbox-screen .worker-inbox-panel .direct-thread-heading,
+html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading{
+ display:flex!important;
+ flex:0 0 auto!important;
+ align-items:center!important;
+ justify-content:space-between!important;
+ min-height:66px!important;
+ padding:9px 12px!important;
+ border:0!important;
+ border-bottom:1px solid #F2C6D4!important;
+ border-radius:0!important;
+ background:#FFFFFF!important;
+ color:#111111!important;
+}
+html body #root .app.inbox-screen .worker-inbox-panel .direct-thread-heading h3,
+html body #root .app.inbox-screen .worker-inbox-panel .direct-thread-heading h4,
+html body #root .app.inbox-screen .worker-inbox-panel .direct-thread-heading small,
+html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading h3,
+html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading small{
+ color:#111111!important;
+}
+html body #root .app.inbox-screen .worker-inbox-panel .direct-thread-heading .icon-back-button,
+html body #root .app.inbox-screen .worker-inbox-panel .direct-thread-heading>button,
+html body #root .app.inbox-screen .hyrz-admin-thread .direct-thread-heading .icon-back-button{
+ width:38px!important;
+ height:38px!important;
+ min-width:38px!important;
+ border:1px solid #F2C6D4!important;
+ border-radius:50%!important;
+ background:#FFFFFF!important;
+ color:#AD1744!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-composer{
+ flex:0 0 auto!important;
+ gap:7px!important;
+ margin:0!important;
+ padding:7px 8px calc(7px + env(safe-area-inset-bottom))!important;
+ border:0!important;
+ border-top:1px solid #F2C6D4!important;
+ border-radius:0!important;
+ background:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-composer textarea{
+ min-height:40px!important;
+ padding:10px 13px!important;
+ border:1px solid #F2C6D4!important;
+ border-radius:22px!important;
+ background:#FFFFFF!important;
+ color:#171717!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-composer textarea::placeholder{
+ color:#777777!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-composer .hyrz-chat-tool{
+ border:1px solid #F2C6D4!important;
+ background:#FFFFFF!important;
+ color:#AD1744!important;
+}
+html body #root .app.inbox-screen .hyrz-direct-composer button.primary{
+ min-height:40px!important;
+ border-radius:50%!important;
+ background:#AD1744!important;
+ color:#FFFFFF!important;
+}
+
+/* Prevent the Inbox route from introducing a horizontal offset or overflow on mobile. */
+html,body,#root{
+ width:100%!important;
+ max-width:100%!important;
+ overflow-x:hidden!important;
+}
+html body #root .app.inbox-screen{
+ position:relative!important;
+ left:0!important;
+ width:100%!important;
+ max-width:100%!important;
+ min-width:0!important;
+ margin:0!important;
+ padding-left:0!important;
+ padding-right:0!important;
+ overflow-x:clip!important;
+ transform:none!important;
+}
+html body #root .app.inbox-screen>main.page-inbox{
+ position:relative!important;
+ left:0!important;
+ width:100%!important;
+ max-width:100%!important;
+ min-width:0!important;
+ margin-left:0!important;
+ margin-right:0!important;
+ box-sizing:border-box!important;
+ transform:none!important;
+}
+@media(max-width:1100px){
+ html body #root .app.inbox-screen>main.page-inbox{
+  padding-left:18px!important;
+  padding-right:18px!important;
+ }
+}
+@media(max-width:650px){
+ html body #root .app.inbox-screen>main.page-inbox{
+  width:100%!important;
+  max-width:100vw!important;
+  padding-left:12px!important;
+  padding-right:12px!important;
+ }
+}
