@@ -15688,3 +15688,134 @@ html body #root .app.inbox-screen .workchat-whatsapp-composer>textarea{
 #root .app main.page-inbox .worker-workchat-panel .workchat-whatsapp-composer>textarea{
  flex:1 1 60px!important;min-width:0!important;
 }
+
+
+/* Hyrz brand refresh: Pink Red (#F5054F) + White.
+   Replaces the previous orange/black/cream palette consistently across worker,
+   employer, admin, inbox, navigation, forms and public-facing app surfaces. */
+:root{
+ --hyrz-brand:#F5054F;
+ --hyrz-brand-hover:#D90445;
+ --hyrz-brand-soft:#FFF0F4;
+ --hyrz-ink:#7B1737;
+ --hyrz-navy:#F5054F;
+ --hyrz-cream:#FFFFFF;
+ --hyrz-cream-deep:#FFF0F4;
+ --hyrz-amber:#F5054F;
+ --hyrz-coral:#F5054F;
+ --hyrz-muted:#9B526B;
+ --hyrz-border:#FFD1DE;
+ --hyrz-white:#FFFFFF;
+ --hyrz-canvas:#FFFFFF;
+ --hyrz-surface:#FFFFFF;
+ --hyrz-line:#FFD1DE;
+ --hyrz-lime:#F5054F;
+ --hyrz-lime-ink:#FFFFFF;
+ --hyrz-blue:#F5054F;
+ --hyrz-blue-soft:#FFF0F4;
+ --hyrz-teal:#F5054F;
+ --hyrz-teal-soft:#FFF0F4;
+ --hyrz-amber-soft:#FFF0F4;
+ --hyrz-green:#F5054F;
+ --hyrz-green-soft:#FFF0F4;
+ --hyrz-text-primary:#7B1737;
+ --hyrz-text-secondary:#9B526B;
+ --hyrz-text-on-dark:#FFFFFF;
+}
+html,body,#root{background:#FFFFFF!important;color:#7B1737}
+.app,.app.worker,.app.employer,.app.admin-console{
+ background:#FFFFFF!important;color:#7B1737!important;
+}
+.app main,.app.worker main,.app.employer main,.app.admin-console main{
+ background:#FFFFFF!important;color:#7B1737!important;
+}
+.app h1,.app h2,.app h3,.app h4,.app p,.app label,.app legend,
+.app main strong,.app main b,.app main .panel,.app main .stat{
+ color:inherit;
+}
+.app .sidebar,.app.worker .sidebar,.app.employer .sidebar,
+.app .worker-bottom-nav,.app.worker .worker-bottom-nav,
+.app .public-home-nav,.app .public-footer,
+.app .employer-hero,.app .hero-card,.app .critical-card,.app .dark-card{
+ background:#F5054F!important;color:#FFFFFF!important;border-color:#F5054F!important;
+}
+.app .brand,.app .sidebar .brand,.app .sidebar nav button,
+.app .sidebottom button,.app .worker-bottom-nav button,
+.app .public-home-nav a,.app .public-home-nav button,
+.app .employer-hero h1,.app .employer-hero h2,
+.app .hero-card,.app .critical-card,.app .dark-card{
+ color:#FFFFFF!important;
+}
+.app .brand span,.app .green,.app .live,.app .tag,.app .eyebrow,
+.app .sidebar nav button.selected,.app .sidebar nav button:hover{
+ color:#FFFFFF!important;
+}
+.app .sidebar nav button.selected,.app .sidebar nav button:hover,
+.app .worker-bottom-nav button.active,.app .worker-bottom-nav button:hover,
+.app .worker-section-links button.selected,.app .tabs button.selected,
+.app .subsection-tabs button.selected,.app .section-tabs button.selected,
+.app .workchat-section-tabs button.selected,.app .inbox-tabs button.active{
+ background:#D90445!important;color:#FFFFFF!important;border-color:#FFFFFF!important;
+}
+.app .panel,.app .stat,.app .card,.app .section-card,.app .dashboard-card,
+.app .critical-info-box,.app .published-shift-card,.app .workchat-conversation,
+.app .direct-conversation-list,.app .direct-conversation-thread,
+.app .inbox-worker-search,.app .admin-record{
+ background:#FFFFFF!important;color:#7B1737!important;border-color:#FFD1DE!important;
+}
+.app .primary,.app button.primary,.app .formgrid .primary,
+.app .shiftpay button,.app .row button,.app .notification-back,
+.app .send-button,.app .workchat-send-button{
+ background:#F5054F!important;border-color:#F5054F!important;color:#FFFFFF!important;
+}
+.app .primary:hover,.app button.primary:hover,
+.app .shiftpay button:hover,.app .row button:hover{
+ background:#D90445!important;border-color:#D90445!important;color:#FFFFFF!important;
+}
+.app .secondary,.app button.secondary,.app .pill,.app .tag-pill,
+.app .shiftdate,.app .job-tabs button.selected,.app .checkout-section-cards button.selected{
+ background:#FFF0F4!important;border-color:#FFD1DE!important;color:#7B1737!important;
+}
+.app input,.app select,.app textarea,.app .workchat-composer textarea,
+.app .direct-message-compose textarea{
+ background:#FFFFFF!important;color:#7B1737!important;border-color:#FFD1DE!important;
+}
+.app input::placeholder,.app textarea::placeholder{color:#B77A8F!important;opacity:1}
+.app input:focus,.app select:focus,.app textarea:focus,
+.app button:focus-visible,.app a:focus-visible{
+ border-color:#F5054F!important;outline-color:#F5054F!important;
+ box-shadow:0 0 0 3px rgba(245,5,79,.13)!important;
+}
+.app a,.app .textbutton,.app .link-button{color:#F5054F}
+.app .workchat-message-row.mine .workchat-message-bubble,
+.app .direct-message-bubble.sent{
+ background:#F5054F!important;color:#FFFFFF!important;border-color:#F5054F!important;
+}
+.app .workchat-message-row:not(.mine) .workchat-message-bubble,
+.app .direct-message-bubble:not(.sent){
+ background:#FFF0F4!important;color:#7B1737!important;border-color:#FFD1DE!important;
+}
+.app .workchat-avatar,.app .workchat-profile-avatar,.app .worker-avatar,
+.app .employer-avatar,.app .hyrz-admin-message-icon{
+ background:#FFF0F4!important;color:#F5054F!important;border-color:#FFD1DE!important;
+}
+.app .workchat-composer,.app .workchat-whatsapp-composer,
+.app .workchat-message-list,.app .direct-message-compose{
+ background:#FFFFFF!important;border-color:#FFD1DE!important;
+}
+.app .workchat-composer-tool,.app .workchat-media-button{
+ background:#FFFFFF!important;color:#F5054F!important;border-color:#FFD1DE!important;
+}
+.app .status,.app .status.approved,.app .status.paid,
+.app .status.rejected,.app .status.disputed,.app .status.overdue{
+ background:#FFF0F4!important;color:#9B1741!important;border-color:#FFD1DE!important;
+}
+.app hr,.app .shiftrow,.app .row,.app table td,.app table th,
+.app .table td,.app .table th{border-color:#FFD1DE!important}
+.app footer,.app .muted,.app .hint,.app small.muted,
+.app .shiftmain small,.app .row small,.app .empty{
+ color:#9B526B!important;
+}
+.app .notification-switch:checked,.app .hyrz-toggle.on{
+ background:#F5054F!important;
+}
