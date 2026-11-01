@@ -16853,3 +16853,19 @@ html body #root .app.worker.inbox-screen>nav.worker-bottom-nav>button.active{
   max-width:100vw!important;
  }
 }
+
+
+/* Inbox active state: match the other worker nav items by turning only its label black. */
+html body #root .app.worker.inbox-screen>nav.worker-bottom-nav>button.active,
+html body #root .app.inbox-screen>nav.worker-bottom-nav>button.active{
+ color:#000000!important;
+ -webkit-text-fill-color:#000000!important;
+ background:transparent!important;
+}
+html body #root .app.worker.inbox-screen>nav.worker-bottom-nav>button.active>small,
+html body #root .app.inbox-screen>nav.worker-bottom-nav>button.active>small,
+html body #root .app.worker.inbox-screen>nav.worker-bottom-nav>button.active :is(span,small),
+html body #root .app.inbox-screen>nav.worker-bottom-nav>button.active :is(span,small){
+ color:#000000!important;
+ -webkit-text-fill-color:#000000!important;
+}
