@@ -16351,3 +16351,15 @@ html body #root .app.inbox-screen .workchat-conversation-title.workchat-group-in
  opacity:1!important;
  background:transparent!important;
 }
+
+
+/* Group-info header is a button, not a text link: never underline its title on hover/focus/active. */
+.worker-workchat-panel .workchat-group-info-trigger:hover .workchat-conversation-title-copy h3,
+.worker-workchat-panel .workchat-group-info-trigger:focus .workchat-conversation-title-copy h3,
+.worker-workchat-panel .workchat-group-info-trigger:active .workchat-conversation-title-copy h3,
+html body #root .app.inbox-screen .workchat-group-info-trigger:hover .workchat-conversation-title-copy h3,
+html body #root .app.inbox-screen .workchat-group-info-trigger:focus .workchat-conversation-title-copy h3,
+html body #root .app.inbox-screen .workchat-group-info-trigger:active .workchat-conversation-title-copy h3{
+ text-decoration:none!important;
+ text-decoration-line:none!important;
+}
