@@ -16303,3 +16303,10 @@ html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-comp
 .workchat-shared-media-item img{width:100%;max-height:190px;object-fit:contain;border-radius:8px;background:#f7f7f7}
 .workchat-shared-media-item strong{font-size:12px;overflow-wrap:anywhere}
 .workchat-shared-media-item small{font-size:11px;color:#777}
+
+
+/* Hide the conversation header while Group Information is open; keep the dedicated group-info heading. */
+.worker-workchat-panel .workchat-conversation:has(> .workchat-group-info) > .workchat-conversation-header,
+.worker-workchat-panel .workchat-conversation:has(> .workchat-group-info) > .workchat-header-search{
+ display:none!important;
+}
