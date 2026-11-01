@@ -16552,7 +16552,7 @@ html body #root .app.inbox-screen nav.worker-bottom-nav>button.active :is(span,s
  -webkit-text-fill-color:#FFFFFF!important;
 }
 html body #root .app.inbox-screen nav.worker-bottom-nav>button.active{
- background:rgba(255,255,255,.13)!important;
+ background:transparent!important;
 }
 html body #root .app.inbox-screen nav.worker-bottom-nav>button:hover{
  background:rgba(255,255,255,.08)!important;
