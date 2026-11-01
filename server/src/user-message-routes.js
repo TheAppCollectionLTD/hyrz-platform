@@ -211,7 +211,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await workchatDeletionColumnsReady;
   }
   async function getWorkchat(id,userId) {
-    const [rows]=await db.execute(`SELECT w.*,COALESCE(s.disabled,0) AS disabled,EXISTS(SELECT 1 FROM workchat_admins wa WHERE wa.workchat_id=w.id AND wa.user_id=?) AS is_workchat_admin FROM workchats w LEFT JOIN workchat_participants p ON p.workchat_id=w.id AND p.user_id=? LEFT JOIN workchat_settings s ON s.workchat_id=w.id WHERE w.id=? AND (w.employer_user_id=? OR p.user_id IS NOT NULL) LIMIT 1`,[userId,userId,id,userId]);
+    const [rows]=await db.execute(`SELECT w.*,u.first_name AS created_by_first_name,u.last_name AS created_by_last_name,u.email AS created_by_email,u.profile_picture AS created_by_profile_picture,COALESCE(s.disabled,0) AS disabled,EXISTS(SELECT 1 FROM workchat_admins wa WHERE wa.workchat_id=w.id AND wa.user_id=?) AS is_workchat_admin FROM workchats w JOIN users u ON u.id=w.employer_user_id LEFT JOIN workchat_participants p ON p.workchat_id=w.id AND p.user_id=? LEFT JOIN workchat_settings s ON s.workchat_id=w.id WHERE w.id=? AND (w.employer_user_id=? OR p.user_id IS NOT NULL) LIMIT 1`,[userId,userId,id,userId]);
     return rows[0]||null;
   }
   async function canManageWorkchat(chat,userId){
