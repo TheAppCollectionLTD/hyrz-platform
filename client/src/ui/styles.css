@@ -16285,3 +16285,21 @@ html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-comp
 .worker-workchat-panel .workchat-group-info-trigger{border:0;background:transparent;text-align:left;cursor:pointer;color:inherit;padding:0}
 .worker-workchat-panel .workchat-group-info-trigger:hover .workchat-conversation-title-copy h3{text-decoration:underline;text-decoration-color:#C2184B}
 .worker-workchat-panel .workchat-settings-menu button{width:100%;text-align:left}
+
+
+/* Group info: shared profile, creator metadata and tappable conversation header */
+.workchat-conversation-title.workchat-group-info-trigger{display:flex;align-items:center;gap:10px;min-width:0;flex:1;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;padding:4px 8px;border-radius:12px}
+.workchat-conversation-title.workchat-group-info-trigger:hover{background:rgba(194,24,75,.06)}
+.workchat-conversation-title.workchat-group-info-trigger:focus-visible{outline:2px solid #C2184B;outline-offset:2px}
+.workchat-info-group-profile{display:flex;align-items:center;gap:13px;padding:12px 0 16px;border-bottom:1px solid rgba(194,24,75,.16)}
+.workchat-info-group-profile .workchat-profile-avatar{width:64px;height:64px;min-width:64px;border-radius:50%;overflow:hidden}
+.workchat-info-group-profile .workchat-profile-avatar img{width:100%;height:100%;object-fit:cover}
+.workchat-info-group-profile h3{margin:0;color:#171717;font-size:18px}
+.workchat-info-group-profile p{margin:4px 0 0;color:#666;font-size:12px}
+.workchat-group-info .workchat-info-dl{display:grid;grid-template-columns:minmax(95px,auto) 1fr;gap:9px 14px;margin:0;padding:12px;border:1px solid rgba(194,24,75,.15);border-radius:12px;background:#fff}
+.workchat-group-info .workchat-info-dl dt{color:#777;font-size:12px}
+.workchat-group-info .workchat-info-dl dd{margin:0;color:#171717;font-size:12px;font-weight:650;overflow-wrap:anywhere}
+.workchat-shared-media-item{display:flex;flex-direction:column;gap:6px;min-width:0;padding:10px;border:1px solid rgba(194,24,75,.15);border-radius:12px;background:#fff;color:#171717;text-decoration:none}
+.workchat-shared-media-item img{width:100%;max-height:190px;object-fit:contain;border-radius:8px;background:#f7f7f7}
+.workchat-shared-media-item strong{font-size:12px;overflow-wrap:anywhere}
+.workchat-shared-media-item small{font-size:11px;color:#777}
