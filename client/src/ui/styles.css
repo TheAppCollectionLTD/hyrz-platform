@@ -16245,3 +16245,14 @@ html body #root .app.inbox-screen .bottom-nav button{
   padding:6px 7px calc(6px + env(safe-area-inset-bottom))!important;
  }
 }
+
+
+/* Give the Workchat composer a subtle breathing space above the bottom nav. */
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-composer{
+ margin-bottom:5px!important;
+}
+@media(max-width:650px){
+ html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-composer{
+  margin-bottom:5px!important;
+ }
+}
