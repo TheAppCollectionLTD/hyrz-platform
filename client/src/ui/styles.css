@@ -16317,3 +16317,37 @@ html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-comp
 .workchat-group-info .workchat-info-group-profile{
  display:none!important;
 }
+
+
+/* Improve contrast in the worker Workchat conversation header. */
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-header,
+html body #root .app.inbox-screen .workchat-conversation-header{
+ background:#FFFFFF!important;
+ color:#111111!important;
+ border-bottom:1px solid #F2C6D4!important;
+ opacity:1!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-header .workchat-conversation-title-copy h3,
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-header .workchat-conversation-title-copy h3 *,
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-header .workchat-conversation-title-copy p,
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-conversation-title-copy h3,
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-conversation-title-copy p{
+ color:#111111!important;
+ -webkit-text-fill-color:#111111!important;
+ opacity:1!important;
+ text-shadow:none!important;
+ filter:none!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-header .workchat-conversation-title-copy h3,
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-conversation-title-copy h3{
+ font-weight:800!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-header .workchat-conversation-title-copy p,
+html body #root .app.inbox-screen .workchat-conversation-header .workchat-conversation-title-copy p{
+ font-weight:600!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-title.workchat-group-info-trigger,
+html body #root .app.inbox-screen .workchat-conversation-title.workchat-group-info-trigger{
+ opacity:1!important;
+ background:transparent!important;
+}
