@@ -15584,3 +15584,42 @@ html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversat
 html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation) .worker-workchat-panel{
  margin-top:0!important;
 }
+
+
+/* Voice-note and camera controls in the worker chat composer. */
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-composer .workchat-media-button{
+ display:flex!important;flex:0 0 36px!important;align-items:center!important;justify-content:center!important;
+ width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;
+ border:1px solid #dce2eb!important;border-radius:50%!important;background:#fff!important;
+ color:#344054!important;opacity:1!important;cursor:not-allowed!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-composer .workchat-media-button svg{
+ display:block!important;width:19px!important;height:19px!important;fill:none!important;
+ stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-composer textarea{
+ flex:1 1 90px!important;min-width:0!important;
+}
+html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation) main.page-inbox{
+ display:flex!important;flex-direction:column!important;min-height:0!important;
+}
+html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation) .worker-workchat-panel{
+ display:flex!important;flex:1 1 0%!important;flex-direction:column!important;
+ height:auto!important;min-height:0!important;max-height:none!important;
+}
+html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation) .worker-workchat-panel .workchat-conversation{
+ display:flex!important;flex:1 1 0%!important;flex-direction:column!important;
+ height:100%!important;min-height:0!important;max-height:none!important;
+}
+html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation) .worker-workchat-panel .workchat-message-list{
+ flex:1 1 0%!important;min-height:0!important;max-height:none!important;
+}
+@media(max-width:650px){
+ html body #root .app.inbox-screen .worker-workchat-panel .workchat-composer .workchat-media-button{
+  flex-basis:32px!important;width:32px!important;height:32px!important;
+  min-width:32px!important;min-height:32px!important;
+ }
+ html body #root .app.inbox-screen .worker-workchat-panel .workchat-composer .workchat-media-button svg{
+  width:17px!important;height:17px!important;
+ }
+}
