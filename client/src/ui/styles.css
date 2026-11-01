@@ -15569,3 +15569,18 @@ html body #root .app.inbox-screen .worker-workchat-panel .workchat-composer .wor
   min-width:38px!important;min-height:38px!important;
  }
 }
+
+
+/* Keep the single large back control in the Inbox title row while a worker chat is open. */
+html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation)>main.page-inbox>header{
+ display:flex!important;visibility:visible!important;position:relative!important;
+ align-items:center!important;justify-content:space-between!important;
+ min-height:54px!important;height:auto!important;margin:0 0 8px!important;
+ padding:0!important;overflow:visible!important;
+}
+html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation)>main.page-inbox>header .workchat-top-back{
+ display:flex!important;visibility:visible!important;
+}
+html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation) .worker-workchat-panel{
+ margin-top:0!important;
+}
