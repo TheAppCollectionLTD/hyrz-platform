@@ -16765,3 +16765,236 @@ html body #root .app.worker.inbox-screen>nav.worker-bottom-nav>button.active>sma
  color:#111111!important;
  -webkit-text-fill-color:#111111!important;
 }
+
+
+/* One-to-one Admin and Employer conversations share the Workchat chat surface. */
+html body #root .app.inbox-screen .hyrz-one-to-one-chat{
+ display:flex!important;
+ flex-direction:column!important;
+ gap:0!important;
+ width:100%!important;
+ min-width:0!important;
+ min-height:420px!important;
+ height:min(68vh,680px)!important;
+ max-height:680px!important;
+ margin:10px 0 0!important;
+ overflow:hidden!important;
+ border:1px solid #eee9e4!important;
+ border-radius:14px!important;
+ background:#fff!important;
+ box-shadow:0 5px 20px rgba(25,20,16,.05)!important;
+ box-sizing:border-box!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-conversation-header{
+ position:relative!important;
+ z-index:2!important;
+ display:flex!important;
+ flex:0 0 auto!important;
+ align-items:center!important;
+ justify-content:space-between!important;
+ gap:12px!important;
+ min-height:64px!important;
+ padding:10px 14px!important;
+ border:0!important;
+ border-bottom:1px solid #eee9e4!important;
+ border-radius:0!important;
+ background:#fff!important;
+ color:#171717!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-conversation-header>div{
+ display:flex!important;
+ flex-direction:column!important;
+ align-items:flex-start!important;
+ gap:3px!important;
+ min-width:0!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-thread-identity{
+ flex-direction:row!important;
+ align-items:center!important;
+ gap:10px!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-thread-avatar,
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-profile-avatar{
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ width:40px!important;
+ height:40px!important;
+ flex:0 0 40px!important;
+ border-radius:50%!important;
+ background:#FCE8EF!important;
+ color:#AD1744!important;
+ font-size:14px!important;
+ font-weight:800!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .direct-thread-heading h3,
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .direct-thread-heading h4{
+ margin:0!important;
+ color:#171717!important;
+ font-size:15px!important;
+ font-weight:800!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .direct-thread-heading small{
+ color:#777!important;
+ font-size:11px!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .direct-thread-heading button{
+ display:inline-flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ width:auto!important;
+ min-width:36px!important;
+ min-height:36px!important;
+ padding:7px 11px!important;
+ border:1px solid #eee3da!important;
+ border-radius:20px!important;
+ background:#fff!important;
+ color:#292929!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-message-list{
+ display:flex!important;
+ flex:1 1 auto!important;
+ flex-direction:column!important;
+ gap:12px!important;
+ min-height:0!important;
+ height:auto!important;
+ max-height:none!important;
+ margin:0!important;
+ padding:16px 12px!important;
+ overflow-y:auto!important;
+ border:0!important;
+ border-radius:0!important;
+ background-color:#fbf7f5!important;
+ background-image:
+  radial-gradient(circle at 18px 18px,rgba(173,23,68,.075) 1.2px,transparent 1.8px),
+  radial-gradient(circle at 54px 54px,rgba(173,23,68,.055) 1px,transparent 1.7px),
+  repeating-linear-gradient(135deg,rgba(173,23,68,.022) 0,rgba(173,23,68,.022) 1px,transparent 1px,transparent 22px)!important;
+ background-size:72px 72px,72px 72px,auto!important;
+ scrollbar-color:#AD1744 #f7eeee!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-message{
+ display:flex!important;
+ width:fit-content!important;
+ max-width:86%!important;
+ margin:0!important;
+ padding:0!important;
+ border:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-message.sent{
+ align-self:flex-end!important;
+ justify-content:flex-end!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-message.received{
+ align-self:flex-start!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-message-content{
+ display:block!important;
+ width:auto!important;
+ max-width:100%!important;
+ padding:10px 13px!important;
+ border:1px solid #F2C6D4!important;
+ border-radius:15px 15px 15px 4px!important;
+ background:#fff!important;
+ color:#171717!important;
+ box-shadow:0 1px 2px rgba(45,20,25,.06)!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-message.sent .hyrz-direct-message-content{
+ border-color:#AD1744!important;
+ border-radius:15px 15px 4px 15px!important;
+ background:#AD1744!important;
+ color:#fff!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-sender{
+ display:block!important;
+ margin:0 0 4px!important;
+ color:#AD1744!important;
+ font-size:11px!important;
+ font-weight:800!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-message p{
+ margin:0!important;
+ color:inherit!important;
+ font-size:13px!important;
+ line-height:1.45!important;
+ white-space:pre-wrap!important;
+ overflow-wrap:anywhere!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-message small{
+ display:block!important;
+ margin-top:5px!important;
+ color:#777!important;
+ font-size:9px!important;
+ text-align:right!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-direct-message.sent small{
+ color:rgba(255,255,255,.82)!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer{
+ display:flex!important;
+ flex:0 0 auto!important;
+ flex-direction:row!important;
+ flex-wrap:nowrap!important;
+ align-items:center!important;
+ gap:8px!important;
+ margin:0!important;
+ padding:9px 10px!important;
+ border:0!important;
+ border-top:1px solid #eee9e4!important;
+ border-radius:0!important;
+ background:#fff!important;
+ box-shadow:none!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .hyrz-chat-tool{
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ width:34px!important;
+ height:34px!important;
+ min-width:34px!important;
+ min-height:34px!important;
+ padding:0!important;
+ border:1px solid #F2C6D4!important;
+ border-radius:50%!important;
+ background:#fff!important;
+ color:#AD1744!important;
+ font-size:20px!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer textarea{
+ flex:1 1 auto!important;
+ width:1%!important;
+ min-width:0!important;
+ min-height:40px!important;
+ max-height:100px!important;
+ padding:10px 14px!important;
+ border:1px solid #F2C6D4!important;
+ border-radius:22px!important;
+ background:#fff!important;
+ color:#171717!important;
+ font-size:13px!important;
+ resize:none!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer button.primary{
+ flex:0 0 auto!important;
+ min-width:58px!important;
+ min-height:38px!important;
+ padding:8px 13px!important;
+ border:1px solid #AD1744!important;
+ border-radius:22px!important;
+ background:#AD1744!important;
+ color:#fff!important;
+ font-size:12px!important;
+ font-weight:800!important;
+}
+@media(max-width:650px){
+ html body #root .app.inbox-screen .hyrz-one-to-one-chat{
+  min-height:0!important;
+  height:calc(100dvh - 250px)!important;
+  max-height:680px!important;
+ }
+ html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-conversation-header{padding:9px 11px!important}
+ html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-message-list{padding:13px 10px!important}
+ html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer{gap:6px!important;padding:8px 7px!important}
+ html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer button.primary{min-width:48px!important;padding:7px 10px!important}
+}
