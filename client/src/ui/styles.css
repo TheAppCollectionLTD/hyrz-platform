@@ -15819,3 +15819,100 @@ html,body,#root{background:#FFFFFF!important;color:#7B1737}
 .app .notification-switch:checked,.app .hyrz-toggle.on{
  background:#F5054F!important;
 }
+
+
+/* Final high-specificity brand pass.
+   Some legacy mobile rules use #root selectors and hard-coded colours, so
+   explicitly override those rules as well as the shared design tokens. */
+:root{
+ --hyrz-orange:#F5054F!important;
+ --hyrz-orange-hover:#D90445!important;
+ --hyrz-black:#F5054F!important;
+ --hyrz-white:#FFFFFF!important;
+ --hyrz-page:#FFFFFF!important;
+ --hyrz-border:#FFD1DE!important;
+ --hyrz-muted:#9B526B!important;
+ --hyrz-lime:#F5054F!important;
+ --hyrz-lime-hover:#D90445!important;
+ --hyrz-lime-ink:#FFFFFF!important;
+ --hyrz-ink:#7B1737!important;
+ --hyrz-navy:#F5054F!important;
+ --hyrz-cream:#FFFFFF!important;
+ --hyrz-cream-deep:#FFF0F4!important;
+ --hyrz-amber:#F5054F!important;
+ --hyrz-coral:#F5054F!important;
+}
+html body #root .app,
+html body #root .app.worker,
+html body #root .app.employer,
+html body #root .app.admin-console{
+ background:#FFFFFF!important;color:#7B1737!important;
+}
+html body #root .app .primary,
+html body #root .app button.primary,
+html body #root .app .worker-section-links button.active,
+html body #root .app .worker-section-links button.selected,
+html body #root .app .job-tabs-squares>button.active,
+html body #root .app .job-tabs-squares>button.selected,
+html body #root .app .worker-bottom-nav button.active,
+html body #root .app .mobile-bottom-nav button.active,
+html body #root .app .worker-mobile-nav button.active,
+html body #root .app .bottom-nav button.active,
+html body #root .app .employer-bottom-nav button.active{
+ background:#F5054F!important;border-color:#F5054F!important;color:#FFFFFF!important;
+}
+html body #root .app .primary:hover,
+html body #root .app button.primary:hover,
+html body #root .app .worker-section-links button:hover{
+ background:#D90445!important;border-color:#D90445!important;color:#FFFFFF!important;
+}
+html body #root .app.worker nav.worker-bottom-nav,
+html body #root .app.employer nav.employer-bottom-nav,
+html body #root .app .worker-bottom-nav,
+html body #root .app .mobile-bottom-nav,
+html body #root .app .worker-mobile-nav,
+html body #root .app .bottom-nav,
+html body #root .app .employer-bottom-nav{
+ background:#F5054F!important;border-color:#F5054F!important;color:#FFFFFF!important;
+}
+html body #root .app.worker nav.worker-bottom-nav button,
+html body #root .app.employer nav.employer-bottom-nav button,
+html body #root .app .worker-bottom-nav button,
+html body #root .app .employer-bottom-nav button{
+ color:#FFFFFF!important;
+}
+html body #root .app.worker nav.worker-bottom-nav button.active,
+html body #root .app.employer nav.employer-bottom-nav button.active{
+ background:#D90445!important;color:#FFFFFF!important;
+}
+html body #root .app .sidebar,
+html body #root .app .sidebar nav button.selected,
+html body #root .app .sidebar nav button:hover{
+ background:#F5054F!important;color:#FFFFFF!important;border-color:#F5054F!important;
+}
+html body #root .app .panel,
+html body #root .app .stat,
+html body #root .app .card,
+html body #root .app .section-card,
+html body #root .app .dashboard-card,
+html body #root .app .critical-info-box,
+html body #root .app .published-shift-card{
+ background:#FFFFFF!important;color:#7B1737!important;border-color:#FFD1DE!important;
+}
+html body #root .app .worker-section-links button,
+html body #root .app .job-tabs button,
+html body #root .app .inbox-tabs button,
+html body #root .app .workchat-section-tabs button{
+ border-color:#FFD1DE!important;
+}
+html body #root .app .worker-section-links button.active,
+html body #root .app .job-tabs button.active,
+html body #root .app .inbox-tabs button.active,
+html body #root .app .workchat-section-tabs button.active{
+ background:#F5054F!important;color:#FFFFFF!important;border-color:#F5054F!important;
+}
+html body #root .app input:focus,
+html body #root .app select:focus,
+html body #root .app textarea:focus{
+ border-color:#F5054F!important;box-shadow:0 0 0 3px rgba(245,5,79,.13)!important;
+}
