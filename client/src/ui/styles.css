@@ -16363,3 +16363,81 @@ html body #root .app.inbox-screen .workchat-group-info-trigger:active .workchat-
  text-decoration:none!important;
  text-decoration-line:none!important;
 }
+
+
+/* Hyrz visual refresh: subtle wallpaper canvas + deep maroon brand accent. */
+:root{
+ --hyrz-brand:#5B1730!important;
+ --hyrz-brand-hover:#431023!important;
+ --hyrz-brand-soft:#F2E8EC!important;
+ --hyrz-cobalt:#5B1730!important;
+ --hyrz-cobalt-dark:#431023!important;
+ --hyrz-lime:#5B1730!important;
+ --hyrz-lime-hover:#431023!important;
+ --hyrz-orange:#5B1730!important;
+ --hyrz-orange-hover:#431023!important;
+ --hyrz-coral:#5B1730!important;
+ --hyrz-teal:#5B1730!important;
+ --hyrz-blue:#5B1730!important;
+ --hyrz-muted:#765565!important;
+ --hyrz-border:#E3CDD5!important;
+ --hyrz-line:#E3CDD5!important;
+ --hyrz-cream-deep:#F2E8EC!important;
+ --hyrz-blue-soft:#F2E8EC!important;
+ --hyrz-teal-soft:#F2E8EC!important;
+}
+html,body,#root{
+ min-height:100%;
+ background-color:#F8F5F6!important;
+}
+body{
+ background-image:
+  radial-gradient(circle at 12% 16%,rgba(91,23,48,.055) 0,rgba(91,23,48,0) 27%),
+  radial-gradient(circle at 88% 78%,rgba(91,23,48,.045) 0,rgba(91,23,48,0) 30%),
+  repeating-linear-gradient(135deg,rgba(91,23,48,.018) 0,rgba(91,23,48,.018) 1px,transparent 1px,transparent 12px)!important;
+ background-attachment:fixed!important;
+ background-size:auto,auto,auto!important;
+ color:#171114!important;
+}
+#root>.app,
+#root .app.worker,
+#root .app.employer,
+#root .app.admin{
+ background:transparent!important;
+}
+#root .app main{background:transparent!important}
+#root .app :is(.sidebar,.worker-bottom-nav,.mobile-bottom-nav,.bottom-nav){
+ background:#431023!important;
+}
+#root .app :is(.primary,button.primary,.send-button,.workchat-send-button,.notification-back,.public-nav-signup,.public-intro-cta){
+ background:#5B1730!important;
+ border-color:#5B1730!important;
+ color:#FFFFFF!important;
+}
+#root .app :is(.primary,button.primary,.send-button,.workchat-send-button,.notification-back):hover{
+ background:#431023!important;border-color:#431023!important;
+}
+#root .app :is(.green,.live,.eyebrow,.brand span,.textbutton,.workchat-photo-upload,.workchat-media-list a){
+ color:#5B1730!important;
+}
+#root .app :is(button,a,[role="button"],input,select,textarea):focus-visible{
+ outline-color:rgba(91,23,48,.48)!important;
+}
+#root .app :is(input,select,textarea):focus{
+ border-color:#5B1730!important;
+ box-shadow:0 0 0 3px rgba(91,23,48,.10)!important;
+}
+#root .app :is(.panel,.stat,.card,.workchat-group-info,.workchat-composer,.workchat-message-list){
+ border-color:#E3CDD5!important;
+}
+#root .app :is(.selected,.active,.status.approved,.status.paid,.shiftdate,.secondary){
+ background-color:#F2E8EC!important;
+ border-color:#E3CDD5!important;
+}
+#root .app :is(.status.approved,.status.paid,.shiftdate,.secondary){color:#431023!important}
+#root .app :is(.workchat-info-tabs>button.active,.workchat-info-badge,.workchat-toggle.on){
+ background:#5B1730!important;border-color:#5B1730!important;color:#FFFFFF!important;
+}
+#root .app .worker-bottom-nav :is(button,a),
+#root .app .mobile-bottom-nav :is(button,a),
+#root .app .bottom-nav :is(button,a){color:#FFFFFF!important}
