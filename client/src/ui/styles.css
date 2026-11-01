@@ -16123,3 +16123,125 @@ html body #root .app :where(.sidebar nav button,.worker-bottom-nav button,.mobil
 html body #root .app :where(.primary,button.primary,.send-button,.workchat-send-button,.compose-message-button):hover :where(span,small,strong,svg){
  color:#FFFFFF!important;
 }
+
+
+/* Open Workchat final pass: consistent raspberry/black/white palette and no dead strip above bottom navigation. */
+html body #root .app.inbox-screen .worker-workchat-panel:has(.workchat-conversation),
+html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation) main.page-inbox{
+ display:flex!important;
+ flex-direction:column!important;
+ flex:1 1 0!important;
+ min-height:0!important;
+ height:auto!important;
+ max-height:none!important;
+ margin-bottom:0!important;
+ padding-bottom:0!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel:has(.workchat-conversation) .workchat-conversation{
+ display:flex!important;
+ flex:1 1 0!important;
+ flex-direction:column!important;
+ min-height:0!important;
+ height:100%!important;
+ max-height:none!important;
+ margin:0!important;
+ padding:0!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-message-list{
+ flex:1 1 0!important;
+ min-height:0!important;
+ margin:0!important;
+ padding-bottom:12px!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-composer{
+ flex:0 0 auto!important;
+ margin:0!important;
+ margin-top:auto!important;
+ padding:8px 8px calc(8px + env(safe-area-inset-bottom))!important;
+ border-top:1px solid #F2C6D4!important;
+ background:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-composer>textarea,
+html body #root .app.inbox-screen .workchat-whatsapp-composer>textarea{
+ background:#FFFFFF!important;
+ color:#111111!important;
+ border:1px solid #F2C6D4!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-composer .workchat-media-button,
+html body #root .app.inbox-screen .workchat-whatsapp-composer .workchat-media-button{
+ background:#FFFFFF!important;
+ color:#C2184B!important;
+ border:1px solid #C2184B!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-composer .workchat-send-button,
+html body #root .app.inbox-screen .workchat-whatsapp-composer .workchat-send-button{
+ background:#C2184B!important;
+ color:#FFFFFF!important;
+ border:1px solid #C2184B!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-message-row.mine .workchat-message-bubble,
+html body #root .app.inbox-screen .workchat-message-row.mine .workchat-message-bubble,
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-message-row.mine .workchat-message-bubble[class*="tone-"]{
+ background:#C2184B!important;
+ color:#FFFFFF!important;
+ border-color:#C2184B!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-message-row:not(.mine) .workchat-message-bubble,
+html body #root .app.inbox-screen .workchat-message-row:not(.mine) .workchat-message-bubble,
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-message-row:not(.mine) .workchat-message-bubble[class*="tone-"]{
+ background:#FCE8EF!important;
+ color:#111111!important;
+ border-color:#F2C6D4!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-title .workchat-profile-avatar{
+ background:#FCE8EF!important;
+ color:#C2184B!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-title-copy h3,
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-message-meta strong{
+ color:#111111!important;
+}
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation-title-copy p,
+html body #root .app.inbox-screen .worker-workchat-panel .workchat-message-meta time{
+ color:#666666!important;
+}
+html body #root .app.inbox-screen nav.worker-bottom-nav,
+html body #root .app.inbox-screen .worker-bottom-nav,
+html body #root .app.inbox-screen .mobile-bottom-nav,
+html body #root .app.inbox-screen .bottom-nav{
+ background:#C2184B!important;
+ border-color:#C2184B!important;
+}
+html body #root .app.inbox-screen nav.worker-bottom-nav button,
+html body #root .app.inbox-screen .worker-bottom-nav button,
+html body #root .app.inbox-screen .mobile-bottom-nav button,
+html body #root .app.inbox-screen .bottom-nav button{
+ color:#FFFFFF!important;
+}
+@media(max-width:650px){
+ html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversation) main.page-inbox{
+  display:flex!important;
+  height:calc(100dvh - var(--hyrz-mobile-nav-height, 64px))!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding-bottom:0!important;
+  margin-bottom:0!important;
+ }
+ html body #root .app.inbox-screen .worker-workchat-panel:has(.workchat-conversation){
+  flex:1 1 0!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+ }
+ html body #root .app.inbox-screen .worker-workchat-panel .workchat-conversation{
+  flex:1 1 0!important;
+  height:100%!important;
+  min-height:0!important;
+ }
+ html body #root .app.inbox-screen .worker-workchat-panel .workchat-whatsapp-composer{
+  padding:6px 7px calc(6px + env(safe-area-inset-bottom))!important;
+ }
+}
