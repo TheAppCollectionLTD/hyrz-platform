@@ -15623,3 +15623,38 @@ html body #root .app.inbox-screen:has(.worker-workchat-panel .workchat-conversat
   width:17px!important;height:17px!important;
  }
 }
+
+
+/* Correct selectors for the opened Inbox Workchat (not the legacy worker panel). */
+html body #root .app.inbox-screen:has(.workchat-whatsapp-composer) main.page-inbox{
+ display:flex!important;flex-direction:column!important;min-height:0!important;
+}
+html body #root .app.inbox-screen:has(.workchat-whatsapp-composer) .workchat-conversation{
+ display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
+ min-height:0!important;height:auto!important;max-height:none!important;
+}
+html body #root .app.inbox-screen:has(.workchat-whatsapp-composer) .workchat-message-list{
+ flex:1 1 auto!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;
+}
+html body #root .app.inbox-screen .workchat-whatsapp-composer .workchat-media-button{
+ display:flex!important;flex:0 0 34px!important;align-items:center!important;justify-content:center!important;
+ width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
+ padding:0!important;border:1px solid #dce2eb!important;border-radius:50%!important;
+ background:#fff!important;color:#344054!important;opacity:1!important;
+}
+html body #root .app.inbox-screen .workchat-whatsapp-composer .workchat-media-button svg{
+ display:block!important;width:19px!important;height:19px!important;fill:none!important;
+ stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important;
+}
+html body #root .app.inbox-screen .workchat-whatsapp-composer>textarea{
+ flex:1 1 90px!important;min-width:0!important;
+}
+@media(max-width:650px){
+ html body #root .app.inbox-screen .workchat-whatsapp-composer .workchat-media-button{
+  flex-basis:30px!important;width:30px!important;height:30px!important;
+  min-width:30px!important;min-height:30px!important;
+ }
+ html body #root .app.inbox-screen .workchat-whatsapp-composer .workchat-media-button svg{
+  width:17px!important;height:17px!important;
+ }
+}
