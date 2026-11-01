@@ -17425,3 +17425,12 @@ html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer .work
  html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer>textarea{font-size:12px!important;padding:9px 10px!important}
  html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer .workchat-send-button{width:36px!important;height:36px!important;min-width:36px!important;flex-basis:36px!important}
 }
+
+
+/* One-to-one Inbox composers mirror the Workchat bar; the GIF action uses a plus icon. */
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-composer-tool.workchat-gif-button{
+ display:flex!important;flex:0 0 34px!important;align-items:center!important;justify-content:center!important;
+ width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
+ padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;
+ color:#d4ddd7!important;font-size:21px!important;font-weight:700!important;
+}
