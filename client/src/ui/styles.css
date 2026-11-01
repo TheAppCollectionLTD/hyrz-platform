@@ -16513,3 +16513,47 @@ body{
  background:transparent!important;
 }
 #root .app main{background:transparent!important;}
+
+
+/* Inbox must use the same single continuous bottom navigation bar as every other worker page. */
+html body #root .app.inbox-screen nav.worker-bottom-nav{
+ display:grid!important;
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:0!important;
+ padding:7px max(12px,env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom))!important;
+ background:#AD1744!important;
+ border:0!important;
+ border-top:0!important;
+ border-radius:0!important;
+ box-shadow:0 -8px 24px rgba(0,0,0,.10)!important;
+}
+html body #root .app.inbox-screen nav.worker-bottom-nav>button,
+html body #root .app.inbox-screen nav.worker-bottom-nav>button:not(.active),
+html body #root .app.inbox-screen nav.worker-bottom-nav>button.active{
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ flex-direction:column!important;
+ gap:4px!important;
+ min-width:0!important;
+ min-height:52px!important;
+ margin:0!important;
+ padding:5px 2px!important;
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ color:#FFFFFF!important;
+ -webkit-text-fill-color:#FFFFFF!important;
+ box-shadow:none!important;
+}
+html body #root .app.inbox-screen nav.worker-bottom-nav>button :is(span,small),
+html body #root .app.inbox-screen nav.worker-bottom-nav>button.active :is(span,small){
+ color:#FFFFFF!important;
+ -webkit-text-fill-color:#FFFFFF!important;
+}
+html body #root .app.inbox-screen nav.worker-bottom-nav>button.active{
+ background:rgba(255,255,255,.13)!important;
+}
+html body #root .app.inbox-screen nav.worker-bottom-nav>button:hover{
+ background:rgba(255,255,255,.08)!important;
+}
