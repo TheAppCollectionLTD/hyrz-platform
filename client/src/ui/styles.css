@@ -16490,3 +16490,26 @@ body{background:#F7F7F7!important;background-image:none!important;background-att
 #root .app :is(.selected,.active,.status.approved,.status.paid,.shiftdate,.secondary){background-color:#FCE8EF!important;border-color:#F2C6D4!important;}
 #root .app :is(.status.approved,.status.paid,.shiftdate,.secondary){color:#861235!important;}
 #root .app :is(.workchat-info-tabs>button.active,.workchat-info-badge,.workchat-toggle.on){background:#AD1744!important;border-color:#AD1744!important;color:#FFFFFF!important;}
+
+
+/* Restore the subtle Hyrz wallpaper while retaining the pink-red brand palette. */
+html,body,#root{
+ min-height:100%;
+ background-color:#F7F7F7!important;
+}
+body{
+ background-color:#F7F7F7!important;
+ background-image:
+  radial-gradient(circle at 12% 16%,rgba(173,23,68,.055) 0,rgba(173,23,68,0) 27%),
+  radial-gradient(circle at 88% 78%,rgba(173,23,68,.045) 0,rgba(173,23,68,0) 30%),
+  repeating-linear-gradient(135deg,rgba(173,23,68,.018) 0,rgba(173,23,68,.018) 1px,transparent 1px,transparent 12px)!important;
+ background-attachment:fixed!important;
+ background-size:auto,auto,auto!important;
+}
+#root>.app,
+#root .app.worker,
+#root .app.employer,
+#root .app.admin{
+ background:transparent!important;
+}
+#root .app main{background:transparent!important;}
