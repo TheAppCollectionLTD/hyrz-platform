@@ -17604,3 +17604,115 @@ html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer>texta
   bottom:0!important;
  }
 }
+
+
+/* Inbox 1:1 chats — use the same Hyrz Workchat palette and contrast throughout. */
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-conversation-header{
+ background:#AD1744!important;
+ color:#FFFFFF!important;
+ border-bottom:1px solid #861235!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-conversation-back{
+ background:rgba(255,255,255,.12)!important;
+ border:1px solid rgba(255,255,255,.75)!important;
+ color:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-profile-avatar{
+ background:#FCE8EF!important;
+ border:2px solid #FCE8EF!important;
+ color:#AD1744!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-conversation-title h3,
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-conversation-title-copy h3{
+ color:#FFFFFF!important;
+ -webkit-text-fill-color:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-conversation-title p,
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-conversation-title-copy p{
+ color:#FCE8EF!important;
+ -webkit-text-fill-color:#FCE8EF!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-message-list{
+ background-color:#FBF7F5!important;
+ background-image:
+  radial-gradient(circle at 18px 18px,rgba(173,23,68,.075) 1.2px,transparent 1.8px),
+  radial-gradient(circle at 54px 54px,rgba(173,23,68,.055) 1px,transparent 1.7px),
+  repeating-linear-gradient(135deg,rgba(173,23,68,.022) 0,rgba(173,23,68,.022) 1px,transparent 1px,transparent 22px)!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-meta,
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-meta strong{
+ color:#171717!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-meta time{
+ color:#AD1744!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-bubble{
+ background:#FCE8EF!important;
+ border:1px solid #F2C6D4!important;
+ color:#111111!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-row.mine .workchat-message-bubble{
+ background:#AD1744!important;
+ border-color:#AD1744!important;
+ color:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-row.mine .workchat-message-bubble *,
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-row.mine .workchat-message-bubble p{
+ color:#FFFFFF!important;
+ -webkit-text-fill-color:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-row:not(.mine) .workchat-message-bubble,
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-message-row:not(.mine) .workchat-message-bubble *{
+ color:#111111!important;
+ -webkit-text-fill-color:#111111!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer{
+ background:#FFFFFF!important;
+ border-top:1px solid #F2C6D4!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-composer-tools .workchat-composer-tool,
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer>.workchat-composer-tool{
+ background:#FFFFFF!important;
+ border:1px solid #F2C6D4!important;
+ color:#AD1744!important;
+ opacity:1!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-composer-tool.workchat-gif-button{
+ border:1px solid #AD1744!important;
+ border-radius:7px!important;
+ background:#FCE8EF!important;
+ color:#AD1744!important;
+ font-weight:800!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-composer-tool.workchat-media-button{
+ background:#FFFFFF!important;
+ border:1px solid #AD1744!important;
+ color:#AD1744!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-composer-tool svg{
+ stroke:currentColor!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer>textarea{
+ background:#FFFFFF!important;
+ border:1px solid #F2C6D4!important;
+ border-radius:22px!important;
+ color:#171717!important;
+ -webkit-text-fill-color:#171717!important;
+ caret-color:#AD1744!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer>textarea::placeholder{
+ color:#777777!important;
+ -webkit-text-fill-color:#777777!important;
+ opacity:1!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer .workchat-send-button{
+ background:#AD1744!important;
+ border:1px solid #AD1744!important;
+ color:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer .workchat-send-button svg{
+ stroke:#FFFFFF!important;
+}
+html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-read-receipt{
+ color:#AD1744!important;
+}
