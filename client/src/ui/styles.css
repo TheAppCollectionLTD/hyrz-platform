@@ -17758,3 +17758,23 @@ html body #root .app .worker-inbox-panel .direct-message-history {
   overflow:hidden!important;
  }
 }
+
+
+/* Main Inbox toolbar: category tabs on the left, sign-out at top right. */
+html body #root .app.inbox-screen .inbox-main-toolbar{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;
+ gap:10px!important;width:100%!important;margin:0 0 12px!important;
+}
+html body #root .app.inbox-screen .inbox-main-toolbar .inbox-category-tabs{
+ flex:1 1 auto!important;min-width:0!important;margin:0!important;
+}
+html body #root .app.inbox-screen .inbox-main-signout{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 38px!important;width:38px!important;height:38px!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:10px!important;
+ background:#080808!important;color:#fff!important;cursor:pointer!important;
+}
+html body #root .app.inbox-screen .inbox-main-signout svg{
+ display:block!important;width:21px!important;height:21px!important;fill:none!important;
+ stroke:currentColor!important;stroke-width:2.1!important;stroke-linecap:round!important;stroke-linejoin:round!important;
+}
