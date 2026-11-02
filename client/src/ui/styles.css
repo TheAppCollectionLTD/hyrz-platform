@@ -17743,3 +17743,18 @@ html body #root .app .worker-inbox-panel .direct-message-history {
   overflow:hidden!important;
  }
 }
+
+
+/* Definitive override: the inbox mobile header has a high-specificity
+   display:flex!important rule, so hide it with a matching important rule. */
+@media(max-width:650px){
+ html body #root .app.inbox-screen>main.page-inbox>header{
+  display:none!important;
+  min-height:0!important;
+  height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  overflow:hidden!important;
+ }
+}
