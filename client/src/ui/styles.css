@@ -17788,3 +17788,20 @@ html body #root .app.inbox-screen .inbox-main-signout-row{
 html body #root .app.inbox-screen .inbox-main-toolbar{
  justify-content:flex-start!important;
 }
+
+
+/* Match the compact profile-page sign-out control in the Inbox header row. */
+html body #root .app.inbox-screen .inbox-main-signout-row{
+ display:flex!important;align-items:flex-start!important;justify-content:flex-end!important;
+ width:100%!important;min-height:28px!important;margin:0 0 10px!important;padding:0!important;
+}
+html body #root .app.inbox-screen .inbox-main-signout{
+ width:28px!important;min-width:28px!important;max-width:28px!important;
+ height:28px!important;min-height:28px!important;max-height:28px!important;
+ flex:0 0 28px!important;border:0!important;border-radius:8px!important;
+ background:#080808!important;color:#fff!important;padding:0!important;
+ box-shadow:none!important;
+}
+html body #root .app.inbox-screen .inbox-main-signout svg{
+ width:15px!important;height:15px!important;stroke:#fff!important;stroke-width:2.2!important;
+}
