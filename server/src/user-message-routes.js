@@ -56,7 +56,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const category=String(req.body.category||'enquiries');
     const subject=String(req.body.subject||'').trim();
     const body=String(req.body.body||'').trim();
-    if (!['checkout_disputes','complaints','enquiries'].includes(category)) return res.status(400).json({error:'Choose a valid message subject category'});
+    if (!['checkout_disputes','complaints','enquiries','appeal_strikes'].includes(category)) return res.status(400).json({error:'Choose a valid message subject category'});
     if (subject.length<2||subject.length>200||body.length<1||body.length>5000) return res.status(400).json({error:'Subject must be 2-200 characters and message 1-5000 characters'});
     await ensureAdminMessageMeta;
     let recipientId=Number(req.body.recipientId)||0;
@@ -71,7 +71,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const conversationKey=[Number(req.user.id),recipientId].sort((a,b)=>a-b).join(':');
     const [result]=await db.execute('INSERT INTO messages(conversation_key,sender_id,body) VALUES(?,?,?)',[conversationKey,req.user.id,body]);
     await db.execute('INSERT INTO admin_message_meta(message_id,recipient_id,category,subject) VALUES(?,?,?,?)',[result.insertId,recipientId,category,subject]);
-    await audit(req,'message.sent','message',result.insertId,{recipientId,category,subject});
+    try{await audit(req,'message.sent','message',result.insertId,{recipientId,category,subject});}catch(error){console.warn('Admin message audit failed after message was saved:',error.message);}
     res.status(201).json({ok:true,id:result.insertId,message:'Your message has been sent to hyrz support.'});
   }));
 
