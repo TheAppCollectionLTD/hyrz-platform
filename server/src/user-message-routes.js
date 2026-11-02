@@ -179,15 +179,16 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   }));
 
   app.post('/api/conversations/:id/messages', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
-    await ensureDirectMessages;
+    await ensureDirectMessages;await ensureDirectReadVisibilityColumn();
     const id=Number(req.params.id),body=String(req.body.body||'').trim();
     if(!body||body.length>5000)return res.status(400).json({error:'Enter a message of 1-5000 characters.'});
     const [conversations]=await db.execute('SELECT id FROM employer_worker_conversations WHERE id=? AND (employer_user_id=? OR worker_user_id=?)',[id,req.user.id,req.user.id]);
     if(!conversations.length)return res.status(404).json({error:'Conversation not found.'});
     const [result]=await db.execute('INSERT INTO employer_worker_messages(conversation_id,sender_id,body) VALUES(?,?,?)',[id,req.user.id,body]);
     await db.execute('UPDATE employer_worker_conversations SET last_message_at=NOW() WHERE id=?',[id]);
-    await audit(req,'direct_message.sent','conversation',id,{messageId:result.insertId});
-    res.status(201).json({ok:true,id:result.insertId});
+    // Message delivery must not be reported as failed because optional audit logging fails.
+    try{await audit(req,'direct_message.sent','conversation',id,{messageId:result.insertId});}catch(auditError){console.error('Direct message audit logging failed:',auditError);}
+    res.status(201).json({ok:true,id:Number(result.insertId)});
   }));
 
   const ensureGroupWorkchats = Promise.all([
