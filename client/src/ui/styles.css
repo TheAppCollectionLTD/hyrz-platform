@@ -17716,3 +17716,16 @@ html body #root .app.inbox-screen .hyrz-one-to-one-chat>.workchat-composer .work
 html body #root .app.inbox-screen .hyrz-one-to-one-chat .workchat-read-receipt{
  color:#AD1744!important;
 }
+
+
+/* Chat history must jump instantly to the latest message on open.
+   Smooth scrolling here makes the initial scroll position visibly animate
+   from the top, even when JavaScript sets scrollTop before paint. */
+html body #root .app.inbox-screen .workchat-message-list,
+html body #root .app.inbox-screen .hyrz-direct-chat,
+html body #root .app.inbox-screen .direct-message-history,
+html body #root .app .worker-inbox-panel .workchat-message-list,
+html body #root .app .worker-inbox-panel .hyrz-direct-chat,
+html body #root .app .worker-inbox-panel .direct-message-history {
+  scroll-behavior: auto !important;
+}
