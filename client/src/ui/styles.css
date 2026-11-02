@@ -17830,3 +17830,22 @@ html body #root .app.inbox-screen .inbox-main-signout svg{
  display:block!important;width:22px!important;height:22px!important;
  stroke:#fff!important;stroke-width:2.1!important;
 }
+
+
+/* Inbox conversation list: allow the final row to extend above the fixed
+   bottom navigation instead of being clipped by the legacy panel wrapper. */
+@media(max-width:760px){
+ html body #root .app.worker.inbox-screen>main.page-inbox{
+  padding-bottom:calc(150px + env(safe-area-inset-bottom))!important;
+ }
+ html body #root .app.worker.inbox-screen .worker-inbox-panel{
+  height:auto!important;max-height:none!important;min-height:0!important;
+  overflow:visible!important;
+ }
+ html body #root .app.worker.inbox-screen .worker-inbox-panel .inbox-all-conversations,
+ html body #root .app.worker.inbox-screen .worker-inbox-panel .worker-direct-conversation-list,
+ html body #root .app.worker.inbox-screen .worker-inbox-panel .worker-inbox-messages{
+  height:auto!important;max-height:none!important;min-height:0!important;
+  overflow:visible!important;padding-bottom:18px!important;
+ }
+}
