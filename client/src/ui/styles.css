@@ -17778,3 +17778,13 @@ html body #root .app.inbox-screen .inbox-main-signout svg{
  display:block!important;width:21px!important;height:21px!important;fill:none!important;
  stroke:currentColor!important;stroke-width:2.1!important;stroke-linecap:round!important;stroke-linejoin:round!important;
 }
+
+
+/* Place Inbox sign-out on its own row above the category tabs. */
+html body #root .app.inbox-screen .inbox-main-signout-row{
+ display:flex!important;align-items:center!important;justify-content:flex-end!important;
+ width:100%!important;margin:0 0 8px!important;padding:0!important;
+}
+html body #root .app.inbox-screen .inbox-main-toolbar{
+ justify-content:flex-start!important;
+}
