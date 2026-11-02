@@ -17729,3 +17729,17 @@ html body #root .app .worker-inbox-panel .hyrz-direct-chat,
 html body #root .app .worker-inbox-panel .direct-message-history {
   scroll-behavior: auto !important;
 }
+
+
+/* Open worker Workchat: suppress the legacy Inbox title/action row.
+   Its earlier mobile layout rule uses display:flex!important. */
+@media(max-width:650px){
+ html body #root .app.inbox-screen>main.page-inbox>header[style*="display: none"]{
+  display:none!important;
+  min-height:0!important;
+  height:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+ }
+}
