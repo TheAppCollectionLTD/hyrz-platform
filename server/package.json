@@ -7,7 +7,7 @@
     "dev": "nodemon src/index.js",
     "dev:test": "node scripts/run-local-test.js",
     "start": "node src/index.js",
-    "test": "node --test",
+    "test": "node --test test/*.test.js",
     "bootstrap:owner": "node src/bootstrap-owner.js",
     "test:integration": "node scripts/run-integration-test.js",
     "setup:test": "node scripts/setup-test-db.js",
