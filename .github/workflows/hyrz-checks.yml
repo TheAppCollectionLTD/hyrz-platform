@@ -76,7 +76,12 @@ jobs:
       - name: Run admin journey integration tests
         env:
           OWNER_EMAIL: owner@test.hyrz.invalid
-        run: npm run test:integration
+        run: |
+          npm run test:integration
+          test_status=$?
+          echo '--- API server log ---'
+          cat /tmp/hyrz-api.log || true
+          exit $test_status
 
   client:
     runs-on: ubuntu-latest
