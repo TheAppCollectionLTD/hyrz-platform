@@ -1,5 +1,6 @@
 const { auth, allow, adminTier } = require('./middleware');
 const bcrypt = require('bcryptjs');
+const crypto = require('node:crypto');
 const { hashIdentifier } = require('./identifier-hash');
 
 module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds }) {
@@ -463,7 +464,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     let userId;
     try {
       await conn.beginTransaction();
-      const [result]=await conn.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at,public_user_id) VALUES(?,?,'admin',?,'active',UTC_TIMESTAMP(),?)",[email,hash,tier,'PENDING-'+crypto.randomBytes(12).toString('hex').toUpperCase()]);
+      const [result]=await conn.execute("INSERT INTO users(email,password_hash,role,admin_tier,status,email_verified_at,public_user_id) VALUES(?,?,'admin',?,'active',UTC_TIMESTAMP(),?)",[email,hash,tier,'P-'+crypto.randomBytes(10).toString('hex').toUpperCase()]);
       userId=result.insertId;
       await conn.execute("UPDATE users SET public_user_id=CONCAT('HYRZ-',LPAD(?,8,'0')) WHERE id=?",[userId,userId]);
       await conn.commit();
