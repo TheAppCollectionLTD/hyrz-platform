@@ -1343,7 +1343,7 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
 }));
 require('./user-message-routes')(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta });
 require('./shift-confirmation-routes')(app, { db, asyncRoute, audit, resend, ensureWorkerAvailabilityTable });
-require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta });
+require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds });
 
 app.get('/api/admin/overview',auth,allow('admin'),asyncRoute(async(req,res)=>{
  const [[users]]=await db.query('SELECT COUNT(*) count FROM users');
