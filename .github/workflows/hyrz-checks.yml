@@ -85,6 +85,24 @@ jobs:
           echo '--- API server log ---'
           cat /tmp/hyrz-api.log || true
           exit $test_status
+      - name: Seed isolated browser test accounts
+        run: npm run seed:test-accounts
+      - name: Install frontend and browser test dependencies
+        run: |
+          npm --prefix ../client ci
+          npm --prefix ../client install --no-save playwright
+          npx --prefix ../client playwright install --with-deps chromium
+      - name: Start frontend
+        run: |
+          VITE_API_URL=http://127.0.0.1:4000/api npm --prefix ../client run dev -- --host 127.0.0.1 > /tmp/hyrz-client.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:5173; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/hyrz-client.log
+          exit 1
+      - name: Run desktop and mobile browser smoke tests
+        run: node ../client/tests/smoke.e2e.cjs
 
   client:
     runs-on: ubuntu-latest
