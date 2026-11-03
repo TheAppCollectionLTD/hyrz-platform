@@ -264,7 +264,7 @@ async function main() {
     employerId=await addUser({email:'employer@test.hyrz.invalid',role:'employer',company:'TEST-COMPANY-123'});
     const blocked=await api('/admin/users/'+employerId+'/status',{token:ownerToken,method:'PATCH',body:{status:'blocked'}});
     assert.equal(blocked.status,200);
-    const reg=await api('/auth/register',{method:'POST',body:{email:'employer-retry@test.hyrz.invalid',password:'Test-Only-Password-2026!',confirmPassword:'Test-Only-Password-2026!',role:'employer',businessName:'Test Business',companyRole:'Owner',companyNumber:'test-company-123',termsAccepted:true,termsVersion:'2026-10-19'}});
+    const reg=await api('/auth/register',{method:'POST',body:{email:'employer-retry@test.hyrz.invalid',password:'Test-Only-Password-2026!',confirmPassword:'Test-Only-Password-2026!',role:'employer',firstName:'Test',lastName:'Employer',businessName:'Test Business',companyRole:'Owner',businessAddress:'1 Test Street',businessCity:'London',postcode:'E1 1AA',companyNumber:'test-company-123',termsAccepted:true,termsVersion:'2026-10-19'}});
     assert.equal(reg.status,403,JSON.stringify(reg.data));
   });
   await check('Invoice list and audit log endpoints return data',async()=>{
