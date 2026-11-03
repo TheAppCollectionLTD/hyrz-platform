@@ -318,7 +318,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
         lastName,
         tokenHash,
         '2026-10-19',
-        'PENDING-' + crypto.randomBytes(12).toString('hex').toUpperCase()
+        'P-' + crypto.randomBytes(10).toString('hex').toUpperCase()
       ]
     );
 
