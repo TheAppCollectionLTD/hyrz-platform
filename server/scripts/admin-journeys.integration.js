@@ -127,14 +127,14 @@ async function main() {
     const sent=await api('/messages',{token:workerToken,method:'POST',body:{category:'complaints',subject:'Integration test complaint',body:'Testing support inbox delivery.'}});
     assert.equal(sent.status,201,JSON.stringify(sent.data));
     const inbox=await api('/admin/inbox',{token:ownerToken});
-    assert.equal(inbox.status,200);
+    assert.equal(inbox.status,200,JSON.stringify(inbox.data));
     assert.ok(inbox.data.messages.some(m=>Number(m.id)===Number(sent.data.id)&&m.category==='complaints'));
     const claimed=await api('/admin/messages/'+sent.data.id+'/claim',{token:ownerToken,method:'PATCH',body:{}});
-    assert.equal(claimed.status,200);
+    assert.equal(claimed.status,200,JSON.stringify(claimed.data));
     const collision=await api('/admin/messages/'+sent.data.id+'/claim',{token:tier2Token,method:'PATCH',body:{}});
     assert.equal(collision.status,409);
     const read=await api('/admin/messages/'+sent.data.id+'/read',{token:ownerToken,method:'PATCH',body:{}});
-    assert.equal(read.status,200);
+    assert.equal(read.status,200,JSON.stringify(read.data));
     const reply=await api('/admin/messages',{token:ownerToken,method:'POST',body:{recipientId:workerId,category:'complaints',subject:'Re: Integration test complaint',body:'Support has received your complaint.'}});
     assert.equal(reply.status,201,JSON.stringify(reply.data));
     const history=await api('/messages/mine',{token:workerToken});
@@ -144,7 +144,7 @@ async function main() {
   await check('Blocking a worker prevents re-registration with the same identifier',async()=>{
     const blocked=await api('/admin/users/'+workerId+'/status',{token:tier2Token,method:'PATCH',body:{status:'blocked'}});
     assert.equal(blocked.status,200,JSON.stringify(blocked.data));
-    const reg=await api('/auth/register',{method:'POST',body:{email:'worker-retry@test.hyrz.invalid',password:'Test-Only-Password-2026!',confirmPassword:'Test-Only-Password-2026!',role:'worker',nationalInsuranceNumber:'QQ123456C'}});
+    const reg=await api('/auth/register',{method:'POST',body:{email:'worker-retry@test.hyrz.invalid',password:'Test-Only-Password-2026!',confirmPassword:'Test-Only-Password-2026!',role:'worker',nationalInsuranceNumber:'QQ123456C',termsAccepted:true,termsVersion:'2026-10-19'}});
     assert.equal(reg.status,403,JSON.stringify(reg.data));
   });
   await check('Employer can submit a counter-offer and admin can accept it',async()=>{
@@ -183,7 +183,7 @@ async function main() {
     assert.ok(loadedTemplate,'The saved template should persist in the employer template list.');
     assert.equal(loadedTemplate.shift.slots,undefined,'The stored template must not contain headcount.');
     assert.equal(loadedTemplate.shift.startsAt,undefined,'The stored template must not contain dates.');
-    assert.equal(loadedTemplate.shift.description,undefined,'The stored template should only contain role, type and rate.');
+    assert.equal(loadedTemplate.shift.description,'','The template API should normalise an omitted description to an empty string.');
     const removed=await api('/shift-templates/'+saved.data.template.id,{token:employerToken,method:'DELETE'});
     assert.equal(removed.status,200,JSON.stringify(removed.data));
   });
@@ -264,7 +264,7 @@ async function main() {
     employerId=await addUser({email:'employer@test.hyrz.invalid',role:'employer',company:'TEST-COMPANY-123'});
     const blocked=await api('/admin/users/'+employerId+'/status',{token:ownerToken,method:'PATCH',body:{status:'blocked'}});
     assert.equal(blocked.status,200);
-    const reg=await api('/auth/register',{method:'POST',body:{email:'employer-retry@test.hyrz.invalid',password:'Test-Only-Password-2026!',confirmPassword:'Test-Only-Password-2026!',role:'employer',businessName:'Test Business',companyRole:'Owner',companyNumber:'test-company-123'}});
+    const reg=await api('/auth/register',{method:'POST',body:{email:'employer-retry@test.hyrz.invalid',password:'Test-Only-Password-2026!',confirmPassword:'Test-Only-Password-2026!',role:'employer',businessName:'Test Business',companyRole:'Owner',companyNumber:'test-company-123',termsAccepted:true,termsVersion:'2026-10-19'}});
     assert.equal(reg.status,403,JSON.stringify(reg.data));
   });
   await check('Invoice list and audit log endpoints return data',async()=>{
