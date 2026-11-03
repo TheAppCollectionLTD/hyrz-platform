@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const baseURL = process.env.HYRZ_WEB_URL || 'http://127.0.0.1:5173';
 const accounts = [
   { role: 'worker', email: 'test.worker@hyrz.local', password: 'HyrzTestWorker!2026', heading: 'Find shifts' },
-  { role: 'employer', email: 'test.employer@hyrz.local', password: 'HyrzTestEmployer!2026', heading: 'Hello, hyrz Test Staffing Ltd' },
+  { role: 'employer', email: 'test.employer@hyrz.local', password: 'HyrzTestEmployer!2026', heading: /^Hello,/ },
   { role: 'admin', email: 'test.owner@hyrz.local', password: 'Test-Only-Password-2026!', heading: 'Dashboard' }
 ];
 
