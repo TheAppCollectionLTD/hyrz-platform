@@ -2,7 +2,7 @@ const { auth, allow, adminTier } = require('./middleware');
 const bcrypt = require('bcryptjs');
 const { hashIdentifier } = require('./identifier-hash');
 
-module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta }) {
+module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds }) {
   const admin = [auth, allow('admin')];
   const ensureBlockedIdentifiers = createTable(`CREATE TABLE IF NOT EXISTS blocked_identifiers (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -450,6 +450,7 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
   }));
 
   app.post('/api/admin/admins', ...admin, asyncRoute(async(req,res) => {
+    await ensurePublicUserIds;
     const tier=Number(req.body.tier), email=String(req.body.email||'').trim().toLowerCase(), password=req.body.password;
     if (Number(req.user.admin_tier)>2) return res.status(403).json({error:'Tier 3 administrators cannot create administrators'});
     if (![1,2,3].includes(tier) || (Number(req.user.admin_tier)===2 && tier!==3)) return res.status(403).json({error:'You cannot create an administrator at that tier'});
