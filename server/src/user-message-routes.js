@@ -64,7 +64,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
       const [admins]=await db.execute("SELECT id FROM users WHERE id=? AND role='admin' AND status='active'",[recipientId]);
       if (!admins.length) return res.status(404).json({error:'Administrator not found'});
     } else {
-      const [admins]=await db.execute("SELECT id FROM users WHERE role='admin' AND status='active' ORDER BY admin_tier ASC,id ASC LIMIT 1");
+      const [admins]=await db.execute("SELECT id FROM users WHERE role='admin' AND status='active' AND admin_tier IS NOT NULL ORDER BY admin_tier ASC,id ASC LIMIT 1");
       if (!admins.length) return res.status(503).json({error:'Support is temporarily unavailable'});
       recipientId=Number(admins[0].id);
     }
