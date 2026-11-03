@@ -77,8 +77,11 @@ jobs:
         env:
           OWNER_EMAIL: owner@test.hyrz.invalid
         run: |
-          npm run test:integration
-          test_status=$?
+          if npm run test:integration; then
+            test_status=0
+          else
+            test_status=$?
+          fi
           echo '--- API server log ---'
           cat /tmp/hyrz-api.log || true
           exit $test_status
