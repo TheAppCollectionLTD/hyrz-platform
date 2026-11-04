@@ -78,6 +78,10 @@ agenthub/agents/youtube/db
 
 memory/test_credentials.md
 
+# hyrz private env files
+server/.env
+client/.env
+
 # Mobile development
 android-sdk/
 
