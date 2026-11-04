@@ -1,0 +1,120 @@
+name: hyrz checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, admin-journeys]
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test-root-password
+          MYSQL_DATABASE: hyrz_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -ptest-root-password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: hyrz_test
+      DB_USER: root
+      DB_PASSWORD: test-root-password
+      JWT_SECRET: integration-test-secret-not-for-production
+      IDENTIFIER_HASH_SECRET: integration-identifier-hash-secret
+      PORT: 4000
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - run: node --check src/index.js
+      - run: node --check src/admin-routes.js
+      - run: node --check src/user-message-routes.js
+      - run: node --check src/bootstrap-owner.js
+      - run: node --check src/identifier-hash.js
+      - run: node --check src/middleware.js
+      - run: node --check src/postcode-distance.js
+      - run: node --check src/shift-confirmation-routes.js
+      - run: node --check scripts/admin-journeys.integration.js
+      - run: node --check scripts/reset-test-db.js
+      - run: node --check scripts/run-integration-test.js
+      - run: node --check scripts/seed-test-accounts.js
+      - run: node --check scripts/setup-test-db.js
+      - run: npm test
+      - name: Initialise integration database
+        run: mysql --host=127.0.0.1 --user=root --password=test-root-password hyrz_test < db/schema.sql
+      - name: Bootstrap test owner
+        env:
+          OWNER_USERNAME: SimsonH
+          OWNER_EMAIL: owner@test.hyrz.invalid
+          OWNER_PASSWORD: Test-Only-Password-2026!
+        run: npm run bootstrap:owner
+      - name: Start API
+        run: |
+          npm start > /tmp/hyrz-api.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4000/api/health; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/hyrz-api.log
+          exit 1
+      - name: Run admin journey integration tests
+        env:
+          OWNER_EMAIL: owner@test.hyrz.invalid
+        run: |
+          if npm run test:integration; then
+            test_status=0
+          else
+            test_status=$?
+          fi
+          echo '--- API server log ---'
+          cat /tmp/hyrz-api.log || true
+          exit $test_status
+      - name: Seed isolated browser test accounts
+        run: npm run seed:test-accounts
+      - name: Install frontend and browser test dependencies
+        run: |
+          npm --prefix ../client ci
+          npm --prefix ../client install --no-save playwright
+          npx --prefix ../client playwright install --with-deps chromium
+      - name: Start frontend
+        run: |
+          VITE_API_URL=http://127.0.0.1:4000/api npm --prefix ../client run dev -- --host 127.0.0.1 > /tmp/hyrz-client.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:5173; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/hyrz-client.log
+          exit 1
+      - name: Run desktop and mobile browser smoke tests
+        run: node ../client/tests/smoke.e2e.cjs
+
+  client:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci
+      - run: npm run build

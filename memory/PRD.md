@@ -13,3 +13,9 @@ Pull repo, then: (1) make chat nicer & functional with GIFs/emoji, easy to use; 
 - P0 Chat (none exists yet; only empty messages table): conversations per shift/application, emoji, GIF search (provider TBD: Tenor/Giphy), unread, live updates
 - P0 Contractor vs PAYE: worker choice, tax code/NI, UK 2026/27 income tax + NI calc, payslips, accounting reports (no HMRC RTI filing yet)
 - P1 Pension auto-enrolment (TBD), admin chat access (TBD)
+
+## 2026-11-04 Re-pull
+- User updated main (commit 408f170). /app/client & /app/server replaced with latest main (App.jsx 1652 lines, new burgundy design, existing messaging: user-message-routes.js with employer_worker_conversations/messages, workchat, admin messages, privacy/last-seen, Inbox tab).
+- Earlier standalone chat module (built on old code) backed up to /root/hyrz-chat-v1 (NOT in app; conflicts with /api/conversations). Reuse ideas/CSS when restyling their Inbox.
+- Preview DB is hyrz_test seeded via `npm run setup:test`; preview-start.sh updated.
+- NEXT: restyle their existing Inbox/direct chat WhatsApp-style + emoji picker + GIPHY GIFs (needs VITE_GIPHY_API_KEY from user).
