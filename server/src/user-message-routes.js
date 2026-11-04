@@ -131,6 +131,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
       await ensureDirectMessages;
       await addColumn('employer_worker_messages','reply_to_message_id BIGINT UNSIGNED NULL','direct message replies');
       await addColumn('employer_worker_messages','deleted_at DATETIME NULL','direct message deletion');
+      await addColumn('employer_worker_messages','image_data MEDIUMTEXT NULL','direct message photos');
       await db.query(`CREATE TABLE IF NOT EXISTS direct_message_reactions (message_id BIGINT UNSIGNED NOT NULL,conversation_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,emoji VARCHAR(16) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(message_id,user_id,emoji),KEY idx_direct_reaction_conversation(conversation_id,message_id)) ENGINE=InnoDB`);
       await db.query(`CREATE TABLE IF NOT EXISTS direct_typing (conversation_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,updated_at DATETIME NOT NULL,PRIMARY KEY(conversation_id,user_id)) ENGINE=InnoDB`);
     })();
@@ -161,10 +162,17 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     if(!messages.length)return res.status(404).json({error:'Message not found.'});
     if(Number(messages[0].sender_id)!==Number(req.user.id))return res.status(403).json({error:'You can only delete your own messages.'});
     if(messages[0].deleted_at)return res.json({ok:true,alreadyDeleted:true});
-    await db.execute("UPDATE employer_worker_messages SET body='This message was deleted.',deleted_at=UTC_TIMESTAMP() WHERE id=?",[messageId]);
+    await db.execute("UPDATE employer_worker_messages SET body='This message was deleted.',image_data=NULL,deleted_at=UTC_TIMESTAMP() WHERE id=?",[messageId]);
     await db.execute('DELETE FROM direct_message_reactions WHERE message_id=?',[messageId]);
     try{await audit(req,'direct_message.deleted','conversation',id,{messageId});}catch(auditError){console.error('Direct message audit logging failed:',auditError);}
     res.json({ok:true,deleted:true});
+  }));
+  app.get('/api/conversations/:id/messages/:messageId/image',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureDirectExtras();const id=Number(req.params.id);
+    if(!await getDirectConversation(id,req.user.id))return res.status(404).json({error:'Conversation not found.'});
+    const [rows]=await db.execute('SELECT image_data FROM employer_worker_messages WHERE id=? AND conversation_id=? AND image_data IS NOT NULL',[Number(req.params.messageId),id]);
+    if(!rows.length)return res.status(404).json({error:'Photo not found.'});
+    res.set('Cache-Control','private, max-age=86400').json({image:rows[0].image_data});
   }));
   app.post('/api/conversations/:id/typing',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await ensureDirectExtras();const id=Number(req.params.id);
@@ -224,7 +232,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await db.execute('UPDATE employer_worker_messages SET read_at=COALESCE(read_at,UTC_TIMESTAMP()),read_receipt_visible=? WHERE conversation_id=? AND sender_id<>? AND read_at IS NULL',[privacy.read_receipts_enabled?1:0,id,req.user.id]);
     await ensureDirectExtras();
     const [messages]=await db.execute(`SELECT m.id,m.conversation_id,m.sender_id,m.body,CASE WHEN m.read_receipt_visible=1 THEN m.read_at ELSE NULL END AS read_at,m.created_at,u.first_name AS sender_first_name,u.last_name AS sender_last_name,u.role AS sender_role,
-      m.deleted_at,m.reply_to_message_id,reply.body AS reply_body,reply.deleted_at AS reply_deleted_at,reply.sender_id AS reply_sender_id,replyUser.first_name AS reply_sender_first_name,replyUser.last_name AS reply_sender_last_name
+      m.deleted_at,(m.image_data IS NOT NULL) AS has_image,m.reply_to_message_id,reply.body AS reply_body,reply.deleted_at AS reply_deleted_at,reply.sender_id AS reply_sender_id,replyUser.first_name AS reply_sender_first_name,replyUser.last_name AS reply_sender_last_name
       FROM employer_worker_messages m JOIN users u ON u.id=m.sender_id
       LEFT JOIN employer_worker_messages reply ON reply.id=m.reply_to_message_id AND reply.conversation_id=m.conversation_id LEFT JOIN users replyUser ON replyUser.id=reply.sender_id
       WHERE m.conversation_id=? ORDER BY m.created_at ASC,m.id ASC`,[id]);
@@ -236,14 +244,16 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
 
   app.post('/api/conversations/:id/messages', auth, allow('worker','employer'), asyncRoute(async(req,res) => {
     await ensureDirectMessages;await ensureDirectReadVisibilityColumn();
-    const id=Number(req.params.id),body=String(req.body.body||'').trim();
+    await ensureDirectExtras();
+    const id=Number(req.params.id),image=req.body.image?String(req.body.image):null;
+    if(image&&(!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(image)||image.length>900000))return res.status(400).json({error:'Photos must be JPEG, PNG or WebP and under 650 KB.'});
+    const body=String(req.body.body||'').trim()||(image?'📷 Photo':'');
     if(!body||body.length>5000)return res.status(400).json({error:'Enter a message of 1-5000 characters.'});
     const [conversations]=await db.execute('SELECT id FROM employer_worker_conversations WHERE id=? AND (employer_user_id=? OR worker_user_id=?)',[id,req.user.id,req.user.id]);
     if(!conversations.length)return res.status(404).json({error:'Conversation not found.'});
-    await ensureDirectExtras();
     const replyToMessageId=Number(req.body.replyToMessageId)||null;
     if(replyToMessageId){const [replyRows]=await db.execute('SELECT id FROM employer_worker_messages WHERE id=? AND conversation_id=?',[replyToMessageId,id]);if(!replyRows.length)return res.status(400).json({error:'The message you are replying to was not found in this conversation.'});}
-    const [result]=await db.execute('INSERT INTO employer_worker_messages(conversation_id,sender_id,body,reply_to_message_id) VALUES(?,?,?,?)',[id,req.user.id,body,replyToMessageId]);
+    const [result]=await db.execute('INSERT INTO employer_worker_messages(conversation_id,sender_id,body,reply_to_message_id,image_data) VALUES(?,?,?,?,?)',[id,req.user.id,body,replyToMessageId,image]);
     await db.execute('UPDATE employer_worker_conversations SET last_message_at=NOW() WHERE id=?',[id]);
     await db.execute('DELETE FROM direct_typing WHERE conversation_id=? AND user_id=?',[id,req.user.id]);
     // Message delivery must not be reported as failed because optional audit logging fails.

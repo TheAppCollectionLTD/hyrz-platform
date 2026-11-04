@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SendHorizontal, Smile, X } from 'lucide-react';
+import { ImagePlus, SendHorizontal, Smile, X } from 'lucide-react';
+import { compressImage } from './ChatPhoto';
 import EmojiGifPicker from './EmojiGifPicker';
 import { fullName, previewText } from './chatUtils';
 
-export default function DirectComposer({ user, replyTo, onCancelReply, onSend, onTyping }) {
+export default function DirectComposer({ user, replyTo, onCancelReply, onSend, onSendImage, onError, onTyping }) {
+  const fileInput = useRef(null);
   const [text, setText] = useState('');
   const [picker, setPicker] = useState(null);
   const input = useRef(null);
@@ -47,6 +49,9 @@ export default function DirectComposer({ user, replyTo, onCancelReply, onSend, o
       <div className="hz-composer">
         <button type="button" className={`hz-icon ${picker === 'emoji' ? 'on' : ''}`} onClick={() => setPicker(p => p === 'emoji' ? null : 'emoji')} aria-label="Emoji" data-testid="chat-emoji-toggle"><Smile size={22} /></button>
         <button type="button" className={`hz-gif ${picker === 'gif' ? 'on' : ''}`} onClick={() => setPicker(p => p === 'gif' ? null : 'gif')} data-testid="chat-gif-toggle">GIF</button>
+        <input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp" hidden data-testid="chat-photo-input"
+          onChange={async e => { const f = e.target.files?.[0]; e.target.value = ''; if (!f) return; try { onSendImage(await compressImage(f), text.trim()); setText(''); } catch (err) { onError(err.message); } }} />
+        <button type="button" className="hz-icon" onClick={() => fileInput.current?.click()} aria-label="Send a photo" data-testid="chat-photo-button"><ImagePlus size={21} /></button>
         <textarea ref={input} rows={1} value={text} maxLength={5000} placeholder="Type a message" aria-label="Message" data-testid="chat-message-input"
           onChange={e => change(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); } if (e.key === 'Escape') setPicker(null); }} />

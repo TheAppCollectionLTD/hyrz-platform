@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Ban, Check, CheckCheck, Clock, CornerUpLeft, SmilePlus, Trash2 } from 'lucide-react';
 import MessageBody from './MessageBody';
+import ChatPhoto from './ChatPhoto';
 import { QUICK_REACTIONS, bigEmojiCount, fullName, isGif, previewText, timeOf } from './chatUtils';
 
-export default function DirectBubble({ m, meId, mine, tail, onReply, onReact, onDelete, focused, onQuoteClick }) {
+export default function DirectBubble({ conversationId, m, meId, mine, tail, onReply, onReact, onDelete, focused, onQuoteClick }) {
   const [menu, setMenu] = useState(false);
   const [selected, setSelected] = useState(false);
   const close = () => { setMenu(false); setSelected(false); };
   const deleted = Boolean(m.deleted_at);
-  const gif = !deleted && isGif(m.body);
+  const photo = !deleted && Boolean(Number(m.has_image));
+  const gif = !deleted && !photo && isGif(m.body);
   const big = !deleted && !gif && bigEmojiCount(m.body);
   const testId = `direct-message-${m.id}`;
   const reactions = m.reactions || [];
-  const cls = ['hz-bubble', gif && 'gif', big && 'big', deleted && 'deleted', reactions.length && 'has-reactions'].filter(Boolean).join(' ');
+  const cls = ['hz-bubble', (gif || photo) && 'gif', photo && 'photo', big && 'big', deleted && 'deleted', reactions.length && 'has-reactions'].filter(Boolean).join(' ');
 
   return (
     <div id={`direct-msg-${m.id}`} className={`hz-row ${mine ? 'mine' : 'theirs'} ${tail ? 'tail' : ''} ${focused ? 'focused' : ''} ${selected ? 'selected' : ''}`} onMouseLeave={close} data-testid={testId}>
@@ -21,7 +23,7 @@ export default function DirectBubble({ m, meId, mine, tail, onReply, onReact, on
           <b>{Number(m.reply_sender_id) === Number(meId) ? 'You' : fullName(m.reply_sender_first_name, m.reply_sender_last_name, 'Message')}</b>
           <span>{m.reply_deleted_at ? 'This message was deleted.' : previewText(m.reply_body)}</span>
         </button>}
-        {deleted ? <span className="hz-deleted"><Ban size={14} /> This message was deleted</span> : <span className="hz-text"><MessageBody body={m.body} /></span>}
+        {deleted ? <span className="hz-deleted"><Ban size={14} /> This message was deleted</span> : photo ? <><ChatPhoto conversationId={conversationId} messageId={m.id} localSrc={m.localImage} />{m.body !== '📷 Photo' && <span className="hz-text hz-caption">{m.body}</span>}</> : <span className="hz-text"><MessageBody body={m.body} /></span>}
         <span className="hz-meta">
           {timeOf(m.created_at)}
           {mine && !deleted && (m.pending ? <Clock size={13} /> : m.read_at ? <CheckCheck size={16} className="hz-tick read" aria-label="Read" /> : <Check size={16} className="hz-tick" aria-label="Sent" />)}

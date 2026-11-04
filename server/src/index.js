@@ -45,6 +45,7 @@ app.use(cors({
 }));
 
 app.use(express.json({ limit: '1mb' }));
+if (process.env.TRUST_PROXY) app.set('trust proxy', /^\d+$/.test(process.env.TRUST_PROXY) ? Number(process.env.TRUST_PROXY) : process.env.TRUST_PROXY);
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
 // Run schema changes one at a time: concurrent ALTER TABLE statements were deadlocking at startup.
@@ -1342,6 +1343,8 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
  sql+=' ORDER BY d.created_at DESC';const [rows]=await db.execute(sql,args);res.json({disputes:rows});
 }));
 require('./user-message-routes')(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta });
+require('./payroll-routes')(app, { db, asyncRoute, audit });
+require('./shift-reminders')(app, { db, asyncRoute });
 require('./shift-confirmation-routes')(app, { db, asyncRoute, audit, resend, ensureWorkerAvailabilityTable });
 require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds });
 

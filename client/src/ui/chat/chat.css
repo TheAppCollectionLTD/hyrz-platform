@@ -185,3 +185,13 @@ html body #root .app .hz-room.hz-room .hz-tick :is(path,polyline,line){stroke:#8
 html body #root .app .hz-room.hz-room .hz-tick.read :is(path,polyline,line){stroke:#34B7F1!important}
 html body #root .app .hz-room.hz-room .hz-bubble.gif .hz-tick :is(path,polyline,line){stroke:#fff!important}
 html body #root .app .hz-room.hz-room .hz-bubble.gif .hz-tick.read :is(path,polyline,line){stroke:#8fdcff!important}
+.hz-photo{display:block;width:280px;max-width:100%;max-height:360px;object-fit:cover;border-radius:7px;cursor:zoom-in;background:#F7F2F4}
+.hz-photo-loading{height:200px;animation:hzPulse 1s infinite alternate}
+.hz-photo-missing{padding:20px;color:#7b7479;font-size:12px}
+.hz-bubble.photo .hz-caption{padding:6px 4px 14px}
+.hz-lightbox{position:fixed;inset:0;z-index:2000;background:#0b0b0bf0;display:grid;place-items:center;padding:24px;animation:hzIn .2s}
+.hz-lightbox img{max-width:100%;max-height:90vh;border-radius:8px}
+html body #root .app .hz-lightbox button{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:0!important;background:#ffffff22!important;color:#fff!important;display:grid;place-items:center}
+/* Group workchats open full screen like WhatsApp */
+html body #root .app .workchat-conversation:not(.hyrz-one-to-one-chat){position:fixed!important;inset:0!important;z-index:70!important;margin:0!important;max-width:none!important;width:100%!important;border-radius:0!important;display:flex!important;flex-direction:column!important;background:#F4EFEA!important}
+html body #root .app .workchat-conversation:not(.hyrz-one-to-one-chat) .workchat-message-list{flex:1!important;max-height:none!important;height:auto!important;overflow-y:auto!important;padding:16px 8%!important}

@@ -71,14 +71,14 @@ export default function DirectChatRoom({ conversationId, conversation, user, onB
     setFocusId(id); setTimeout(() => setFocusId(null), 1600);
   }
 
-  async function send(body) {
-    const temp = { id: `tmp-${Date.now()}`, pending: true, sender_id: user.id, body, created_at: new Date().toISOString(), reactions: [],
+  async function send(body, image) {
+    const temp = { id: `tmp-${Date.now()}`, pending: true, sender_id: user.id, body: body || (image ? '📷 Photo' : ''), localImage: image, has_image: Boolean(image), created_at: new Date().toISOString(), reactions: [],
       reply_to_message_id: replyTo?.id, reply_body: replyTo?.body, reply_sender_id: replyTo?.sender_id,
       reply_sender_first_name: replyTo?.sender_first_name, reply_sender_last_name: replyTo?.sender_last_name };
     nearBottom.current = true;
     setPending(p => [...p, temp]); setReplyTo(null);
     try {
-      await request(`${base}/messages`, { method: 'POST', body: JSON.stringify({ body, replyToMessageId: temp.reply_to_message_id || undefined }) });
+      await request(`${base}/messages`, { method: 'POST', body: JSON.stringify({ body, image: image || undefined, replyToMessageId: temp.reply_to_message_id || undefined }) });
       await load(); onActivity();
     } catch (e) { onError(e.message); }
     finally { setPending(p => p.filter(x => x.id !== temp.id)); }
@@ -127,14 +127,14 @@ export default function DirectChatRoom({ conversationId, conversation, user, onB
           const grouped = prev && !newDay && Number(prev.sender_id) === Number(m.sender_id) && toDate(m.created_at) - toDate(prev.created_at) < 5 * 60000;
           return <React.Fragment key={m.id}>
             {newDay && <div className="hz-day"><span>{dayLabel(m.created_at)}</span></div>}
-            <DirectBubble m={m} meId={user.id} mine={mine} tail={!grouped} focused={Number(focusId) === Number(m.id)} onQuoteClick={goTo}
+            <DirectBubble conversationId={conversationId} m={m} meId={user.id} mine={mine} tail={!grouped} focused={Number(focusId) === Number(m.id)} onQuoteClick={goTo}
               onReply={() => setReplyTo(m)} onReact={e => react(m, e)} onDelete={() => remove(m)} />
           </React.Fragment>;
         })}
         {otherTyping && <div className="hz-row theirs tail" data-testid="chat-typing-indicator"><div className="hz-bubble hz-typing"><i /><i /><i /></div></div>}
       </div>
       {showJump && <button type="button" className="hz-jump" onClick={jump} aria-label="Jump to latest" data-testid="chat-jump-latest"><ChevronDown size={20} /></button>}
-      <DirectComposer user={user} replyTo={replyTo} onCancelReply={() => setReplyTo(null)} onSend={send}
+      <DirectComposer user={user} replyTo={replyTo} onCancelReply={() => setReplyTo(null)} onSend={send} onSendImage={(img, caption) => send(caption, img)} onError={onError}
         onTyping={typing => request(`${base}/typing`, { method: 'POST', body: JSON.stringify({ typing }) }).catch(() => {})} />
     </section>
   );
