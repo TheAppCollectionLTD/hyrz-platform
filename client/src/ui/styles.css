@@ -17849,3 +17849,182 @@ html body #root .app.inbox-screen .inbox-main-signout svg{
   overflow:visible!important;padding-bottom:18px!important;
  }
 }
+
+
+/* Preserved visual refinements from the legacy colour-refresh branch. */
+
+
+/* Hyrz colour refresh preview — 2026-10-21
+   Reversible visual-only pass: palette, controls, cards, navigation and status colours. */
+:root {
+  --hyrz-navy: #172640;
+  --hyrz-lime: #B8F34A;
+  --hyrz-ivory: #F7F4EC;
+  --hyrz-white: #FFFFFF;
+  --hyrz-amber: #F5B544;
+  --hyrz-slate: #687386;
+  --hyrz-green-bg: #EAF5D9;
+  --hyrz-red-bg: #FCE8E6;
+  --hyrz-blue-bg: #E7EFFB;
+  --hyrz-border: #E4DED2;
+}
+html, body { background: var(--hyrz-ivory); color: var(--hyrz-navy); }
+body { accent-color: var(--hyrz-navy); }
+.sidebar { background: var(--hyrz-navy); color: #fff; }
+.brand span, .green, .live, .big-stat strong { color: var(--hyrz-lime); }
+.sidebar nav button.selected, .sidebar nav button:hover {
+  background: rgba(184,243,74,.14); color: var(--hyrz-lime);
+}
+.primary, .formgrid .primary, .welcome-panel > .primary, .welcome-panel button.primary {
+  background: var(--hyrz-navy); color: #fff; border: 1px solid var(--hyrz-navy);
+  box-shadow: 0 2px 0 rgba(23,38,64,.08);
+}
+.primary:hover, .welcome-panel > .primary:hover {
+  background: #243958; border-color: #243958; color: #fff;
+}
+.secondary, .textbutton {
+  background: var(--hyrz-ivory); color: var(--hyrz-navy); border: 1px solid var(--hyrz-border);
+}
+.secondary:hover, .textbutton:hover {
+  background: #EEE8DB; color: var(--hyrz-navy); border-color: #D4C9B7;
+}
+.panel, .stat, .card, .welcome-panel, .onboarding-panel {
+  border-color: var(--hyrz-border);
+}
+.panel, .stat { background: var(--hyrz-white); }
+input, select, textarea {
+  border-color: #D9D2C5; color: var(--hyrz-navy); background: #fff;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 3px solid rgba(184,243,74,.32); border-color: #7FAE2D;
+}
+.userpill, .pill { border-color: var(--hyrz-border); color: var(--hyrz-slate); }
+.eyebrow, .muted, .tag { color: var(--hyrz-slate); }
+
+/* Subsection controls are individual buttons, never a dark full-width strip. */
+.worker-section-links, .job-tabs, .admin-tabs {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  background: transparent !important; border: 0; padding: 0; margin: 14px 0 20px;
+}
+.worker-section-links button, .job-tabs button, .admin-tabs button {
+  flex: 0 0 auto; min-height: 38px; padding: 10px 15px;
+  border: 1px solid var(--hyrz-border); border-radius: 9px;
+  background: #fff; color: var(--hyrz-navy);
+  font: 600 12px/1.2 'DM Sans',sans-serif;
+  box-shadow: 0 1px 2px rgba(23,38,64,.04);
+  transition: background .16s ease, color .16s ease, border-color .16s ease, transform .16s ease;
+}
+.worker-section-links button:hover, .job-tabs button:hover, .admin-tabs button:hover {
+  background: #F0F7E4; border-color: #CDE99A; color: var(--hyrz-navy);
+}
+.worker-section-links button.selected, .job-tabs button.selected, .admin-tabs button.selected {
+  background: var(--hyrz-navy); border-color: var(--hyrz-navy); color: #fff;
+}
+.app.worker .job-tabs button.selected { background: var(--hyrz-navy); border-color: var(--hyrz-navy); color: #fff; }
+.worker-bottom-nav button.active, .worker-bottom-nav button:hover,
+.employer-bottom-nav button.active, .employer-bottom-nav button:hover {
+  background: var(--hyrz-green-bg); color: var(--hyrz-navy);
+}
+.worker-bottom-nav button.active span, .employer-bottom-nav button.active span { color: var(--hyrz-navy); }
+.status, .verification-status {
+  border-radius: 999px; font-weight: 700; letter-spacing: .1px;
+}
+.status.approved, .status.paid, .verification-status.verified {
+  background: var(--hyrz-green-bg); color: #365D16; border-color: #D6E9B9;
+}
+.status.pending, .status.submitted, .status.manual_review,
+.verification-status.pending, .verification-status.manual_review {
+  background: #FFF1D6; color: #80520A; border-color: #F3D59B;
+}
+.status.rejected, .status.disputed, .status.overdue, .verification-status.rejected {
+  background: var(--hyrz-red-bg); color: #9B3029; border-color: #F2C9C5;
+}
+.status.info, .status.open { background: var(--hyrz-blue-bg); color: #284C83; border-color: #C9D9F2; }
+.empty-state { border-color: var(--hyrz-border); background: #FCFBF8; color: var(--hyrz-slate); }
+.worker-back-button { color: var(--hyrz-navy); border-color: var(--hyrz-border); }
+.worker-back-button:hover { background: var(--hyrz-green-bg); color: var(--hyrz-navy); }
+.alert, [role="alert"] { border-radius: 10px; }
+@media (max-width: 760px) {
+  .worker-section-links, .job-tabs, .admin-tabs { gap: 7px; }
+  .worker-section-links button, .job-tabs button, .admin-tabs button {
+    min-height: 36px; padding: 9px 12px;
+  }
+}
+
+
+/* Clickable applicant and approved-worker profile segments */
+.applicant-worker-segment{cursor:pointer;transition:border-color .15s ease,box-shadow .15s ease}
+.applicant-worker-segment:hover,.applicant-worker-segment:focus-visible{outline:none;border-color:var(--hyrz-blue,#244b91);box-shadow:0 0 0 2px rgba(36,75,145,.12)}
+.applicant-worker-main{display:flex;align-items:flex-start;gap:.85rem;min-width:0;flex:1}
+.applicant-worker-avatar{width:58px;height:58px;flex:0 0 58px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--hyrz-green-soft,#edf2e7);color:var(--hyrz-green,#52683e);font-weight:800;font-size:1.1rem}
+.applicant-worker-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.applicant-worker-copy{display:flex;flex-direction:column;align-items:flex-start;gap:.3rem;min-width:0;flex:1}
+.applicant-worker-copy>strong{font-size:1rem}
+.applicant-worker-copy>small{overflow-wrap:anywhere}
+.applicant-worker-copy .applicant-profile-details{width:100%;box-sizing:border-box;cursor:auto}
+.applicant-profile-heading{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem}
+.applicant-profile-heading>img,.applicant-profile-initials{width:64px;height:64px;flex:0 0 64px;object-fit:cover;border-radius:12px}
+.applicant-profile-initials{display:flex;align-items:center;justify-content:center;background:var(--hyrz-green-soft,#edf2e7);color:var(--hyrz-green,#52683e);font-weight:800;font-size:1.2rem}
+.applicant-profile-heading h4{margin:0 0 .25rem}
+.applicant-profile-heading p{margin:0;font-weight:700}
+.filled-applicant-worker-segment{align-items:flex-start}
+.filled-applicant-worker-segment>.status{flex:0 0 auto;margin-top:.25rem}
+.filled-applicant-worker-segment>.actions{flex-wrap:wrap;align-items:center}
+@media(max-width:700px){.applicant-worker-main{gap:.65rem}.applicant-worker-avatar{width:48px;height:48px;flex-basis:48px}.filled-applicant-worker-segment{flex-wrap:wrap}.filled-applicant-worker-segment>.actions{width:100%;padding-left:calc(48px + .65rem)}}
+
+
+/* Admin console: use the same light, calm card language as worker and employer accounts. */
+.app.admin .admin-console,
+.app.admin main > .panel.admin-console,
+.admin-console{
+  background:#fff!important;
+  color:#17243a!important;
+  border:1px solid #e7dfd2!important;
+  border-radius:16px!important;
+  box-shadow:0 8px 24px rgba(31,39,51,.045)!important;
+}
+.admin-console .panel-head h2,
+.admin-console h2,.admin-console h3,.admin-console h4{color:#17243a!important}
+.admin-console p,.admin-console .muted{color:#68758a!important}
+.admin-console label{color:#25344c!important}
+.admin-console input,.admin-console select,.admin-console textarea{
+  background:#fffdfa!important;color:#17243a!important;border:1px solid #ded5c7!important;border-radius:9px!important;
+}
+.admin-console .secondary{background:#f0e8dc!important;color:#17243a!important;border:1px solid #e4d9c9!important}
+.admin-console .primary{background:#f5b63f!important;color:#17243a!important;border-color:#f5b63f!important}
+.admin-console .admin-tabs{gap:8px;margin:0 0 18px;padding:0 0 14px;border-bottom:1px solid #e8e0d4}
+.admin-console .admin-tabs button{
+  min-height:38px;padding:10px 13px;border:1px solid #e3d9ca;border-radius:9px;
+  background:#fffdfa;color:#24334c;font:700 11px 'DM Sans',sans-serif;letter-spacing:0;cursor:pointer;
+}
+.admin-console .admin-tabs button.selected{background:#17243a;color:#fff;border-color:#17243a}
+.admin-console .admin-overview-stats{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px!important;
+  width:100%;margin:18px 0 20px!important;
+}
+.admin-console .admin-overview-stats .admin-counter{
+  width:100%;min-width:0;min-height:112px;box-sizing:border-box;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:14px;
+  padding:16px!important;margin:0;border:1px solid #e7dfd2!important;border-radius:13px!important;
+  background:#fffdfa!important;color:#17243a!important;box-shadow:0 4px 14px rgba(31,39,51,.035)!important;
+  text-align:left;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s;
+}
+.admin-console .admin-overview-stats .admin-counter:hover{
+  border-color:#c7b89f!important;transform:translateY(-1px);box-shadow:0 7px 18px rgba(31,39,51,.08)!important;
+}
+.admin-console .admin-overview-stats .admin-counter:focus-visible{outline:3px solid #e5b34d;outline-offset:2px}
+.admin-console .admin-overview-stats .admin-counter small{
+  color:#68758a!important;font-size:10px;line-height:1.45;font-weight:700;letter-spacing:.55px;
+}
+.admin-console .admin-overview-stats .admin-counter strong{color:#17243a!important;font-size:30px;line-height:1}
+.admin-console .admin-record{border-bottom-color:#e8e0d4}
+.admin-console .admin-note{background:#f5f6f0;color:#5c6658}
+@media(max-width:900px){
+ .admin-console .admin-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+ .admin-console .admin-overview-stats{grid-template-columns:1fr;gap:8px!important}
+ .admin-console .admin-overview-stats .admin-counter{min-height:86px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+ .admin-console .admin-overview-stats .admin-counter small{grid-column:1}
+ .admin-console .admin-overview-stats .admin-counter strong{grid-column:2;grid-row:1/3;font-size:27px}
+}
