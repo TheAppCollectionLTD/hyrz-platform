@@ -19,3 +19,13 @@ Pull repo, then: (1) make chat nicer & functional with GIFs/emoji, easy to use; 
 - Earlier standalone chat module (built on old code) backed up to /root/hyrz-chat-v1 (NOT in app; conflicts with /api/conversations). Reuse ideas/CSS when restyling their Inbox.
 - Preview DB is hyrz_test seeded via `npm run setup:test`; preview-start.sh updated.
 - NEXT: restyle their existing Inbox/direct chat WhatsApp-style + emoji picker + GIPHY GIFs (needs VITE_GIPHY_API_KEY from user).
+
+## 2026-11-04 WhatsApp-style chats (done, tested iteration_1: backend 12/12, frontend flows pass, fixes applied)
+- Direct 1:1 chats (employer<->worker) now render via client/src/ui/chat/DirectChatRoom.jsx (full-screen above bottom nav): bubbles w/ tails, day labels, sent/read ticks, typing indicator, search, reply quotes, quick reactions (one per user), delete-for-everyone, big emoji, GIF bubbles, tap-to-select actions on mobile.
+- Server (user-message-routes.js): ensureDirectExtras adds reply_to_message_id, deleted_at, direct_message_reactions, direct_typing; routes POST reactions, DELETE message, POST typing; GET messages returns reactions/reply/otherTyping.
+- Shared emoji+GIF picker (EmojiGifPicker.jsx: emoji-picker-react + GIPHY browser search) replaces old ChatEmojiGifPicker everywhere (workchats send GIF immediately via sendWorkchatGif). GIF messages = giphy media URL in body; MessageBody renders only giphy hosts.
+- Worker shift cards (Applied/Upcoming) have "Message employer" -> opens direct chat (applications/mine now returns employer_user_id).
+- GIPHY key: VITE_GIPHY_API_KEY (client env; preview reads /app/frontend/.env).
+## Backlog
+- P1 paging for direct messages (currently full history polled every 2.5s); workchat regression test needs a workchat (requires employer favourite)
+- P1 Contractor vs PAYE accounting feature (original request)

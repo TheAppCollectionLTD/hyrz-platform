@@ -17,7 +17,7 @@ export function dayLabel(value) {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: d.getFullYear() === now.getFullYear() ? undefined : 'numeric' });
 }
 
-const GIF_URL = /^https:\/\/(?:media\d*|i)\.giphy\.com\/\S+$|^https:\/\/\S+\.(?:gif|webp)(?:\?\S*)?$/i;
+const GIF_URL = /^https:\/\/(?:media\d*|i)\.giphy\.com\/\S+$/i;
 export const isGif = body => GIF_URL.test(String(body || '').trim());
 
 const EMOJI_ONLY = /^(?:\p{Extended_Pictographic}|\p{Emoji_Component}|\u200d|\ufe0f|\s)+$/u;

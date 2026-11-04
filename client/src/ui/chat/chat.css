@@ -104,7 +104,7 @@
 .hyrz-gif-topics{display:flex;gap:6px;overflow-x:auto;padding:0 12px 8px;scrollbar-width:none}
 .hyrz-gif-topics button{flex:none;border:1px solid #EEE6E9;background:#fff;border-radius:20px;padding:5px 11px;font-size:12px;cursor:pointer;color:#292929}
 .hyrz-gif-topics button.on,.hyrz-gif-topics button:hover{background:#FCE8EF;border-color:transparent;color:#AD1744}
-.hyrz-gif-grid{flex:1;overflow-y:auto;padding:0 12px;columns:3 110px;column-gap:6px}
+.hyrz-gif-grid{flex:1;overflow-y:auto;padding:0 12px;columns:3;column-gap:6px}
 .hyrz-gif-grid button{display:block;width:100%;margin:0 0 6px;padding:0;border:0;border-radius:8px;overflow:hidden;background:#F7F2F4;cursor:pointer;break-inside:avoid;transition:transform .15s}
 .hyrz-gif-grid button:hover{transform:scale(1.03)}
 .hyrz-gif-grid img{display:block;width:100%}
@@ -132,26 +132,26 @@ html body #root .app .workchat-whatsapp-composer{position:relative}
 @media(max-width:760px){
   .hz-wall{padding:12px 10px}
   .hz-bubble{max-width:84%}
-  .hz-actions{display:none}
-  .hz-row:active .hz-actions,.hz-row:focus-within .hz-actions{display:flex;opacity:1;pointer-events:auto}
+  .hz-actions{top:auto;bottom:calc(100% + 4px);transform:none}
+  .mine .hz-actions{right:0}.theirs .hz-actions{left:0}
   .hz-head-search{width:55%}
 }
 
 /* Win over the app's global button/input styles */
-html body #root .app .hz-room button{box-shadow:none;min-height:0;min-width:0;text-transform:none;letter-spacing:normal}
-html body #root .app .hz-room .hz-icon{background:transparent!important;color:#54656f!important;border:0!important;padding:0!important}
-html body #root .app .hz-room .hz-icon:hover,html body #root .app .hz-room .hz-icon.on{background:#FCE8EF!important;color:#AD1744!important}
-html body #root .app .hz-room .hz-send{background:#AD1744!important;color:#fff!important;border:0!important;padding:0!important}
-html body #root .app .hz-room .hz-gif{background:transparent!important;color:#54656f!important;padding:0 8px!important}
-html body #root .app .hz-room .hz-gif:hover,html body #root .app .hz-room .hz-gif.on{background:#FCE8EF!important;color:#AD1744!important;border-color:#AD1744!important}
-html body #root .app .hz-room .hz-actions{opacity:0!important;pointer-events:none}
-html body #root .app .hz-room .hz-row:hover .hz-actions,html body #root .app .hz-room .hz-row:focus-within .hz-actions{opacity:1!important;pointer-events:auto}
-html body #root .app .hz-room .hz-actions button{background:#ffffffe6!important;color:#54656f!important;border:0!important;padding:0!important;box-shadow:0 1px 2px #0b141a33}
-html body #root .app .hz-room .hz-actions button:hover{color:#AD1744!important}
-html body #root .app .hz-room .hz-react-bar button,html body #root .app .hz-room .hz-reactions button{background:transparent!important;border:0!important;padding:1px 2px!important;color:inherit!important}
-html body #root .app .hz-room .hz-reactions button.me{background:#FCE8EF!important}
-html body #root .app .hz-room .hz-quote{background:#0000000d!important;border-top:0!important;border-right:0!important;border-bottom:0!important}
-html body #root .app .hz-room .hz-jump{background:#fff!important;color:#54656f!important;border:0!important}
+html body #root .app .hz-room.hz-room button{box-shadow:none;min-height:0;min-width:0;text-transform:none;letter-spacing:normal}
+html body #root .app .hz-room.hz-room .hz-icon{background:transparent!important;color:#54656f!important;border:0!important;padding:0!important}
+html body #root .app .hz-room.hz-room .hz-icon:hover,html body #root .app .hz-room.hz-room .hz-icon.on{background:#FCE8EF!important;color:#AD1744!important}
+html body #root .app .hz-room.hz-room .hz-send{background:#AD1744!important;color:#fff!important;border:0!important;padding:0!important}
+html body #root .app .hz-room.hz-room .hz-gif{background:transparent!important;color:#54656f!important;padding:0 8px!important}
+html body #root .app .hz-room.hz-room .hz-gif:hover,html body #root .app .hz-room.hz-room .hz-gif.on{background:#FCE8EF!important;color:#AD1744!important;border-color:#AD1744!important}
+html body #root .app .hz-room.hz-room .hz-actions{opacity:0!important;pointer-events:none}
+html body #root .app .hz-room.hz-room .hz-row:hover .hz-actions,html body #root .app .hz-room.hz-room .hz-row:focus-within .hz-actions{opacity:1!important;pointer-events:auto}
+html body #root .app .hz-room.hz-room .hz-actions button{background:#ffffffe6!important;color:#54656f!important;border:0!important;padding:0!important;box-shadow:0 1px 2px #0b141a33}
+html body #root .app .hz-room.hz-room .hz-actions button:hover{color:#AD1744!important}
+html body #root .app .hz-room.hz-room .hz-react-bar button,html body #root .app .hz-room.hz-room .hz-reactions button{background:transparent!important;border:0!important;padding:1px 2px!important;color:inherit!important}
+html body #root .app .hz-room.hz-room .hz-reactions button.me{background:#FCE8EF!important}
+html body #root .app .hz-room.hz-room .hz-quote{background:#0000000d!important;border-top:0!important;border-right:0!important;border-bottom:0!important}
+html body #root .app .hz-room.hz-room .hz-jump{background:#fff!important;color:#54656f!important;border:0!important}
 html body #root .app .hyrz-picker button{box-shadow:none;min-height:0;text-transform:none}
 html body #root .app .hyrz-picker-tabs button{background:transparent!important;color:#54656f!important;border:0!important}
 html body #root .app .hyrz-picker-tabs button.on{background:#FCE8EF!important;color:#AD1744!important}
@@ -159,10 +159,29 @@ html body #root .app .hyrz-gif-topics button{background:#fff!important;color:#29
 html body #root .app .hyrz-gif-topics button.on,html body #root .app .hyrz-gif-topics button:hover{background:#FCE8EF!important;color:#AD1744!important;border-color:transparent!important}
 html body #root .app .hyrz-gif-grid button{background:#F7F2F4!important;border:0!important;padding:0!important}
 html body #root .app .hyrz-picker .EmojiPickerReact button{background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important}
-html body #root .app .hz-room svg,html body #root .app .hyrz-picker svg{stroke:currentColor!important;fill:none!important;width:auto;height:auto}
-html body #root .app .hz-room .hz-tick{color:#8696a0!important}
-html body #root .app .hz-room .hz-tick.read{color:#34B7F1!important}
-html body #root .app .hz-room .hz-bubble.gif .hz-tick{color:#fff!important}
-html body #root .app .hz-room .hz-bubble.gif .hz-tick.read{color:#8fdcff!important}
-html body #root .app .hz-room textarea{min-height:44px!important;border:0!important;border-radius:22px!important;padding:11px 18px!important;background:#fff!important;box-shadow:inset 0 0 0 1px #EEE6E9!important;font-size:14.5px!important}
-html body #root .app .hz-room textarea:focus{box-shadow:inset 0 0 0 1.5px #AD1744!important}
+html body #root .app .hz-room.hz-room svg,html body #root .app .hyrz-picker svg{stroke:currentColor!important;fill:none!important;width:auto;height:auto}
+html body #root .app .hz-room.hz-room .hz-tick{color:#8696a0!important}
+html body #root .app .hz-room.hz-room .hz-tick.read{color:#34B7F1!important}
+html body #root .app .hz-room.hz-room .hz-bubble.gif .hz-tick{color:#fff!important}
+html body #root .app .hz-room.hz-room .hz-bubble.gif .hz-tick.read{color:#8fdcff!important}
+html body #root .app .hz-room.hz-room textarea{min-height:44px!important;border:0!important;border-radius:22px!important;padding:11px 18px!important;background:#fff!important;box-shadow:inset 0 0 0 1px #EEE6E9!important;font-size:14.5px!important}
+html body #root .app .hz-room.hz-room textarea:focus{box-shadow:inset 0 0 0 1.5px #AD1744!important}
+html body #root .app .hz-room.hz-room .hz-row.selected .hz-actions{opacity:1!important;pointer-events:auto}
+html body #root .app .hz-room.hz-room .hz-row.selected .hz-bubble{box-shadow:0 0 0 2px #AD174440}
+@media(hover:none){html body #root .app .hz-room.hz-room .hz-row:hover:not(.selected) .hz-actions{opacity:0!important;pointer-events:none}}
+/* Keep chat colours readable under the worker theme's global text rules */
+html body #root .app .hz-room.hz-room :is(div,span,small,b,strong,p,a,label,li,button){-webkit-text-fill-color:currentColor!important}
+html body #root .app .hz-room.hz-room :is(.hz-bubble,.hz-text,.hz-title strong,.hz-quote span,.hz-reactions button){color:#111111!important}
+html body #root .app .hz-room.hz-room .mine :is(.hz-bubble,.hz-text){color:#2a0d16!important}
+html body #root .app .hz-room.hz-room :is(.hz-meta,.hz-title small,.hz-reactions small,.hz-loading,.hz-deleted){color:#667781!important}
+html body #root .app .hz-room.hz-room .hz-bubble.gif .hz-meta{color:#fff!important}
+html body #root .app .hz-room.hz-room :is(.hz-title small.typing,.hz-title small.online,.hz-quote.other b){color:#AD1744!important}
+html body #root .app .hz-room.hz-room .hz-quote b{color:#06866a!important}
+html body #root .app .hz-room.hz-room .hz-note{color:#5b4d1d!important}
+html body #root .app .hz-room.hz-room .hz-day span{color:#54656f!important}
+html body #root .app .hyrz-picker.hyrz-picker :is(div,span,small,p,button){-webkit-text-fill-color:currentColor!important;opacity:1}
+html body #root .app .hyrz-picker.hyrz-picker :is(.hyrz-gif-note,.hyrz-gif-attrib){color:#7b7479!important}
+html body #root .app .hz-room.hz-room .hz-tick :is(path,polyline,line){stroke:#8696a0!important}
+html body #root .app .hz-room.hz-room .hz-tick.read :is(path,polyline,line){stroke:#34B7F1!important}
+html body #root .app .hz-room.hz-room .hz-bubble.gif .hz-tick :is(path,polyline,line){stroke:#fff!important}
+html body #root .app .hz-room.hz-room .hz-bubble.gif .hz-tick.read :is(path,polyline,line){stroke:#8fdcff!important}

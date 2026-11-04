@@ -1,0 +1,41 @@
+{
+  "summary": "Tested the WhatsApp-style direct chat (backend API + UI), emoji/GIF picker, reply/react/delete, typing indicator, search, and the Message employer shortcut on shift cards. Backend: 12/12 pytest pass (message fields, send/read, validation, reply, reaction toggle/replace, all 10 allowed emojis, delete own only (403 for others), typing on/off, 404 for a non-participant (worker2), 401 without auth, applications/mine employer_user_id, conversation list). UI, worker on desktop 1920x800: the room opens full screen with name, status, TODAY label, GIF image bubble, big 👍 with ❤️ reaction and quote bubbles. Sending by Enter and by the send button works. A single grey tick becomes a blue double tick once the employer reads the message. The emoji picker inserts an emoji and closes. GIF tab shows chat-gif-not-configured (expected). The react bar adds a reaction and clicking it again removes it. Reply shows the reply bar, the sent bubble is quoted, and clicking the quote scrolls to and highlights the original. Delete asks for confirmation and then shows 'This message was deleted'. 'typing…' and the dots bubble appear within ~3s and clear after typing stops. Search filters messages. Back returns to the list. Employer side works the same, including reacting to the worker's message, and has no delete button on the other person's messages. Shift shortcut: Upcoming (Bartender, app 1) and Applied (Event Steward, app 2) each show 'Message employer'. App 2 opened a new 'Morgan Testemployer' chat. Mobile 390x844: the room sits right above the bottom nav (room bottom 778 = nav top) with no horizontal overflow. Found 2 real UI bugs: on mobile you can't reach react/reply/delete at all, and on the worker side the action buttons show on every bubble all the time.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/conversations/:id/messages", "issue": "Any https URL ending .gif/.webp (any host) is stored and rendered as an <img> by the client (chatUtils GIF_URL regex). That allows external tracking pixels (IP leak) and unmoderated images. Only allow media*.giphy.com / i.giphy.com on both the server and the client."},
+      {"endpoint": "GET /api/conversations/:id/messages", "issue": "Returns the full history with no paging and is polled every 2.5s, and each poll also runs the read UPDATE. This will get slow on long chats. Consider ?afterId or a limit."},
+      {"endpoint": "GET /api/conversations/mine", "issue": "last_message for a deleted message is the literal 'This message was deleted.', and the list still shows ✓✓ ticks next to it."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "DirectBubble actions (mobile <=760px)", "issue": "react/reply/delete can't be reached on touch devices. chat.css sets .hz-actions{display:none} and only shows them on .hz-row:active / :focus-within. Tapping the bubble text doesn't focus anything, so the buttons never appear (checked: display stays 'none' after a tap at 390x844). Need long-press or tap-to-select that sets a selected state, or make the bubble focusable (tabIndex=0) and keep the actions visible while it is selected.", "selector": ".hz-row .hz-actions", "priority": "HIGH"},
+      {"component": "DirectBubble actions (worker role, desktop)", "issue": "The hover action buttons show on every bubble all the time (computed opacity 1 when not hovered). Employer side is correct (opacity 0). RCA: the room renders inside section.panel.worker-inbox-panel, so styles.css '#root .app.worker main :is(.panel,...) :is(...,div){opacity:1!important;color:#111!important;-webkit-text-fill-color:#111!important}' beats chat.css. The same rule also forces .hz-quote b (should be green/brand) and .hz-meta (should be grey) to #111. Fix: raise chat.css specificity for .hz-room inside .app.worker, or exclude .hz-room from that worker readability rule.", "selector": "[data-testid=direct-message-{id}-react-btn]", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Direct chat room", "issues": ["Deleted-message bubbles still show sent/read ticks (WhatsApp hides them)", "The conversation list always shows ✓✓ (only the colour changes) while the room shows a single ✓ for 'sent', which is inconsistent"]},
+      {"screen": "Inbox page (worker, desktop)", "issues": ["Two sign-out icon buttons sit on top of each other (the 'Inbox' header and the 'Hello, Taylor' row). Was there before this change but looks off."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_direct_chat_whatsapp.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Make bubble actions (react/reply/delete) reachable on mobile/touch: long-press or tap-to-select state",
+    "Stop the worker-theme styles.css rule from overriding .hz-room styles (actions always visible, quote/meta colours forced to #111)",
+    "Restrict GIF rendering and storage to giphy hosts (client isGif plus server validation)",
+    "Optional: hide ticks on deleted messages; make list ticks match the room (single vs double)"
+  ],
+  "critical_code_review_comments": [
+    "App.jsx is 1643 lines with very long one-line JSX (the workchat composer markup is duplicated at ~L715 and ~L809, and the voice/photo buttons are duplicated inside it). Split it and remove the duplicates.",
+    "Reactions: the server allows one reaction per user per message (WhatsApp-like), while the workchat endpoint allows several. The difference is intentional but worth noting.",
+    "/app/backend/tests/test_chat_api.py is out of date (targets a different API and demo credentials) and will fail or skip. Remove it or update it."
+  ],
+  "updated_files": ["/app/backend/tests/test_direct_chat_whatsapp.py"],
+  "success_rate": {"backend": "100% (12/12)", "frontend": "~90% (all listed flows work; mobile action access and worker CSS override bugs)"},
+  "seed_data_creation": "TEST_ messages were created in conversation 1 and deleted by id. There is no hard delete, so ~10 'This message was deleted' placeholders now stay in conversation 1 and the list preview reads 'This message was deleted.' The shift shortcut created conversation 2 (Taylor Testworker ↔ Morgan Testemployer, empty), which is expected behaviour. A 👍 reaction by the employer on message 2 was added and then removed.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Login: POST /api/auth/login -> {token,user}. Conversation 1 = worker id 1 and employer id 4; conversation 2 = worker 1 and employer2 id 3. Message ids 1-8 are the original seed, 9+ are deleted test placeholders. Workchat regression could NOT be tested: no workchats exist for the test accounts (GET /api/workchats/mine returns []). Creating one needs an employer favourite and can only be archived, not deleted. Run pytest with -n 0 if xdist ordering matters.",
+  "rca of the issue": "Worker action buttons always visible: CSS specificity conflict. The '#root .app.worker main :is(.panel,...) :is(...div){opacity:1!important}' readability rule in styles.css (~L7436) applies because DirectChatRoom is mounted inside section.panel.worker-inbox-panel. Mobile: chat.css @media(max-width:760px) .hz-actions{display:none} with only :active/:focus-within reveal, and there is no focusable element in the bubble."
+}
