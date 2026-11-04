@@ -61,7 +61,8 @@ module.exports = function registerPayrollRoutes(app, { db, asyncRoute, audit }) 
   }
 
   app.get('/api/worker/payslips', auth, allow('worker'), asyncRoute(async (req, res) => {
-    res.json({ taxYear: TAX_YEAR.label, payslips: await payslipsFor(req.user.id) });
+    const [[me]] = await db.execute('SELECT first_name,last_name,email FROM users WHERE id=?', [req.user.id]);
+    res.json({ taxYear: TAX_YEAR.label, worker: { name: [me.first_name, me.last_name].filter(Boolean).join(' ') || me.email, email: me.email }, payslips: await payslipsFor(req.user.id) });
   }));
 
   app.get('/api/admin/payroll-summary', auth, allow('admin'), asyncRoute(async (req, res) => {

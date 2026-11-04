@@ -12,6 +12,7 @@
     "test:integration": "node scripts/run-integration-test.js",
     "setup:test": "node scripts/setup-test-db.js",
     "seed:test-accounts": "node scripts/seed-test-accounts.js",
+    "seed:demo": "node scripts/seed-demo-data.js",
     "reset:test": "node scripts/reset-test-db.js"
   },
   "dependencies": {

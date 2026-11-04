@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS checkouts (
  counter_end DATETIME NULL,
  counter_break_minutes INT NULL,
  counter_gross_pay DECIMAL(10,2) NULL,
- status ENUM('submitted','approved','rejected','disputed') NOT NULL DEFAULT 'submitted',
+ status ENUM('open','submitted','approved','rejected','disputed','paid','completed') NOT NULL DEFAULT 'submitted',
  gross_pay DECIMAL(10,2) NOT NULL,
  platform_fee DECIMAL(10,2) NOT NULL,
  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

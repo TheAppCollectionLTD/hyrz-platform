@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { request } from '../../api';
+import { downloadPayslipPdf } from './payslipPdf';
 import './payroll.css';
 
 const money = n => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(Number(n || 0));
@@ -11,7 +12,7 @@ function PayTypeCard({ id, title, text, chosen, onChoose }) {
   </button>;
 }
 
-function Payslip({ p }) {
+function Payslip({ p, worker }) {
   const [open, setOpen] = useState(false);
   return <article className="payslip" data-testid={`payslip-${p.taxYear}-${p.week}-${p.payType}`}>
     <button type="button" className="payslip-head" onClick={() => setOpen(v => !v)}>
@@ -27,6 +28,7 @@ function Payslip({ p }) {
         <div className="payslip-sum minus"><span>National Insurance (cat. {p.niCategory})</span><b>−{money(p.employeeNi)}</b></div>
         <div className="payslip-sum net"><span>Take-home pay</span><b data-testid="payslip-net">{money(p.net)}</b></div>
       </> : <p className="payslip-note">Paid gross as a self-employed contractor. Remember to declare this income through Self Assessment.</p>}
+      <button type="button" className="payslip-download" onClick={() => downloadPayslipPdf(p, worker)} data-testid={`payslip-download-${p.taxYear}-${p.week}-${p.payType}`}>Download PDF</button>
     </div>}
   </article>;
 }
@@ -36,12 +38,13 @@ export default function WorkerPayroll({ setNotice = () => {} }) {
   const [settings, setSettings] = useState(null);
   const [draft, setDraft] = useState({ payType: 'contractor', taxCode: '1257L', niCategory: 'A', confirmed: false });
   const [payslips, setPayslips] = useState([]);
+  const [worker, setWorker] = useState({});
   const [saving, setSaving] = useState(false);
 
   async function load() {
     try {
       const [s, p] = await Promise.all([request('/worker/pay-settings'), request('/worker/payslips')]);
-      setSettings(s.settings); setPayslips(p.payslips || []);
+      setSettings(s.settings); setPayslips(p.payslips || []); setWorker(p.worker || {});
       setDraft(d => ({ ...d, payType: s.settings.payType, taxCode: s.settings.taxCode || '1257L', niCategory: s.settings.niCategory || 'A' }));
     } catch (e) { setError(e.message); }
   }
@@ -75,7 +78,7 @@ export default function WorkerPayroll({ setNotice = () => {} }) {
       {settings && <small className="pay-current" data-testid="pay-settings-current">Currently paid as: <b>{settings.payType === 'paye' ? `hyrz PAYE (${settings.taxCode}, cat. ${settings.niCategory})` : 'Independent contractor'}</b></small>}
     </form>
     <h3 className="payslips-title">Payslips</h3>
-    {payslips.length ? <div className="payslip-list" data-testid="payslip-list">{payslips.map(p => <Payslip key={`${p.taxYear}-${p.week}-${p.payType}`} p={p} />)}</div>
+    {payslips.length ? <div className="payslip-list" data-testid="payslip-list">{payslips.map(p => <Payslip key={`${p.taxYear}-${p.week}-${p.payType}`} p={p} worker={worker} />)}</div>
       : <p className="payslip-empty" data-testid="payslip-empty">Your payslips appear here once an employer approves your checked-out hours.</p>}
   </section>;
 }
