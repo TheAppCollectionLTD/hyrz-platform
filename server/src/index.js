@@ -46,7 +46,7 @@ app.use(cors({
 
 app.use(express.json({ limit: '1mb' }));
 if (process.env.TRUST_PROXY) app.set('trust proxy', /^\d+$/.test(process.env.TRUST_PROXY) ? Number(process.env.TRUST_PROXY) : process.env.TRUST_PROXY);
-app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
+app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100, skipSuccessfulRequests: true, standardHeaders: true, legacyHeaders: false }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
 // Run schema changes one at a time: concurrent ALTER TABLE statements were deadlocking at startup.
 let schemaQueue = Promise.resolve();

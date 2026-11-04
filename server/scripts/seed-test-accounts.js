@@ -6,6 +6,27 @@ const { hashIdentifier } = require('../src/identifier-hash');
 
 const accounts = [
   {
+    email: 'demo.worker@hyrz.local',
+    password: 'HyrzDemoWorker!2026',
+    role: 'worker',
+    firstName: 'Alex',
+    lastName: 'Demo',
+    identifier: 'HYRZDEMOWORKER2026'
+  },
+  {
+    email: 'demo.employer@hyrz.local',
+    password: 'HyrzDemoEmployer!2026',
+    role: 'employer',
+    firstName: 'Sam',
+    lastName: 'Demo',
+    businessName: 'The Demo Bar & Kitchen',
+    companyNumber: null,
+    companyRole: 'General Manager',
+    address: '1 Demo Street',
+    city: 'London',
+    postcode: 'EC1A 4AA'
+  },
+  {
     email: 'test.worker@hyrz.local',
     password: 'HyrzTestWorker!2026',
     role: 'worker',
@@ -117,6 +138,8 @@ async function main() {
 
     await conn.commit();
     console.log('Test accounts are ready in hyrz_test. These are fictional accounts for local testing only.');
+    console.log('Demo worker:   demo.worker@hyrz.local / HyrzDemoWorker!2026');
+    console.log('Demo employer: demo.employer@hyrz.local / HyrzDemoEmployer!2026');
     console.log('Worker 1:   test.worker@hyrz.local / HyrzTestWorker!2026');
     console.log('Employer 1: test.employer@hyrz.local / HyrzTestEmployer!2026');
     console.log('Worker 2:   test.worker2@hyrz.local / HyrzTestWorker2!2026');
