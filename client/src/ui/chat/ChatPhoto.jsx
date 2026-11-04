@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { request } from '../../api';
 
@@ -35,9 +36,9 @@ export default function ChatPhoto({ conversationId, messageId, localSrc }) {
   return <>
     {src ? <img className="hz-photo" src={src} alt="Shared photo" onClick={() => setOpen(true)} data-testid={`chat-photo-${messageId}`} />
       : <span className="hz-photo hz-photo-loading" />}
-    {open && <div className="hz-lightbox" onClick={() => setOpen(false)} data-testid="chat-photo-lightbox">
+    {open && createPortal(<div className="hz-lightbox" onClick={() => setOpen(false)} data-testid="chat-photo-lightbox">
       <button type="button" aria-label="Close photo"><X size={24} /></button>
       <img src={src} alt="Shared photo full size" />
-    </div>}
+    </div>, document.body)}
   </>;
 }

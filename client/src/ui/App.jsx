@@ -13,7 +13,7 @@ export default function App(){
  useEffect(()=>{
   function closeOpenSections(event){
    const openTriggers=[...document.querySelectorAll('[aria-expanded="true"]')];
-   const containers=['.role-multi-filter','.shift-type-multi-filter','.availability-employer-preferences','.workchat-settings','.shift-use-template','.workchat-participant-picker','.workchat-message-bubble','.favourite-worker-card','.applicant-profile-actions','.applicant-card','.worker-profile-card'];
+   const containers=['.role-multi-filter','.shift-type-multi-filter','.availability-employer-preferences','.workchat-settings','.shift-use-template','.workchat-participant-picker','.workchat-message-bubble','.workchat-reaction-picker','.workchat-message-actions','.workchat-message-content','.favourite-worker-card','.applicant-profile-actions','.applicant-card','.worker-profile-card'];
    openTriggers.forEach(trigger=>{
     if(trigger===event.target||trigger.contains(event.target))return;
     const container=trigger.closest(containers.join(','))||trigger.parentElement;
@@ -496,7 +496,7 @@ async function apply(id){const target=shifts.find(item=>Number(item.id)===Number
     </div>:publicIntroSlide===1?<div className="public-intro-copy public-intro-how">
       <div className="public-about-kicker">YOUR WORK, YOUR WAY</div>
       <h1>How hyrz works for workers.</h1>
-      <p className="public-intro-lead">Find shifts that fit your availability, understand what you're agreeing to, and keep your work organised in one place.</p>
+      <p className="public-intro-lead">Find hospitality, festival and retail shifts that fit your life. Get paid as a self-employed contractor or through hyrz PAYE, where we handle your tax, National Insurance and payslips.</p>
       <ol className="public-intro-steps">
         <li><strong>Create your profile</strong><span>Tell us about your experience, skills and the roles you want to work in.</span></li>
         <li><strong>Get verified</strong><span>Complete the identity and eligibility checks requested by hyrz. Verification helps build trust and supports applicable legal and compliance requirements.</span></li>
@@ -509,7 +509,7 @@ async function apply(id){const target=shifts.find(item=>Number(item.id)===Number
     </div>:<div className="public-intro-copy public-intro-how">
       <div className="public-about-kicker">STAFFING, MADE CLEARER</div>
       <h1>How hyrz works for employers.</h1>
-      <p className="public-intro-lead">Plan staffing needs, reach suitable workers and manage shifts through a clearer process.</p>
+      <p className="public-intro-lead">One app to hire everyone your venue, festival or store needs. hyrz takes control of staffing and accounting, from vetting and scheduling to payroll and one simple invoice.</p>
       <ol className="public-intro-steps">
         <li><strong>Set up your business profile</strong><span>Add your business details so workers know who is offering the shift.</span></li>
         <li><strong>Verify your identity and business</strong><span>Complete the identity and business checks requested by hyrz to support trust and applicable legal and compliance obligations.</span></li>

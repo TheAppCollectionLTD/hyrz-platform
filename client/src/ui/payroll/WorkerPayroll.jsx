@@ -31,7 +31,8 @@ function Payslip({ p }) {
   </article>;
 }
 
-export default function WorkerPayroll({ setNotice = () => {}, setError = () => {} }) {
+export default function WorkerPayroll({ setNotice = () => {} }) {
+  const [error, setError] = useState('');
   const [settings, setSettings] = useState(null);
   const [draft, setDraft] = useState({ payType: 'contractor', taxCode: '1257L', niCategory: 'A', confirmed: false });
   const [payslips, setPayslips] = useState([]);
@@ -47,7 +48,7 @@ export default function WorkerPayroll({ setNotice = () => {}, setError = () => {
   useEffect(() => { load(); }, []);
 
   async function save(e) {
-    e.preventDefault(); setSaving(true);
+    e.preventDefault(); setSaving(true); setError('');
     try { await request('/worker/pay-settings', { method: 'PUT', body: JSON.stringify(draft) }); setNotice('Pay settings saved. They apply to shifts from now on.'); await load(); }
     catch (err) { setError(err.message); } finally { setSaving(false); }
   }
@@ -69,6 +70,7 @@ export default function WorkerPayroll({ setNotice = () => {}, setError = () => {
         </select></label>
         <label className="paye-confirm"><input type="checkbox" checked={draft.confirmed} onChange={e => setDraft({ ...draft, confirmed: e.target.checked })} data-testid="paye-confirm-checkbox" /> I confirm these details are correct and I want hyrz to pay me through PAYE.</label>
       </div>}
+      {error && <div className="alert error" role="alert" data-testid="pay-settings-error">{error}</div>}
       <button className="primary" disabled={!changed || saving} data-testid="pay-settings-save-button">{saving ? 'Saving…' : 'Save pay settings'}</button>
       {settings && <small className="pay-current" data-testid="pay-settings-current">Currently paid as: <b>{settings.payType === 'paye' ? `hyrz PAYE (${settings.taxCode}, cat. ${settings.niCategory})` : 'Independent contractor'}</b></small>}
     </form>

@@ -34,9 +34,11 @@ module.exports = function registerShiftReminders(app, { db, asyncRoute }) {
       const body = `⏰ Shift reminder: ${r.title} at ${r.business_name} is tomorrow, ${fmt(start, { weekday: 'long', day: 'numeric', month: 'long' })}, `
         + `${fmt(start, { hour: '2-digit', minute: '2-digit' })}–${fmt(end, { hour: '2-digit', minute: '2-digit' })}.\n📍 ${r.location}\n`
         + 'Please arrive a few minutes early. Reply here if anything changes. (Sent automatically by hyrz)';
+      const [claim] = await db.execute('INSERT IGNORE INTO shift_chat_reminders(application_id,conversation_id,message_id) VALUES(?,?,0)', [r.application_id, conv.id]);
+      if (!claim.affectedRows) continue;
       const [msg] = await db.execute('INSERT INTO employer_worker_messages(conversation_id,sender_id,body) VALUES(?,?,?)', [conv.id, r.employer_id, body]);
       await db.execute('UPDATE employer_worker_conversations SET last_message_at=NOW() WHERE id=?', [conv.id]);
-      await db.execute('INSERT IGNORE INTO shift_chat_reminders(application_id,conversation_id,message_id) VALUES(?,?,?)', [r.application_id, conv.id, msg.insertId]);
+      await db.execute('UPDATE shift_chat_reminders SET message_id=? WHERE application_id=?', [msg.insertId, r.application_id]);
       sent++;
     }
     return { sent };
