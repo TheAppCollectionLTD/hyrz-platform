@@ -23,6 +23,7 @@ app.use(cors({
 
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100 }));
+app.use(['/api/conversations', '/api/chat-messages'], rateLimit({ windowMs: 60*1000, limit: 300 }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
 const audit = async (req, action, entityType, entityId, details={}) => {
   await db.execute('INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,details,ip_address) VALUES(?,?,?,?,?,?)',
@@ -482,6 +483,7 @@ app.patch('/api/admin/users/:id/status',auth,allow('admin'),asyncRoute(async(req
  const status=req.body.status;if(!['active','blocked'].includes(status))return res.status(400).json({error:'Invalid status'});
  await db.execute('UPDATE users SET status=? WHERE id=?',[status,req.params.id]);await audit(req,'user.status_changed','user',req.params.id,{status});res.json({ok:true});
 }));
+app.use('/api', require('./chat'));
 app.use((err,req,res,next)=>{console.error(err);res.status(err.status||500).json({error:err.status?err.message:'Internal server error'});});
 const port=Number(process.env.PORT||4000);
 app.listen(port,()=>console.log(`hyrz API listening on http://localhost:${port}`));

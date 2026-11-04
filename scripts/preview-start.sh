@@ -11,14 +11,16 @@ if [ ! -d "$DATADIR/mysql" ]; then
   FRESH=1
 fi
 if ! mariadb-admin --socket=$SOCK ping > /dev/null 2>&1; then
-  nohup /usr/sbin/mariadbd --datadir=$DATADIR --user=root --socket=$SOCK --port=3306 --bind-address=127.0.0.1 > /tmp/mariadb.log 2>&1 &
+  setsid nohup /usr/sbin/mariadbd --datadir=$DATADIR --user=root --socket=$SOCK --port=3306 --bind-address=127.0.0.1 > /tmp/mariadb.log 2>&1 < /dev/null &
   for i in $(seq 1 30); do mariadb-admin --socket=$SOCK ping > /dev/null 2>&1 && break; sleep 1; done
 fi
 if [ "$FRESH" = "1" ]; then
   mariadb --socket=$SOCK -e "CREATE DATABASE IF NOT EXISTS hyrz;"
   mariadb --socket=$SOCK -e "CREATE USER IF NOT EXISTS 'hyrz_app'@'%' IDENTIFIED BY 'hyrz_preview_pw'; CREATE USER IF NOT EXISTS 'hyrz_app'@'localhost' IDENTIFIED BY 'hyrz_preview_pw'; GRANT ALL ON hyrz.* TO 'hyrz_app'@'%'; GRANT ALL ON hyrz.* TO 'hyrz_app'@'localhost'; FLUSH PRIVILEGES;"
   mariadb --socket=$SOCK hyrz < /app/server/db/schema.sql
-  (cd /app/server && node /app/scripts/seed-preview.js)
 fi
-pkill -f "node /app/server/src/index.js" 2>/dev/null
-cd /app/server && nohup node /app/server/src/index.js > /tmp/hyrz-api.log 2>&1 &
+for f in /app/server/db/migrations/*.sql; do mariadb --socket=$SOCK hyrz < "$f"; done
+(cd /app/server && node /app/scripts/seed-preview.js >> /tmp/hyrz-seed.log 2>&1)
+if ! curl -s -o /dev/null http://127.0.0.1:4000/api/health; then
+  cd /app/server && setsid nohup node /app/server/src/index.js > /tmp/hyrz-api.log 2>&1 < /dev/null &
+fi
