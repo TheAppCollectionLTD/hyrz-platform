@@ -215,7 +215,7 @@ async function main() {
       { from: worker, ago: 1390, body: "I'm in! 🙋", reply: 4, react: [[L, '❤️']] },
       { from: J, ago: 1380, body: 'Me too 🙌' },
       { from: employer, ago: 90, body: "Weather update: it's looking sunny ☀️ but bring a layer for the evening." },
-      { from: P, ago: 25, body: "Fingers crossed I get approved too, it sounds like a great one!", react: [[J, '🤞']] },
+      { from: P, ago: 25, body: "Fingers crossed I get approved too, it sounds like a great one!", react: [[J, '🙏']] },
       { from: employer, ago: 8, body: GIF }
     ]);
     await workchat(conn, employer, 'Friday Bar Team', [worker, P], [
