@@ -1,0 +1,133 @@
+/* Midnight & Sunshine shell: global polish (all sizes) + desktop side menu (>=1024px). Loaded last. */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&display=swap');
+:root{--mn-navy:#0F1B2D;--mn-navy-2:#1A293E;--mn-navy-3:#162438;--mn-line:#283A52;--mn-sky:#4DA3FF;--mn-blue:#2272EB;--mn-blue-2:#1D5EC2;--mn-sun:#FFC93C;--mn-sun-2:#E5B22B;--mn-bg:#F7F8FA;--mn-card:#FFFFFF;--mn-ink:#0F1B2D;--mn-ink-2:#5A6B82;--mn-muted:#8A99AD;--mn-border:#E2E8F0;--mn-shadow:0 4px 16px rgba(15,27,45,.06);--mn-shadow-lg:0 12px 32px rgba(15,27,45,.10);--mn-side:248px}
+
+/* Typography + surfaces */
+#root .app h1,#root .app h2,#root .app h3,#root .app .brand,.nav-brand{font-family:'Outfit','Manrope',sans-serif!important;letter-spacing:-.02em}
+#root .app.worker,#root .app.employer,#root .app.admin{background:var(--mn-bg)!important}
+#root:not(#mn) .app :is(.panel,.stats){border-color:var(--mn-border)!important;border-radius:16px!important;box-shadow:var(--mn-shadow)!important;background:var(--mn-card)!important}
+#root:not(#mn) .app .eyebrow{color:var(--mn-blue)!important;letter-spacing:.12em!important}
+#root:not(#mn) .app :is(input,select,textarea):focus-visible{outline:none!important;border-color:var(--mn-sky)!important;box-shadow:0 0 0 3px rgba(77,163,255,.25)!important}
+#root:not(#mn) .app button:focus-visible{outline:2px solid var(--mn-sky)!important;outline-offset:2px}
+#root:not(#mn) .app :is(.nav-unread-badge,.bottom-nav-notification,.workchat-unread-count){background:var(--mn-sun)!important;color:var(--mn-navy)!important;-webkit-text-fill-color:var(--mn-navy)!important;font-weight:800!important}
+::selection{background:#FFC93C;color:#0F1B2D}
+
+/* Dashboard section tiles (all sizes) */
+#root:not(#mn) .app .worker-section-links.job-tabs-squares{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:12px!important;width:100%!important;justify-items:stretch!important;align-items:stretch!important}
+#root:not(#mn) .app .worker-section-links .section-tile{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;min-height:76px!important;height:auto!important;margin:0!important;padding:14px 16px!important;text-align:left!important;background:#fff!important;color:var(--mn-ink)!important;border:1px solid var(--mn-border)!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(15,27,45,.04)!important;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease!important;cursor:pointer}
+#root:not(#mn) .app .worker-section-links .section-tile:hover{transform:translateY(-2px);box-shadow:var(--mn-shadow-lg)!important;border-color:#BFDBFE!important}
+#root:not(#mn) .app .section-tile-icon{flex:0 0 40px;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#EBF5FF;color:var(--mn-blue)}
+#root:not(#mn) .app .section-tile:hover .section-tile-icon{background:var(--mn-sun);color:var(--mn-navy)}
+#root:not(#mn) .app .section-tile-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
+#root:not(#mn) .app .section-tile-label{font:700 15px 'Outfit',sans-serif;color:var(--mn-ink)}
+#root:not(#mn) .app .section-tile-desc{font:500 12.5px 'DM Sans',sans-serif;color:var(--mn-ink-2);white-space:normal}
+@media (max-width:640px){#root:not(#mn) .app .worker-section-links.job-tabs-squares{grid-template-columns:1fr 1fr!important;gap:10px!important}#root:not(#mn) .app .worker-section-links .section-tile{flex-direction:column!important;align-items:flex-start!important;min-height:104px!important}}
+
+/* Mobile/tablet bottom nav */
+.nav-brand{display:none}
+#root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav){background:var(--mn-navy)!important;border-top:1px solid var(--mn-line)!important;box-shadow:0 -8px 24px rgba(15,27,45,.18)!important}
+#root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav) button{color:var(--mn-muted)!important;-webkit-text-fill-color:currentColor!important;background:transparent!important;border-color:transparent!important;transition:color .15s,background-color .15s}
+#root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav) button:is(.active,.selected){color:var(--mn-sun)!important}
+#root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav) svg{stroke:currentColor!important}
+
+/* Chats: blue ticks, navy icon on sunshine send */
+:root{--wc-coral:#FFC93C}
+#root:not(#hz) .app .workchat-read-receipt.is-read{color:var(--mn-blue)!important}
+#root:not(#hz) .app .workchat-send-button{color:var(--mn-navy)!important}
+#root:not(#hz) .app .workchat-send-button svg{stroke:var(--mn-navy)!important}
+#root:not(#hz) .app .workchat-message-meta strong{color:var(--mn-blue)!important}
+html body #root:not(#hz) .app .hz-room.hz-room{--hz-read:#2272EB!important;--hz-out:#DCEBFF!important;--hz-wall:#F0F4F8!important;--hz-doodle:#0F1B2D0F!important;--hz-brand:#FFC93C!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-send{background:var(--mn-sun)!important;color:var(--mn-navy)!important}
+
+/* ---------- Desktop: side menu + wide workspace ---------- */
+@media (min-width:1024px){
+  #root:not(#mn) .app:is(.worker,.employer,.admin){padding-bottom:0!important}
+  #root:not(#mn) .app:is(.worker,.employer,.admin)>aside.sidebar{display:none!important}
+  #root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav){position:fixed!important;top:0!important;left:0!important;right:auto!important;bottom:0!important;width:var(--mn-side)!important;height:100vh!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:4px!important;padding:24px 14px!important;border-top:0!important;border-right:1px solid var(--mn-line)!important;box-shadow:none!important;z-index:70!important;grid-template-columns:none!important;overflow-y:auto}
+  #root:not(#mn) .app .nav-brand{display:block;margin:2px 12px 30px;font-weight:800;font-size:30px;line-height:1;color:#fff}
+  #root:not(#mn) .app .nav-brand i{font-style:normal;color:var(--mn-sun)}
+  #root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav)>button{position:relative!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;width:100%!important;min-height:46px!important;height:auto!important;margin:0!important;padding:11px 14px!important;border:0!important;border-radius:10px!important;font:600 15px 'DM Sans',sans-serif!important;color:#B8C4D6!important;text-align:left!important}
+  #root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav)>button:hover{background:var(--mn-navy-3)!important;color:var(--mn-sky)!important}
+  #root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav)>button:is(.active,.selected){background:var(--mn-navy-2)!important;color:var(--mn-sun)!important;box-shadow:inset 3px 0 0 var(--mn-sun)!important}
+  #root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav)>button :is(span,svg){margin:0!important}
+  #root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav) .bottom-nav-icon{position:relative;display:grid!important;place-items:center;width:22px!important;height:22px!important}
+  #root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav) svg{width:21px!important;height:21px!important}
+  #root:not(#mn) .app .admin-bottom-nav>.admin-signout-icon{margin-top:auto!important}
+
+  #root:not(#mn) .app:is(.worker,.employer,.admin)>main{margin-left:var(--mn-side)!important;width:auto!important;max-width:none!important;min-height:100vh;padding:36px clamp(32px,4vw,64px) 64px!important;box-sizing:border-box}
+  #root:not(#mn) .app:is(.worker,.employer,.admin)>main>*{max-width:1320px!important;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}
+  #root:not(#mn) .app:is(.worker,.employer,.admin)>main>header{width:100%!important;display:flex!important;align-items:center!important;gap:18px!important;padding:0 0 8px!important;margin-bottom:22px!important}
+  #root:not(#mn) .app:is(.worker,.employer,.admin)>main>header h1{font-size:clamp(34px,2.6vw,46px)!important;line-height:1.05!important;margin:4px 0!important}
+  #root:not(#mn) .app:is(.worker,.employer,.admin)>main>header>div{flex:1 1 auto}
+  #root:not(#mn) .app .worker-header-profile-picture{width:56px!important;height:56px!important;flex:0 0 56px!important;border-radius:16px!important;background:var(--mn-navy)!important;color:var(--mn-sun)!important;font:800 22px 'Outfit',sans-serif!important}
+  #root:not(#mn) .app .worker-header-profile-picture span{color:var(--mn-sun)!important}
+
+  /* Wide dashboard */
+  #root:not(#mn) .app .worker-section-links.job-tabs-squares{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))!important;gap:16px!important}
+  #root:not(#mn) .app .employer-dashboard-sections,#root:not(#mn) .app .worker-section-nav{padding:28px 30px!important}
+
+  /* Full-screen chats sit beside the side menu */
+  html body #root:not(#hz) .app .hz-room.hz-room{left:var(--mn-side)!important;--hz-bottom:0px!important;bottom:0!important}
+  #root:not(#mn) .app.inbox-screen>main{padding-top:28px!important}
+}
+@media (min-width:1600px){#root:not(#mn) .app .worker-section-links.job-tabs-squares{grid-template-columns:repeat(4,1fr)!important}}
+
+/* Fixes: nav item contents inherit colour, tiles left aligned, today card, inbox header */
+#root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav)>button *{color:inherit!important;-webkit-text-fill-color:currentColor!important}
+#root:not(#mn) .app .worker-section-links .section-tile{flex-direction:row!important;justify-content:flex-start!important;align-items:center!important}
+@media (max-width:640px){#root:not(#mn) .app .worker-section-links .section-tile{flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important}}
+#root:not(#mn) .app .section-tile *{-webkit-text-fill-color:currentColor!important}
+#root:not(#mn) .app .worker-todays-shift-card{border-radius:14px!important}
+@media (min-width:1024px){#root:not(#mn) .app .employer-todays-overview,#root:not(#mn) .app .worker-todays-shift-wrap{padding:0!important;overflow:hidden}}
+#root:not(#mn) .app .employer-todays-overview .worker-todays-shift-card,#root:not(#mn) .app .worker-todays-shift-wrap>.worker-todays-shift-card{background:linear-gradient(0deg,transparent,transparent),var(--mn-navy)!important;color:#E6EDF7!important;border:0!important;box-shadow:none!important;margin:0!important}
+@media (min-width:1024px){#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card{padding:24px 28px!important}}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card *{-webkit-text-fill-color:currentColor!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card small{color:var(--mn-sun)!important;letter-spacing:.12em}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card strong{color:#fff!important;font-family:'Outfit',sans-serif!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card>span,#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card p{color:#B8C4D6!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap) .worker-todays-shift-actions button.primary{background:var(--mn-sun)!important;color:var(--mn-navy)!important;border:0!important;font-weight:700!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap) .worker-todays-shift-actions button.secondary{background:transparent!important;color:#fff!important;border:1px solid #3A4E6A!important}
+#root:not(#mn) .app .worker-greeting-subtitle{color:var(--mn-ink-2)!important}
+
+#root:not(#mn) .app.inbox-screen{background-image:none!important;background-color:var(--mn-bg)!important}
+#root:not(#mn) .app .inbox-category-tabs{display:inline-flex!important;gap:4px!important;padding:4px!important;background:#E9EEF5!important;border-radius:999px!important;width:auto!important;border:0!important}
+#root:not(#mn) .app .inbox-category-tabs button{flex:0 0 auto!important;min-height:0!important;height:38px!important;padding:0 20px!important;border:0!important;border-radius:999px!important;background:transparent!important;color:var(--mn-ink-2)!important;-webkit-text-fill-color:currentColor!important;font:600 14px 'DM Sans',sans-serif!important;box-shadow:none!important;transition:background-color .15s,color .15s}
+#root:not(#mn) .app .inbox-category-tabs button:hover{color:var(--mn-ink)!important}
+#root:not(#mn) .app .inbox-category-tabs button.active{background:var(--mn-navy)!important;color:#fff!important}
+#root:not(#mn) .app .inbox-global-search{border-radius:14px!important;border-color:var(--mn-border)!important;background:#fff!important}
+#root:not(#mn) .app .inbox-global-search input{font-size:15px!important}
+@media (min-width:1024px){
+  #root:not(#mn) .app.inbox-screen>main>header{display:none!important}
+  #root:not(#mn) .app .inbox-main-signout-row h1{font-size:40px!important}
+  #root:not(#mn) .app .inbox-main-toolbar{margin:4px 0 14px!important}
+}
+#root:not(#mn) .app .inbox-category-tabs{display:flex!important;width:100%!important;max-width:620px!important;overflow:visible!important;grid-template-columns:none!important}
+#root:not(#mn) .app .inbox-category-tabs button{flex:1 1 0!important;width:auto!important;max-width:none!important;justify-content:center!important}
+#root:not(#mn) .app .workchat-wa-row{grid-template-columns:56px minmax(0,1fr) auto!important;gap:14px!important;padding:12px 14px!important}
+#root:not(#mn) .app .workchat-wa-avatar{width:48px!important;height:48px!important;font-family:'Outfit',sans-serif}
+#root:not(#mn) .app .workchat-wa-row:nth-child(3n+2) .workchat-wa-avatar{background:#2272EB!important}
+#root:not(#mn) .app .workchat-wa-row:nth-child(3n) .workchat-wa-avatar{background:#FFC93C!important}
+#root:not(#mn) .app .workchat-wa-row:nth-child(3n) .workchat-wa-avatar b{color:#0F1B2D!important;-webkit-text-fill-color:#0F1B2D!important}
+/* Pill tabs for job / notification / availability tabs */
+#root:not(#mn) .app nav.job-tabs:not(.job-tabs-squares),#root:not(#mn) .app div.job-tabs:not(.job-tabs-squares){display:flex!important;flex-wrap:wrap!important;gap:8px!important;grid-template-columns:none!important}
+#root:not(#mn) .app .job-tabs:not(.job-tabs-squares)>button{flex:0 0 auto!important;width:auto!important;min-height:0!important;height:40px!important;padding:0 18px!important;border-radius:999px!important;border:1px solid var(--mn-border)!important;background:#fff!important;color:var(--mn-ink-2)!important;-webkit-text-fill-color:currentColor!important;font:600 14px 'DM Sans',sans-serif!important;box-shadow:none!important;transition:background-color .15s,color .15s,border-color .15s}
+#root:not(#mn) .app .job-tabs:not(.job-tabs-squares)>button:hover{border-color:var(--mn-sky)!important;color:var(--mn-ink)!important}
+#root:not(#mn) .app .job-tabs:not(.job-tabs-squares)>button:is(.active,.selected){background:var(--mn-navy)!important;color:#fff!important;border-color:var(--mn-navy)!important}
+@media (min-width:1024px){#root:not(#mn) .app :is(.worker-bottom-nav,.employer-bottom-nav,.admin-bottom-nav)>button small{font-size:15px!important;font-weight:600!important;letter-spacing:0!important;text-transform:none!important}}
+#root:not(#mn) .app .worker-section-links.job-tabs-squares{grid-auto-rows:auto!important}
+#root:not(#mn) .app .worker-section-links .section-tile{aspect-ratio:auto!important;height:auto!important;max-height:none!important;position:relative!important;inset:auto!important;transform:none}
+#root:not(#mn) .app .worker-section-links .section-tile:hover{transform:translateY(-2px)}
+#root:not(#mn) .app .worker-section-links .section-tile>*{position:static!important}
+#root:not(#mn) .app .worker-header-profile-picture span{-webkit-text-fill-color:#FFC93C!important;color:#FFC93C!important;font:800 20px 'Outfit',sans-serif!important}
+#root:not(#mn) .app .worker-section-links.job-tabs-squares{grid-template-rows:none!important;height:auto!important;min-height:0!important}
+#root:not(#mn) .app .worker-section-links .section-tile>*{margin:0!important;text-align:left!important}
+#root:not(#mn) .app .worker-section-links .section-tile .section-tile-copy{align-items:flex-start!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;gap:4px!important;text-align:left!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card>*{grid-area:auto!important;position:static!important;margin:0!important;text-align:left!important;width:auto!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card strong{font-size:clamp(22px,2vw,30px)!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap) .worker-todays-shift-actions{display:flex!important;gap:10px!important;margin-top:12px!important;flex-wrap:wrap}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap),#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card{height:auto!important;min-height:0!important}
+#root:not(#mn) .app :is(.employer-todays-overview,.worker-todays-shift-wrap)>.worker-todays-shift-card>*{flex:0 0 auto!important;height:auto!important;min-height:0!important}
+#root:not(#mn) .app .section-tile :is(.section-tile-label,.section-tile-desc){display:block!important;width:100%!important;text-align:left!important}
+#root:not(#mn) .app .worker-header-profile-picture{display:grid!important;place-items:center!important;padding:0!important}
+#root:not(#mn) .app .worker-header-profile-picture span{line-height:1!important;display:block!important}

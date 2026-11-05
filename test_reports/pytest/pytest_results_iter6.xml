@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="9" time="3.429" timestamp="2026-11-05T01:48:10.506135+00:00" hostname="agent-env-cb5b3f3e-4715-46c2-8d88-1bb0495b28ec"><testcase classname="tests.test_hyrz_iter6_retest.TestCounterOfferInvoice" name="test_01_counter_offer" time="0.621" /><testcase classname="tests.test_hyrz_iter6_retest.TestCounterOfferInvoice" name="test_02_approve_invoice_uses_counter" time="0.307" /><testcase classname="tests.test_hyrz_iter6_retest.TestCounterOfferInvoice" name="test_03_payslip_matches_counter" time="0.590" /><testcase classname="tests.test_hyrz_iter6_retest.TestCounterOfferInvoice" name="test_04_review_again_409" time="0.424" /><testcase classname="tests.test_hyrz_iter6_retest.TestCounterOfferInvoice" name="test_05_admin_review_again_409" time="0.576" /><testcase classname="tests.test_hyrz_iter6_retest.TestCounterOfferInvoice" name="test_06_review_rejected_then_409" time="0.176" /><testcase classname="tests.test_hyrz_iter6_retest.TestCounterOfferInvoice" name="test_07_counter_offer_on_approved_checkout" time="0.146"><failure message="AssertionError: counter-offer on approved checkout accepted: 201 {&quot;ok&quot;:true,&quot;status&quot;:&quot;disputed&quot;,&quot;counterGrossPay&quot;:13.5}&#10;assert 201 in (400, 409)&#10; +  where 201 = &lt;Response [201]&gt;.status_code">self = &lt;test_hyrz_iter6_retest.TestCounterOfferInvoice object at 0xf9a866515210&gt;
+
+    def test_07_counter_offer_on_approved_checkout(self):
+        # Edge: counter-offer after approval should be refused (otherwise invoice and payslip drift)
+        cid = late_bar_cid()
+        r = requests.post(f'{BASE}/checkouts/{cid}/counter-offer', headers=h('employer'), json={
+            'comment': 'TEST late counter', 'actualStart': '2026-11-04T19:00', 'actualEnd': '2026-11-04T20:00', 'breakMinutes': 0})
+&gt;       assert r.status_code in (400, 409), f'counter-offer on approved checkout accepted: {r.status_code} {r.text}'
+E       AssertionError: counter-offer on approved checkout accepted: 201 {"ok":true,"status":"disputed","counterGrossPay":13.5}
+E       assert 201 in (400, 409)
+E        +  where 201 = &lt;Response [201]&gt;.status_code
+
+tests/test_hyrz_iter6_retest.py:98: AssertionError</failure></testcase><testcase classname="tests.test_hyrz_iter6_retest.TestWorkerCancel" name="test_cancel_started_shift_409" time="0.350" /><testcase classname="tests.test_hyrz_iter6_retest.TestAdminQueue" name="test_new_employer_company_check_reason" time="0.161" /></testsuite></testsuites>

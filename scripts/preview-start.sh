@@ -19,6 +19,7 @@ fi
 if [ ! -f /root/hyrz-db/.seeded-demo-v1 ]; then
   (cd /app/server && npm run seed:test-accounts >> /tmp/hyrz-seed.log 2>&1 && npm run seed:demo >> /tmp/hyrz-seed.log 2>&1) && touch /root/hyrz-db/.seeded-demo-v1
 fi
+node /app/scripts/sync-preview-secrets.js > /tmp/hyrz-secrets-sync.log 2>&1
 if ! curl -s -o /dev/null http://127.0.0.1:4000/api/health; then
   cd /app/server && setsid nohup node /app/server/src/index.js > /tmp/hyrz-api.log 2>&1 < /dev/null &
 fi

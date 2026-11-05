@@ -2,7 +2,7 @@ import { jsPDF } from 'jspdf';
 
 const gbp = n => '£' + Number(n || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 const ukDate = s => new Date(s + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-const BRAND = [173, 23, 68];
+const BRAND = [15, 27, 45];
 
 export function downloadPayslipPdf(p, worker = {}) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });

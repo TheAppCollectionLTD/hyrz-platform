@@ -1248,8 +1248,9 @@ app.post('/api/checkouts/:id/counter-offer',auth,allow('employer'),requireVerifi
  await ensureCheckoutCounterColumns;
  const {comment='',actualStart,actualEnd,breakMinutes}=req.body||{};
  if(typeof comment!=='string'||comment.trim().length<3||comment.length>3000)return res.status(400).json({error:'Please provide a counter-offer comment of 3-3000 characters'});
- const [rows]=await db.execute(`SELECT c.id,c.shift_id,c.worker_id,s.hourly_pay,b.id AS business_id FROM checkouts c JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id WHERE c.id=? AND b.owner_user_id=?`,[req.params.id,req.user.id]);
+ const [rows]=await db.execute(`SELECT c.id,c.shift_id,c.worker_id,c.status,s.hourly_pay,b.id AS business_id FROM checkouts c JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id WHERE c.id=? AND b.owner_user_id=?`,[req.params.id,req.user.id]);
  if(!rows.length)return res.status(404).json({error:'Checkout not found'});
+ if(!['submitted','disputed'].includes(rows[0].status))return res.status(409).json({error:'Only submitted or disputed checkouts can be countered. This one is '+rows[0].status+'.'});
  let gross=null;
  if(actualStart||actualEnd||breakMinutes!==undefined){
   if(!actualStart||!actualEnd||!Number.isInteger(Number(breakMinutes))||Number(breakMinutes)<0)return res.status(400).json({error:'Provide start, end and a non-negative break duration together'});
@@ -1271,7 +1272,8 @@ app.patch('/api/checkouts/:id/review',auth,requireVerification,asyncRoute(async(
  if(req.user.role==='employer'){query+=' AND b.owner_user_id=?';args.push(req.user.id);}
  const [rows]=await db.execute(query,args);if(!rows.length)return res.status(404).json({error:'Checkout not found'});
  if(!['submitted','disputed'].includes(rows[0].status))return res.status(409).json({error:'Only submitted or disputed checkouts can be reviewed. This one is '+rows[0].status+'.'});
- await db.execute('UPDATE checkouts SET status=?,reviewed_by=?,reviewed_at=NOW() WHERE id=?',[status,req.user.id,req.params.id]);
+ const [upd]=await db.execute("UPDATE checkouts SET status=?,reviewed_by=?,reviewed_at=NOW() WHERE id=? AND status IN ('submitted','disputed')",[status,req.user.id,req.params.id]);
+ if(!upd.affectedRows)return res.status(409).json({error:'This checkout was already reviewed.'});
  await audit(req,'checkout.'+status,'checkout',req.params.id);
  if(status==='approved'){
   const [business]=await db.execute('SELECT business_id FROM shifts WHERE id=?',[rows[0].shift_id]);

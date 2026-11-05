@@ -293,7 +293,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   }
   app.get('/api/workchats/mine',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await Promise.all([ensureGroupWorkchats,ensureProfilePictureColumn,ensureMessaging()]);
-    const [rows]=await db.execute(`SELECT w.id,w.name,w.status,w.created_at,w.last_message_at,COALESCE(ws.disabled,0) disabled,
+    const [rows]=await db.execute(`SELECT w.id,w.name,w.status,w.employer_user_id,w.created_at,w.last_message_at,COALESCE(ws.disabled,0) disabled,
       (SELECT COUNT(*) FROM workchat_participants p2 WHERE p2.workchat_id=w.id) participant_count,
       (SELECT COUNT(*) FROM workchat_messages m JOIN workchat_participants me ON me.workchat_id=w.id AND me.user_id=? WHERE m.workchat_id=w.id AND m.sender_id<>? AND m.created_at>COALESCE(me.last_read_at,'1970-01-01')) unread_count,
       (SELECT body FROM workchat_messages m WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message,

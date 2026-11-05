@@ -1,13 +1,13 @@
-.worker-payroll{margin:26px 0;padding:24px;border:1px solid #F2C6D4;border-radius:16px;background:#fff}
+.worker-payroll{margin:26px 0;padding:24px;border:1px solid #BFDBFE;border-radius:16px;background:#fff}
 .worker-payroll h2{margin:4px 0 6px}
 .worker-payroll-intro{color:#5b5357;font-size:13px;margin-bottom:16px}
 .pay-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-html body #root .app .worker-payroll .pay-type-card{position:relative;display:grid;gap:6px;text-align:left;padding:16px 16px 16px 46px;border:2px solid #EEE6E9!important;border-radius:14px;background:#fff!important;color:#111!important;cursor:pointer;transition:border-color .15s,background-color .15s;min-height:0;height:auto}
-html body #root .app .worker-payroll .pay-type-card.on{border-color:#AD1744!important;background:#FCE8EF!important}
+html body #root .app .worker-payroll .pay-type-card{position:relative;display:grid;gap:6px;text-align:left;padding:16px 16px 16px 46px;border:2px solid #E2E8F0!important;border-radius:14px;background:#fff!important;color:#0F1B2D!important;cursor:pointer;transition:border-color .15s,background-color .15s;min-height:0;height:auto}
+html body #root .app .worker-payroll .pay-type-card.on{border-color:#2272EB!important;background:#EBF5FF!important}
 .pay-type-card strong{font-size:15px}
 .pay-type-card small{font-size:12.5px;line-height:1.5;color:#5b5357}
 .pay-type-radio{position:absolute;left:16px;top:18px;width:18px;height:18px;border-radius:50%;border:2px solid #b9aeb3}
-.pay-type-card.on .pay-type-radio{border-color:#AD1744;box-shadow:inset 0 0 0 4px #fff;background:#AD1744}
+.pay-type-card.on .pay-type-radio{border-color:#2272EB;box-shadow:inset 0 0 0 4px #fff;background:#2272EB}
 .paye-fields{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-bottom:12px}
 .paye-fields small{font-weight:400;color:#7b7479}
 .paye-confirm{grid-column:1/-1;display:flex!important;align-items:flex-start;gap:8px;font-weight:500}
@@ -15,17 +15,17 @@ html body #root .app .worker-payroll .pay-type-card.on{border-color:#AD1744!impo
 .pay-current{display:block;margin-top:10px;color:#5b5357}
 .payslips-title{margin:26px 0 10px}
 .payslip-list{display:grid;gap:8px}
-.payslip{border:1px solid #EEE6E9;border-radius:12px;overflow:hidden}
-html body #root .app .worker-payroll .payslip-head{width:100%;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:13px 16px;border:0!important;background:#FBF8F9!important;color:#111!important;cursor:pointer;text-align:left;min-height:0}
+.payslip{border:1px solid #E2E8F0;border-radius:12px;overflow:hidden}
+html body #root .app .worker-payroll .payslip-head{width:100%;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:13px 16px;border:0!important;background:#FBF8F9!important;color:#0F1B2D!important;cursor:pointer;text-align:left;min-height:0}
 .payslip-type{font-size:11px;font-weight:700;padding:4px 9px;border-radius:20px;background:#eef0f2}
-.payslip-type.paye{background:#FCE8EF;color:#AD1744}
+.payslip-type.paye{background:#EBF5FF;color:#2272EB}
 .payslip-body{padding:10px 16px 14px;display:grid;gap:6px}
 .payslip-line,.payslip-sum{display:flex;justify-content:space-between;gap:10px;font-size:13px}
 .payslip-line span{color:#5b5357}
 .payslip-sum{border-top:1px solid #F2EBEE;padding-top:6px}
-.payslip-sum.minus b{color:#AD1744}
+.payslip-sum.minus b{color:#2272EB}
 .payslip-sum.net{font-size:15px}
 .payslip-note,.payslip-empty{font-size:12.5px;color:#7b7479}
 @media(max-width:700px){.pay-type-grid,.paye-fields{grid-template-columns:1fr}}
-html body #root .app .worker-payroll .payslip-download{justify-self:end;margin-top:8px;padding:8px 16px;border-radius:999px;border:1px solid #AD1744!important;background:#fff!important;color:#AD1744!important;font-weight:700;font-size:13px;cursor:pointer;min-height:0;transition:background-color .15s,color .15s}
-html body #root .app .worker-payroll .payslip-download:hover{background:#AD1744!important;color:#fff!important}
+html body #root .app .worker-payroll .payslip-download{justify-self:end;margin-top:8px;padding:8px 16px;border-radius:999px;border:1px solid #2272EB!important;background:#fff!important;color:#2272EB!important;font-weight:700;font-size:13px;cursor:pointer;min-height:0;transition:background-color .15s,color .15s}
+html body #root .app .worker-payroll .payslip-download:hover{background:#2272EB!important;color:#fff!important}

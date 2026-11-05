@@ -29,3 +29,15 @@ Pull repo, then: (1) make chat nicer & functional with GIFs/emoji, easy to use; 
 ## Backlog
 - P1 paging for direct messages (currently full history polled every 2.5s); workchat regression test needs a workchat (requires employer favourite)
 - P1 Contractor vs PAYE accounting feature (original request)
+
+## 2026-11-05 Demo data, payslip PDFs, verification, Plum & Blush chats (tested iterations 3-6)
+- Demo data seeder: server/scripts/seed-demo-data.js (`npm run seed:demo`, idempotent; preview-start runs it once). Adds shifts (today/upcoming/past), PAYE payslips, direct chats, 3 workchats, admin threads, extra workers Priya/Jamie/Leo, unverified new.worker/new.employer.
+- Payslip PDF: client/src/ui/payroll/payslipPdf.js (jsPDF); /api/worker/payslips returns worker name.
+- Fixes: checkout status enum includes open/paid/completed (clock-in works); emoji reactions utf8mb4_bin; admin threads grouped; employer inbox tabs above list; checkout review/counter-offer status guards; invoice uses counter amount + recalculated fee; worker can't cancel started shift; pin only for workchat owner/admins.
+- Verification (server/src/verification-routes.js + client/src/ui/verification/*): Stripe Identity (session/status/webhook /api/stripe/identity-webhook, raw body), RTW share code + admin GOV.UK check, Companies House auto check at employer signup (+ recheck). Unit test server/test/check-company.test.js. Env: STRIPE_SECRET_KEY, STRIPE_IDENTITY_WEBHOOK_SECRET, COMPANIES_HOUSE_API_KEY, RESEND_API_KEY, EMAIL_FROM (see server/.env.example). Preview syncs keys from /app/backend/.env via scripts/sync-preview-secrets.js.
+- Chat theme: client/src/ui/chat/workchat-theme.css (Plum #3B1124 / blush #F9E2EC / coral #FF5C67), imported in main.jsx.
+- Feature inventory: /app/memory/FEATURES.md
+## Backlog
+- P0 Keys from user: Stripe (Identity), Companies House, Resend (+ verified domain). Stripe webhook endpoint: <APP_URL>/api/stripe/identity-webhook (events identity.verification_session.*)
+- P1 Real money movement (collect employer payments / pay workers) — not built
+- P2 HMRC RTI filing (user skipped); two sign-out icons in inbox header; native date picker in RTW form; empty dashboard section cards

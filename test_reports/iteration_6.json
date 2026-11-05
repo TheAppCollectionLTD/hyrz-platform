@@ -1,0 +1,52 @@
+{
+  "summary": "Iteration 6 retest of the 10 failures from iteration 5, plus a quick regression. Backend: the new suite test_hyrz_iter6_retest.py passes 8 of 9 tests. The iteration 5 suite passes 25 of 26; the one failure is the known legacy checkout id=1, which is not part of the demo data. npm test passes 15/15. FIXED and verified: (1) after a counter-offer, the invoice uses the counter amount (subtotal 40.50, fee 6.00, total 46.50) and the payslip line matches (40.50); (2) reviewing an already approved or rejected checkout returns 409, for both employer and admin; (3) a worker cannot cancel a shift that has already started (409 'already started', no strike, the application stays approved); (4) the workchat header at 390px shows the group name and '3 members · View group info', and the icons stay on screen; (5) direct chats have the plum header (#3B1124) with a white name, for both roles; (8) the worker verification pills are readable; (9) admin-company-check-36 shows for new.employer in the admin pending-verification queue; (10, partly) the reply quote's text has no separate background and is the same width as the quote, the admin-thread history is cream (rgb 250,245,238), and the active inbox tab has white text on plum. STILL FAILING: (6) the employer owner is NOT offered 'Pin message' on other people's messages. The API allows it (POST pin returns 200), so only the UI is wrong. The worker part of (6) passes: no Pin for the worker, the API returns 403, and Edit shows only on your own messages. (7) The three-dots settings icon is still dark (#292929) on the plum header, so it is almost invisible. (10) The initials in inbox list avatars are dark on plum and unreadable; the read ticks on your own bubbles still overlap the reaction chip slightly (by 6px). New issues: short messages in your own bubbles wrap in the middle of a word ('dasd' shows as 'da/sd'). A counter-offer on an already approved checkout is accepted, and the invoice then no longer matches the payslip. Regression passed: workchat react, reply and send for both roles; direct-chat send and receive; payslip PDF download (a 7.3KB PDF). The seeder was re-run at the end.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "POST /api/checkouts/:id/counter-offer", "issue": "There is no status guard. A counter-offer on an already APPROVED checkout returns 201 and sets the status back to 'disputed'. After re-approval, the invoice keeps the old amount (INSERT IGNORE on checkout_id), so the invoice shows 40.50 while the payslip shows the new counter_gross_pay of 13.50. Reproduced. Fix: allow counter-offers only when the status is submitted or disputed (otherwise return 409).", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "PATCH /api/checkouts/:id/review", "issue": "The status check and the UPDATE are separate statements, so two concurrent approvals could race. Consider UPDATE ... WHERE id=? AND status IN ('submitted','disputed') and check affectedRows."},
+      {"endpoint": "GET /api/workchats/mine", "issue": "The list items do not include employer_user_id (only GET /workchats/:id/messages returns it as workchat.employer_user_id). This is the root cause of the Pin UI bug below."},
+      {"endpoint": "payslips", "issue": "The payslip date and tax week use actual_start even when the counter-offer changes counter_start. This only matters if a counter-offer moves the shift to a different tax week."},
+      {"endpoint": "legacy data", "issue": "Checkout id=1 (rate 22.50, 9.5h) has fee 20.25 instead of 21.38. This is the known legacy row from iteration 5."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Workchat message actions (employer owner)", "issue": "'Pin message' is never shown to the workchat owner on other people's messages. RCA: in App.jsx (line ~715) the condition reads workchatItems.find(w=>w.id===workchatOpenId)?.employer_user_id, but the /workchats/mine items have no employer_user_id. The participants' is_admin is 0 for Sam (the owner), so both checks are false. Fix: store d.workchat from reloadWorkchat (the /messages response has employer_user_id: 7) and use that, or add employer_user_id to /workchats/mine.", "selector": ".workchat-message-actions button", "priority": "HIGH"},
+      {"component": "Workchat header settings (three dots)", "issue": "The SVG circles are computed as rgb(41,41,41) on the #3B1124 plum header, so they are almost invisible. RCA: styles.css line ~9236 '#root .app .workchat-conversation-actions .workchat-settings-button :is(span,svg){color:#292929!important}' sets the svg colour, so 'fill:currentColor' in workchat-theme.css:186 resolves to dark. Set the svg/circle colour to #fff (or the blush colour) inside the header.", "selector": ".workchat-settings-button svg circle", "priority": "MEDIUM"},
+      {"component": "Inbox list avatars", "issue": "The initials are rgb(23,23,23) on a plum (#3B1124) circle, so they are unreadable (worker and employer). RCA: the initials are rendered in a <b> element, but workchat-theme.css:201 targets '.workchat-wa-avatar span'. Add '.workchat-wa-avatar b' to that rule.", "selector": ".workchat-wa-avatar b", "priority": "MEDIUM"},
+      {"component": "Own message bubble (worker view)", "issue": "Short own messages wrap in the middle of a word: 'dasd' shows as 'da / sd' and 'dddd' as 'dd / dd'. The bubble is about 45px wide with overflow-wrap:anywhere, so the shrink-to-fit width collapses. Use overflow-wrap:break-word together with a min-width or width:max-content (with a max-width) on the bubble.", "selector": ".workchat-message-row.mine .workchat-message-bubble", "priority": "MEDIUM"},
+      {"component": "Own message read ticks", "issue": "The read receipt sits below the bubble (tick at y 424-441, bubble ends at 424) and still overlaps the reaction row (starts at 435) by about 6px. The tick also looks like a detached blush strip under the bubble.", "selector": ".workchat-read-receipt", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Employer admin-thread overlay (390px)", "issues": ["The reply composer has a large oval outline that wraps both the textarea and the Send button, which looks broken"]},
+      {"screen": "Direct chat (390px)", "issues": ["The sticky 'YESTERDAY' date pill overlaps the GIF image"]},
+      {"screen": "Workchat composer", "issues": ["The placeholder is inconsistent: 'Write a message...' for the worker and 'Type a message' for the employer"]},
+      {"screen": "Admin > Users > Employers", "issues": ["The count pill on the BLOCKED chip is white on white, so the count is invisible", "The 'Pending verification' filter still lists active, verified employers above the pending one"]},
+      {"screen": "Worker Find shifts (390px)", "issues": ["The heading in the dark date-picker card (above 'Show all') is barely visible: dark text on a dark card"]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_hyrz_iter6_retest.py", "/app/backend/tests/test_hyrz_iter5_verification_payments.py", "/app/test_reports/pytest/pytest_results_iter6.xml"],
+  "action_items": [
+    "HIGH: show 'Pin message' to the workchat owner. Use workchat.employer_user_id from the /workchats/:id/messages response, or add employer_user_id to /workchats/mine",
+    "HIGH: add a status guard to POST /api/checkouts/:id/counter-offer (only when submitted or disputed, otherwise 409) so the invoice and the payslip cannot drift apart",
+    "Make the header three-dots icon visible on plum (override the svg colour set by styles.css:9236)",
+    "Make the inbox avatar initials white (target '.workchat-wa-avatar b')",
+    "Fix the mid-word wrapping of short own messages; move the read ticks inside the bubble so they don't overlap the reaction chip",
+    "Minor: the admin-thread reply composer outline, the BLOCKED count pill contrast, consistent composer placeholders"
+  ],
+  "critical_code_review_comments": [
+    "client/src/ui/App.jsx line 715 is a single, very long JSX line with all the message rendering and permission logic inline. Extract it into a WorkchatMessage component and a canPin/canEdit helper. The file is far over 700 lines.",
+    "CSS relies on stacked !important rules with escalating specificity (#root:not(#hz) ...) across styles.css (>13k lines) and workchat-theme.css. Regressions like the settings-icon colour come from these conflicts. Consolidate the chat theme rules.",
+    "PATCH /checkouts/:id/review: the status check and the update are not atomic. Use a conditional UPDATE and check affectedRows."
+  ],
+  "updated_files": ["/app/backend/tests/test_hyrz_iter6_retest.py"],
+  "success_rate": {"backend": "89% (8/9 new retest tests; 25/26 iteration 5 regression, the failure being legacy row id=1; npm test 15/15)", "frontend": "~70% (retest items 4, 5, 8, 9 pass; 6 owner part, 7 and the 10 avatars fail; 10 ticks partly)"},
+  "seed_data_creation": "None. Test messages (TEST_iter6 ...) were sent in Friday Bar Team and the Alex<->Sam direct chat; the seeder was re-run at the end to restore the demo data.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Run serially: cd /app/backend && python -m pytest tests/test_hyrz_iter6_retest.py -n 0 (destructive; re-run the seeder before and after: cd /app/server && node scripts/seed-demo-data.js). test_07 checks the counter-offer-on-approved guard. Server date is around 2026-11-05 UTC. To log in in Playwright: POST /api/auth/login, set localStorage 'hyrz_token', then reload. Inbox rows are .workchat-wa-row; the Admins tab is the button 'Admins'. Admin pending queue: USERS > EMPLOYERS > PENDING VERIFICATION, which shows data-testid admin-company-check-36. Payslip: Profile > click 'Week 31' > 'Download PDF'. Workchat 36 = Friday Bar Team (owner Sam id 7; participants' is_admin is all 0).",
+  "rca of the issue": "Pin hidden for the owner: the UI reads employer_user_id from workchatItems (/workchats/mine), and that field is missing there; it exists only in the /messages response. Settings icon dark: styles.css:9236 sets svg color to #292929!important, so fill:currentColor resolves to dark. Avatar initials dark: the markup uses <b>, but the CSS targets span. Counter-offer drift: the counter-offer endpoint does not check the checkout status, and the invoice INSERT IGNORE keeps the first invoice."
+}
