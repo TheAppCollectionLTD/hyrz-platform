@@ -255,6 +255,18 @@ async function main() {
       { from: 'u', ago: 9900, body: 'Thanks, really easy to set up!' }
     ]);
 
+    await conn.query(`DELETE FROM user_notifications WHERE user_id IN (${[employer, ...all].join(',')})`);
+    const note = (u, title, body, type, minsAgo, read) => conn.execute('INSERT INTO user_notifications(user_id,title,body,notification_type,read_at,created_at) VALUES(?,?,?,?,?,?)', [u, title, body, type, read ? sql(ago(minsAgo - 5)) : null, sql(ago(minsAgo))]);
+    await note(worker, 'Shift reminder: Bartender – Friday Night', `Tomorrow 17:00–23:00 at The Demo Bar & Kitchen. Please arrive 10 minutes early.`, 'shift_reminder', 320, false);
+    await note(worker, "You're booked for Riverside Fest 🎪", 'Sam approved you for Festival Bar Crew – Riverside Fest. Check the crew chat for meeting point details.', 'shift_approved', 1500, false);
+    await note(worker, 'Your payslip is ready', 'Your latest hyrz PAYE payslip is available under Profile > Pay & Tax.', 'payroll', 2900, true);
+    await note(worker, 'New shifts near you', '3 new hospitality and festival shifts were posted within 5 miles this week.', 'admin_broadcast', 8000, true);
+    await note(employer, '2 timesheets waiting for approval', 'Alex Demo and Leo Martins submitted hours for Bartender – Late Bar.', 'checkout_submitted', 200, false);
+    await note(employer, 'New applicant for Waiting Staff – Wedding Reception', 'Priya Shah applied. She has silver service experience and a 4.9 rating.', 'application', 1900, false);
+    await note(employer, 'Invoice paid', 'Thanks! Invoice for Festival Bar Crew – Harvest Fair has been marked as paid.', 'invoice', 6000, true);
+    await note(employer, 'Welcome to the new hyrz', 'Fresh look, faster dashboard and WhatsApp-style work chats are now live.', 'admin_broadcast', 10000, true);
+
+    await conn.execute("UPDATE workchats SET description='Crew chat for Riverside Fest 🎪 Meeting point, rota and day-of updates live here. Gate C staff entrance.' WHERE employer_user_id=? AND name LIKE 'Riverside%'", [employer]).catch(() => {});
     await conn.commit();
     console.log('Demo data ready: shifts, payslips, direct chats, workchats and admin chats for the demo accounts.');
     console.log('Extra demo workers (password ' + DEMO_PASSWORD + '): ' + EXTRA_WORKERS.map(w => w.email).join(', '));

@@ -1,0 +1,37 @@
+/* Section polish: list rows, status pills, invoices, funds, shift cards, page chrome. */
+#root:not(#sx) .app .row{display:flex!important;align-items:center!important;gap:16px!important;padding:14px 16px!important;margin:0 0 10px!important;background:#fff!important;border:1px solid #E2E8F0!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(15,27,45,.04)!important;transition:box-shadow .15s,transform .15s}
+#root:not(#sx) .app .row:hover{box-shadow:0 8px 22px rgba(15,27,45,.07)!important}
+#root:not(#sx) .app .row>div:first-child{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:3px}
+#root:not(#sx) .app .row>div:first-child b{font:700 15px 'Outfit',sans-serif!important;color:#0F1B2D!important}
+#root:not(#sx) .app .row>div:first-child small{color:#5A6B82!important;font-size:13px!important}
+#root:not(#sx) .app .row>strong{font:800 18px 'Outfit',sans-serif!important;color:#0F1B2D!important}
+#root:not(#sx) .app .row>button{width:auto!important;border-radius:999px!important}
+#root:not(#sx) .app .employer-invoices-panel .row::before{content:'£';flex:0 0 40px;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#EBF5FF;color:#2272EB;font:800 17px 'Outfit',sans-serif}
+
+#root:not(#sx) .app span.status{display:inline-flex!important;align-items:center!important;gap:6px;padding:4px 11px!important;border-radius:999px!important;font:700 12px 'DM Sans',sans-serif!important;text-transform:capitalize!important;letter-spacing:0!important;border:0!important;background:#EEF2F7!important;color:#33445C!important;-webkit-text-fill-color:currentColor!important;white-space:nowrap}
+#root:not(#sx) .app span.status::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+#root:not(#sx) .app span.status:is(.issued,.submitted,.pending,.open,.draft){background:#FFF4CC!important;color:#7A5A00!important}
+#root:not(#sx) .app span.status:is(.paid,.approved,.completed,.verified,.filled){background:#E7F6EC!important;color:#0B7A3B!important}
+#root:not(#sx) .app span.status:is(.overdue,.disputed,.rejected,.void,.cancelled){background:#FDECEC!important;color:#B42318!important}
+
+/* Funds: balance hero */
+#root:not(#sx) .app .employer-funds-summary{background:#0F1B2D!important;color:#fff!important;border:0!important;border-radius:18px!important;padding:26px 28px!important;position:relative;overflow:hidden;box-shadow:0 18px 40px -22px rgba(15,27,45,.6)!important}
+#root:not(#sx) .app .employer-funds-summary::after{content:'';position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,201,60,.35),transparent 70%)}
+#root:not(#sx) .app .employer-funds-summary *{color:#C9D4E4!important;-webkit-text-fill-color:currentColor!important}
+#root:not(#sx) .app .employer-funds-summary :is(strong,b,h3){color:#fff!important;font-family:'Outfit',sans-serif!important}
+#root:not(#sx) .app .employer-funds-summary :is(.eyebrow,small:first-child){color:#FFC93C!important}
+
+/* Shift cards */
+#root:not(#sx) .app .shift-card{border-radius:16px!important;border-color:#E2E8F0!important;box-shadow:0 1px 3px rgba(15,27,45,.05)!important;transition:box-shadow .15s,transform .15s}
+#root:not(#sx) .app .shift-card:hover{box-shadow:0 12px 28px rgba(15,27,45,.08)!important}
+#root:not(#sx) .app .shift-card .shift-card-avatar,#root:not(#sx) .app .shift-card [class*="avatar"]:not(img){background:#0F1B2D!important;color:#FFC93C!important;-webkit-text-fill-color:#FFC93C!important;border-radius:14px!important;font-family:'Outfit',sans-serif!important}
+#root:not(#sx) .app .shift-contract-preview summary{font:700 14px 'DM Sans',sans-serif!important;color:#2272EB!important;cursor:pointer}
+
+/* Favourites */
+#root:not(#sx) .app .favourite-worker-row,#root:not(#sx) .app [class*="favourite-worker-card"]{border-radius:14px!important}
+#root:not(#sx) .app [class*="favourite"] [class*="avatar"]:not(img),#root:not(#sx) .app [class*="favourite"] [class*="initial"]{background:#0F1B2D!important;color:#FFC93C!important;-webkit-text-fill-color:#FFC93C!important;font-family:'Outfit',sans-serif!important;border-radius:14px!important}
+
+/* Page chrome: back button + empty states */
+#root:not(#sx) .app .empty-state{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px;min-height:140px;padding:28px!important;border:1.5px dashed #D5DEEA!important;border-radius:16px!important;background:#FAFBFD!important;color:#5A6B82!important;text-align:center!important;font-size:14.5px!important}
+#root:not(#sx) .app .empty-state::before{content:'';width:44px;height:44px;border-radius:14px;background:#FFF4CC url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' fill='none' stroke='%230F1B2D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l1.9 5.8L20 10l-5 3.6L16.8 20 12 16.6 7.2 20 9 13.6 4 10l6.1-1.2z'/%3E%3C/svg%3E") center/22px no-repeat;margin-bottom:4px}
+#root:not(#sx) .app .row{border-style:solid!important;border-width:1px!important;border-color:#E2E8F0!important}

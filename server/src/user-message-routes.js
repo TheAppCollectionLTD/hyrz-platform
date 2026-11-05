@@ -292,8 +292,8 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     return rows.length>0;
   }
   app.get('/api/workchats/mine',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
-    await Promise.all([ensureGroupWorkchats,ensureProfilePictureColumn,ensureMessaging()]);
-    const [rows]=await db.execute(`SELECT w.id,w.name,w.status,w.employer_user_id,w.created_at,w.last_message_at,COALESCE(ws.disabled,0) disabled,
+    await Promise.all([ensureGroupWorkchats,ensureProfilePictureColumn,ensureMessaging(),ensureWorkchatProfile]);
+    const [rows]=await db.execute(`SELECT w.id,w.name,w.status,w.employer_user_id,w.photo,w.description,w.created_at,w.last_message_at,COALESCE(ws.disabled,0) disabled,
       (SELECT COUNT(*) FROM workchat_participants p2 WHERE p2.workchat_id=w.id) participant_count,
       (SELECT COUNT(*) FROM workchat_messages m JOIN workchat_participants me ON me.workchat_id=w.id AND me.user_id=? WHERE m.workchat_id=w.id AND m.sender_id<>? AND m.created_at>COALESCE(me.last_read_at,'1970-01-01')) unread_count,
       (SELECT body FROM workchat_messages m WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message,
@@ -471,6 +471,19 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     await db.execute('DELETE FROM workchat_participants WHERE workchat_id=? AND user_id=?',[id,userId]);
     await db.execute('DELETE FROM workchat_typing WHERE workchat_id=? AND user_id=?',[id,userId]);
     await audit(req,'workchat.participant.removed','workchat',id,{userId});
+    res.json({ok:true});
+  }));
+  const ensureWorkchatProfile=(async()=>{await ensureGroupWorkchats;await db.query('ALTER TABLE workchats ADD COLUMN IF NOT EXISTS photo MEDIUMTEXT NULL, ADD COLUMN IF NOT EXISTS description VARCHAR(500) NULL');})();
+  app.patch('/api/workchats/:id/profile',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    await ensureWorkchatProfile;const id=Number(req.params.id),chat=await getWorkchat(id,req.user.id);
+    if(!chat)return res.status(404).json({error:'Workchat not found.'});
+    if(!await canManageWorkchat(chat,req.user.id))return res.status(403).json({error:'Only the employer or a group admin can change the group photo and description.'});
+    const sets=[],args=[];
+    if(req.body.photo!==undefined){const p=req.body.photo;if(p!==null&&(typeof p!=='string'||!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(p)||p.length>550000))return res.status(400).json({error:'Please choose a JPG, PNG or WebP photo under 400 KB.'});sets.push('photo=?');args.push(p);}
+    if(req.body.description!==undefined){const d=String(req.body.description||'').trim();if(d.length>500)return res.status(400).json({error:'Keep the description under 500 characters.'});sets.push('description=?');args.push(d||null);}
+    if(!sets.length)return res.status(400).json({error:'Nothing to update.'});
+    await db.execute('UPDATE workchats SET '+sets.join(',')+' WHERE id=?',[...args,id]);
+    await audit(req,'workchat.profile_updated','workchat',id,{photo:req.body.photo!==undefined,description:req.body.description!==undefined});
     res.json({ok:true});
   }));
   app.patch('/api/workchats/:id/settings',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ArrowLeft, BellOff, Bell, ChevronRight, Image as ImageIcon, LogOut, Search, Settings2, Trash2, UserPlus, Users } from 'lucide-react';
+import { ArrowLeft, BellOff, Bell, Camera, ChevronRight, Pencil, Image as ImageIcon, LogOut, Search, Settings2, Trash2, UserPlus, Users } from 'lucide-react';
 import './group-info.css';
 
 const MEDIA_RE = /https?:\/\/[^\s<>()]+\.(?:gif|png|jpe?g|webp)(?:\?[^\s<>()]*)?|https?:\/\/media\d*\.giphy\.com\/[^\s<>()]+/gi;
@@ -15,7 +15,19 @@ function Action({ icon: Icon, label, onClick, testid }) {
   return <button type="button" className="wa-action" onClick={onClick} data-testid={testid}><Icon size={20} /><span>{label}</span></button>;
 }
 
-export default function WorkchatGroupInfo({ chat, info, participants, messages, currentUserId, disabled, canManage, isOwner, avatar, presence, onClose, onSearch, onManage, onToggleDisabled, onDelete }) {
+function resizeImage(file) {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image(), url = URL.createObjectURL(file);
+    img.onload = () => { const max = 512, scale = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); resolve(c.toDataURL('image/jpeg', 0.85)); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('That file could not be read as an image.')); };
+    img.src = url;
+  });
+}
+
+export default function WorkchatGroupInfo({ chat, info, participants, messages, currentUserId, disabled, canManage, isOwner, avatar, presence, description = '', onClose, onSearch, onManage, onToggleDisabled, onDelete, onSaveProfile }) {
+  const [editing, setEditing] = useState(false), [draft, setDraft] = useState(description), [busy, setBusy] = useState(false), [err, setErr] = useState('');
+  const save = async patch => { setBusy(true); setErr(''); try { await onSaveProfile(patch); setEditing(false); } catch (e) { setErr(e.message || 'Could not save.'); } finally { setBusy(false); } };
+  const pickPhoto = async e => { const f = e.target.files?.[0]; e.target.value = ''; if (!f) return; if (!/^image\//.test(f.type)) return setErr('Please choose an image file.'); try { await save({ photo: await resizeImage(f) }); } catch (x) { setErr(x.message); } };
   const [query, setQuery] = useState('');
   const [lightbox, setLightbox] = useState(null);
   const name = info?.name || chat?.name || 'Workchat';
@@ -30,7 +42,7 @@ export default function WorkchatGroupInfo({ chat, info, participants, messages, 
     <header className="wa-info-bar"><button type="button" className="wa-icon-btn" onClick={onClose} aria-label="Back to chat" data-testid="group-info-back"><ArrowLeft size={22} /></button><strong>Group info</strong></header>
     <div className="wa-info-scroll">
       <div className="wa-card wa-hero">
-        <Avatar name={name} src={avatar} size={112} />
+        <div className="wa-photo-wrap"><Avatar name={name} src={avatar} size={112} />{canManage && <label className="wa-photo-edit" title="Change group photo" data-testid="group-info-photo-edit"><Camera size={18} /><input type="file" accept="image/jpeg,image/png,image/webp" onChange={pickPhoto} disabled={busy} data-testid="group-info-photo-input" /></label>}</div>
         <h2 data-testid="group-info-name">{name}</h2>
         <p>Group · {participants.length} member{participants.length === 1 ? '' : 's'}</p>
         <div className="wa-actions">
@@ -40,7 +52,10 @@ export default function WorkchatGroupInfo({ chat, info, participants, messages, 
         </div>
       </div>
 
-      <div className="wa-card wa-about">
+      <div className="wa-card wa-about" data-testid="group-info-about">
+        {err && <p className="wa-err" data-testid="group-info-error">{err}</p>}
+        {editing ? <div className="wa-desc-edit"><textarea value={draft} maxLength={500} rows={3} onChange={e => setDraft(e.target.value)} placeholder="Add a group description, e.g. meeting point, dress code, rota link" data-testid="group-info-description-input" autoFocus /><div><small>{draft.length}/500</small><button type="button" className="wa-text-btn" onClick={() => { setEditing(false); setDraft(description); }}>Cancel</button><button type="button" className="wa-save-btn" disabled={busy} onClick={() => save({ description: draft })} data-testid="group-info-description-save">{busy ? 'Saving…' : 'Save'}</button></div></div>
+          : <div className="wa-desc"><p className={description ? 'wa-desc-text' : 'wa-desc-empty'} data-testid="group-info-description">{description || (canManage ? 'Add group description' : 'No group description yet')}</p>{canManage && <button type="button" className="wa-icon-btn wa-pencil" onClick={() => { setDraft(description); setEditing(true); }} aria-label="Edit description" data-testid="group-info-description-edit"><Pencil size={16} /></button>}</div>}
         <p className="wa-about-text">{disabled ? 'Only admins can send messages right now.' : 'Everyone in this group can send messages.'}</p>
         <small>{creator ? `Created by ${creator}` : 'Workchat'}{created ? `, ${created}` : ''}</small>
       </div>

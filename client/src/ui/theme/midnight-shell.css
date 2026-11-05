@@ -170,3 +170,27 @@ html body #root:not(#hz) .app .hz-room.hz-room .hz-send{background:var(--mn-sun)
 #root:not(#mn) .app .cluster-current-shift-heading *{color:var(--mn-ink)!important}
 #root:not(#mn) .app .cluster-current-shift-heading .eyebrow{color:var(--mn-blue)!important}
 #root:not(#mn) .app .shift-cluster-count *{color:var(--mn-ink-2)!important}
+
+/* Split-view inbox (WhatsApp Web) on wide screens */
+@media (min-width:1200px){
+  :root{--mn-list:400px}
+  #root:not(#mn) .app:is(.worker,.employer):has(.hz-room,.workchat-conversation)>main>*{max-width:var(--mn-list)!important;margin-left:0!important;margin-right:0!important}
+  #root:not(#mn) .app:is(.worker,.employer):has(.hz-room,.workchat-conversation)>main{padding-left:24px!important;padding-right:0!important}
+  #root:not(#mn) .app:is(.worker,.employer):has(.hz-room,.workchat-conversation) .inbox-category-tabs button{padding:0 8px!important;font-size:13px!important}
+  html body #root:not(#hz) .app .hz-room.hz-room,#root:not(#mn) .app:is(.worker,.employer) .workchat-conversation{left:calc(var(--mn-side) + var(--mn-list) + 48px)!important;right:0!important;top:0!important;bottom:0!important;width:auto!important;max-width:none!important;border-radius:0!important;border-left:1px solid #E2E8F0!important;box-shadow:-12px 0 32px -24px rgba(15,27,45,.35)!important}
+  #root:not(#mn) .app .wc-split .workchat-conversation{position:fixed!important;z-index:60!important;display:flex!important;flex-direction:column!important}
+  #root:not(#mn) .app .wc-split .workchat-conversation .workchat-message-list{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important}
+  #root:not(#mn) .app:has(.hz-room,.workchat-conversation) .workchat-wa-row{grid-template-columns:48px minmax(0,1fr) auto!important}
+  #root:not(#mn) .app:has(.hz-room,.workchat-conversation) :is(.icon-back-button,.workchat-conversation-back,.hz-back){display:none!important}
+}
+@media (min-width:1200px){
+  html body #root:not(#mn) .app.inbox-screen:has(.workchat-conversation) main.page-inbox>:is(header,.worker-subsection-toolbar,.inbox-global-search,.inbox-category-tabs){display:flex!important}
+  html body #root:not(#mn) .app.inbox-screen:has(.workchat-conversation) main.page-inbox>header{display:none!important}
+  html body #root:not(#mn) .app .wc-split>.worker-workchat-page-heading{display:none!important}
+  html body #root:not(#mn) .app .wc-split>.workchat-list-search{display:none!important}
+  html body #root:not(#mn) .app .wc-split{display:block!important;height:auto!important}
+}
+@media (min-width:1200px){
+  #root:not(#mn) .app:is(.worker,.employer):has(.hz-room,.workchat-conversation)>main{align-items:flex-start!important;justify-content:flex-start!important}
+  #root:not(#mn) .app:is(.worker,.employer):has(.hz-room,.workchat-conversation)>main>*{align-self:flex-start!important;width:var(--mn-list)!important;margin-inline:0!important;left:auto!important;transform:none!important}
+}

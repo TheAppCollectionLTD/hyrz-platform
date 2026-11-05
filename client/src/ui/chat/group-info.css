@@ -54,3 +54,20 @@ html body #root:not(#wa) .app .wa-info header.wa-info-bar{background:#0F1B2D!imp
 html body #root:not(#wa) .app .wa-info header.wa-info-bar strong{color:#fff!important;-webkit-text-fill-color:#fff!important}
 html body #root:not(#wa) .app .wa-info header.wa-info-bar .wa-icon-btn{background:transparent!important;color:#fff!important;border:0!important}
 html body #root:not(#wa) .app .wa-info header.wa-info-bar .wa-icon-btn:hover{background:#1A293E!important}
+#root:not(#wa) .app .wa-photo-wrap{position:relative}
+#root:not(#wa) .app .wa-photo-edit{position:absolute;right:2px;bottom:2px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#FFC93C;color:#0F1B2D;border:3px solid #fff;cursor:pointer;transition:transform .15s}
+#root:not(#wa) .app .wa-photo-edit:hover{transform:scale(1.08)}
+#root:not(#wa) .app .wa-photo-edit input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+#root:not(#wa) .app .wa-desc{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #EEF2F7}
+#root:not(#wa) .app .wa-desc-text{margin:0;font-size:15px;line-height:1.5;color:#0F1B2D;white-space:pre-wrap}
+#root:not(#wa) .app .wa-desc-empty{margin:0;font-size:15px;color:#2272EB;font-weight:600}
+#root:not(#wa) .app .wa-pencil{color:#5A6B82;width:34px;height:34px;flex:0 0 34px}
+#root:not(#wa) .app .wa-pencil:hover{background:#EEF2F7}
+#root:not(#wa) .app .wa-desc-edit{margin-bottom:12px}
+#root:not(#wa) .app .wa-desc-edit textarea{width:100%;padding:10px 12px;border:1.5px solid #4DA3FF;border-radius:12px;font:400 15px/1.5 'DM Sans',sans-serif;resize:vertical;outline:none}
+#root:not(#wa) .app .wa-desc-edit>div{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:8px}
+#root:not(#wa) .app .wa-desc-edit small{margin-right:auto;color:#8A99AD}
+#root:not(#wa) .app .wa-text-btn,#root:not(#wa) .app .wa-save-btn{min-height:0;height:36px;padding:0 16px;border-radius:999px;font:700 14px 'DM Sans',sans-serif;cursor:pointer;width:auto;box-shadow:none}
+#root:not(#wa) .app .wa-text-btn{background:transparent;border:0;color:#5A6B82}
+#root:not(#wa) .app .wa-save-btn{background:#0F1B2D;color:#fff;border:0}
+#root:not(#wa) .app .wa-err{margin:0 0 10px;padding:8px 12px;border-radius:10px;background:#FDECEC;color:#B42318;font-size:13.5px}
