@@ -44,7 +44,9 @@ app.use(cors({
   }
 }));
 
-app.use(express.json({ limit: '1mb' }));
+const jsonBody = express.json({ limit: '1mb' });
+app.use((req, res, next) => req.path === '/api/stripe/identity-webhook' ? next() : jsonBody(req, res, next));
+let verification;
 if (process.env.TRUST_PROXY) app.set('trust proxy', /^\d+$/.test(process.env.TRUST_PROXY) ? Number(process.env.TRUST_PROXY) : process.env.TRUST_PROXY);
 app.use('/api/auth', rateLimit({ windowMs: 15*60*1000, limit: 100, skipSuccessfulRequests: true, standardHeaders: true, legacyHeaders: false }));
 const asyncRoute = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(next);
@@ -349,6 +351,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
 
     await conn.execute("UPDATE users SET public_user_id=CONCAT('HYRZ-',LPAD(?,8,'0')) WHERE id=?",[result.insertId,result.insertId]);
     await conn.commit();
+
+    if (role === 'employer') await verification.runCompanyCheck(result.insertId).catch(error => console.error('Companies House check failed:', error.message));
 
     try {
       await sendVerificationEmail(normalizedEmail, rawToken);
@@ -1345,6 +1349,7 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
 }));
 require('./user-message-routes')(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta });
 require('./payroll-routes')(app, { db, asyncRoute, audit });
+verification = require('./verification-routes')(app, { db, asyncRoute, audit, addColumn, createTable });
 require('./shift-reminders')(app, { db, asyncRoute });
 require('./shift-confirmation-routes')(app, { db, asyncRoute, audit, resend, ensureWorkerAvailabilityTable });
 require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds });
@@ -1362,7 +1367,8 @@ app.get('/api/admin/verification-queue',auth,allow('admin'),adminTier(2),asyncRo
           u.email_verified_at AS emailVerified,u.created_at AS createdAt,
           'worker' AS role,wp.identity_verification_status AS identityStatus,
           wp.right_to_work_status AS rightToWorkStatus,
-          NULL AS companyStatus,NULL AS businessName,NULL AS companyNumber
+          NULL AS companyStatus,NULL AS businessName,NULL AS companyNumber,
+          wp.rtw_share_code AS rtwShareCode,wp.rtw_date_of_birth AS rtwDateOfBirth,NULL AS companyCheckReason
    FROM users u LEFT JOIN worker_profiles wp ON wp.user_id=u.id
    WHERE u.role='worker'
    ORDER BY u.created_at DESC LIMIT 500`
@@ -1372,7 +1378,8 @@ app.get('/api/admin/verification-queue',auth,allow('admin'),adminTier(2),asyncRo
           u.email_verified_at AS emailVerified,u.created_at AS createdAt,
           'employer' AS role,b.identity_verification_status AS identityStatus,
           NULL AS rightToWorkStatus,b.verification_status AS companyStatus,
-          b.name AS businessName,b.company_number AS companyNumber
+          b.name AS businessName,b.company_number AS companyNumber,
+          NULL AS rtwShareCode,NULL AS rtwDateOfBirth,b.company_check_reason AS companyCheckReason
    FROM users u LEFT JOIN businesses b ON b.owner_user_id=u.id
    WHERE u.role='employer'
    ORDER BY u.created_at DESC LIMIT 500`

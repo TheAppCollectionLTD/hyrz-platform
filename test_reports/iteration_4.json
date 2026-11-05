@@ -1,0 +1,57 @@
+{
+  "summary": "Iteration 4: frontend retest of the 8 failures from iteration 3, plus regression checks. I tested at 1920x1080 and, for the worker workchat, at 390x844. 7 of 8 now pass: (1) workchat reaction picker and Reply for worker (desktop and mobile) and employer; (2) employer pinned section and composer; (3) Upcoming and Completed shift tabs; (4) All tab opens the direct chat; (5) inbox header and tabs sit above the list, and the employer's 4th tab is 'Workers'; (6) admin threads are grouped and the employer can open one and reply; (7) checkout worker names show and the stray 0 is gone. (8) FAILS: the worker Workchats tab still shows the raw giphy URL. While cleaning up I found a new backend bug: different emojis are treated as the same emoji, so reaction counts are wrong and tapping one emoji can remove another. I confirmed this in the database and with an API call. Regression checks that pass: payslip PDF download, employer direct chat react/reply/send, clock-in. I did not re-run the worker direct chat this round.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "GET /api/workchats/:id/messages, POST /api/workchats/:id/messages/:mid/reactions (and the direct_message_reactions equivalents)", "issue": "The emoji columns use utf8mb4_unicode_ci, which treats all 4-byte emojis as equal (SELECT '👍'='🙏' COLLATE utf8mb4_unicode_ci returns 1). Result 1: GROUP BY message_id,emoji merges different emojis. Message 50 has 👍 (user 6) and 🙏 (user 9) but the API returns [{👍, count 2}]; message 55 has 🔥 and 👏 but shows '🔥 2'. Result 2: the toggle check `WHERE ... emoji=?` matches the wrong emoji. As the worker I POSTed 🙏 on message 50 and it DELETED my 👍. Result 3: the primary key (message_id,user_id,emoji) cannot hold two different 4-byte emojis from one user. Fix: ALTER both emoji columns to `VARCHAR(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin` (also update the CREATE TABLE in user-message-routes.js:272 and the direct-reactions DDL), or add COLLATE utf8mb4_bin in the GROUP BY and WHERE clauses.", "priority": "HIGH"}
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Worker Inbox > Workchats tab preview (item 8)", "issue": "Still shows the raw giphy URL ('Sam Demo: https://media.giphy.com/...giphy.gif'). App.jsx line 812 (worker workchat list) renders {w.last_message} directly. The employer list (line 733) and the All tab already use previewText. Fix: change it to {previewText(w.last_message)}.", "selector": "button[aria-label^='Open workchat Riverside'] small", "priority": "MEDIUM"},
+      {"component": "Employer admin thread overlay (.inbox-chat-overlay)", "issue": "The overlay works (the full conversation shows and replies send POST /messages with the same subject and category, and the row updates), but text is unreadable. The H3 thread title is white (#fff) on a white header bar, so it is invisible. The hyrz support message text is rgb(241,245,246) on an rgb(244,241,242) bubble, so the admin's answer is invisible. The 'You · time' meta is dark rgb(41,41,41) on crimson. The 'Close chat ✕' button is nearly invisible. The overlay also closes as soon as a reply is sent, so the user cannot see the message they sent. data-testid=employer-admin-thread is only on the history list, not on the overlay, title or reply box. No testids on the reply textarea or the Send reply button.", "selector": ".inbox-chat-overlay .admin-thread-history", "priority": "HIGH"},
+      {"component": "Worker Completed shifts tab", "issue": "Past shifts still show a 'Cancel shift' button and a 'Confirmed' chip. Cancel should be hidden on completed shifts.", "selector": "Completed shifts tab cards", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Workchat (both roles)", "issues": ["The quoted-reply block inside your own sent bubble is crimson with dark crimson text, so the quoted text is unreadable.", "The selected reaction chip shows a dark count on a crimson chip, which is low contrast.", "Mobile 390px: the workchat header title wraps one word per line ('Riverside / Fest / Crew') and the composer textarea is only ~174px wide.", "The pinned section takes about 250px of a 1080px viewport for the employer."]},
+      {"screen": "Employer Checkouts", "issues": ["The 'Approve' button renders as an unstyled browser-default grey button."]},
+      {"screen": "Worker admin thread", "issues": ["The admin sender shows as the raw email 'test.owner@hyrz.local' instead of 'hyrz support' (the employer view shows 'hyrz support').", "The 'You' message text is dark on crimson, which is low contrast."]},
+      {"screen": "Seed data", "issues": ["'Bartender – Friday Night' is dated Thu 05 Nov.", "The admin thread says Leo submitted 15 minutes extra, but Leo's checkout shows 19:00–23:00, the same times as Alex's."]}
+    ]
+  },
+  "passed_tests": [
+    "Item 1 worker 1920: clicking a bubble opens the picker; tapping 👍 sends POST /workchats/8/messages/50/reactions and the reaction shows. Reply sets .workchat-reply-preview ('Replying to Priya Shah') and Enter sends replyToMessageId=50.",
+    "Item 1 worker 390x844: tapping ❤️ sends a POST and the reaction shows. Reply preview appears and cancels.",
+    "Item 1 employer: tapping 🎉 sends a POST. Reply preview appears and sending gives replyToMessageId=48.",
+    "Item 2: the employer pinned section is styled (pin svg 19px, card svgs 14px, DM Sans, 'View in conversation' links) and the composer sits at y=1019 and works.",
+    "Item 3: Upcoming shows exactly Cocktail Bar Host (Wed 04 Nov), Bartender – Friday Night (Thu 05 Nov) and Riverside Fest (Sat 07 Nov). Completed lists past approved shifts (Harvest Fair, Brunch, etc.).",
+    "Item 4: on the employer All tab, clicking Alex Demo opens DirectChatRoom.",
+    "Item 5: 'Hello, Sam' at top=114, tabs at top=168, first row at top=376. The employer tabs read All/Workchats/Admins/Workers.",
+    "Item 6: the worker Admins tab shows 'Switching to hyrz PAYE' once and opening it shows all 4 messages. The employer sees 2 admin rows (Late finish…, Welcome to hyrz). The employer thread shows both messages and Send reply sends POST /messages with the same subject.",
+    "Item 7: each checkout card shows 'Worker: <name>' via data-testid=checkout-worker-<id> (Alex, Leo, Priya). No stray '0' text nodes.",
+    "Item 8 (All tab only): the Riverside preview shows 'GIF'.",
+    "Regression: worker payslip download gives hyrz-payslip-2026-27-week-31.pdf, 7054 bytes.",
+    "Regression: employer direct chat react (POST conversations/14/messages/96/reactions ❤️), reply (reply bar shown) and send (replyToMessageId=96).",
+    "Regression: worker Clock in gives 201 checkoutId=48 and the card changes to 'Checkout #48 · Clocked in' with Clock out."
+  ],
+  "test_report_links": [],
+  "action_items": [
+    "HIGH: Change the emoji columns of workchat_message_reactions and direct_message_reactions to COLLATE utf8mb4_bin (DDL and ALTER). The unicode_ci collation merges different emojis in GROUP BY and in the toggle WHERE.",
+    "HIGH: Fix contrast in the employer admin thread overlay: the title is white on white and the admin message text is near-white on light grey. Also keep the overlay open after sending a reply.",
+    "MEDIUM: In App.jsx line 812 (worker Workchats list), wrap w.last_message in previewText().",
+    "LOW: Hide Cancel shift on Completed shift cards. Style the checkout Approve button. Fix quoted-reply contrast in own bubbles. Show 'hyrz support' instead of the admin email in the worker admin thread."
+  ],
+  "critical_code_review_comments": [
+    "user-message-routes.js:344 and :386-388: emoji GROUP BY and equality depend on the column collation. utf8mb4_unicode_ci and utf8mb4_general_ci compare all supplementary-plane emoji as equal.",
+    "App.jsx is still a 1646-line file with very long minified lines (one line holds a whole view), and worker and employer workchat views are duplicated (lines ~700 vs ~804, 733 vs 812). That is why fixes like previewText land in one branch and not the other. Extract a shared WorkchatList and WorkchatRoom component.",
+    "styles.css is 18,050 lines with many `html body #root ... !important` override layers (e.g. 14967-14982). The admin-thread contrast bug comes from conflicting override layers. Consolidate them."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested (frontend only), 1 backend bug found incidentally", "frontend": "87.5% (7/8 retest items pass), regression 3/3 tested pass"},
+  "seed_data_creation": "None. I created TEST_ workchat messages 58 and 59, direct message 106, admin message 25 and checkout 48 (clock-in), then deleted them all by id. I reverted my reactions, which put message 50 back to its seeded state (only 🙏 by user 9). I reset last_message_at for workchat 8 and conversation 14. Opening threads marked some seeded messages as read; I did not restore read state.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Today is Wed 4 Nov 2026 in the container. Riverside workchat id is now 8 (was 5); Sam↔Alex direct conversation id is 14. Log in by fetching /api/auth/login in the page and setting localStorage 'hyrz_token', then reload. The worker nav 'Dashboard' button includes a badge number, so don't match it with exact=True. Direct chat bubble actions: click '#direct-msg-<id> .hz-text' to select, then click [data-testid=direct-message-<id>-react-btn] with force=True. Workchat: click .workchat-message-bubble, then use .workchat-reaction-picker button[aria-label='React 👍'] and .workchat-message-actions 'Reply'. Payslips are on the Profile page: click article.payslip to expand, then [data-testid^=payslip-download-]. The DB is MariaDB hyrz_test (credentials in /app/server/.env); use --default-character-set=utf8mb4. The worker direct chat was not re-tested this round.",
+  "rca of the issue": "Emoji reactions: the MariaDB utf8mb4_unicode_ci collation gives all 4-byte emojis the same weight. Reproduce: as worker, POST /api/workchats/8/messages/50/reactions {emoji:'👍'}, then POST {emoji:'🙏'}. The second call deletes the 👍 instead of adding 🙏. GET also returns merged counts. Mitigation: use utf8mb4_bin on the emoji columns. GIF preview: the worker branch at App.jsx:812 never calls previewText."
+}

@@ -78,10 +78,10 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   app.get('/api/messages/mine', auth, asyncRoute(async(req,res) => {
     await ensureAdminMessageMeta;
     const [messages]=await db.execute(`SELECT m.id,m.conversation_key,m.body,m.created_at,m.sender_id,meta.category,meta.subject,meta.read_at,meta.employer_read_at,meta.recipient_id,
-      sender.email AS sender_email,sender.role AS sender_role,recipient.email AS recipient_email,recipient.role AS recipient_role
+      IF(sender.role='admin' AND ?<>'admin','hyrz support',sender.email) AS sender_email,sender.role AS sender_role,IF(recipient.role='admin' AND ?<>'admin','hyrz support',recipient.email) AS recipient_email,recipient.role AS recipient_role
       FROM messages m JOIN admin_message_meta meta ON meta.message_id=m.id
       JOIN users sender ON sender.id=m.sender_id JOIN users recipient ON recipient.id=meta.recipient_id
-      WHERE m.sender_id=? OR meta.recipient_id=? ORDER BY m.created_at DESC LIMIT 200`,[req.user.id,req.user.id]);
+      WHERE m.sender_id=? OR meta.recipient_id=? ORDER BY m.created_at DESC LIMIT 200`,[req.user.role,req.user.role,req.user.id,req.user.id]);
     res.json({messages});
   }));
 
@@ -132,7 +132,8 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
       await addColumn('employer_worker_messages','reply_to_message_id BIGINT UNSIGNED NULL','direct message replies');
       await addColumn('employer_worker_messages','deleted_at DATETIME NULL','direct message deletion');
       await addColumn('employer_worker_messages','image_data MEDIUMTEXT NULL','direct message photos');
-      await db.query(`CREATE TABLE IF NOT EXISTS direct_message_reactions (message_id BIGINT UNSIGNED NOT NULL,conversation_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,emoji VARCHAR(16) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(message_id,user_id,emoji),KEY idx_direct_reaction_conversation(conversation_id,message_id)) ENGINE=InnoDB`);
+      await db.query(`CREATE TABLE IF NOT EXISTS direct_message_reactions (message_id BIGINT UNSIGNED NOT NULL,conversation_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,emoji VARCHAR(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(message_id,user_id,emoji),KEY idx_direct_reaction_conversation(conversation_id,message_id)) ENGINE=InnoDB`);
+      await db.query('ALTER TABLE direct_message_reactions MODIFY emoji VARCHAR(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL');
       await db.query(`CREATE TABLE IF NOT EXISTS direct_typing (conversation_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,updated_at DATETIME NOT NULL,PRIMARY KEY(conversation_id,user_id)) ENGINE=InnoDB`);
     })();
     return directExtrasReady;
@@ -269,7 +270,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     db.query(`CREATE TABLE IF NOT EXISTS workchat_settings (workchat_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,disabled TINYINT(1) NOT NULL DEFAULT 0,updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP) ENGINE=InnoDB`),
     db.query(`CREATE TABLE IF NOT EXISTS workchat_admins (workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(workchat_id,user_id)) ENGINE=InnoDB`),
     db.query(`CREATE TABLE IF NOT EXISTS workchat_pins (message_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,workchat_id BIGINT UNSIGNED NOT NULL,pinned_by BIGINT UNSIGNED NOT NULL,pinned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,KEY idx_workchat_pins_chat(workchat_id,pinned_at)) ENGINE=InnoDB`),
-    db.query(`CREATE TABLE IF NOT EXISTS workchat_message_reactions (message_id BIGINT UNSIGNED NOT NULL,workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,emoji VARCHAR(16) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(message_id,user_id,emoji),KEY idx_workchat_reaction_chat(workchat_id,message_id)) ENGINE=InnoDB`),
+    db.query(`CREATE TABLE IF NOT EXISTS workchat_message_reactions (message_id BIGINT UNSIGNED NOT NULL,workchat_id BIGINT UNSIGNED NOT NULL,user_id BIGINT UNSIGNED NOT NULL,emoji VARCHAR(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(message_id,user_id,emoji),KEY idx_workchat_reaction_chat(workchat_id,message_id)) ENGINE=InnoDB`).then(()=>db.query('ALTER TABLE workchat_message_reactions MODIFY emoji VARCHAR(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL')),
   ]);
   let workchatDeletionColumnsReady;
   async function ensureWorkchatMessageDeletionColumns(){

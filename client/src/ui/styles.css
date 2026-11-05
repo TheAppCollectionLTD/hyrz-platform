@@ -18048,3 +18048,4 @@ input:focus, select:focus, textarea:focus {
 #root .app .admin-thread-msg.from-me{align-self:flex-end;background:#AD1744;color:#fff}
 #root .app .admin-thread-msg p{margin:4px 0 0;color:inherit}
 #root .app .admin-thread-msg small{opacity:.75;font-size:11px}
+#root:not(#hz) .app .employer-checkouts-panel button.primary[data-testid^="checkout-approve-"]{background:#AD1744!important;color:#fff!important;border:0!important;border-radius:999px!important;padding:8px 18px!important;font-weight:700}

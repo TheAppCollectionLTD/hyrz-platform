@@ -1,0 +1,125 @@
+{
+  "project_name": "hyrz - Flexible Staffing Platform Work Chats",
+  "theme": "Plum and Blush (WhatsApp Groupchat Inspired)",
+  "app_type": "mobile_web_app",
+  "component_path": "client/src/ui/chat/",
+  "styles_path": "client/src/ui/chat/chat.css",
+  "exact_hex_tokens": {
+    "header_bg": "#3B1124",
+    "header_text": "#FFFFFF",
+    "header_subtext": "#E8B3C3",
+    "header_icon": "#E8B3C3",
+    "header_icon_hover_bg": "#4A182F",
+    "wall_bg": "#FAF5EE",
+    "wall_pattern_dot": "#3B11240F",
+    "own_bubble_bg": "#F9E2EC",
+    "own_bubble_text": "#2A0D16",
+    "other_bubble_bg": "#FFFFFF",
+    "other_bubble_text": "#1A1A1A",
+    "read_tick": "#FF5C67",
+    "unread_tick": "#A0989D",
+    "coral_button_bg": "#FF5C67",
+    "coral_button_text": "#FFFFFF",
+    "coral_button_hover": "#E04853",
+    "sender_name_palette": [
+      "#AD1744",
+      "#2B6CB0",
+      "#2F855A",
+      "#B7791F",
+      "#805AD5",
+      "#C53030",
+      "#319795",
+      "#D69E2E"
+    ],
+    "pinned_bar_bg": "#FFFFFFEF",
+    "pinned_bar_border": "#F0E1E7",
+    "pinned_bar_accent": "#3B1124",
+    "reply_quote_own_bg": "#F2CEDB",
+    "reply_quote_own_border": "#FF5C67",
+    "reply_quote_other_bg": "#F5ECEE",
+    "reply_quote_other_border": "#3B1124",
+    "reaction_chip_bg": "#FFFFFF",
+    "reaction_chip_border": "#EADEE3",
+    "reaction_chip_me_bg": "#F9E2EC",
+    "composer_bg": "#F4E8ED",
+    "composer_input_bg": "#FFFFFF",
+    "composer_input_border": "#E2D2D7",
+    "composer_input_focus": "#FF5C67",
+    "chat_list_hover": "#F5EBEF",
+    "chat_list_unread_badge": "#FF5C67",
+    "system_message_bg": "#FFF4DB",
+    "system_message_text": "#5C4A1C",
+    "system_message_border": "#F2E2BE"
+  },
+  "typography": {
+    "font_family_main": "'DM Sans', sans-serif",
+    "font_family_heading": "'Manrope', sans-serif",
+    "chat_title": "700 16px Manrope, sans-serif",
+    "chat_subtext": "500 12.5px 'DM Sans', sans-serif",
+    "sender_name": "700 12.5px Manrope, sans-serif",
+    "message_body": "400 14px/1.42 'DM Sans', sans-serif",
+    "timestamp": "500 10.5px 'DM Sans', sans-serif",
+    "pinned_label": "700 12px Manrope, sans-serif",
+    "date_separator": "700 11px Manrope, uppercase, tracking 0.5px"
+  },
+  "radii": {
+    "bubble_default": "12px",
+    "bubble_tail_corner": "2px",
+    "header": "0px",
+    "pinned_bar": "10px",
+    "composer_input": "22px",
+    "reaction_chip": "14px",
+    "avatar": "50%",
+    "badge": "12px",
+    "action_button": "50%"
+  },
+  "spacing": {
+    "desktop_max_width": "900px",
+    "wall_padding_desktop": "16px 20px",
+    "wall_padding_mobile": "12px 10px",
+    "bubble_padding": "7px 10px 8px 11px",
+    "row_gap": "4px",
+    "grouped_row_gap": "10px"
+  },
+  "shadows": {
+    "bubble": "0 1px 1px rgba(59, 17, 36, 0.08)",
+    "pinned_bar": "0 2px 10px rgba(59, 17, 36, 0.06)",
+    "action_tooltip": "0 4px 16px rgba(59, 17, 36, 0.15)",
+    "picker_modal": "0 18px 48px rgba(59, 17, 36, 0.25)"
+  },
+  "css_specs": {
+    "pure_css_doodle_pattern": "background-color: #FAF5EE; background-image: radial-gradient(#3B11240F 1.3px, transparent 1.5px), radial-gradient(#3B11240F 1.3px, transparent 1.5px); background-size: 24px 24px; background-position: 0 0, 12px 12px;",
+    "bubble_tail_approach": ".tail.theirs .hz-bubble::before { content:''; position:absolute; top:0; left:-7px; width:8px; height:12px; background:inherit; clip-path:polygon(0 0, 100% 0, 100% 100%); } .tail.mine .hz-bubble::before { content:''; position:absolute; top:0; right:-7px; width:8px; height:12px; background:inherit; clip-path:polygon(0 0, 100% 0, 0 100%); }",
+    "pinned_bar_spec": "position:sticky; top:0; z-index:5; background:#FFFFFFEF; backdrop-filter:blur(10px); border-bottom:1px solid #F0E1E7; padding:8px 14px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 10px rgba(59, 17, 36, 0.06);",
+    "chat_list_row_spec": "display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid #F4E8ED; cursor:pointer; transition:background-color 0.15s ease;",
+    "micro_interactions": "Hover actions scale(1.08) on coral buttons; bubble reaction pop animation keyframes hzPop { 0%{transform:scale(0.5);opacity:0} 70%{transform:scale(1.08)} 100%{transform:scale(1);opacity:1} }; smooth message entry slide-up."
+  },
+  "key_functionalities": [
+    "Group workchat room with Deep Plum (#3B1124) header, participant count/avatars, back button, and info trigger",
+    "Collapsible WhatsApp-style pinned messages bar with icon and message preview",
+    "Message bubbles with distinct participant colors on white for incoming messages, soft blush (#F9E2EC) for own messages",
+    "Coral ticks (#FF5C67) for read receipts, timestamps, and styled reply quote blocks inside bubbles",
+    "Emoji reaction chips beneath bubbles with count badges and user toggle",
+    "Long-press/hover action bar (react, reply, pin)",
+    "Date separators and shift reminder system notifications in golden-warm pill cards",
+    "GIF and photo attachments with inline preview and full lightbox",
+    "Composer with attachment tools (emoji, GIF, photo), rounded input, and coral send button with typing indicator",
+    "Chat list view with avatar, title, snippet, time, and unread notification badge"
+  ],
+  "accessibility": {
+    "contrast_verification": "All text colors on white and blush bubbles meet WCAG AA standards (APCA tested). Sender name palette optimized for high contrast on white background.",
+    "testing_attribute": "data-testid present on all key chat elements (e.g. data-testid='chat-header', data-testid='chat-message-bubble', data-testid='chat-composer-send-button', data-testid='pinned-message-bar')"
+  },
+  "instructions_to_main_agent": [
+    "Apply exact hex tokens defined in exact_hex_tokens to client/src/ui/chat/chat.css and styles.css",
+    "Ensure both mobile 390px and desktop 1920px viewports center the chat inside a max-width 900px container or full modal overlay",
+    "Verify testing attributes data-testid on interactive buttons and message elements",
+    "Ensure 1:1 direct chats and group workchats share the Plum and Blush design system for consistency"
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": {
+    "avoid_ai_slop": "Use Plum and Blush palette with WhatsApp chat aesthetics. Never use generic blue gradients.",
+    "data_testid": "All interactive and informational chat elements MUST include data-testid attributes.",
+    "no_universal_transition": "Do not apply transition: all. Specify properties like transition: background-color 0.15s ease, transform 0.15s ease.",
+    "responsive": "Mobile-first responsive design supporting 390px viewport to 1920px desktop view."
+  }
+}

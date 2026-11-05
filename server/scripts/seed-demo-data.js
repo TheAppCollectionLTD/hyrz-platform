@@ -7,6 +7,7 @@ const { calculatePay } = require('../src/pricing');
 
 // Fills the demo worker/employer accounts with realistic shifts, payslips, direct chats, workchats and admin chats.
 const DEMO_PASSWORD = 'HyrzDemoWorker!2026';
+const NEW_PASSWORD = 'HyrzNewUser!2026';
 const EXTRA_WORKERS = [
   { email: 'priya.demo@hyrz.local', first: 'Priya', last: 'Shah', id: 'HYRZDEMOPRIYA2026' },
   { email: 'jamie.demo@hyrz.local', first: 'Jamie', last: 'Okafor', id: 'HYRZDEMOJAMIE2026' },
@@ -127,6 +128,14 @@ async function main() {
     const extra = [];
     for (const w of EXTRA_WORKERS) extra.push(await ensureWorker(conn, w, hash));
     const [P, J, L] = extra, all = [worker, ...extra];
+    for (const [email, role, first, last] of [['new.worker@hyrz.local', 'worker', 'Nina', 'Newman'], ['new.employer@hyrz.local', 'employer', 'Omar', 'Owens']]) {
+      await conn.execute('DELETE FROM worker_profiles WHERE user_id IN (SELECT id FROM users WHERE email=?)', [email]);
+      await conn.execute('DELETE FROM businesses WHERE owner_user_id IN (SELECT id FROM users WHERE email=?)', [email]);
+      await conn.execute('DELETE FROM users WHERE email=?', [email]);
+      const [u] = await conn.execute("INSERT INTO users(email,password_hash,role,first_name,last_name,email_verified_at,status) VALUES(?,?,?,?,?,UTC_TIMESTAMP(),'active')", [email, await bcrypt.hash(NEW_PASSWORD, 12), role, first, last]);
+      if (role === 'worker') await conn.execute('INSERT INTO worker_profiles(user_id) VALUES(?)', [u.insertId]);
+      else await conn.execute("INSERT INTO businesses(owner_user_id,name,company_number,postcode,role_at_company,address_line_1,city) VALUES(?,'Owens Events Ltd','12345678','SW1A 1AA','Director','10 Sample Road','London')", [u.insertId]);
+    }
     await wipe(conn, employer, all, admin, businessId);
 
     await conn.execute("UPDATE users SET phone='07700 900123' WHERE id=? AND phone IS NULL", [employer]);
