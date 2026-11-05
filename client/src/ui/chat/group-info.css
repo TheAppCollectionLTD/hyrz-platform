@@ -1,0 +1,56 @@
+/* WhatsApp-style group info, Midnight & Sunshine. Overlay inside the workchat conversation. */
+#root .app .workchat-conversation,#root .app .worker-workchat-panel{position:relative}
+#root:not(#wa) .app .wa-info{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;background:#F0F4F8;color:#0F1B2D;font-family:'DM Sans',sans-serif;animation:waSlide .22s ease both;border-radius:inherit;overflow:hidden}
+@keyframes waSlide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+#root:not(#wa) .app .wa-info *{-webkit-text-fill-color:currentColor;box-sizing:border-box}
+#root:not(#wa) .app .wa-info-bar{display:flex;align-items:center;gap:14px;min-height:60px;padding:8px 14px;background:#0F1B2D;color:#fff;flex:0 0 auto}
+#root:not(#wa) .app .wa-info-bar strong{font:700 17px 'Outfit',sans-serif;color:#fff}
+#root:not(#wa) .app .wa-icon-btn{width:40px;height:40px;min-height:0;padding:0;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#fff;cursor:pointer;box-shadow:none;transition:background-color .15s}
+#root:not(#wa) .app .wa-icon-btn:hover{background:#1A293E}
+#root:not(#wa) .app .wa-info-scroll{flex:1 1 auto;overflow-y:auto;padding:10px 0 28px;display:flex;flex-direction:column;gap:10px}
+#root:not(#wa) .app .wa-card{background:#fff;padding:16px 20px;box-shadow:0 1px 2px rgba(15,27,45,.06);max-width:760px;width:100%;margin:0 auto}
+@media (min-width:800px){#root:not(#wa) .app .wa-card{border-radius:14px}}
+#root:not(#wa) .app .wa-hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 20px 18px}
+#root:not(#wa) .app .wa-hero h2{margin:14px 0 2px;font:700 24px 'Outfit',sans-serif;color:#0F1B2D}
+#root:not(#wa) .app .wa-hero p{margin:0;color:#5A6B82;font-size:14.5px}
+#root:not(#wa) .app .wa-avatar{flex:0 0 auto;display:grid;place-items:center;border-radius:50%;overflow:hidden;color:#fff;font-family:'Outfit',sans-serif;font-weight:700;background:#0F1B2D}
+#root:not(#wa) .app .wa-avatar img{width:100%;height:100%;object-fit:cover}
+#root:not(#wa) .app .wa-actions{display:flex;justify-content:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+#root:not(#wa) .app .wa-action{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:92px;min-height:0;padding:12px 10px;border:1px solid #E2E8F0;border-radius:14px;background:#fff;color:#2272EB;font:600 13px 'DM Sans',sans-serif;cursor:pointer;box-shadow:none;transition:background-color .15s,transform .12s}
+#root:not(#wa) .app .wa-action span{color:#0F1B2D}
+#root:not(#wa) .app .wa-action:hover{background:#EBF5FF;transform:translateY(-1px)}
+#root:not(#wa) .app .wa-about-text{margin:0 0 4px;font-size:15px;color:#0F1B2D}
+#root:not(#wa) .app .wa-about small{color:#8A99AD;font-size:12.5px}
+#root:not(#wa) .app .wa-row-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;color:#5A6B82;font-size:14px;font-weight:600}
+#root:not(#wa) .app .wa-row-head span{display:flex;align-items:center;gap:6px}
+#root:not(#wa) .app .wa-row-head small{display:flex;align-items:center;gap:2px;color:#8A99AD;font-size:13px}
+#root:not(#wa) .app .wa-row-head input{max-width:200px;padding:7px 12px;border:1px solid #E2E8F0;border-radius:999px;font-size:13px}
+#root:not(#wa) .app .wa-media-strip{display:grid;grid-auto-flow:column;grid-auto-columns:86px;gap:6px;overflow-x:auto;padding-bottom:4px}
+#root:not(#wa) .app .wa-media{width:86px;height:86px;min-height:0;padding:0;border:0;border-radius:10px;overflow:hidden;background:#E2E8F0;cursor:zoom-in;box-shadow:none}
+#root:not(#wa) .app .wa-media img{width:100%;height:100%;object-fit:cover;transition:transform .2s}
+#root:not(#wa) .app .wa-media:hover img{transform:scale(1.06)}
+#root:not(#wa) .app .wa-empty{display:flex;align-items:center;gap:8px;margin:0;color:#8A99AD;font-size:14px}
+#root:not(#wa) .app .wa-link{display:block;margin-top:8px;color:#2272EB;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#root:not(#wa) .app .wa-members{padding-left:0;padding-right:0}
+#root:not(#wa) .app .wa-members .wa-row-head{padding:0 20px}
+#root:not(#wa) .app .wa-member{display:flex;align-items:center;gap:14px;width:100%;padding:10px 20px;border:0;background:transparent;text-align:left;font:inherit;min-height:0;box-shadow:none;transition:background-color .12s}
+#root:not(#wa) .app .wa-member:hover{background:#F7F8FA}
+#root:not(#wa) .app button.wa-member{cursor:pointer}
+#root:not(#wa) .app .wa-member-copy{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px;border-bottom:1px solid #EDF2F7;padding-bottom:10px;margin-bottom:-10px}
+#root:not(#wa) .app .wa-member-copy strong{font-size:15.5px;font-weight:600;color:#0F1B2D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#root:not(#wa) .app .wa-member-copy small{font-size:13px;color:#8A99AD}
+#root:not(#wa) .app .wa-add-icon{width:44px;height:44px;background:#FFC93C!important;color:#0F1B2D}
+#root:not(#wa) .app .wa-add strong{color:#2272EB}
+#root:not(#wa) .app .wa-admin{flex:0 0 auto;padding:3px 9px;border-radius:6px;background:#EBF5FF;color:#1D5EC2;font-size:11.5px;font-weight:700}
+#root:not(#wa) .app .wa-past{margin:12px 20px 0;font-size:12.5px;color:#8A99AD}
+#root:not(#wa) .app .wa-danger{display:flex;flex-direction:column;padding:6px 0}
+#root:not(#wa) .app .wa-danger button{display:flex;align-items:center;gap:16px;width:100%;min-height:0;padding:14px 22px;border:0;background:transparent;color:#0F1B2D;font:600 15px 'DM Sans',sans-serif;text-align:left;cursor:pointer;box-shadow:none}
+#root:not(#wa) .app .wa-danger button:hover:not(:disabled){background:#F7F8FA}
+#root:not(#wa) .app .wa-danger button.red{color:#C5221F}
+#root:not(#wa) .app .wa-danger button:disabled{opacity:.55;cursor:not-allowed}
+#root:not(#wa) .app .wa-lightbox{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:rgba(15,27,45,.92);cursor:zoom-out}
+#root:not(#wa) .app .wa-lightbox img{max-width:92vw;max-height:88vh;border-radius:12px}
+html body #root:not(#wa) .app .wa-info header.wa-info-bar{background:#0F1B2D!important;color:#fff!important;justify-content:flex-start!important;border:0!important;margin:0!important;box-shadow:none!important;position:static!important;width:auto!important;max-width:none!important}
+html body #root:not(#wa) .app .wa-info header.wa-info-bar strong{color:#fff!important;-webkit-text-fill-color:#fff!important}
+html body #root:not(#wa) .app .wa-info header.wa-info-bar .wa-icon-btn{background:transparent!important;color:#fff!important;border:0!important}
+html body #root:not(#wa) .app .wa-info header.wa-info-bar .wa-icon-btn:hover{background:#1A293E!important}

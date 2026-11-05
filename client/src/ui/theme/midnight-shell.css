@@ -131,3 +131,20 @@ html body #root:not(#hz) .app .hz-room.hz-room .hz-send{background:var(--mn-sun)
 #root:not(#mn) .app .section-tile :is(.section-tile-label,.section-tile-desc){display:block!important;width:100%!important;text-align:left!important}
 #root:not(#mn) .app .worker-header-profile-picture{display:grid!important;place-items:center!important;padding:0!important}
 #root:not(#mn) .app .worker-header-profile-picture span{line-height:1!important;display:block!important}
+
+/* Admin console polish */
+#root:not(#mn) .app .admin-console nav.admin-tabs{background:transparent!important;border:0!important;padding:0!important;gap:8px!important;flex-wrap:wrap!important}
+#root:not(#mn) .app .admin-console nav.admin-tabs button{border-radius:999px!important;border:1px solid var(--mn-border)!important;background:#fff!important;color:var(--mn-ink-2)!important;-webkit-text-fill-color:currentColor!important;font:700 12.5px 'DM Sans',sans-serif!important;letter-spacing:.04em!important;box-shadow:none!important}
+#root:not(#mn) .app .admin-console nav.admin-tabs button:is(.active,.selected){background:var(--mn-navy)!important;color:#fff!important;border-color:var(--mn-navy)!important}
+#root:not(#mn) .app .admin-console :is(.stat,.admin-stat,[class*="report"]) strong{color:var(--mn-ink)!important;-webkit-text-fill-color:currentColor!important}
+#root:not(#mn) .app .admin-console :is(.stat,.admin-stat,[class*="report"]) :is(small,span,label){color:var(--mn-ink-2)!important;-webkit-text-fill-color:currentColor!important}
+#root:not(#mn) .app .admin-console :is(h2,h3,h4,label){color:var(--mn-ink)!important}
+#root:not(#mn) .app .admin-console .admin-inbox-open-message{background:#EBF5FF!important;color:var(--mn-ink)!important;border-left:4px solid var(--mn-blue)!important}
+#root:not(#mn) .app .admin-console .admin-inbox-open-message *{color:var(--mn-ink)!important;-webkit-text-fill-color:currentColor!important}
+#root:not(#mn) .app .admin-console .admin-inbox-unread-count{background:var(--mn-sun)!important;color:var(--mn-navy)!important;-webkit-text-fill-color:var(--mn-navy)!important}
+#root:not(#mn) .app .favourite-worker-info{color:var(--mn-ink)!important}
+#root:not(#mn) .app .instant-pay-badge.unavailable{background:#F2F5FA!important;color:var(--mn-ink-2)!important;border-color:var(--mn-border)!important}
+#root:not(#hz) .app .workchat-message-row.mine .workchat-quoted-message small{color:var(--mn-blue-2)!important}
+#root:not(#mn) .app :is(.download-app-copy h2,.hyrz-footer-column h3){color:#fff!important;-webkit-text-fill-color:#fff!important}
+#root:not(#mn) .app button.public-about-trigger.active{background:var(--mn-navy)!important;color:#fff!important}
+@media (min-width:1024px){#root:not(#mn) .app:is(.worker,.employer) .workchat-conversation{left:var(--mn-side)!important;right:0!important;width:auto!important;max-width:none!important}}

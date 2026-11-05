@@ -1,6 +1,6 @@
 export const QUICK_REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 
-const PALETTE = ['#AD1744', '#2F6F8F', '#7A4FA0', '#2E8B6E', '#B5651D', '#5B6BC0', '#8E3B5E', '#3F7D3A'];
+const PALETTE = ['#2272EB', '#0E9F6E', '#B45309', '#7C3AED', '#0891B2', '#DB2777', '#1A293E', '#4D7C0F'];
 export const avatarColor = id => PALETTE[Math.abs(Number(id) || 0) % PALETTE.length];
 export const initials = name => String(name || '?').trim().split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('') || '?';
 export const fullName = (first, last, fallback) => [first, last].filter(Boolean).join(' ') || fallback;
