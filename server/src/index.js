@@ -1118,6 +1118,7 @@ app.post('/api/applications/:id/cancel',auth,allow('worker'),asyncRoute(async(re
  const [rows]=await db.execute("SELECT a.id,a.status,a.shift_id,s.starts_at FROM applications a JOIN shifts s ON s.id=a.shift_id WHERE a.id=? AND a.worker_id=? AND a.status IN ('pending','approved')",[req.params.id,req.user.id]);
  if(!rows.length)return res.status(404).json({error:'Active application not found'});
  const a=rows[0],timeUntilStart=new Date(a.starts_at).getTime()-Date.now(),within24Hours=timeUntilStart>=0&&timeUntilStart<=24*60*60*1000;
+ if(a.status==='approved'&&timeUntilStart<0)return res.status(409).json({error:'This shift has already started, so it can no longer be cancelled. Please message the employer.'});
  if(a.status==='approved'&&within24Hours&&req.body?.confirmStrike!==true)return res.status(409).json({error:'Cancelling an approved shift within 24 hours will give you a strike. Do you want to continue?',strike:true});
  await db.execute("UPDATE applications SET status='withdrawn' WHERE id=? AND worker_id=?",[a.id,req.user.id]);
  if(a.status==='approved'&&within24Hours){
@@ -1265,18 +1266,25 @@ app.post('/api/checkouts/:id/counter-offer',auth,allow('employer'),requireVerifi
 app.patch('/api/checkouts/:id/review',auth,requireVerification,asyncRoute(async(req,res)=>{
  if(!['employer','admin'].includes(req.user.role))return res.status(403).json({error:'Insufficient permissions'});
  const status=req.body.status;if(!['approved','rejected','disputed'].includes(status))return res.status(400).json({error:'Invalid status'});
- let query='SELECT c.id,c.shift_id FROM checkouts c JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id WHERE c.id=?';
+ let query='SELECT c.id,c.shift_id,c.status FROM checkouts c JOIN shifts s ON s.id=c.shift_id JOIN businesses b ON b.id=s.business_id WHERE c.id=?';
  const args=[req.params.id];
  if(req.user.role==='employer'){query+=' AND b.owner_user_id=?';args.push(req.user.id);}
  const [rows]=await db.execute(query,args);if(!rows.length)return res.status(404).json({error:'Checkout not found'});
+ if(!['submitted','disputed'].includes(rows[0].status))return res.status(409).json({error:'Only submitted or disputed checkouts can be reviewed. This one is '+rows[0].status+'.'});
  await db.execute('UPDATE checkouts SET status=?,reviewed_by=?,reviewed_at=NOW() WHERE id=?',[status,req.user.id,req.params.id]);
  await audit(req,'checkout.'+status,'checkout',req.params.id);
  if(status==='approved'){
   const [business]=await db.execute('SELECT business_id FROM shifts WHERE id=?',[rows[0].shift_id]);
   const [c]=await db.execute('SELECT * FROM checkouts WHERE id=?',[req.params.id]);
   const due=new Date(Date.now()+14*86400000).toISOString().slice(0,10);
+  let gross=Number(c[0].gross_pay),fee=Number(c[0].platform_fee);
+  if(c[0].counter_gross_pay!=null){
+   const [[sh]]=await db.execute('SELECT hourly_pay FROM shifts WHERE id=?',[c[0].shift_id]);
+   const p=calculatePay({hourlyPay:sh.hourly_pay,startsAt:c[0].counter_start||c[0].actual_start,endsAt:c[0].counter_end||c[0].actual_end,breakMinutes:c[0].counter_break_minutes??c[0].break_minutes??0});
+   gross=Number(c[0].counter_gross_pay);fee=p.platformFee;
+  }
   await db.execute("INSERT IGNORE INTO invoices(business_id,checkout_id,subtotal,platform_fee,total,due_at,status) VALUES(?,?,?,?,?,?,'issued')",
-  [business[0].business_id, c[0].id,c[0].gross_pay,c[0].platform_fee,Number(c[0].gross_pay)+Number(c[0].platform_fee),due]);
+  [business[0].business_id,c[0].id,gross.toFixed(2),fee.toFixed(2),(gross+fee).toFixed(2),due]);
  }
  res.json({ok:true,status});
 }));

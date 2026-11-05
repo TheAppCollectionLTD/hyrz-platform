@@ -166,3 +166,45 @@
 #root:not(#hz) .app .workchat-conversation-header .workchat-conversation-title-copy{display:block!important;min-width:0!important;overflow:hidden!important}
 #root:not(#hz) .app .workchat-conversation-header .workchat-conversation-title{display:flex!important;align-items:center!important;gap:10px!important;text-align:left!important}
 @media (max-width:640px){#root:not(#hz) .app .workchat-conversation-header .workchat-conversation-title-copy h3{font-size:15px!important}}
+
+/* Direct chat plum header (beat chat.css high-specificity rules) */
+html body #root:not(#hz) .app .hz-room.hz-room{--hz-head:#3B1124!important;--hz-line:#3B1124!important;--hz-read:#FF5C67!important;--hz-out:#F9E2EC!important;--hz-wall:#FAF5EE!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-head{background:#3B1124!important;border-bottom-color:#3B1124!important;color:#fff!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-head .hz-title strong{color:#fff!important;-webkit-text-fill-color:#fff!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-head .hz-title small{color:#E8B3C3!important;-webkit-text-fill-color:#E8B3C3!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-head .hz-title small.typing,html body #root:not(#hz) .app .hz-room.hz-room .hz-head .hz-title small.online{color:#FFC2CB!important;-webkit-text-fill-color:#FFC2CB!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-head .hz-icon{color:#E8B3C3!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-head .hz-icon:hover{background:#4A182F!important;color:#fff!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-head-search{background:#4A182F!important;color:#E8B3C3!important}
+html body #root:not(#hz) .app .hz-room.hz-room .hz-head-search input{color:#fff!important;-webkit-text-fill-color:#fff!important}
+
+/* Workchat header layout: title flexes, icons stay on screen */
+#root:not(#hz) .app .workchat-conversation-header{display:flex!important;flex-wrap:nowrap!important;position:relative;overflow:visible!important}
+#root:not(#hz) .app .workchat-conversation-header>.workchat-conversation-title{flex:1 1 0!important;min-width:0!important;width:auto!important;max-width:none!important}
+#root:not(#hz) .app .workchat-conversation-header>.workchat-conversation-back,#root:not(#hz) .app .workchat-conversation-header .workchat-header-icon,#root:not(#hz) .app .workchat-conversation-actions{flex:0 0 auto!important}
+#root:not(#hz) .app .workchat-conversation-actions{display:flex!important;gap:2px!important;align-items:center}
+#root:not(#hz) .app .workchat-settings-button svg circle{fill:currentColor!important}
+#root:not(#hz) .app .workchat-conversation-header .workchat-header-icon{width:40px!important;height:40px!important;min-height:0!important;padding:0!important;display:grid!important;place-items:center!important}
+@media (max-width:640px){
+  #root:not(#hz) .app .workchat-conversation-header{padding:8px 6px!important;gap:4px!important}
+  #root:not(#hz) .app .workchat-conversation-header .workchat-profile-avatar{width:38px!important;height:38px!important;flex:0 0 38px!important}
+  #root:not(#hz) .app .workchat-conversation-header .workchat-header-icon{width:36px!important;height:36px!important}
+}
+
+/* Own bubbles: ticks inside flow, reply bubble full width */
+#root:not(#hz) .app .workchat-message-row.mine .workchat-message-bubble,#root:not(#hz) .app .workchat-message-row.mine .workchat-message-meta{width:100%!important;box-sizing:border-box}
+#root:not(#hz) .app .workchat-message-row .workchat-message-bubble{width:100%!important;box-sizing:border-box}
+#root:not(#hz) .app .workchat-message-row.mine .workchat-read-receipt{order:2;align-self:stretch;text-align:right;background:var(--wc-mine)!important;margin:0!important;padding:0 10px 6px!important;border-radius:0 0 12px 12px!important;line-height:1}
+#root:not(#hz) .app .workchat-message-row.mine .workchat-read-receipt~.workchat-message-bubble,#root:not(#hz) .app .workchat-message-row.mine .workchat-message-bubble:has(~.workchat-read-receipt){border-radius:0!important;padding-bottom:2px!important}
+
+/* Inbox lists + overlay */
+#root:not(#hz) .app .workchat-wa-avatar span,#root:not(#hz) .app .workchat-wa-avatar{color:#fff!important;-webkit-text-fill-color:#fff!important}
+#root:not(#hz) .app .inbox-chat-overlay .admin-thread-history,#root:not(#hz) .app .inbox-chat-overlay .direct-message-history{background-color:var(--wc-wall)!important}
+
+/* Verification status pills */
+#root:not(#hz) .app .onboarding-panel .verification-status{background:#F4EEF0!important;color:#3B1124!important;-webkit-text-fill-color:#3B1124!important;border:1px solid #E6D8DD!important}
+#root:not(#hz) .app .onboarding-panel .verification-status.verified{background:#E6F4EA!important;color:#1E6B3A!important;-webkit-text-fill-color:#1E6B3A!important;border-color:#C6E6CF!important}
+#root:not(#hz) .app .onboarding-panel .verification-status.pending,#root:not(#hz) .app .onboarding-panel .verification-status.manual_review{background:#FFF4DB!important;color:#7A5A12!important;-webkit-text-fill-color:#7A5A12!important;border-color:#F2E2BE!important}
+#root:not(#hz) .app .onboarding-panel .verification-status.rejected{background:#FDECEE!important;color:#9B1C2C!important;-webkit-text-fill-color:#9B1C2C!important;border-color:#F6C9CF!important}
+#root:not(#hz) .app .inbox-category-tabs button.active{background:#3B1124!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:#3B1124!important}
+#root:not(#hz) .app .workchat-conversation-header>.workchat-conversation-actions{width:auto!important;min-width:0!important;flex:0 0 auto!important;margin-left:auto!important;justify-content:flex-end!important}

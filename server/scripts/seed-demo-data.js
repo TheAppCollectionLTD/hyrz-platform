@@ -40,6 +40,8 @@ async function ensureWorker(conn, w, hash) {
 async function wipe(conn, employer, workers, admin, businessId) {
   const ids = workers.join(',');
   await conn.query(`DELETE i FROM invoices i JOIN checkouts c ON c.id=i.checkout_id JOIN shifts s ON s.id=c.shift_id WHERE s.business_id=${businessId}`);
+  await conn.query(`DELETE d FROM disputes d JOIN checkouts c ON c.id=d.checkout_id JOIN shifts s ON s.id=c.shift_id WHERE s.business_id=${businessId}`).catch(() => {});
+  await conn.query(`DELETE FROM worker_strikes WHERE worker_id IN (${ids}) OR shift_id IN (SELECT id FROM shifts WHERE business_id=${businessId})`).catch(() => {});
   await conn.query(`DELETE FROM ratings WHERE shift_id IN (SELECT id FROM shifts WHERE business_id=${businessId})`);
   await conn.query(`DELETE FROM checkouts WHERE shift_id IN (SELECT id FROM shifts WHERE business_id=${businessId})`);
   await conn.query(`DELETE FROM shift_chat_reminders WHERE application_id IN (SELECT a.id FROM applications a JOIN shifts s ON s.id=a.shift_id WHERE s.business_id=${businessId})`).catch(() => {});
@@ -134,7 +136,7 @@ async function main() {
       await conn.execute('DELETE FROM users WHERE email=?', [email]);
       const [u] = await conn.execute("INSERT INTO users(email,password_hash,role,first_name,last_name,email_verified_at,status) VALUES(?,?,?,?,?,UTC_TIMESTAMP(),'active')", [email, await bcrypt.hash(NEW_PASSWORD, 12), role, first, last]);
       if (role === 'worker') await conn.execute('INSERT INTO worker_profiles(user_id) VALUES(?)', [u.insertId]);
-      else await conn.execute("INSERT INTO businesses(owner_user_id,name,company_number,postcode,role_at_company,address_line_1,city) VALUES(?,'Owens Events Ltd','12345678','SW1A 1AA','Director','10 Sample Road','London')", [u.insertId]);
+      else await conn.execute("INSERT INTO businesses(owner_user_id,name,company_number,postcode,role_at_company,address_line_1,city,company_check_reason) VALUES(?,'Owens Events Ltd','12345678','SW1A 1AA','Director','10 Sample Road','London','Automatic Companies House checks are not set up yet. An admin will review your company.')", [u.insertId]);
     }
     await wipe(conn, employer, all, admin, businessId);
 

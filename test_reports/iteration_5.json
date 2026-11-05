@@ -1,0 +1,77 @@
+{
+  "summary": "Iteration 5: I tested the backend and the frontend. Unit tests (npm test) pass 15/15. New pytest suite: 23 of 26 pass. The failures are 1 HIGH payments bug, 1 seed-data gap and 1 legacy data row. The verification gate works end to end: unverified users get 403 VERIFICATION_REQUIRED; Stripe Identity returns 503 with a friendly message and the webhook returns 503 'not configured' (status shows not_started); right-to-work validation works and the status moves to pending; registering returns 503 'verification email could not be sent' and login is then refused with EMAIL_NOT_VERIFIED; the admin queue shows the share code and the GOV.UK link; admin approval unlocks the account. The core payments and fees maths is correct. Workchat redesign works on desktop: plum header, blush own bubbles, distinct reactions, reply, send and GIF all work. Issues found: (1) the mobile header hides the group name; (2) direct chats still have a white header, not plum; (3) Pin permission differs between UI and API; (4) the invoice ignores the employer's counter-offer. I also found and fixed a seeder crash. The seeder was re-run at the end and the demo data is restored.",
+  "payments_fees_pass_fail_table": [
+    {"rule": "Fee £2/h when rate <= £20 (all demo checkouts, e.g. £13.50 x 4h = £8.00)", "result": "PASS"},
+    {"rule": "Fee 10%/h when rate > £20", "result": "PASS in unit tests; legacy test checkout #1 (test.worker, £22.50 x 9.5h) stores a £20.25 fee where it should be £21.38. This is old seed data, not the current code"},
+    {"rule": "Employer total / invoice total = gross + fee (all invoices)", "result": "PASS"},
+    {"rule": "Checkout approval creates an 'issued' invoice due today+14 (Late Bar checkout: £54 + £8 = £62, due 2026-11-19)", "result": "PASS"},
+    {"rule": "Counter-offer validation (comment >= 3 chars) and counterGrossPay (19:00-22:00 = £40.50, status disputed)", "result": "PASS"},
+    {"rule": "Invoice after a counter-offer bills the counter amount", "result": "FAIL: invoice bills the worker's original £54.00 + £8.00 fee, while the payslip pays the counter £40.50"},
+    {"rule": "Employer cancels shift <24h: 409 with fee preview (Cocktail Bar Host 13.75 x 4.75h x 50% = £32.66 per worker)", "result": "PASS"},
+    {"rule": "Employer removes approved worker <24h: 409 first, then confirmCancellationFee charges £32.66 (saved on the application)", "result": "PASS"},
+    {"rule": "Employer cancels shift >24h: no fee", "result": "PASS"},
+    {"rule": "Worker cancels approved shift <24h: 409, then confirmStrike records a strike", "result": "PASS"},
+    {"rule": "No-show rejected before shift end (409); allowed after end, records a strike", "result": "PASS"},
+    {"rule": "Payment preferences validation (£1-£1,000,000; cadence instant/3_days/7_days/14_days); saved values persist", "result": "PASS"},
+    {"rule": "Admin invoices: list, status change, paid->void blocked (400), reminder 503 graceful, reminder on paid 400", "result": "PASS"},
+    {"rule": "Admin financial reports (tier 1): invoicedRevenue = SUM(platform_fee)", "result": "PASS"},
+    {"rule": "Admin payroll summary", "result": "PASS"},
+    {"rule": "Pay settings validation (bad code / Scottish S code / bad NI category / not confirmed all return 400)", "result": "PASS"},
+    {"rule": "PAYE payslip maths (1257L weekly non-cumulative, NI 8% over £242/week): tax/NI/net recomputed independently", "result": "PASS"},
+    {"rule": "Contractor payslips: net = gross, no deductions", "result": "PASS"}
+  ],
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "PATCH /api/checkouts/:id/review (approved) after POST /api/checkouts/:id/counter-offer", "issue": "The invoice uses c.gross_pay and c.platform_fee and ignores counter_gross_pay. The employer is billed £54 + £8 for a shift the payslip pays as £40.50 (payroll-routes uses COALESCE(counter_gross_pay, gross_pay)). The fee is also not recalculated for the counter hours. Fix: in index.js ~line 1278, use COALESCE(counter_gross_pay, gross_pay) for the subtotal and recalculate the fee with calculatePay on the counter times. Decide whether approving a disputed checkout accepts the counter.", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "POST /api/workchats/:id/messages/:mid/pin", "issue": "The API only lets workchat admins pin (canManageWorkchat), but the UI shows 'Pin message' to every sender on their own messages. A worker clicking it gets a silent 403 'Only workchat admins can pin messages.' The reverse also happens: the employer (workchat owner) is not offered 'Pin' on other people's messages, because the UI checks workchatParticipants is_admin and not ownership. Align the UI condition with canManageWorkchat."},
+      {"endpoint": "PATCH /api/checkouts/:id/review", "issue": "There is no check on the current status. A checkout that is open, rejected or already approved can be re-reviewed. Rejecting after approval leaves the issued invoice in place."},
+      {"endpoint": "POST /api/applications/:id/cancel", "issue": "within24Hours requires timeUntilStart >= 0. A worker who cancels an approved shift that has already started (or ended) gets no strike. Employer DELETE /api/shifts/:id treats past shifts as within 24h and charges the fee."},
+      {"endpoint": "scripts/seed-demo-data.js", "issue": "new.employer@hyrz.local is seeded with company_check_reason NULL, so admin-company-check-<id> never renders for the seeded account (it only appears for real sign-ups, where runCompanyCheck sets 'Automatic Companies House checks are not set up yet...'). Set a reason in the seeder."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Workchat header at 390x844", "issue": "The group name H3 and the '5 members' line have width 0, so they are invisible. The search and settings icons sit at x=383-452 on a 390px screen, which is off-screen. Only the back button and avatar show. Make the title copy flex:1 with min-width:0 and keep the header icons inside the viewport (e.g. reduce the header gap or let the icons shrink).", "selector": ".workchat-conversation-header h3", "priority": "HIGH"},
+      {"component": "Direct chats (Alex <-> Sam), both roles", "issue": "The header is still white (#fff) with a #111 title. The plum theme is not applied. RCA: chat.css .hz-room{--hz-head:#FFFFFF} wins on load order, and chat.css:174/176 force the title and subtitle colours with 'html body #root .app .hz-room.hz-room ... !important'. Fix: in workchat-theme.css, use the same high-specificity selector with !important for --hz-head, the .hz-title strong/small colours and the icons.", "selector": ".hz-room .hz-head", "priority": "HIGH"},
+      {"component": "Workchat settings (three-dots) icon in header", "issue": "The circles are filled rgb(41,41,41) on the plum header, so the icon is almost invisible.", "selector": ".workchat-settings-button", "priority": "MEDIUM"},
+      {"component": "Worker verification panel status badges", "issue": "On the worker page, the Verified / Not started / Pending pills render as dark pills with dark text and are unreadable. The employer page shows the same badges correctly (light background).", "selector": ".verification-status", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [
+      {"flow": "Worker pins own workchat message", "issue": "The Pin button is shown, the API returns 403 and no error is visible to the user.", "affected_selectors": [".workchat-message-actions button"]}
+    ],
+    "design_issues": [
+      {"screen": "Employer admin thread overlay", "issues": ["Plum header, readable bubbles and staying open after reply all PASS, but the message history area has a black (#111) background inside the cream overlay."]},
+      {"screen": "Workchat own bubbles", "issues": ["Read-receipt ticks sit outside the bubble and overlap the reaction chip.", "For reply bubbles, the text line has a narrower blush background than the quote above it, so the bubble looks split."]},
+      {"screen": "Inbox lists", "issues": ["Worker list avatars are dark plum circles with dark initials (unreadable).", "The active tab uses black text on crimson.", "There are two sign-out icons in the Inbox header."]},
+      {"screen": "Verification RTW form", "issues": ["The date of birth field uses the browser's native date picker, not the app's calendar component."]},
+      {"screen": "Worker dashboard", "issues": ["The 'Dashboard sections' cards (Checkouts / Invoices / Finances) are about 420px tall and empty except for a label. They look like missing images."]}
+    ]
+  },
+  "passed_frontend": ["Verification panel (worker + employer): identity button disabled with the 'being switched on' note; invalid share code shows rtw-error; valid code shows rtw-submitted and the right-to-work row becomes Pending; employer company-step shown", "Admin queue: admin-rtw-code-<id> shows share code W1234567A, date of birth and the GOV.UK link", "Workchat desktop: plum header with white name, cream wall, white other bubbles with coloured names and avatars, blush own bubbles on the right, coral round send, one-row composer (emoji, GIF, mic, attach, textarea, send) with no duplicates, GIF renders, worker list preview says 'GIF'", "Reactions: two different emojis show as separate chips; toggling one keeps the other", "Reply plus send text works for worker and employer; employer pin/unpin of own message works", "Employer checkout Approve button is styled (crimson pill)", "Worker admin thread shows its subject, not the admin email"],
+  "not_retested": ["Completed shift cards without a Cancel button (could not reach that tab in the time available)", "Payslip PDF download in UI (passed in iteration 4)"],
+  "test_report_links": ["/app/backend/tests/test_hyrz_iter5_verification_payments.py", "/app/test_reports/pytest/pytest_iter5.xml"],
+  "action_items": [
+    "HIGH: make the invoice use the counter-offer amount (counter_gross_pay plus a recalculated fee) when a disputed checkout is approved",
+    "HIGH: fix the workchat header on mobile (390px) so the group name and members line are visible and the icons stay on screen",
+    "HIGH: apply the plum header to direct chats (fix the CSS specificity against chat.css !important rules)",
+    "Align Pin permissions between UI and API (worker shown Pin and gets 403; employer owner not offered Pin on others' messages); show the API error",
+    "Make the header settings icon visible on plum; fix the worker verification badges' contrast",
+    "Add a status guard to checkout review; fix worker cancel after shift start (no strike)",
+    "Seed company_check_reason for new.employer so admin-company-check renders"
+  ],
+  "critical_code_review_comments": [
+    "index.js is 1469 lines and App.jsx 1646 lines with very long single-line JSX; split them into modules",
+    "The worker_strikes and shift_confirmation_invites CREATE TABLE statements are repeated inside request handlers; move them to startup migrations",
+    "Clock-in, clock-out and submit routes skip requireVerification (they still need an approved application, so low risk)",
+    "Registration commits the user before the email send; on 503 the account exists and the user must use resend-verification. That works, but tell the user in the UI"
+  ],
+  "updated_files": ["/app/server/scripts/seed-demo-data.js (wipe() now deletes disputes and worker_strikes for the demo business/workers. Before this, the seeder crashed with an FK error on disputes_ibfk_1 after any counter-offer, and strikes piled up across runs)", "/app/backend/tests/test_hyrz_iter5_verification_payments.py (new)"],
+  "success_rate": {"backend": "88% (23/26 pytest; 15/15 unit)", "frontend": "~75%"},
+  "seed_data_creation": "No new seed data. A TEST_ user registered during testing was deleted by id. The seeder was re-run at the end, and employer payment preferences were restored to their defaults.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Run the pytest suite serially: cd /app/backend && python -m pytest tests/test_hyrz_iter5_verification_payments.py -n 0. It changes demo data, so re-run the seeder afterwards. Token login in Playwright: POST /api/auth/login, then localStorage 'hyrz_token'. Workchat actions appear when you click .workchat-message-bubble; reaction buttons have aria-label 'React <emoji>' (👍❤️😂😮😢👏🎉🙏). Employer = Sam Demo; worker = Alex Demo.",
+  "rca of the issue": "Direct chat white header: chat.css .hz-room sets --hz-head:#FFFFFF, and its 'html body #root .app .hz-room.hz-room' !important colour rules beat the theme's plain '.hz-room .hz-head' rules. Mobile workchat header: the title copy shrinks to 0 width because the fixed-size header icons overflow the 390px row. Seeder crash: wipe() deleted checkouts without first deleting the disputes rows that counter-offers create (FK)."
+}
