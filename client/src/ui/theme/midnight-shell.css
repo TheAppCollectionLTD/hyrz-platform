@@ -148,3 +148,25 @@ html body #root:not(#hz) .app .hz-room.hz-room .hz-send{background:var(--mn-sun)
 #root:not(#mn) .app :is(.download-app-copy h2,.hyrz-footer-column h3){color:#fff!important;-webkit-text-fill-color:#fff!important}
 #root:not(#mn) .app button.public-about-trigger.active{background:var(--mn-navy)!important;color:#fff!important}
 @media (min-width:1024px){#root:not(#mn) .app:is(.worker,.employer) .workchat-conversation{left:var(--mn-side)!important;right:0!important;width:auto!important;max-width:none!important}}
+/* Jobs mobile today card, timetable, landing tabs */
+#root:not(#mn) .app .worker-todays-shift-wrap{display:block!important;position:relative!important;overflow:visible!important}
+#root:not(#mn) .app .worker-todays-shift-wrap>.worker-todays-shift-card{position:relative!important;inset:auto!important;transform:none!important}
+#root:not(#mn) .app .timetable-day-pad{display:block;visibility:hidden}
+#root:not(#mn) .app .timetable-day.has-shift{background:#DCEBFF!important;border-color:#BFDBFE!important;color:var(--mn-ink)!important}
+#root:not(#mn) .app .timetable-day.has-shift *{color:var(--mn-ink)!important;-webkit-text-fill-color:currentColor!important}
+#root:not(#mn) .app .timetable-day.selected{background:var(--mn-navy)!important;border-color:var(--mn-navy)!important}
+#root:not(#mn) .app .timetable-day.selected *{color:#fff!important;-webkit-text-fill-color:#fff!important}
+#root:not(#mn) .app .timetable-day.selected.has-shift span{color:var(--mn-sun)!important;-webkit-text-fill-color:var(--mn-sun)!important}
+#root:not(#mn) .app .timetable-legend-orange{background:#DCEBFF!important;border-color:#BFDBFE!important}
+.public-intro-tabs button.active,.public-intro-dots button.active,.app-visual-tabbar span.active{background:#0F1B2D!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border-color:#0F1B2D!important}
+#root:not(#mn) .app :is(.timetable-weekdays,.timetable-days){grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:5px!important;width:100%!important;min-width:0!important}
+#root:not(#mn) .app .timetable-grid{overflow:visible!important;min-width:0!important;width:100%!important}
+#root:not(#mn) .app .timetable-day{min-width:0!important;width:auto!important;padding:6px 2px!important}
+@media (max-width:640px){#root:not(#mn) .app .timetable-day span{font-size:9px!important}}
+#root:not(#mn) .app .timetable-day:not(.selected):is(:hover,:focus-visible){background:#EBF5FF!important;border-color:var(--mn-sky)!important}
+#root:not(#mn) .app .timetable-day:not(.selected):is(:hover,:focus-visible) *{color:var(--mn-ink)!important;-webkit-text-fill-color:currentColor!important}
+#root:not(#mn) .app .rolling-calendar-heading :is(strong,h3,h4,span:not(button span)){color:#fff!important;-webkit-text-fill-color:#fff!important}
+#root:not(#mn) .app .cluster-current-shift-heading{background:#EBF5FF!important;border-left-color:var(--mn-blue)!important;color:var(--mn-ink)!important}
+#root:not(#mn) .app .cluster-current-shift-heading *{color:var(--mn-ink)!important}
+#root:not(#mn) .app .cluster-current-shift-heading .eyebrow{color:var(--mn-blue)!important}
+#root:not(#mn) .app .shift-cluster-count *{color:var(--mn-ink-2)!important}

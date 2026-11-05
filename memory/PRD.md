@@ -41,3 +41,10 @@ Pull repo, then: (1) make chat nicer & functional with GIFs/emoji, easy to use; 
 - P0 Keys from user: Stripe (Identity), Companies House, Resend (+ verified domain). Stripe webhook endpoint: <APP_URL>/api/stripe/identity-webhook (events identity.verification_session.*)
 - P1 Real money movement (collect employer payments / pay workers) — not built
 - P2 HMRC RTI filing (user skipped); two sign-out icons in inbox header; native date picker in RTW form; empty dashboard section cards
+
+## 2026-11-05 Midnight & Sunshine redesign + desktop side menu + WhatsApp group info (iterations 7-8)
+- Palette migrated via scripts/recolor-midnight.js (crimson/plum -> navy #0F1B2D / blue #2272EB / sunshine #FFC93C / off-white #F7F8FA) across styles.css, chat css, payroll, verification; payslip PDF navy.
+- client/src/ui/theme/midnight-shell.css (imported last in main.jsx): Outfit headings, desktop >=1024px fixed left side menu (bottom navs restyled, 'hyrz.' brand), wide main 1320px, dashboard tiles (dashboard/SectionTile.jsx with lucide icons), pill tabs, admin console polish, timetable fixes (weekday alignment padding in App.jsx), landing fixes.
+- WhatsApp-style group info: client/src/ui/chat/WorkchatGroupInfo.jsx + group-info.css replacing old tabbed info (worker + employer). Opens from header title or ⋮ > Group info.
+## Backlog
+- P1 desktop split-view inbox (list + chat side by side); remaining minor contrast items from iteration_8; two sign-out icons
