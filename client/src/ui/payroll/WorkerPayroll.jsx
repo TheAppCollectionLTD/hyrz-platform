@@ -6,7 +6,6 @@ import './payroll.css';
 
 const money = n => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(Number(n || 0));
 const day = s => new Date(s + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-const today = () => new Date().toISOString().slice(0, 10);
 
 function Payslip({ p, worker }) {
   const [open, setOpen] = useState(false);
@@ -16,7 +15,7 @@ function Payslip({ p, worker }) {
       <span className={`payslip-type ${p.payType}`}>{p.payType === 'paye' ? 'PAYE' : 'Contractor'}</span>
       <strong>{money(p.net)}</strong>
     </button>
-    {p.payDate && <small className="payslip-paydate" data-testid="payslip-pay-date">{p.payDate <= today() ? 'Paid' : 'Pay day'} {new Date(p.payDate + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })} · one week in arrears</small>}
+    {p.payDate && <small className="payslip-paydate" data-testid="payslip-pay-date">Pay date {new Date(p.payDate + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })} · one week in arrears</small>}
     {open && <div className="payslip-body">
       {p.lines.map(l => <div className="payslip-line" key={l.checkoutId}><span>{day(l.date)} · {l.shiftTitle} · {l.businessName}</span><b>{money(l.gross)}</b></div>)}
       <div className="payslip-sum"><span>Gross pay</span><b>{money(p.gross)}</b></div>

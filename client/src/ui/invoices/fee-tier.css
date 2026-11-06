@@ -17,3 +17,5 @@
 .paye-pay-badge{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:#EBF5FF;color:#2272EB;font-size:12px;font-weight:700}
 .paye-application-note p{color:#24324a;line-height:1.55}
 @media(max-width:700px){.fee-tier-meters{grid-template-columns:1fr}}
+html body #root .app .fee-tier-card h3,html body #root .app .fee-tier-card .fee-tier-credits>strong{color:#fff!important}
+html body #root .app .fee-tier-card .fee-tier-rules,html body #root .app .fee-tier-card .fee-tier-credit span{color:#cdd6e4!important}

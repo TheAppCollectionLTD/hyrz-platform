@@ -194,3 +194,8 @@ html body #root:not(#hz) .app .hz-room.hz-room .hz-send{background:var(--mn-sun)
   #root:not(#mn) .app:is(.worker,.employer):has(.hz-room,.workchat-conversation)>main{align-items:flex-start!important;justify-content:flex-start!important}
   #root:not(#mn) .app:is(.worker,.employer):has(.hz-room,.workchat-conversation)>main>*{align-self:flex-start!important;width:var(--mn-list)!important;margin-inline:0!important;left:auto!important;transform:none!important}
 }
+@media (min-width:1200px){
+  html body #root:not(#mn) .app .employer-wc-split>:is(.employer-hero,.workchat-critical-info){display:none!important}
+  html body #root:not(#mn) .app .employer-wc-split .employer-workchat-card{padding:16px!important}
+  html body #root:not(#mn) .app .employer-wc-split .employer-workchat-card>:is(.employer-chat-icon,.eyebrow,h3){display:none!important}
+}

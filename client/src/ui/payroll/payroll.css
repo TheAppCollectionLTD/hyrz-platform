@@ -43,3 +43,4 @@ html body #root .app .worker-payroll .payslip-download:hover{background:#2272EB!
 .pay-signup-block{display:grid;gap:8px;margin:6px 0 10px}
 .pay-signup-block>strong{font-size:15px;color:#0F1B2D}
 .pay-signup-block>small{color:#5b5357}
+html body #root .app .pay-contract,html body #root .app .pay-contract *,html body #root .app .pay-switch-notes,html body #root .app .pay-contract-agree{text-align:left!important}

@@ -293,7 +293,7 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
   }
   app.get('/api/workchats/mine',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await Promise.all([ensureGroupWorkchats,ensureProfilePictureColumn,ensureMessaging(),ensureWorkchatProfile]);
-    const [rows]=await db.execute(`SELECT w.id,w.name,w.status,w.employer_user_id,w.photo,w.description,w.created_at,w.last_message_at,COALESCE(ws.disabled,0) disabled,
+    const [rows]=await db.execute(`SELECT w.id,w.name,w.status,w.employer_user_id,CRC32(w.photo) AS photo_version,w.description,w.created_at,w.last_message_at,COALESCE(ws.disabled,0) disabled,
       (SELECT COUNT(*) FROM workchat_participants p2 WHERE p2.workchat_id=w.id) participant_count,
       (SELECT COUNT(*) FROM workchat_messages m JOIN workchat_participants me ON me.workchat_id=w.id AND me.user_id=? WHERE m.workchat_id=w.id AND m.sender_id<>? AND m.created_at>COALESCE(me.last_read_at,'1970-01-01')) unread_count,
       (SELECT body FROM workchat_messages m WHERE m.workchat_id=w.id ORDER BY m.id DESC LIMIT 1) last_message,
@@ -325,6 +325,11 @@ module.exports = function registerUserMessageRoutes(app, { db, asyncRoute, audit
     const pairs=ids.flatMap(workerId=>[id,workerId]);await db.execute('INSERT INTO workchat_participants(workchat_id,user_id) VALUES '+ids.map(()=>'(?,?)').join(','),pairs);
     await db.execute('INSERT IGNORE INTO workchat_participants(workchat_id,user_id) VALUES(?,?)',[id,req.user.id]);
     await audit(req,'workchat.created','workchat',id,{participantCount:ids.length});res.status(201).json({workchatId:id});
+  }));
+  app.get('/api/workchats/:id/photo',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
+    const [[w]]=await db.execute('SELECT w.photo FROM workchats w WHERE w.id=? AND (w.employer_user_id=? OR EXISTS(SELECT 1 FROM workchat_participants p WHERE p.workchat_id=w.id AND p.user_id=?))',[req.params.id,req.user.id,req.user.id]);
+    if(!w)return res.status(404).json({error:'Workchat not found'});
+    res.json({photo:w.photo||null});
   }));
   app.get('/api/workchats/:id/messages',auth,allow('worker','employer'),asyncRoute(async(req,res)=>{
     await Promise.all([ensureWorkchatMessageDeletionColumns(),ensureProfilePictureColumn,ensureMessaging()]);

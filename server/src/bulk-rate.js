@@ -30,7 +30,7 @@ module.exports = function registerBulkRate(app, { db, asyncRoute }) {
     return rows;
   }
 
-  // Settles every finished week for a business; re-running tops up if late invoices arrive.
+  // Settles every finished week for a business; re-running adjusts for late or cancelled invoices.
   async function settle(businessId) {
     await ready;
     const thisMonday = mondayOf(new Date());
@@ -41,10 +41,12 @@ module.exports = function registerBulkRate(app, { db, asyncRoute }) {
     for (const l of all) { const k = iso(mondayOf(utc(l.started))); if (!weeks.has(k)) weeks.set(k, []); weeks.get(k).push(l); }
     for (const [weekStart, ls] of weeks) {
       const r = weeklyBulkCredit(ls);
-      if (!r.qualifies || r.credit <= 0) continue;
+      if (!r.qualifies || r.credit <= 0) { await db.execute('DELETE FROM fee_credits WHERE business_id=? AND week_start=?', [businessId, weekStart]); continue; }
       await db.execute(`INSERT INTO fee_credits(business_id,week_start,workers,hours,amount) VALUES(?,?,?,?,?)
-        ON DUPLICATE KEY UPDATE workers=VALUES(workers),hours=VALUES(hours),amount=GREATEST(amount,VALUES(amount))`, [businessId, weekStart, r.workers, r.hours, r.credit]);
+        ON DUPLICATE KEY UPDATE workers=VALUES(workers),hours=VALUES(hours),amount=VALUES(amount)`, [businessId, weekStart, r.workers, r.hours, r.credit]);
     }
+    const kept = [...weeks.keys()];
+    await db.execute(`DELETE FROM fee_credits WHERE business_id=? AND week_start<?${kept.length ? ` AND week_start NOT IN (${kept.map(() => '?').join(',')})` : ''}`, [businessId, iso(thisMonday), ...kept]);
   }
 
   async function settleAll() {
