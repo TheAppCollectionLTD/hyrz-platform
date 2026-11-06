@@ -1,165 +1,188 @@
 {
   "project_name": "hyrz - UK Flexible Staffing Platform",
-  "theme_archetype": "Midnight and Sunshine (Confident, Modern & Festival-Friendly)",
-  "app_type": "saas_app",
-  "roles": ["worker", "employer", "admin"],
-  "design_system_tokens": {
-    "colors": {
-      "primary_navy": "#0F1B2D",
-      "navy_surface_light": "#1A293E",
-      "navy_border": "#283A52",
-      "sky_blue": "#4DA3FF",
-      "sky_blue_button": "#2272EB",
-      "sky_blue_button_hover": "#1D5EC2",
-      "sunshine_yellow": "#FFC93C",
-      "sunshine_yellow_hover": "#E5B22B",
-      "sunshine_text_color": "#0F1B2D",
-      "off_white_bg": "#F7F8FA",
-      "card_surface_white": "#FFFFFF",
-      "text_primary": "#0F1B2D",
-      "text_secondary": "#5A6B82",
-      "text_muted": "#8A99AD",
-      "text_inverse": "#F7F8FA",
-      "border_default": "#E2E8F0",
-      "border_subtle": "#EDF2F7",
-      "status": {
-        "success": {
-          "bg": "#E6F4EA",
-          "text": "#137333",
-          "border": "#A8DADC"
-        },
-        "warning": {
-          "bg": "#FFF8E1",
-          "text": "#B45309",
-          "border": "#FDE68A"
-        },
-        "danger": {
-          "bg": "#FCE8E6",
-          "text": "#C5221F",
-          "border": "#F87171"
-        },
-        "info": {
-          "bg": "#EBF5FF",
-          "text": "#1D4ED8",
-          "border": "#BFDBFE"
-        }
-      }
+  "theme_archetype": "Midnight and Sunshine (Confident, Modern & Worker-First)",
+  "app_type": "hybrid_fullstack_public_pages",
+  "tech_stack": {
+    "framework": "React (Vite)",
+    "styling": "Plain CSS files (NO Tailwind, NO shadcn)",
+    "icons": "Inline SVGs (.js files)"
+  },
+  "colors": {
+    "primary_navy": "#0F1B2D",
+    "navy_surface_light": "#1A293E",
+    "navy_border": "#283A52",
+    "sky_blue": "#4DA3FF",
+    "sky_blue_button": "#2272EB",
+    "sky_blue_hover": "#1D5EC2",
+    "sunshine_yellow": "#FFC93C",
+    "sunshine_hover": "#E5B22B",
+    "sunshine_text_color": "#0F1B2D",
+    "off_white_bg": "#F7F8FA",
+    "card_white": "#FFFFFF",
+    "text_primary": "#0F1B2D",
+    "text_secondary": "#5A6B82",
+    "text_muted": "#8A99AD",
+    "text_inverse": "#F7F8FA"
+  },
+  "typography": {
+    "heading_font": "'Outfit', 'Plus Jakarta Sans', sans-serif",
+    "body_font": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+    "mono_font": "'JetBrains Mono', monospace"
+  },
+  "1_worker_first_homepage_section_order": [
+    {
+      "section": "Top Navigation",
+      "items": ["Logo (HYRZ)", "About us", "How we work", "App Store / Google Play placeholders", "Sign in", "Sign up"],
+      "styling": "Sticky top, semi-opaque background (rgba(15,27,45,0.95) on dark or rgba(255,255,255,0.95) with backdrop-filter blur), z-index 50"
     },
-    "typography": {
-      "font_family_heading": "'Outfit', 'Plus Jakarta Sans', sans-serif",
-      "font_family_body": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-      "font_family_mono": "'JetBrains Mono', monospace",
-      "scale": {
-        "hero": "text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight",
-        "h1": "text-3xl sm:text-4xl font-bold tracking-tight",
-        "h2": "text-2xl sm:text-3xl font-bold tracking-tight",
-        "h3": "text-xl sm:text-2xl font-semibold",
-        "h4": "text-lg font-semibold",
-        "body_large": "text-lg font-normal leading-relaxed",
-        "body": "text-base font-normal leading-normal",
-        "caption": "text-sm text-secondary font-medium",
-        "label": "text-xs font-semibold uppercase tracking-wider"
-      }
+    {
+      "section": "Hero Section (Worker-First Split)",
+      "headline": "Pick your own shifts. Get paid fast.",
+      "subcopy": "Choose flexible hospitality, festival, retail, warehouse, and hotel shifts across the UK. Get paid instantly with Instant Pay or weekly as a HYRZ PAYE employee with tax and NI done automatically.",
+      "ctas": [
+        {"label": "Find shifts now", "style": "primary_sunshine"},
+        {"label": "How fast pay works", "style": "outline_navy"}
+      ],
+      "layout": "Full-bleed rotating image hero with left text column + right welcome/quick-start panel."
     },
-    "radii": {
-      "sm": "6px",
-      "md": "10px",
-      "lg": "16px",
-      "xl": "24px",
-      "full": "9999px"
+    {
+      "section": "Worker Benefits Grid",
+      "headline": "Work on your terms across the UK",
+      "items": [
+        {"title": "Choose your pay type", "description": "Opt for Instant Pay as an independent contractor or get paid weekly with full tax and NI handled via HYRZ PAYE."},
+        {"title": "Flexible shift selection", "description": "Browse shifts near you in hospitality, events, retail, and logistics. Work when and where you want."},
+        {"title": "Zero paperwork hassle", "description": "Digital timesheets, instant clock-ins, and clear payslips directly inside the app."}
+      ]
     },
-    "shadows": {
-      "subtle": "0 2px 8px rgba(15, 27, 45, 0.04)",
-      "card": "0 4px 16px rgba(15, 27, 45, 0.06)",
-      "dropdown": "0 10px 30px rgba(15, 27, 45, 0.12)",
-      "glow_sunshine": "0 4px 20px rgba(255, 201, 60, 0.35)",
-      "glow_sky": "0 4px 20px rgba(77, 163, 255, 0.25)"
+    {
+      "section": "Short Employer Strip",
+      "headline": "Looking to hire flexible, verified staff?",
+      "subcopy": "Post shifts in minutes, manage timesheets automatically, and connect with trusted local workers.",
+      "cta": {"label": "Post a shift", "style": "secondary_blue"}
+    },
+    {
+      "section": "About & How We Work Carousel",
+      "headline": "How HYRZ works for workers",
+      "slides": [
+        "Create your free worker profile and select your preferred shift categories.",
+        "Apply to local shifts in one tap and receive instant confirmations.",
+        "Complete your shift, submit timesheets, and unlock Instant Pay or weekly PAYE."
+      ]
+    },
+    {
+      "section": "Download App Section",
+      "headline": "Take your work calendar anywhere",
+      "subcopy": "Download the HYRZ app on iOS and Android to get instant shift notifications and live earnings tracking.",
+      "components": ["Interactive phone mockup", "App Store badge", "Google Play badge"]
+    },
+    {
+      "section": "Footer",
+      "links": ["About us", "How we work", "Terms & Conditions", "Privacy Policy", "Support & Contact"]
     }
-  },
-  "layout_specifications": {
-    "desktop": {
-      "min_breakpoint": "1024px",
-      "sidebar": {
-        "width": "260px",
-        "bg_color": "#0F1B2D",
-        "text_color": "#F7F8FA",
-        "logo_area": "Height 72px, bold sunshine yellow emblem (#FFC93C) with white text",
-        "active_nav_item": "bg: #1A293E, text: #FFC93C, border-left: 4px solid #FFC93C",
-        "hover_nav_item": "bg: #162438, text: #4DA3FF",
-        "user_card_bottom": "Border-top: 1px solid #283A52, avatar with sunshine badge, sign-out button"
-      },
-      "main_container": {
-        "bg_color": "#F7F8FA",
-        "max_width": "1440px",
-        "padding": "p-6 lg:p-10",
-        "dashboard_grid": "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      },
-      "chat_split_view": {
-        "list_width": "340px",
-        "detail_flex": "flex-1",
-        "border": "1px solid #E2E8F0"
-      }
-    },
-    "mobile": {
-      "max_breakpoint": "1023px",
-      "bottom_nav": {
-        "height": "64px",
-        "bg_color": "#0F1B2D",
-        "border_top": "1px solid #283A52",
-        "active_icon_color": "#FFC93C",
-        "inactive_icon_color": "#8A99AD"
-      }
-    }
-  },
-  "chat_theme_tokens": {
-    "header": {
-      "bg": "#0F1B2D",
-      "text": "#FFFFFF",
-      "status_indicator": "#4DA3FF"
-    },
-    "wall_background": "#F0F4F8",
-    "own_bubble": {
-      "bg": "#0F1B2D",
-      "text": "#FFFFFF",
-      "timestamp": "#8A99AD",
-      "ticks": "#FFC93C"
-    },
-    "other_bubble": {
-      "bg": "#FFFFFF",
-      "text": "#0F1B2D",
-      "border": "#E2E8F0",
-      "timestamp": "#5A6B82"
-    },
-    "composer": {
-      "bg": "#FFFFFF",
-      "border": "#E2E8F0",
-      "send_button_bg": "#FFC93C",
-      "send_button_text": "#0F1B2D"
-    }
-  },
-  "components_spec": {
-    "buttons": {
-      "primary": "bg-[#FFC93C] text-[#0F1B2D] font-bold hover:bg-[#E5B22B] shadow-sm rounded-md transition-all active:scale-[0.98]",
-      "secondary": "bg-[#2272EB] text-white font-semibold hover:bg-[#1D5EC2] shadow-sm rounded-md transition-all",
-      "outline": "border border-[#283A52] text-[#0F1B2D] hover:bg-[#F7F8FA] rounded-md transition-all"
-    },
-    "cards": "bg-white border border-[#E2E8F0] rounded-xl p-6 shadow-card hover:shadow-lg transition-shadow",
-    "status_pills": "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider",
-    "inputs": "w-full px-4 py-2.5 bg-white border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#4DA3FF] focus:border-transparent outline-none transition-all"
-  },
-  "image_urls": {
-    "bartenders_team": "https://images.unsplash.com/photo-1758526348403-b729c700d675?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwyfHxmZXN0aXZhbCUyMGhvc3BpdGFsaXR5JTIwd29ya2VycyUyMHRlYW18ZW58MHx8fHwxNzkzODg3MzAxfDA&ixlib=rb-4.1.0&q=85",
-    "staff_uniform": "https://images.unsplash.com/photo-1641122669951-3e2aff778d3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwxfHxmZXN0aXZhbCUyMGhvc3BpdGFsaXR5JTIwd29ya2VycyUyMHRlYW18ZW58MHx8fHwxNzkzODg3MzAxfDA&ixlib=rb-4.1.0&q=85"
-  },
-  "instructions_to_main_agent": [
-    "Apply Midnight (#0F1B2D) and Sunshine (#FFC93C) palette across all worker, employer, and admin interfaces.",
-    "Implement the left sidebar fixed layout for desktop screens (>=1024px) with quick navigation items for all 3 roles.",
-    "Re-theme the chat component with dark navy own-bubbles, sunshine accent send buttons, and crisp split-view.",
-    "Ensure all interactive elements have explicit data-testid attributes for testing."
   ],
-  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
-    "Never use generic centered layouts or unstyled default components.",
-    "Always maintain contrast accessibility: sunshine yellow button text must be dark navy (#0F1B2D).",
-    "Use data-testid in kebab-case on all action buttons, inputs, tabs, and status cards."
+  "2_short_employer_strip_design": {
+    "background": "#0F1B2D",
+    "text_color": "#F7F8FA",
+    "border": "1px solid #283A52",
+    "border_radius": "16px",
+    "padding": "2.5rem 2rem",
+    "layout": "Flex row or grid centered with headline on left, subcopy in middle, CTA button on right ('Post a shift').",
+    "contrast": "Headline in white (#FFFFFF), subcopy in #8A99AD, button in Sunshine Yellow (#FFC93C) with dark text (#0F1B2D)."
+  },
+  "3_terms_page_layout_spec": {
+    "company_name": "HYRZ",
+    "layout_type": "Full page layout with sticky desktop sidebar + accessible full-screen modal view option",
+    "desktop_grid": "display: grid; grid-template-columns: 280px 1fr; gap: 3rem; align-items: start; max-width: 1280px; margin: 0 auto; padding: 3rem 1.5rem;",
+    "sidebar": {
+      "position": "sticky",
+      "top": "2rem",
+      "title": "Table of Contents",
+      "active_item_style": "font-weight: 700; color: #2272EB; border-left: 3px solid #2272EB; padding-left: 0.75rem;"
+    },
+    "content_sections": {
+      "numbered": true,
+      "summary_box": {
+        "style": "background-color: #EBF5FF; border-left: 4px solid #2272EB; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem;",
+        "title": "Plain-English Summary",
+        "text_color": "#0F1B2D"
+      },
+      "parts": ["General Terms", "Worker Terms & Pay Options (Instant Pay & PAYE)", "Employer Terms & Billing Rules", "Platform Policies & Disputes"]
+    },
+    "print_friendly": "@media print { nav, .terms-sidebar, footer { display: none !important; } .terms-content { width: 100% !important; margin: 0 !important; color: #000 !important; } }"
+  },
+  "4_universal_accessible_hover_focus_active_system": {
+    "light_background": {
+      "primary_sunshine": {
+        "default": "bg: #FFC93C, text: #0F1B2D, border: none",
+        "hover": "bg: #E5B22B, text: #0F1B2D, shadow: 0 4px 12px rgba(229,178,43,0.3)",
+        "focus": "outline: 3px solid #0F1B2D, outline-offset: 2px",
+        "active": "bg: #D4A322, transform: scale(0.98)"
+      },
+      "secondary_blue": {
+        "default": "bg: #2272EB, text: #FFFFFF, border: none",
+        "hover": "bg: #1D5EC2, text: #FFFFFF, shadow: 0 4px 12px rgba(34,114,235,0.3)",
+        "focus": "outline: 3px solid #2272EB, outline-offset: 2px",
+        "active": "bg: #184FA3, transform: scale(0.98)"
+      },
+      "ghost_text": {
+        "default": "bg: transparent, text: #0F1B2D",
+        "hover": "bg: #EDF2F7, text: #0F1B2D",
+        "focus": "outline: 2px solid #2272EB, outline-offset: 1px",
+        "active": "bg: #E2E8F0"
+      },
+      "icon_button": {
+        "default": "bg: transparent, text: #0F1B2D",
+        "hover": "bg: #EDF2F7, text: #2272EB",
+        "focus": "outline: 2px solid #2272EB, outline-offset: 2px"
+      },
+      "nav_link": {
+        "default": "text: #0F1B2D",
+        "hover": "text: #2272EB, bg: #EDF2F7",
+        "focus": "outline: 2px solid #2272EB"
+      }
+    },
+    "navy_background": {
+      "primary_sunshine": {
+        "default": "bg: #FFC93C, text: #0F1B2D",
+        "hover": "bg: #FFE082, text: #0F1B2D, shadow: 0 0 16px rgba(255,201,60,0.4)",
+        "focus": "outline: 3px solid #FFC93C, outline-offset: 2px",
+        "active": "bg: #E5B22B, transform: scale(0.98)"
+      },
+      "secondary_blue": {
+        "default": "bg: #2272EB, text: #FFFFFF",
+        "hover": "bg: #4DA3FF, text: #0F1B2D",
+        "focus": "outline: 3px solid #4DA3FF, outline-offset: 2px"
+      },
+      "ghost_text": {
+        "default": "bg: transparent, text: #F7F8FA",
+        "hover": "bg: #1A293E, text: #FFC93C",
+        "focus": "outline: 2px solid #FFC93C"
+      },
+      "icon_button": {
+        "default": "bg: transparent, text: #F7F8FA",
+        "hover": "bg: #1A293E, text: #FFC93C",
+        "focus": "outline: 2px solid #FFC93C"
+      },
+      "nav_link": {
+        "default": "text: #F7F8FA",
+        "hover": "text: #FFC93C, bg: #1A293E",
+        "focus": "outline: 2px solid #FFC93C"
+      }
+    }
+  },
+  "5_auth_page_layout_fix_guidance": {
+    "problem": "Hero text on the left gets cut off behind the login/register form card at 1440px and 1920px viewports.",
+    "root_cause": "Absolute positioning overlap or missing flex/grid gap calculation on wide screens.",
+    "solution_css": {
+      "container": "display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 480px); gap: 3rem; align-items: center; max-width: 1440px; margin: 0 auto; width: 100%; min-height: 100vh; padding: 2rem;",
+      "hero_column": "width: 100%; z-index: 1; padding-right: 1.5rem; overflow: visible;",
+      "form_card_column": "width: 100%; max-width: 480px; z-index: 2;",
+      "responsive": "@media (max-width: 1023px) { grid-template-columns: 1fr; gap: 2rem; padding: 1.5rem; }"
+    }
+  },
+  "GENERAL UI UX DESIGN GUIDELINES": [
+    "All interactive and key informational elements MUST include a data-testid attribute in kebab-case for robust automated testing (e.g., data-testid='login-submit-button', data-testid='terms-section-1').",
+    "Never use completely transparent backgrounds on headers, dropdowns, or overlays with content scrolling underneath. Use backdrop-blur with semi-opaque surfaces.",
+    "Ensure WCAG AA contrast ratio (4.5:1 for body text, 3:1 for large headers) on all hover, active, and focus states."
   ]
 }

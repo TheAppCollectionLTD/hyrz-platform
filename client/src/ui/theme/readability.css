@@ -1,0 +1,39 @@
+/* Readable hover/focus states: overrides earlier rules that left text unreadable on hover. */
+html body #root .app .rolling-calendar-day:not(.active):is(:hover,:focus-visible){background:#EBF5FF!important;border-color:#2272EB!important}
+html body #root .app .rolling-calendar-day:not(.active):is(:hover,:focus-visible) *{color:#0F1B2D!important;-webkit-text-fill-color:currentColor!important}
+html body #root .app .rolling-calendar-day.active:is(:hover,:focus-visible),html body #root .app .rolling-calendar-day.active:is(:hover,:focus-visible) *{color:#fff!important;-webkit-text-fill-color:currentColor!important}
+html body #root .public-intro-tabs button:is(:hover,:focus-visible):not(.active){background:#0F1B2D!important;border-color:#0F1B2D!important;color:#fff!important}
+html body #root .public-intro-tabs button.active{background:#2272EB!important;border-color:#2272EB!important;color:#fff!important}
+html body #root .public-intro-controls button:is(:hover,:focus-visible){background:#0F1B2D!important;color:#fff!important;border-color:#0F1B2D!important}
+html body #root .public-home-footer :is(button,a):is(:hover,:focus-visible){color:#FFC93C!important;background:transparent!important}
+html body #root .public-home-footer .hyrz-footer-contact:is(:hover,:focus-visible){background:#FFC93C!important;color:#0F1B2D!important;border-color:#FFC93C!important}
+html body #root .app .shift-employer-avatar:is(:hover,:focus-visible){color:#FFC93C!important}
+html body #root .app .job-tabs>button:not(.selected):is(:hover,:focus-visible),html body #root .app .job-tabs>button:not(.selected):is(:hover,:focus-visible) *{color:#0F1B2D!important;background:#EBF5FF!important;-webkit-text-fill-color:currentColor!important}
+html body #root .app .job-tabs>button.selected,html body #root .app .job-tabs>button.selected *{background:#1D5EC2!important;color:#fff!important}
+html body #root :is(button.primary,.primary):is(:hover,:focus-visible):not(:disabled){background:#1D5EC2!important;color:#fff!important}
+html body #root .home-signin-link,html body #root .textbutton.home-signin-link{color:#1D5EC2!important}
+html body #root .home-signin-link:is(:hover,:focus-visible){color:#0F1B2D!important}
+html body #root :is(button,a,[role=button],input,select,textarea):focus-visible{outline:3px solid #2272EB!important;outline-offset:2px}
+html body #root :is(.public-home-footer,.fee-tier-card,.employer-hero) :is(button,a):focus-visible{outline-color:#FFC93C!important}
+html body #root:not(#x):not(#y) .public-home-footer :is(button,a):is(:hover,:focus-visible){color:#FFC93C!important;background:transparent!important}
+html body #root:not(#x):not(#y) .public-home-footer .hyrz-footer-contact:is(:hover,:focus-visible),html body #root:not(#x):not(#y) .public-home-footer .hyrz-footer-contact:is(:hover,:focus-visible) *{background:#FFC93C!important;color:#0F1B2D!important;border-color:#FFC93C!important}
+html body #root:not(#x):not(#y) .public-home-footer .hyrz-footer-wordmark:is(:hover,:focus-visible){color:#FFC93C!important}
+html body #root:not(#x):not(#y) .public-intro-tabs button.active,html body #root:not(#x):not(#y) .public-intro-tabs button.active:hover{background:#2272EB!important;border-color:#2272EB!important;color:#fff!important}
+html body #root:not(#x):not(#y) .public-intro-tabs button:not(.active):is(:hover,:focus-visible){background:#0F1B2D!important;border-color:#0F1B2D!important;color:#fff!important}
+html body #root:not(#x):not(#y) .pub-employer-strip button:is(:hover,:focus-visible),html body #root:not(#x):not(#y) .pub-employer-strip button:is(:hover,:focus-visible) *{background:#FFE082!important;color:#0F1B2D!important}
+html body #root:not(#x):not(#y) .pub-employer-strip button{background:#FFC93C!important;color:#0F1B2D!important}
+html body #root:not(#x):not(#y) .home-signin-link{color:#1D5EC2!important}
+html body #root:not(#x):not(#y) .home-signin-link:is(:hover,:focus-visible){color:#0F1B2D!important}
+html body #root:not(#x):not(#y) .app .shift-employer-avatar:is(:hover,:focus-visible),html body #root:not(#x):not(#y) .app .shift-employer-avatar:is(:hover,:focus-visible) *{color:#FFC93C!important}
+html body #root:not(#x):not(#y) .app .workchat-wa-row:hover :is(small,time,span){color:#4A5563!important}
+html body #root:not(#x):not(#y) .app .co-stat:is(:hover,:focus-visible){background:#fff!important}
+html body #root:not(#x):not(#y) .app .co-stat:is(:hover,:focus-visible) strong{color:#0F1B2D!important}
+html body #root:not(#x):not(#y) .app .co-stat:is(:hover,:focus-visible) span{color:#24324a!important}
+html body #root:not(#x):not(#y) .app .co-stat:is(:hover,:focus-visible) small{color:#5A6B82!important}
+html body #root:not(#x):not(#y) .app .co-ghost:is(:hover,:focus-visible),html body #root:not(#x):not(#y) .app .co-ghost.on{color:#1D5EC2!important;border-color:#1D5EC2!important}
+html body #root:not(#x):not(#y) .app .worker-back-button:is(:hover,:focus-visible){color:#1D5EC2!important}
+html body #root:not(#x):not(#y) .app .favourite-worker-card:is(:hover,:focus-visible){background:#1D5EC2!important}
+html body #root:not(#x):not(#y) .app .favourite-worker-card:is(:hover,:focus-visible) *{color:#fff!important}
+html body #root:not(#x):not(#y) .app.admin button.selected,html body #root:not(#x):not(#y) .app.admin button.selected *{color:#fff!important}
+html body #root:not(#x):not(#y) .public-intro-tabs button.active{background:#1D5EC2!important;border-color:#1D5EC2!important}
+html body #root:not(#x):not(#y) .app .job-tabs>button.selected{background:#1D5EC2!important}

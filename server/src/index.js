@@ -256,7 +256,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
     businessName, companyNumber, companyRole, postcode, businessAddress, businessCity, nationalInsuranceNumber, workerPermitNumber, confirmPassword
   } = req.body;
 
-  if (req.body?.termsAccepted !== true || req.body?.termsVersion !== '2026-10-19') return res.status(400).json({error:'You must agree to the current Hyrz Terms & Conditions before creating an account.'});
+  if (req.body?.termsAccepted !== true || req.body?.termsVersion !== '2026-11-06') return res.status(400).json({error:'You must agree to the current Hyrz Terms & Conditions before creating an account.'});
 
   if (!email || !/^\S+@\S+\.\S+$/.test(email) ||
       typeof password !== 'string' || password.length < 12) {
@@ -324,7 +324,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
         firstName,
         lastName,
         tokenHash,
-        '2026-10-19',
+        '2026-11-06',
         'P-' + crypto.randomBytes(10).toString('hex').toUpperCase()
       ]
     );

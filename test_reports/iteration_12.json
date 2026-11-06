@@ -1,0 +1,33 @@
+{
+  "summary": "Iteration 12 final retest of the iteration-11 action items. Backend: test_hyrz_iter11_retest.py passes 9/9, including test_credit_removed_when_invoices_cancelled. The bulk-rate.js filter NOT IN ('void','draft') works: when the week 2026-10-26 invoices are voided, the £38.61 credit disappears from GET /api/employer/fee-tier, and it comes back when they are restored. Data was restored afterwards (invoice counts still issued=12, paid=6). Employer split inbox at 1440 and 1920: the page-level 'Workchat' header is hidden and only one sign-out button shows (inbox-main-signout). The list is on the left and the conversation on the right, and switching from Riverside Fest Crew to Friday Bar Team works. The sections.css :not(.employer-wc-split) fix is still in place. Sign-up: the signup-error is now red (bg #FDECEC, text #9B1C1C). After a worker PAYE sign-up with no Resend key, the Check your email page says 'We couldn't send the verification email to:' and shows check-email-notice in red, with no 'We've sent' copy. STILL BROKEN: at 1440 (and also at 1920) the left hero text on the sign-up and account-type pages is cut off behind the form card. Smoke tests pass: worker jobs show 5 paye-pay-badge ('PAYE · paid weekly in arrears'), the Profile pay settings show 'Currently paid as: hyrz PAYE (1257L, cat. A)' with payslips, the employer Invoices page fee-tier-card shows the £38.61 credit for the week of 26 Oct, and admin Financial Reports show bulk credits −£38.61 and net £256.89.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "GET /api/admin/financial-reports (admin-routes.js:124)", "issue": "invoicedRevenue and grossInvoiceValue sum platform_fee/total over ALL invoices with no status filter, so void and draft invoices are counted as 'Platform fees invoiced'. Bulk credits now exclude void invoices, so if any invoice is voided, net platform fees will be overstated. Add WHERE status NOT IN ('void','draft') to those sums."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Sign-up / account type (public auth layout) at 1440 and 1920", "issues": ["NOT FIXED: the left hero text from styles.css:38-53 (.auth-layout::after, which is fixed at left:5% width:40%, so it reaches 45% of the viewport) is cut off. The form card starts at about 31-32% of the viewport (x=450-460 at 1440, x=571 at 1920), so you see 'HOSPITALITY · FESTIVA…', 'Staffing, payroll and ac…' and 'Your next shift or your…'. The right third of the screen is also empty grey. Fix: limit ::after to width: calc(form-left - 5% - gutter), e.g. width:24% or max-width matching the visible image area. Or place the form card in the right 50% to match ::before, which is 50% wide."]},
+      {"screen": "Check your email", "issues": ["Minor: the back icon button is not vertically aligned with the 'Resend verification email' button (it sits about 10px higher)."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_hyrz_iter11_retest.py", "/app/test_reports/pytest/iter12.xml"],
+  "action_items": [
+    "Fix the sign-up hero text being cut off at 1440 and 1920 (styles.css .auth-layout::after width/left versus the position of the form card).",
+    "Optional: exclude void/draft invoices from admin financial-reports invoicedRevenue/grossInvoiceValue."
+  ],
+  "critical_code_review_comments": [
+    "admin-routes.js financial-reports totals include void and draft invoices, which is inconsistent with the bulk-rate credit logic.",
+    "The auth hero copy is CSS ::after content with fixed positioning. It is not accessible to screen readers and cannot respond to the form card's position. Move it into the JSX.",
+    "App.jsx is still extremely large, with lines thousands of characters long. Split it into components."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "about 90% (all retested flows pass except the hero text cut-off)"},
+  "seed_data_creation": "Created TEST worker test_iter12_759742@example.com (users.id 73) through the UI sign-up, then deleted it (and its audit_logs rows) by id. The pytest suite voided and then restored the week-2026-10-26 invoices, created and deleted an application on shift 469, and reset the workchat 72/73 photos to NULL (they were NULL before). No seed scripts were run.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Sign-up: button.public-nav-signup, then 'Continue as a worker'. Inputs: section.panel.auth input:not([type]) (first, last, NI); pay cards [data-testid=pay-type-paye]; [data-testid=pay-contract-agree-checkbox]; button.hyrz-toggle for terms; [data-testid=signup-submit-button]. Employer split: Inbox, then nav.inbox-category-tabs 'Workchats', then .workchat-wa-row. Fee tier: employer Dashboard > Invoices tile, [data-testid=fee-tier-card]. Admin: the 'FINANCIAL REPORTS' tab. Run the backend with: cd /app/backend && python -m pytest tests/test_hyrz_iter11_retest.py -n 0"
+}
