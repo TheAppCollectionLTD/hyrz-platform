@@ -249,6 +249,7 @@ async function sendVerificationEmail(email, rawToken) {
   }
 }
 
+let payroll, bulkRate;
 app.post('/api/auth/register', asyncRoute(async (req, res) => {
   const {
     email, password, role = 'worker', firstName = '', lastName = '',
@@ -279,6 +280,8 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
   }
 
   if (role === 'worker' && !String(nationalInsuranceNumber||'').trim() && !String(workerPermitNumber||'').trim()) return res.status(400).json({error:'A National Insurance number or worker permit number is required for account security checks.'});
+  const payChoice = role === 'worker' ? payroll.parseChoice(req.body.payChoice || {}) : null;
+  if (payChoice?.error) return res.status(400).json({ error: payChoice.error });
 
   const normalizedEmail = email.toLowerCase().trim();
   const emailConstraintReady = await ensureUniqueEmails;
@@ -333,6 +336,7 @@ app.post('/api/auth/register', asyncRoute(async (req, res) => {
           nationalInsuranceNumber ? hashIdentifier(nationalInsuranceNumber) : null,
           workerPermitNumber ? hashIdentifier(workerPermitNumber) : null]
       );
+      await payroll.saveChoice(conn, result.insertId, payChoice);
     } else {
       await ensureBusinessAddressColumns;
       await conn.execute(
@@ -984,6 +988,8 @@ app.post('/api/shifts/:id/apply',auth,allow('worker'),requireVerification,asyncR
  if(!s.length||s[0].status!=='open')return res.status(404).json({error:'Shift not available'});
  if(Number(s[0].private_only||0)===1){await ensurePrivateShiftOffers;const [invitation]=await db.execute("SELECT id FROM private_shift_offers WHERE shift_id=? AND worker_user_id=? AND status='pending' LIMIT 1",[s[0].id,req.user.id]);if(!invitation.length)return res.status(403).json({error:'This private shift is only available to workers who have received an invitation.'});}
  const contractShift=s[0];const contractStart=new Date(contractShift.starts_at),contractEnd=new Date(contractShift.ends_at);const contractHours=Math.max(0,(contractEnd-contractStart)/3600000-Number(contractShift.break_minutes||0)/60);const parseContractList=value=>{if(Array.isArray(value))return value.filter(Boolean);if(typeof value==='string'){try{const parsed=JSON.parse(value);return Array.isArray(parsed)?parsed.filter(Boolean):[]}catch{return []}}return []};const contractPaymentDate=contractShift.company_payment_date??contractShift.payment_date??contractShift.payment_due_date??contractShift.invoice_due_at??contractShift.business_payment_date;const contractPaymentDays=Number(contractShift.company_payment_days??contractShift.payment_days??contractShift.payment_terms_days??contractShift.business_payment_days);const contractPaymentDateParsed=new Date(contractPaymentDate);const contractPaymentTerms=contractPaymentDate&&!Number.isNaN(contractPaymentDateParsed.getTime())?'Payment due '+contractPaymentDateParsed.toLocaleDateString('en-GB'):(Number.isFinite(contractPaymentDays)&&contractPaymentDays>=0&&contractPaymentDays<=14?'Employer payment terms: within '+contractPaymentDays+' day'+(contractPaymentDays===1?'':'s'):'Employer payment terms: payment date shown on the employer invoice, up to 14 days');const canonicalContract={version:'hyrz-shift-contract-v1',employer:contractShift.business_name||'Employer',worker:[req.user.first_name,req.user.last_name].filter(Boolean).join(' ')||req.user.email||'Worker',role:contractShift.title||'Shift worker',location:contractShift.location||'To be confirmed',date:contractStart.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),startTime:contractStart.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),endTime:contractEnd.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),hours:Number(contractHours.toFixed(2)),hourlyRate:Number(contractShift.hourly_pay||0),grossPay:Number((Number(contractShift.hourly_pay||0)*contractHours).toFixed(2)),paymentTerms:contractPaymentTerms,description:contractShift.description||'Duties as reasonably described by the employer for this role.',breakMinutes:Number(contractShift.break_minutes||0),requirements:parseContractList(contractShift.requirements),preferences:parseContractList(contractShift.preferences),perks:parseContractList(contractShift.perks),cancellation:'Cancellations and any applicable fees or worker strikes are handled under the Hyrz platform rules and applicable law.',records:'Hours worked must be recorded accurately and submitted for review. Payment is based on approved hours and the agreed hourly rate, subject to applicable deductions and legal requirements.'};contractSnapshot=JSON.stringify(canonicalContract);
+ const [[payRow]]=await db.execute('SELECT pay_type FROM worker_pay_settings WHERE user_id=? ORDER BY effective_from DESC,id DESC LIMIT 1',[req.user.id]).catch(()=>[[null]]);
+ if(payRow?.pay_type==='paye')contractSnapshot=JSON.stringify({version:'hyrz-paye-employment-v1',coveredBy:'hyrz PAYE employment contract',shiftId:Number(req.params.id),role:contractShift.title||'Shift worker',hourlyRate:Number(contractShift.hourly_pay||0),date:canonicalContract.date});
  const requiredItems=Array.isArray(s[0].requirements)?s[0].requirements:(typeof s[0].requirements==='string'?JSON.parse(s[0].requirements||'[]'):[]);
  if(requiredItems.length&&req.body?.confirmedRequirements!==true)return res.status(400).json({error:'Confirm all shift requirements before applying.'});
  const preferredItems=Array.isArray(s[0].preferences)?s[0].preferences:(typeof s[0].preferences==='string'?JSON.parse(s[0].preferences||'[]'):[]);
@@ -1338,6 +1344,7 @@ app.put('/api/employer/payment-preferences',auth,allow('employer'),asyncRoute(as
 }));
 
 app.get('/api/invoices/mine',auth,asyncRoute(async(req,res)=>{
+ if(req.user.role==='employer'){const [[b]]=await db.execute('SELECT id FROM businesses WHERE owner_user_id=? LIMIT 1',[req.user.id]);if(b)await bulkRate.settle(b.id);}
  const [rows]=req.user.role==='employer'
  ? await db.execute('SELECT i.*,s.title FROM invoices i JOIN businesses b ON b.id=i.business_id JOIN checkouts c ON c.id=i.checkout_id JOIN shifts s ON s.id=c.shift_id WHERE b.owner_user_id=? ORDER BY i.created_at DESC',[req.user.id])
  : await db.execute("SELECT i.*,s.title FROM invoices i JOIN checkouts c ON c.id=i.checkout_id JOIN shifts s ON s.id=c.shift_id WHERE c.worker_id=? ORDER BY i.created_at DESC",[req.user.id]);
@@ -1358,11 +1365,12 @@ app.get('/api/disputes/mine',auth,asyncRoute(async(req,res)=>{
  sql+=' ORDER BY d.created_at DESC';const [rows]=await db.execute(sql,args);res.json({disputes:rows});
 }));
 require('./user-message-routes')(app, { db, asyncRoute, audit, addColumn, ensureEmployerWorkerFavourites, ensureProfilePictureColumn, ensureAdminMessageMeta });
-require('./payroll-routes')(app, { db, asyncRoute, audit });
+payroll = require('./payroll-routes')(app, { db, asyncRoute, audit, addColumn });
+bulkRate = require('./bulk-rate')(app, { db, asyncRoute });
 verification = require('./verification-routes')(app, { db, asyncRoute, audit, addColumn, createTable });
 require('./shift-reminders')(app, { db, asyncRoute });
 require('./shift-confirmation-routes')(app, { db, asyncRoute, audit, resend, ensureWorkerAvailabilityTable });
-require('./admin-routes')(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds });
+require('./admin-routes')(app, { db, asyncRoute, audit, bulkRate, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds });
 
 app.get('/api/admin/overview',auth,allow('admin'),asyncRoute(async(req,res)=>{
  const [[users]]=await db.query('SELECT COUNT(*) count FROM users');

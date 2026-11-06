@@ -2,8 +2,8 @@
 .worker-payroll h2{margin:4px 0 6px}
 .worker-payroll-intro{color:#5b5357;font-size:13px;margin-bottom:16px}
 .pay-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-html body #root .app .worker-payroll .pay-type-card{position:relative;display:grid;gap:6px;text-align:left;padding:16px 16px 16px 46px;border:2px solid #E2E8F0!important;border-radius:14px;background:#fff!important;color:#0F1B2D!important;cursor:pointer;transition:border-color .15s,background-color .15s;min-height:0;height:auto}
-html body #root .app .worker-payroll .pay-type-card.on{border-color:#2272EB!important;background:#EBF5FF!important}
+html body #root .app .pay-type-chooser .pay-type-card{position:relative;display:grid;gap:6px;text-align:left;padding:16px 16px 16px 46px;border:2px solid #E2E8F0!important;border-radius:14px;background:#fff!important;color:#0F1B2D!important;cursor:pointer;transition:border-color .15s,background-color .15s;min-height:0;height:auto}
+html body #root .app .pay-type-chooser .pay-type-card.on{border-color:#2272EB!important;background:#EBF5FF!important}
 .pay-type-card strong{font-size:15px}
 .pay-type-card small{font-size:12.5px;line-height:1.5;color:#5b5357}
 .pay-type-radio{position:absolute;left:16px;top:18px;width:18px;height:18px;border-radius:50%;border:2px solid #b9aeb3}
@@ -29,3 +29,17 @@ html body #root .app .worker-payroll .payslip-head{width:100%;display:grid;grid-
 @media(max-width:700px){.pay-type-grid,.paye-fields{grid-template-columns:1fr}}
 html body #root .app .worker-payroll .payslip-download{justify-self:end;margin-top:8px;padding:8px 16px;border-radius:999px;border:1px solid #2272EB!important;background:#fff!important;color:#2272EB!important;font-weight:700;font-size:13px;cursor:pointer;min-height:0;transition:background-color .15s,color .15s}
 html body #root .app .worker-payroll .payslip-download:hover{background:#2272EB!important;color:#fff!important}
+.pay-type-chooser{display:grid;gap:12px;margin-bottom:14px}
+.pay-type-chooser .pay-type-grid{margin-bottom:0}
+.pay-contract{max-height:260px;overflow:auto;padding:16px 18px;border:1px solid #E2E8F0;border-radius:12px;background:#F7F8FA;font-size:13px;line-height:1.55;color:#24324a}
+.pay-contract h4{margin:0 0 8px;font-size:15px;color:#0F1B2D}
+.pay-contract p{margin:0 0 8px}
+.pay-contract small{color:#7b7479}
+.pay-contract-agree{display:flex!important;align-items:flex-start;gap:10px;font-weight:500;font-size:13px}
+.pay-contract-agree input{width:auto;margin-top:3px}
+.pay-switch-notes{padding:12px 16px;border-radius:12px;background:#FFF7DB;border:1px solid #FFC93C;font-size:13px;color:#0F1B2D}
+.pay-switch-notes ul{margin:6px 0 0;padding-left:18px;display:grid;gap:3px}
+.payslip-paydate{display:block;padding:0 16px 10px;background:#FBF8F9;font-size:12px;color:#2272EB;font-weight:600}
+.pay-signup-block{display:grid;gap:8px;margin:6px 0 10px}
+.pay-signup-block>strong{font-size:15px;color:#0F1B2D}
+.pay-signup-block>small{color:#5b5357}

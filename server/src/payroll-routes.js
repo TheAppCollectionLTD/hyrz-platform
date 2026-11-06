@@ -1,7 +1,7 @@
 const { auth, allow } = require('./middleware');
-const { TAX_YEAR, NI_CATEGORIES, validTaxCode, taxWeekOf, buildPayslip } = require('./payroll');
+const { CONTRACT_VERSIONS, TAX_YEAR, NI_CATEGORIES, validTaxCode, taxWeekOf, buildPayslip } = require('./payroll');
 
-module.exports = function registerPayrollRoutes(app, { db, asyncRoute, audit }) {
+module.exports = function registerPayrollRoutes(app, { db, asyncRoute, audit, addColumn }) {
   const ready = db.query(`CREATE TABLE IF NOT EXISTS worker_pay_settings (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
@@ -10,35 +10,47 @@ module.exports = function registerPayrollRoutes(app, { db, asyncRoute, audit }) 
     ni_category CHAR(1) NULL,
     effective_from DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     KEY idx_worker_pay_settings_user(user_id,effective_from)
-  ) ENGINE=InnoDB`);
+  ) ENGINE=InnoDB`).then(async () => {
+    await addColumn('worker_pay_settings', 'contract_version VARCHAR(40) NULL', 'pay contract version');
+    await addColumn('worker_pay_settings', 'contract_accepted_at DATETIME NULL', 'pay contract acceptance time');
+  });
+
+  function parseChoice(body) {
+    const payType = String(body.payType || '');
+    if (!['contractor', 'paye'].includes(payType)) return { error: 'Choose to work as an independent contractor or as a hyrz PAYE employee.' };
+    if (body.contractAccepted !== true || body.contractVersion !== CONTRACT_VERSIONS[payType]) return { error: payType === 'paye' ? 'Please read and agree to the hyrz PAYE employment contract.' : 'Please read and agree to the hyrz independent contractor agreement.' };
+    if (payType === 'contractor') return { payType, taxCode: null, niCategory: null };
+    const taxCode = String(body.taxCode || '1257L').toUpperCase().replace(/\s+/g, '');
+    const niCategory = String(body.niCategory || 'A').toUpperCase();
+    if (/^S/.test(taxCode)) return { error: 'Scottish tax codes are not supported yet. Please contact hyrz support.' };
+    if (!validTaxCode(taxCode)) return { error: 'Enter a valid tax code, for example 1257L or BR.' };
+    if (!NI_CATEGORIES.includes(niCategory)) return { error: 'Choose a valid National Insurance category.' };
+    return { payType, taxCode, niCategory };
+  }
+
+  async function saveChoice(conn, userId, c) {
+    await ready;
+    await conn.execute('INSERT INTO worker_pay_settings(user_id,pay_type,tax_code,ni_category,effective_from,contract_version,contract_accepted_at) VALUES(?,?,?,?,UTC_TIMESTAMP(),?,UTC_TIMESTAMP())', [userId, c.payType, c.taxCode, c.niCategory, CONTRACT_VERSIONS[c.payType]]);
+  }
 
   async function history(userId) {
     await ready;
-    const [rows] = await db.execute('SELECT pay_type,tax_code,ni_category,effective_from FROM worker_pay_settings WHERE user_id=? ORDER BY effective_from ASC,id ASC', [userId]);
+    const [rows] = await db.execute('SELECT pay_type,tax_code,ni_category,effective_from,contract_version,contract_accepted_at FROM worker_pay_settings WHERE user_id=? ORDER BY effective_from ASC,id ASC', [userId]);
     return rows;
   }
   const current = rows => rows.at(-1) || { pay_type: 'contractor', tax_code: null, ni_category: null, effective_from: null };
   const settingAt = (rows, when) => [...rows].reverse().find(r => String(r.effective_from) <= when) || { pay_type: 'contractor' };
-  const view = r => ({ payType: r.pay_type, taxCode: r.tax_code, niCategory: r.ni_category, effectiveFrom: r.effective_from });
+  const view = r => ({ payType: r.pay_type, taxCode: r.tax_code, niCategory: r.ni_category, effectiveFrom: r.effective_from, contractVersion: r.contract_version || null, contractAcceptedAt: r.contract_accepted_at || null });
 
   app.get('/api/worker/pay-settings', auth, allow('worker'), asyncRoute(async (req, res) => {
-    res.json({ settings: view(current(await history(req.user.id))), taxYear: TAX_YEAR.label });
+    res.json({ settings: view(current(await history(req.user.id))), taxYear: TAX_YEAR.label, contractVersions: CONTRACT_VERSIONS });
   }));
 
   app.put('/api/worker/pay-settings', auth, allow('worker'), asyncRoute(async (req, res) => {
-    const payType = String(req.body.payType || '');
-    if (!['contractor', 'paye'].includes(payType)) return res.status(400).json({ error: 'Choose contractor or PAYE.' });
-    let taxCode = null, niCategory = null;
-    if (payType === 'paye') {
-      taxCode = String(req.body.taxCode || '1257L').toUpperCase().replace(/\s+/g, '');
-      niCategory = String(req.body.niCategory || 'A').toUpperCase();
-      if (/^S/.test(taxCode)) return res.status(400).json({ error: 'Scottish tax codes are not supported yet. Please contact hyrz support.' });
-      if (!validTaxCode(taxCode)) return res.status(400).json({ error: 'Enter a valid tax code, for example 1257L or BR.' });
-      if (!NI_CATEGORIES.includes(niCategory)) return res.status(400).json({ error: 'Choose a valid National Insurance category.' });
-      if (req.body.confirmed !== true) return res.status(400).json({ error: 'Please confirm your PAYE details are correct.' });
-    }
-    await ready;
-    await db.execute('INSERT INTO worker_pay_settings(user_id,pay_type,tax_code,ni_category,effective_from) VALUES(?,?,?,?,UTC_TIMESTAMP())', [req.user.id, payType, taxCode, niCategory]);
+    const c = parseChoice(req.body || {});
+    if (c.error) return res.status(400).json({ error: c.error });
+    const { payType, taxCode, niCategory } = c;
+    await saveChoice(db, req.user.id, c);
     try { await audit(req, 'worker.pay_settings.updated', 'user', req.user.id, { payType, taxCode, niCategory }); } catch (e) { console.error('Pay settings audit failed:', e.message); }
     res.json({ ok: true, settings: view(current(await history(req.user.id))) });
   }));
@@ -72,4 +84,5 @@ module.exports = function registerPayrollRoutes(app, { db, asyncRoute, audit }) 
     const sum = k => Math.round(out.reduce((t, p) => t + p[k], 0) * 100) / 100;
     res.json({ taxYear: TAX_YEAR.label, totals: { gross: sum('gross'), incomeTax: sum('incomeTax'), employeeNi: sum('employeeNi'), employerNi: sum('employerNi'), net: sum('net') }, payslips: out });
   }));
+  return { parseChoice, saveChoice, history, current };
 };

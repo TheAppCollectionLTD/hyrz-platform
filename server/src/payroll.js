@@ -59,13 +59,23 @@ function taxWeekOf(date) {
   return { taxYear: `${startYear}/${String((startYear + 1) % 100).padStart(2, '0')}`, week, start: start.toISOString().slice(0, 10), end: end.toISOString().slice(0, 10) };
 }
 
+const CONTRACT_VERSIONS = { contractor: 'hyrz-contractor-v1', paye: 'hyrz-paye-employment-v1' };
+
+// PAYE is paid weekly, one week in arrears: on the Friday of the week after the work week.
+function payePayDate(periodEnd) {
+  const next = new Date(periodEnd + 'T00:00:00Z');
+  next.setUTCDate(next.getUTCDate() + 1);
+  next.setUTCDate(next.getUTCDate() + ((5 - next.getUTCDay() + 7) % 7));
+  return next.toISOString().slice(0, 10);
+}
+
 function buildPayslip(period, payType, setting, lines) {
   const gross = round(lines.reduce((t, l) => t + l.gross, 0));
-  if (payType !== 'paye') return { ...period, payType: 'contractor', lines, gross, incomeTax: 0, employeeNi: 0, employerNi: 0, net: gross };
+  if (payType !== 'paye') return { ...period, payType: 'contractor', lines, gross, incomeTax: 0, employeeNi: 0, employerNi: 0, net: gross, payDate: null };
   const incomeTax = weeklyIncomeTax(gross, setting.tax_code);
   const employeeNi = weeklyEmployeeNi(gross, setting.ni_category);
   return { ...period, payType: 'paye', taxCode: setting.tax_code, niCategory: setting.ni_category, lines, gross, incomeTax, employeeNi,
-    employerNi: weeklyEmployerNi(gross, setting.ni_category), net: round(gross - incomeTax - employeeNi) };
+    employerNi: weeklyEmployerNi(gross, setting.ni_category), net: round(gross - incomeTax - employeeNi), payDate: payePayDate(period.end) };
 }
 
-module.exports = { TAX_YEAR, NI_CATEGORIES, validTaxCode, weeklyIncomeTax, weeklyEmployeeNi, weeklyEmployerNi, taxWeekOf, buildPayslip };
+module.exports = { CONTRACT_VERSIONS, payePayDate, TAX_YEAR, NI_CATEGORIES, validTaxCode, weeklyIncomeTax, weeklyEmployeeNi, weeklyEmployerNi, taxWeekOf, buildPayslip };

@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { request } from '../../api';
 import { downloadPayslipPdf } from './payslipPdf';
+import PayTypeChooser, { payChoiceBody } from './PayTypeChooser';
 import './payroll.css';
 
 const money = n => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(Number(n || 0));
 const day = s => new Date(s + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-
-function PayTypeCard({ id, title, text, chosen, onChoose }) {
-  return <button type="button" className={`pay-type-card ${chosen ? 'on' : ''}`} onClick={() => onChoose(id)} aria-pressed={chosen} data-testid={`pay-type-${id}`}>
-    <span className="pay-type-radio" /><strong>{title}</strong><small>{text}</small>
-  </button>;
-}
+const today = () => new Date().toISOString().slice(0, 10);
 
 function Payslip({ p, worker }) {
   const [open, setOpen] = useState(false);
@@ -20,6 +16,7 @@ function Payslip({ p, worker }) {
       <span className={`payslip-type ${p.payType}`}>{p.payType === 'paye' ? 'PAYE' : 'Contractor'}</span>
       <strong>{money(p.net)}</strong>
     </button>
+    {p.payDate && <small className="payslip-paydate" data-testid="payslip-pay-date">{p.payDate <= today() ? 'Paid' : 'Pay day'} {new Date(p.payDate + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })} · one week in arrears</small>}
     {open && <div className="payslip-body">
       {p.lines.map(l => <div className="payslip-line" key={l.checkoutId}><span>{day(l.date)} · {l.shiftTitle} · {l.businessName}</span><b>{money(l.gross)}</b></div>)}
       <div className="payslip-sum"><span>Gross pay</span><b>{money(p.gross)}</b></div>
@@ -36,7 +33,7 @@ function Payslip({ p, worker }) {
 export default function WorkerPayroll({ setNotice = () => {} }) {
   const [error, setError] = useState('');
   const [settings, setSettings] = useState(null);
-  const [draft, setDraft] = useState({ payType: 'contractor', taxCode: '1257L', niCategory: 'A', confirmed: false });
+  const [draft, setDraft] = useState({ payType: 'contractor', taxCode: '1257L', niCategory: 'A', contractAccepted: false });
   const [payslips, setPayslips] = useState([]);
   const [worker, setWorker] = useState({});
   const [saving, setSaving] = useState(false);
@@ -45,36 +42,30 @@ export default function WorkerPayroll({ setNotice = () => {} }) {
     try {
       const [s, p] = await Promise.all([request('/worker/pay-settings'), request('/worker/payslips')]);
       setSettings(s.settings); setPayslips(p.payslips || []); setWorker(p.worker || {});
-      setDraft(d => ({ ...d, payType: s.settings.payType, taxCode: s.settings.taxCode || '1257L', niCategory: s.settings.niCategory || 'A' }));
+      setDraft({ payType: s.settings.payType, taxCode: s.settings.taxCode || '1257L', niCategory: s.settings.niCategory || 'A', contractAccepted: false });
     } catch (e) { setError(e.message); }
   }
   useEffect(() => { load(); }, []);
 
   async function save(e) {
     e.preventDefault(); setSaving(true); setError('');
-    try { await request('/worker/pay-settings', { method: 'PUT', body: JSON.stringify(draft) }); setNotice('Pay settings saved. They apply to shifts from now on.'); await load(); }
-    catch (err) { setError(err.message); } finally { setSaving(false); }
+    try {
+      await request('/worker/pay-settings', { method: 'PUT', body: JSON.stringify(payChoiceBody(draft)) });
+      setNotice('Pay settings saved. The change applies straight away to shifts you work from now on.');
+      window.dispatchEvent(new CustomEvent('hyrz-pay-type', { detail: draft.payType }));
+      await load();
+    } catch (err) { setError(err.message); } finally { setSaving(false); }
   }
 
   const changed = settings && (draft.payType !== settings.payType || (draft.payType === 'paye' && (draft.taxCode !== settings.taxCode || draft.niCategory !== settings.niCategory)));
   return <section className="worker-payroll" data-testid="worker-payroll">
     <span className="eyebrow">PAY & TAX</span>
     <h2>How you get paid</h2>
-    <p className="worker-payroll-intro">Choose how hyrz pays you. You can switch at any time; the change applies to shifts you work from now on.</p>
+    <p className="worker-payroll-intro">Choose how hyrz pays you. You can switch at any time. The change applies straight away to shifts you work from then on; shifts already worked are paid the way they were worked.</p>
     <form onSubmit={save}>
-      <div className="pay-type-grid">
-        <PayTypeCard id="contractor" title="Independent contractor" text="Paid your full gross pay. You sort out your own tax and NI through Self Assessment." chosen={draft.payType === 'contractor'} onChoose={v => setDraft({ ...draft, payType: v })} />
-        <PayTypeCard id="paye" title="hyrz PAYE" text="We take off Income Tax and National Insurance for you and give you a payslip for every week you work." chosen={draft.payType === 'paye'} onChoose={v => setDraft({ ...draft, payType: v })} />
-      </div>
-      {draft.payType === 'paye' && <div className="paye-fields">
-        <label>Tax code<input value={draft.taxCode} onChange={e => setDraft({ ...draft, taxCode: e.target.value.toUpperCase() })} placeholder="1257L" data-testid="paye-tax-code-input" /><small>On your P45, P60 or HMRC app. Use 1257L if this is your only job.</small></label>
-        <label>National Insurance category<select value={draft.niCategory} onChange={e => setDraft({ ...draft, niCategory: e.target.value })} data-testid="paye-ni-category-select">
-          <option value="A">A – standard</option><option value="M">M – under 21</option><option value="H">H – apprentice under 25</option><option value="C">C – over State Pension age</option>
-        </select></label>
-        <label className="paye-confirm"><input type="checkbox" checked={draft.confirmed} onChange={e => setDraft({ ...draft, confirmed: e.target.checked })} data-testid="paye-confirm-checkbox" /> I confirm these details are correct and I want hyrz to pay me through PAYE.</label>
-      </div>}
+      <PayTypeChooser value={draft} onChange={setDraft} currentType={settings?.payType} />
       {error && <div className="alert error" role="alert" data-testid="pay-settings-error">{error}</div>}
-      <button className="primary" disabled={!changed || saving} data-testid="pay-settings-save-button">{saving ? 'Saving…' : 'Save pay settings'}</button>
+      <button className="primary" disabled={!changed || !draft.contractAccepted || saving} data-testid="pay-settings-save-button">{saving ? 'Saving…' : 'Save pay settings'}</button>
       {settings && <small className="pay-current" data-testid="pay-settings-current">Currently paid as: <b>{settings.payType === 'paye' ? `hyrz PAYE (${settings.taxCode}, cat. ${settings.niCategory})` : 'Independent contractor'}</b></small>}
     </form>
     <h3 className="payslips-title">Payslips</h3>

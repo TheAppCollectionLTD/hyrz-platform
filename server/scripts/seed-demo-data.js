@@ -11,7 +11,8 @@ const NEW_PASSWORD = 'HyrzNewUser!2026';
 const EXTRA_WORKERS = [
   { email: 'priya.demo@hyrz.local', first: 'Priya', last: 'Shah', id: 'HYRZDEMOPRIYA2026' },
   { email: 'jamie.demo@hyrz.local', first: 'Jamie', last: 'Okafor', id: 'HYRZDEMOJAMIE2026' },
-  { email: 'leo.demo@hyrz.local', first: 'Leo', last: 'Martins', id: 'HYRZDEMOLEO2026' }
+  { email: 'leo.demo@hyrz.local', first: 'Leo', last: 'Martins', id: 'HYRZDEMOLEO2026' },
+  { email: 'mia.demo@hyrz.local', first: 'Mia', last: 'Collins', id: 'HYRZDEMOMIA2026' }
 ];
 const GIF = 'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif';
 
@@ -46,6 +47,7 @@ async function wipe(conn, employer, workers, admin, businessId) {
   await conn.query(`DELETE FROM checkouts WHERE shift_id IN (SELECT id FROM shifts WHERE business_id=${businessId})`);
   await conn.query(`DELETE FROM shift_chat_reminders WHERE application_id IN (SELECT a.id FROM applications a JOIN shifts s ON s.id=a.shift_id WHERE s.business_id=${businessId})`).catch(() => {});
   await conn.query(`DELETE FROM shifts WHERE business_id=${businessId}`);
+  await conn.query(`DELETE FROM fee_credits WHERE business_id=${businessId}`).catch(() => {});
   const [convs] = await conn.query(`SELECT id FROM employer_worker_conversations WHERE employer_user_id=${employer} OR worker_user_id IN (${ids})`);
   for (const { id } of convs) {
     await conn.query(`DELETE FROM direct_message_reactions WHERE conversation_id=${id}`);
@@ -173,6 +175,9 @@ async function main() {
       { title: 'Bartender – Brunch & Bottomless', day: -21, from: 10, to: 22, pay: 13.50, type: 'hospitality', breakMins: 45 },
       { title: 'Festival Bar Crew – Harvest Fair', day: -28, from: 11, to: 22, pay: 14.25, type: 'festival', breakMins: 45 }
     ]) past.push(await S({ ...p, description: 'Completed shift.', location: loc, slots: 3, status: 'completed' }));
+    // Bulk-rate week: 5 different workers x 8h on the Tuesday of last Monday-Sunday week.
+    const lastTuesday = -(((new Date().getUTCDay() + 6) % 7) + 6);
+    const bulkShift = await S({ title: 'Event Crew – Product Launch', description: 'Completed shift.', location: loc, day: lastTuesday, from: 9, to: 17, pay: 12.50, slots: 5, status: 'completed', type: 'hospitality' });
     const lastNight = await S({ title: 'Bartender – Late Bar', description: 'Completed shift.', location: loc, day: -1, from: 19, to: 23, pay: 13.50, slots: 2, status: 'completed', type: 'hospitality' });
 
     const apply = (shift, w, status) => conn.execute('INSERT INTO applications(shift_id,worker_id,status,created_at,contract_accepted_at) VALUES(?,?,?,?,?)', [shift.id, w, status, sql(ago(3000)), status === 'approved' ? sql(ago(2900)) : null]);
@@ -183,6 +188,7 @@ async function main() {
     await apply(wedding, P, 'pending'); await apply(wedding, L, 'pending');
     for (const s of past) { await apply(s, worker, 'approved'); await addCheckout(conn, businessId, s, worker, 'approved'); }
     await apply(past[0], P, 'approved'); await addCheckout(conn, businessId, past[0], P, 'approved');
+    for (const w of all) { await apply(bulkShift, w, 'approved'); await addCheckout(conn, businessId, bulkShift, w, 'approved'); }
     await apply(lastNight, worker, 'approved'); await addCheckout(conn, businessId, lastNight, worker, 'submitted');
     await apply(lastNight, L, 'approved'); await addCheckout(conn, businessId, lastNight, L, 'submitted');
     for (const [s, score, comment] of [[past[1], 9, 'Brilliant on the festival bar, would book again.'], [past[3], 10, 'Super professional with our corporate guests.']])

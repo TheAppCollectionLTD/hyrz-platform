@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('node:crypto');
 const { hashIdentifier } = require('./identifier-hash');
 
-module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds }) {
+module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, bulkRate, sendInvoiceReminder, ensureUniqueEmails, addColumn, createTable, ensureProfilePictureColumn, ensureAdminMessageMeta, ensurePublicUserIds }) {
   const admin = [auth, allow('admin')];
   const ensureBlockedIdentifiers = createTable(`CREATE TABLE IF NOT EXISTS blocked_identifiers (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -136,7 +136,11 @@ module.exports = function registerAdminRoutes(app, { db, asyncRoute, audit, send
     const [referralRows]=await db.execute(`SELECT rc.*,r.email AS referrer_email,rr.email AS referred_email
       FROM referral_commissions rc JOIN users r ON r.id=rc.referrer_user_id JOIN users rr ON rr.id=rc.referred_user_id
       ORDER BY rc.created_at DESC LIMIT 500`);
-    res.json({userCounts,invoices:invoiceTotals,commissions,referralCommissions:referralRows});
+    await bulkRate.settleAll();
+    const [[feeCredits]]=await db.query('SELECT COUNT(*) AS creditCount,COALESCE(SUM(amount),0) AS totalCredits FROM fee_credits');
+    const [creditRows]=await db.query('SELECT fc.*,b.name AS business_name FROM fee_credits fc JOIN businesses b ON b.id=fc.business_id ORDER BY fc.week_start DESC LIMIT 200');
+    invoiceTotals.bulkRateCredits=Number(feeCredits.totalCredits);invoiceTotals.netRevenue=Math.round((Number(invoiceTotals.invoicedRevenue)-Number(feeCredits.totalCredits))*100)/100;
+    res.json({userCounts,invoices:invoiceTotals,commissions,referralCommissions:referralRows,feeCredits:{...feeCredits,rows:creditRows}});
   }));
 
   app.post('/api/admin/referral-commissions', ...admin, asyncRoute(async(req,res) => {
