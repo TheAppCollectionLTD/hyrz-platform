@@ -26,7 +26,7 @@ module.exports = function registerBulkRate(app, { db, asyncRoute }) {
     const [rows] = await db.execute(`SELECT c.worker_id AS workerId, s.hourly_pay AS rate, i.platform_fee AS fee, COALESCE(c.counter_start,c.actual_start) AS started,
       GREATEST(0, TIMESTAMPDIFF(MINUTE, COALESCE(c.counter_start,c.actual_start), COALESCE(c.counter_end,c.actual_end)) - COALESCE(c.counter_break_minutes,c.break_minutes,0)) / 60 AS hours
       FROM invoices i JOIN checkouts c ON c.id=i.checkout_id JOIN shifts s ON s.id=c.shift_id
-      WHERE i.business_id=? AND i.status<>'cancelled' AND COALESCE(c.counter_start,c.actual_start)>=? AND COALESCE(c.counter_start,c.actual_start)<?`, [businessId, from, to]);
+      WHERE i.business_id=? AND i.status NOT IN ('void','draft') AND COALESCE(c.counter_start,c.actual_start)>=? AND COALESCE(c.counter_start,c.actual_start)<?`, [businessId, from, to]);
     return rows;
   }
 

@@ -44,3 +44,4 @@ html body #root .app .worker-payroll .payslip-download:hover{background:#2272EB!
 .pay-signup-block>strong{font-size:15px;color:#0F1B2D}
 .pay-signup-block>small{color:#5b5357}
 html body #root .app .pay-contract,html body #root .app .pay-contract *,html body #root .app .pay-switch-notes,html body #root .app .pay-contract-agree{text-align:left!important}
+html body #root .app .signup-error,html body #root .app .alert.error[data-testid="check-email-notice"]{background:#FDECEC!important;border:1px solid #F5A3A3!important;color:#9B1C1C!important;border-radius:10px;padding:10px 14px;font-weight:600;text-align:left}

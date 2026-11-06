@@ -1,0 +1,40 @@
+{
+  "summary": "Iteration 11 retest of the iteration-10 failures. Backend: 24/25 pass (new file test_hyrz_iter11_retest.py has 9 tests, plus the iter10 suite with 16/16). FIX 1 (employer split inbox) was STILL BROKEN when testing started. Cause: an older rule in client/src/ui/theme/sections.css:45 hid the whole section.employer-welcome whenever a .workchat-conversation existed at >=1200px. That section now holds the list and the conversation, so the page went blank. Testing agent applied a one-line CSS fix (added :not(.employer-wc-split)). After the fix, the split works at 1440 and 1920: list on the left, conversation on the right with messages and composer, clicking another workchat switches the chat, and the hero/unread boxes are hidden. Below 1200px (1100) the chat is full-screen with a back button, as intended. Worker split at 1920 and direct 1:1 chats for both roles work. FIX 2 sign-up errors work (no pay choice error, contract-not-agreed error, and the 503 goes to the Check your email page with check-email-notice). FIX 3 works: /mine has photo_version and no base64, /photo returns 200 for participants and 404 for non-participants, the photo shows in the list, header and group info, and the photo is fetched once. FIX 4: fee-tier h3 and the credits heading are now white on navy. FIX 5: pay-contract text is left aligned and payslips say 'Pay date Fri 13 Nov · one week in arrears'. FIX 6: PAYE apply works with no contract fields (snapshot hyrz-paye-employment-v1), contractors still get a 400, the fee rules are correct (£2/hr at £20 or less, 10% above), and demo.employer has the £38.61 credit. NEW BUG: fee credits do NOT go down when invoices are cancelled. The invoices.status enum has no 'cancelled' value (it is draft/issued/paid/overdue/void), and admin 'cancels' an invoice by setting it to 'void'. bulk-rate.js filters on i.status<>'cancelled', so voided invoices still count toward credits.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "server/src/bulk-rate.js lines() / GET /api/employer/fee-tier / admin financial reports", "issue": "Voided invoices still count toward weekly bulk credits. The filter is i.status<>'cancelled', but the enum value for a cancelled invoice is 'void' ('cancelled' cannot even be stored, and MariaDB rejects it with 'Data truncated'). Reproduced: set the 9 invoices in week 2026-10-26 to 'void', and the £38.61 credit still remained. Fix: use i.status NOT IN ('void','draft'), or i.status<>'void'.", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "bulk-rate.js settle()", "issue": "MIN(first) does not exclude void invoices, which is harmless. Weeks are still UTC Monday, not Europe/London (noted in iteration 10)."},
+      {"endpoint": "checkout approval (index.js ~1289)", "issue": "The platform fee uses shifts.hourly_pay. If an application was accepted with a counter-offer rate (requested_hourly_rate), the fee is based on the advertised rate, not the agreed rate. Please check this is intended."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Employer Inbox split view", "issue": "FIXED BY TESTING AGENT: sections.css:45 hid section.employer-welcome (which contains the list and conversation) whenever a conversation was open at >=1200px, which gave a blank page. Added :not(.employer-wc-split) to that selector. Please keep this change, or remove that old rule.", "selector": "section.employer-welcome.employer-wc-split", "priority": "CRITICAL (now fixed)"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Employer Inbox split (>=1200px)", "issues": ["The page-level <main><header> ('Workchat' title and a large sign-out button) is still shown above the list column, so there are two sign-out buttons stacked ('Workchat' and 'Hello, Sam'). The worker split hides this header. Mirror the condition at App.jsx:413 (hide the header for the employer when inboxTab==='workchats' && workchatOpenId && wideScreen), or fix the CSS at midnight-shell.css:188, which does not apply to the employer."]},
+      {"screen": "Sign-up form", "issues": ["signup-error is shown in a light grey box with dark grey text, so it does not look like an error. Use a red or amber error style.", "The Check your email page says 'We've sent a verification link to…' while the notice below says that the email could NOT be sent. These contradict each other. Change the copy when the notice is shown.", "At 1440px the left hero text ('HOSPITALITY · FESTIVA…', 'Staffing, payroll and a…') is cut off behind the form card."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_hyrz_iter11_retest.py", "/app/backend/tests/test_hyrz_iter10_paytype_bulkrate.py", "/app/test_reports/pytest/iter11.xml"],
+  "action_items": [
+    "HIGH: In bulk-rate.js, exclude voided invoices from credits (change i.status<>'cancelled' to i.status<>'void', or NOT IN ('void','draft')). Then rerun test_credit_removed_when_invoices_cancelled.",
+    "Keep the sections.css:45 change (:not(.employer-wc-split)) or delete that old rule. Also hide the duplicate main header ('Workchat' and sign-out) in the employer split view.",
+    "Style signup-error as an error, and make the Check your email copy match the case where the email failed to send."
+  ],
+  "critical_code_review_comments": [
+    "Several themed CSS files (sections.css, midnight-shell.css) use stacked !important rules with #root:not(#xx) specificity hacks that override each other. This is how the employer split regressed. Consolidate the split rules in one place.",
+    "The invoice status enum ('void') and the code ('cancelled') do not match. Search for other places that check for 'cancelled' invoices.",
+    "App.jsx is extremely large, with single lines thousands of characters long. Split it into components."
+  ],
+  "updated_files": ["/app/client/src/ui/theme/sections.css", "/app/backend/tests/test_hyrz_iter11_retest.py"],
+  "success_rate": {"backend": "96% (24/25)", "frontend": "100% of retested flows after the testing agent's CSS fix (FIX 1 failed before the fix)"},
+  "seed_data_creation": "None. Created and then deleted: test user test_iter11_ui_227944 (id 70), application 636 on shift 469. Invoices 312-328 were set to void temporarily and restored to issued. The workchat 72/73 photos were reset to NULL. Did not run seed:demo, because the test-data rules forbid running seed scripts; all changes were reverted by hand.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Login: button.home-signin-link, then input[type=email]/[type=password], then Enter. Use exact=True for nav buttons (get_by_role('button', name='Profile', exact=True)), because the worker job cards also match 'Profile'. Sign-up inputs have no type attr: use section.panel.auth input:not([type]) (first, last, NI). The terms toggle is button.hyrz-toggle; the pay cards are data-testid pay-type-paye/contractor; the agree checkbox is pay-contract-agree-checkbox. Payslips are on the worker Profile page (payslip-pay-date). Group photo: .workchat-group-info-trigger, then [data-testid=group-info-photo-edit] input[type=file]. Fee tier: employer Dashboard > Invoices, .fee-tier-card. The iter11 file's teardown deletes its application on shift 469 and resets the photos.",
+  "rca of the issue": "Employer split blank: sections.css:45 `@media(min-width:1200px){.app.employer:has(.workchat-conversation,.hz-room) section.employer-welcome{display:none!important}}` was written when the conversation lived outside that section. Now that the list and conversation are inside section.employer-welcome.wc-split, this rule hides everything. Fee credits not reduced: the invoices.status enum is draft/issued/paid/overdue/void, admin cancels by setting 'void', and bulk-rate.js only excludes 'cancelled'."
+}

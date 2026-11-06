@@ -42,6 +42,6 @@
 #root:not(#sx) .app label.workchat-list-search button{width:auto!important;height:32px!important;min-height:0!important;padding:0 12px!important;border-radius:999px!important;font-size:12.5px!important}
 /* Employer split view: hide duplicate welcome header in the list column */
 @media (min-width:1200px){
-  #root:not(#sx) .app.employer:has(.workchat-conversation,.hz-room) section.employer-welcome{display:none!important}
+  #root:not(#sx) .app.employer:has(.workchat-conversation,.hz-room) section.employer-welcome:not(.employer-wc-split){display:none!important}
   #root:not(#sx) .app:has(.workchat-conversation,.hz-room) .workchat-wa-row:hover{background:#EEF2F7!important}
 }
