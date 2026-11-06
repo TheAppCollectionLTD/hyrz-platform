@@ -35,3 +35,13 @@
 #root:not(#sx) .app .empty-state{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px;min-height:140px;padding:28px!important;border:1.5px dashed #D5DEEA!important;border-radius:16px!important;background:#FAFBFD!important;color:#5A6B82!important;text-align:center!important;font-size:14.5px!important}
 #root:not(#sx) .app .empty-state::before{content:'';width:44px;height:44px;border-radius:14px;background:#FFF4CC url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' fill='none' stroke='%230F1B2D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l1.9 5.8L20 10l-5 3.6L16.8 20 12 16.6 7.2 20 9 13.6 4 10l6.1-1.2z'/%3E%3C/svg%3E") center/22px no-repeat;margin-bottom:4px}
 #root:not(#sx) .app .row{border-style:solid!important;border-width:1px!important;border-color:#E2E8F0!important}
+/* Workchat list search (employer + worker) */
+#root:not(#sx) .app label.workchat-list-search{display:flex!important;align-items:center!important;gap:10px!important;height:46px!important;padding:0 14px!important;margin:0 0 12px!important;background:#fff!important;border:1px solid #E2E8F0!important;border-radius:14px!important}
+#root:not(#sx) .app label.workchat-list-search svg{width:18px!important;height:18px!important;flex:0 0 18px!important;fill:none!important;stroke:#8A99AD!important;background:none!important;border-radius:0!important}
+#root:not(#sx) .app label.workchat-list-search input{flex:1 1 auto!important;border:0!important;outline:none!important;background:transparent!important;font-size:15px!important;height:auto!important;padding:0!important;box-shadow:none!important}
+#root:not(#sx) .app label.workchat-list-search button{width:auto!important;height:32px!important;min-height:0!important;padding:0 12px!important;border-radius:999px!important;font-size:12.5px!important}
+/* Employer split view: hide duplicate welcome header in the list column */
+@media (min-width:1200px){
+  #root:not(#sx) .app.employer:has(.workchat-conversation,.hz-room) section.employer-welcome{display:none!important}
+  #root:not(#sx) .app:has(.workchat-conversation,.hz-room) .workchat-wa-row:hover{background:#EEF2F7!important}
+}

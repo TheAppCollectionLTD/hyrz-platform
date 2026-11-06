@@ -5,7 +5,7 @@ import './checkouts.css';
 const STATUS = { open: ['In progress', 'is-open'], submitted: ['To review', 'is-review'], pending: ['To review', 'is-review'], disputed: ['Disputed', 'is-disputed'], approved: ['Approved', 'is-approved'], paid: ['Paid', 'is-approved'], completed: ['Completed', 'is-approved'], rejected: ['Rejected', 'is-disputed'] };
 const t = v => v ? new Date(v).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : '--:--';
 const day = v => v ? new Date(v).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) : 'Date not set';
-const initials = n => String(n || '?').trim().split(/\s+/).map(x => x[0]).join('').slice(0, 2).toUpperCase();
+const initials = n => String(n || '?').trim().split(/\s+/).filter(x => /[A-Za-z0-9]/.test(x[0])).map(x => x[0]).join('').slice(0, 2).toUpperCase();
 
 function duration(start, end, breakMinutes) {
   if (!start || !end) return null;
@@ -28,7 +28,8 @@ export function CheckoutCard({ checkout: c, role, money, onApprove, onMessage, w
   const status = String(c.status || '').toLowerCase();
   const [label, cls] = STATUS[status] || [status, 'is-open'];
   const name = [c.first_name, c.last_name].filter(Boolean).join(' ') || (role === 'worker' ? c.business_name : '') || 'Worker';
-  const start = c.actual_start || c.clocked_in_at, end = c.actual_end || c.clocked_out_at;
+  const countered = c.counter_gross_pay != null;
+  const start = (countered && c.counter_start) || c.actual_start || c.clocked_in_at, end = (countered && c.counter_end) || c.actual_end || c.clocked_out_at;
   const gross = Number(c.counter_gross_pay ?? c.gross_pay ?? 0), fee = Number(c.platform_fee || 0);
   const canReview = ['employer', 'admin'].includes(role) && status === 'submitted';
   return <article className={`co-card ${cls}`} data-testid={`checkout-card-${c.id}`}>
@@ -42,15 +43,15 @@ export function CheckoutCard({ checkout: c, role, money, onApprove, onMessage, w
       <span className={`co-pill ${cls}`}>{label}</span>
     </div>
     <div className="co-time" aria-label="Hours worked">
-      <div><small>Clocked in</small><b>{t(c.clocked_in_at || start)}</b></div>
+      <div><small>Clocked in</small><b>{t(countered ? start : (c.clocked_in_at || start))}</b></div>
       <ArrowRight size={18} className="co-arrow" aria-hidden="true" />
-      <div><small>Clocked out</small><b>{t(c.clocked_out_at || end)}</b></div>
+      <div><small>Clocked out</small><b>{t(countered ? end : (c.clocked_out_at || end))}</b></div>
       <div className="co-dur"><Clock size={15} aria-hidden="true" /><span>{duration(start, end, c.break_minutes) || 'In progress'}{Number(c.break_minutes) ? ` · ${c.break_minutes}m break` : ''}</span></div>
     </div>
     <div className="co-money">
       <div><small>Worker pay</small><b>{money(gross)}</b></div>
-      {role !== 'worker' && <div><small>hyrz fee</small><b>{money(fee)}</b></div>}
-      <div className="co-total"><small>{role === 'worker' ? 'You earn' : 'Total'}</small><b>{money(role === 'worker' ? gross : gross + fee)}</b></div>
+      {role !== 'worker' && !countered && <div><small>hyrz fee</small><b>{money(fee)}</b></div>}
+      <div className="co-total"><small>{role === 'worker' ? 'You earn' : countered ? 'Counter pay (fee recalculated on approval)' : 'Total'}</small><b>{money(role === 'worker' || countered ? gross : gross + fee)}</b></div>
     </div>
     {c.counter_gross_pay != null && <p className="co-note"><Scale size={15} /> Counter-offer: {money(c.counter_gross_pay)}{c.employer_comment ? ` · "${c.employer_comment}"` : ''}</p>}
     {c.worker_adjustment_reason && <p className="co-note">Worker note: {c.worker_adjustment_reason}</p>}

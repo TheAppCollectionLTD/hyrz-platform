@@ -1,0 +1,56 @@
+{
+  "summary": "Iteration 9 tested the Checkouts redesign, the Notifications redesign, section polish, the Split-View Inbox and the group photo/description feature, plus regressions, at 1600x900, 1024x800 and 390x844. BACKEND: 13 of 13 pytest pass. They cover PATCH /api/workchats/:id/profile (403 for a worker, 403/404 for admin, 400 for an invalid photo / gif / number / description over 500 chars / empty body, 200 with persistence that the worker also sees), the seeded description, notifications and checkouts feeds, workchat send/react, direct send and login for all 3 roles. WORKING: the employer Checkouts summary cards filter correctly (To review 2 / Disputed 0 / Approved 13 / All 15). Cards show readable sunshine-on-navy initials, the name, shift, date, in/out times, duration, worker pay, fee and total. Approve hours on #304 set it to Approved and created invoice 'issued' £62.00. The Counter-offer toggle reveals the form; submitting it set the card to Disputed with a note of £40.50. The worker Checkouts view shows 'You earn' and no fee. Employer notifications work: the panel, the Today/This week groups, the blue unread dot, and Mark read updating the count 2→1→0, with the empty state on Unread. Worker split view (>=1200) works: the 400px list stays visible, switching Riverside→Friday Bar Team works, and Employers > Sam Demo opens a direct chat on the right. The employer Workers tab split view works (Alex→Priya switch, DM send OK). Below 1200px (1024 and 390) the old behaviour works: the chat replaces the list and Back returns to it. Group info as employer: the seeded description shows; pencil → textarea → Save persists in the DB; the camera upload of a PNG is resized to JPEG and updates the avatar in group info and the chat header; the worker sees the description and photo in group info and the header, and has no pencil or camera; mobile 390 has no overflow. The payslip PDF downloads (hyrz-payslip-2026-27-week-31.pdf). FAILED/ISSUES: see below.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "GET /api/workchats/mine", "issue": "The list response includes the full base64 'photo' (MEDIUMTEXT, up to ~550KB) for every workchat on every poll. This will bloat inbox polling. Consider a photo URL or endpoint, or a hash/updated_at, instead of inlining it."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Employer Inbox > Workchats split view (>=1200px)", "issue": "Opening Riverside as the employer puts the chat on the right, but the left column shows a duplicated 'Workchat' heading with an oversized sign-out button, a second 'Hello, Sam' and sign-out, and the 'New workchat + / Current workchats (2) / Past workchats (1)' buttons. The workchat LIST itself is not rendered, so you cannot click Friday Bar Team to switch. Root cause: App.jsx line ~699/725 renders the employer list with `!workchatOpenId&&...` (no `||wideScreen` as the worker path has at line 795/804).", "selector": ".workchat-list (missing), employer inbox Workchats tab", "priority": "HIGH"},
+      {"component": "Worker Notifications", "issue": "The worker Notifications tile (dashboard-section-notifications) still renders the OLD WorkerNotifications component (App.jsx ~1435): an unstyled list with title+timestamp jammed together ('Switching to hyrz PAYE05/11/2026, 15:00:00'), plain 'Mark as read' boxes and no Today/This week groups. data-testid=notifications-panel / notifications-tab-* / notification-read-* are absent. Only the employer (BroadcastNotifications) uses the new NotificationsList. The user explicitly disliked the notifications look.", "selector": ".worker-notifications-panel", "priority": "HIGH"},
+      {"component": "Employer Inbox > Workchats list at <1200 (1024)", "issue": "The employer workchat list shows a giant ~100px black circle (the unstyled search SVG) and an unstyled 'Search conversations' button above the rows. The CSS for .workchat-list-search / .employer-workchat-search is scoped only to main.page-workchats (styles.css 12814-12930), not to the inbox page.", "selector": "label.workchat-list-search.employer-workchat-search", "priority": "HIGH"},
+      {"component": "Worker workchat list avatar", "issue": "After the employer sets a group photo, the worker inbox list row still shows the 'R' initial. App.jsx line ~804 uses company_profile_picture/employer_profile_picture/... and ignores w.photo; the employer list uses workchatAvatar(w). The employer 'All' tab row also shows no photo. The header and group info do show the photo.", "selector": ".worker-workchat-panel .workchat-wa-row .workchat-wa-avatar", "priority": "MEDIUM"},
+      {"component": "Worker CheckoutCard", "issue": "The avatar shows 'B–' (initials of the title 'Bartender – Late Bar', including the en-dash) and the business subtitle is empty, because /api/checkouts/mine has no business_name for workers. Fix: add business_name to the query, or strip non-letters in initials().", "selector": "[data-testid^=checkout-card-] .co-avatar", "priority": "MEDIUM"},
+      {"component": "CheckoutCard counter-offer display", "issue": "After the counter-offer (end 22:00, £40.50) the card still shows Clocked out 23:00, 4h 00m and hyrz fee £8.00 (should be £6.00 for 3h), with a total of £48.50, which mixes counter pay with the original fee. Use counter_start/counter_end/counter_break_minutes for the displayed times and fee when present. Also, Disputed cards have no Approve button, so the employer cannot approve from the UI after a counter.", "selector": "[data-testid=checkout-card-<id>] .co-time/.co-money", "priority": "MEDIUM"},
+      {"component": "Split view list active state", "issue": "The open chat's row has no selected/active highlight in the split list (bg stays white). The only highlight is a pink hover (off-palette) that is not tied to the selected chat.", "selector": ".workchat-wa-row", "priority": "LOW"},
+      {"component": "Split view unread badge", "issue": "The Riverside unread badge '2' stays visible in the list while that chat is open on the right.", "selector": ".workchat-wa-row badge", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Checkouts (employer/worker)", "issues": ["The counter-offer form uses native datetime-local inputs (not the shadcn calendar), its inputs have no data-testid, and the Submit button style is smaller than the co-btn pills", "The back-arrow button sits alone under the page title (left on employer, centred on worker: inconsistent)", "Duplicate headings 'Checkouts' + 'Timesheets & checkouts'", "The worker card shows 'Worker pay £54' and 'You earn £54' redundantly"]},
+      {"screen": "Direct chat (split)", "issues": ["The sticky 'YESTERDAY' date chip overlaps the bubble text 'Amazing, thank you! Is there parking on site?'", "The header back arrow is still shown in split mode", "The employer header avatar 'AD' is navy on the navy header (low contrast)"]},
+      {"screen": "Workchat header", "issues": ["After returning from group info, a large translucent oval focus/hover ring covers the whole header title button"]},
+      {"screen": "Favourites", "issues": ["Each row has a curved top-border artifact (border-top with radius showing arcs at the corners), at both 1600 and 390"]},
+      {"screen": "Invoices", "issues": ["Due dates are ISO 'Due 2026-11-19' (not en-GB like the rest of the app)", "On mobile the £ icon sits on its own line for wrapped titles, so card layouts are inconsistent"]},
+      {"screen": "Employer dashboard", "issues": ["'1 shifts scheduled' (pluralisation)", "The hero 'S' avatar letter is not vertically centred"]},
+      {"screen": "Profile", "issues": ["The profile picture uses the unstyled native 'Choose File' input"]},
+      {"screen": "Notifications (employer)", "issues": ["Duplicate 'Notifications' page title + panel title"]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_hyrz_iter9_group_profile.py", "/app/test_reports/pytest/iter9.xml"],
+  "action_items": [
+    "HIGH: Fix the employer Inbox Workchats split view: keep the employer .workchat-list rendered when workchatOpenId && wideScreen (mirror the worker logic at App.jsx 795/804), and hide the duplicated 'Workchat' heading/sign-out in split mode",
+    "HIGH: Switch the worker Notifications page to the new NotificationsList (or restyle WorkerNotifications), with the notifications-panel / tabs / Mark read testids, Today/This week groups and a separate time, so it is not jammed into the title",
+    "HIGH: Style the employer workchat list search (.employer-workchat-search) on the inbox page: giant black SVG circle and raw 'Search conversations' button at <1200px",
+    "MEDIUM: Use w.photo (workchatAvatar) for the worker workchat list rows and the employer 'All' tab rows",
+    "MEDIUM: Add business_name to worker /api/checkouts/mine and make initials() ignore punctuation ('B–')",
+    "MEDIUM: CheckoutCard should show counter times, duration and fee when a counter-offer exists (fee £6.00, not £8.00, for 3h)",
+    "LOW: Add an active-row highlight in the split list, clear the unread badge for the open chat, fix the date-chip overlap in the direct chat, and fix the Favourites row border artifact, the ISO invoice dates and '1 shifts'",
+    "Perf: avoid inlining the base64 photo in /api/workchats/mine"
+  ],
+  "critical_code_review_comments": [
+    "App.jsx is 1638 lines with very long one-line JSX. Split the inbox/workchat list rendering into components; the worker and employer list paths are duplicated and diverged (photo, split view).",
+    "NotificationsList renders the time twice (one in .nt-copy small hidden by CSS, one in .nt-meta): dead markup.",
+    "The NotificationsList grouping relies on items being pre-sorted by created_at desc; if they are not sorted, group headers repeat.",
+    "WorkchatGroupInfo TONES still contains pink #DB2777 (off palette).",
+    "The counter-offer form inputs lack data-testid."
+  ],
+  "updated_files": ["/app/backend/tests/test_hyrz_iter9_group_profile.py"],
+  "success_rate": {"backend": "100% (13/13)", "frontend": "~72% (core flows pass; 3 high-priority UI defects)"},
+  "seed_data_creation": "Created TEST_iter9 messages, a counter-offer and an approval (#304/#305), a group description and a photo; all were reset afterwards via `node scripts/seed-demo-data.js` and `UPDATE workchats SET photo=NULL`. Note: the seeder re-creates workchats with new ids (now 62-64 or later) and new checkout ids.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Login: landing button.home-signin-link → input[type=email]/[type=password] → Enter. Use nav-scoped selectors for sidebar items ('nav button:has-text(\"Profile\")'), because get_by_role name 'Profile' can hit job-card buttons. Inbox tabs: buttons All/Workchats/Admins/Employers (worker) or Workers (employer). Group info opens via [aria-label='Open group information']. Payslip download appears after clicking the 'Week 31' row. The test_seeded_description test fails if the description was changed: reseed first. Retest: the employer split workchat list, worker notifications redesign, employer workchat search styling at 1024, worker list photo, and the worker checkout initials/business name."
+}
