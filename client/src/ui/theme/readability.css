@@ -37,3 +37,11 @@ html body #root:not(#x):not(#y) .app .favourite-worker-card:is(:hover,:focus-vis
 html body #root:not(#x):not(#y) .app.admin button.selected,html body #root:not(#x):not(#y) .app.admin button.selected *{color:#fff!important}
 html body #root:not(#x):not(#y) .public-intro-tabs button.active{background:#1D5EC2!important;border-color:#1D5EC2!important}
 html body #root:not(#x):not(#y) .app .job-tabs>button.selected{background:#1D5EC2!important}
+html body #root:not(#x):not(#y) .terms-contents button:is(:hover,:focus-visible),html body #root:not(#x):not(#y) .terms-contents button:is(:hover,:focus-visible) *{color:#0F1B2D!important;-webkit-text-fill-color:#0F1B2D!important}
+html body #root:not(#x):not(#y) .terms-contents button.active,html body #root:not(#x):not(#y) .terms-contents button.active *{color:#1D5EC2!important;-webkit-text-fill-color:#1D5EC2!important}
+html body #root:not(#x):not(#y) .app .job-tabs>button.selected,html body #root:not(#x):not(#y) .app .job-tabs>button.selected *,html body #root:not(#x):not(#y) .app.admin button.selected,html body #root:not(#x):not(#y) .app.admin button.selected *,html body #root:not(#x):not(#y) .app .workchat-section-tabs button:is(.selected,.active),html body #root:not(#x):not(#y) .app .workchat-section-tabs button:is(.selected,.active) *{color:#fff!important;-webkit-text-fill-color:#fff!important}
+html body #root:not(#x):not(#y) .app.admin button.selected{background:#1D5EC2!important}
+html body #root:not(#x):not(#y) .app :is(.home-employer-link,.terms-open-full,.hyrz-footer-column>button){font-family:inherit!important;border:0!important;background:transparent!important;padding:0!important;box-shadow:none!important}
+html body #root:not(#x):not(#y) .terms-page-bar .terms-back:is(:hover,:focus-visible){background:#FFC93C!important;border-color:#FFC93C!important;color:#0F1B2D!important;-webkit-text-fill-color:#0F1B2D!important}
+html body #root:not(#x):not(#y) .terms-page-bar .terms-logo:is(:hover,:focus-visible){color:#FFC93C!important;-webkit-text-fill-color:#FFC93C!important}
+html body #root:not(#x):not(#y) .app.admin button.selected:is(:hover,:focus-visible),html body #root:not(#x):not(#y) .app.admin button.selected:is(:hover,:focus-visible) *{color:#0F1B2D!important;-webkit-text-fill-color:#0F1B2D!important}

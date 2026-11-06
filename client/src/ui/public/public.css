@@ -42,7 +42,7 @@ html body #root .pub-employer-strip button:focus-visible{outline:3px solid #FFC9
 html body #root .app.auth-layout:has(.terms-page)::before,html body #root .app.auth-layout:has(.terms-page)::after{display:none!important}
 html body #root .role-selection .role-card,html body #root .role-selection .role-card *{font-family:inherit}
 .sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-html body #root .app.auth-layout::after{content:"PICK YOUR SHIFTS · GET PAID FAST\A\AFlexible hospitality, festival and retail work.\A\AYour next shift starts here."!important}
+html body #root .app.auth-layout::after{content:"PICK YOUR SHIFTS · GET PAID FAST\A\A Flexible hospitality, festival and retail work.\A\AYour next shift starts here."!important}
 .welcome-eyebrow{display:block;margin-bottom:10px;font-size:12px;font-weight:800;letter-spacing:.14em;color:#2272EB}
 .home-employer-prompt{margin-top:6px;font-size:14px;color:#5A6B82}
 html body #root .home-employer-link{color:#0F1B2D!important;font-weight:700;text-decoration:underline;text-underline-offset:3px}
@@ -63,3 +63,5 @@ html body #root .auth-welcome .pub-benefit p,html body #root .auth-welcome .pub-
 html body #root .auth-welcome .home-employer-prompt{display:flex;align-items:center;gap:6px;margin:4px 0 0;font-size:15px;color:#5A6B82!important}
 html body #root .auth-welcome .home-employer-prompt .home-employer-link{all:unset;cursor:pointer;font-size:15px;font-weight:700;color:#0F1B2D!important;text-decoration:underline;text-underline-offset:3px}
 html body #root .auth-welcome .home-employer-prompt .home-employer-link:is(:hover,:focus-visible){color:#1D5EC2!important}
+html body #root .auth-welcome>.pub-employer-strip{width:auto;box-sizing:border-box}
+@media(max-width:1180px){html body #root .auth-welcome>.pub-employer-strip{margin-left:16px;margin-right:16px}}

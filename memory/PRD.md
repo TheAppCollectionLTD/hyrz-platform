@@ -48,3 +48,12 @@ Pull repo, then: (1) make chat nicer & functional with GIFs/emoji, easy to use; 
 - WhatsApp-style group info: client/src/ui/chat/WorkchatGroupInfo.jsx + group-info.css replacing old tabbed info (worker + employer). Opens from header title or ⋮ > Group info.
 ## Backlog
 - P1 desktop split-view inbox (list + chat side by side); remaining minor contrast items from iteration_8; two sign-out icons
+
+## 2026-11-06 Pay types, bulk rate, worker-first site, Terms (iterations 10-13)
+- Contractor/PAYE choice at sign-up + switching with contracts; PAYE weekly in arrears (Friday after tax week); PAYE jobs hide Instant Pay + shift contract.
+- Employer fee £2/hr ≤£20, 10% above; bulk £1.50/hr (5+ workers & 40+ hrs Mon–Sun) as week-end credit.
+- Inbox split view fixes, workchat photo payload fix (`photo_version` + `/api/workchats/:id/photo`).
+- Worker-first public pages, full Terms page (v2026-11-06), hover readability fixes, auth caption no longer covered.
+## Backlog
+- P1: live keys (Resend, Stripe Identity, Companies House); use negotiated hourly rate in pay/fee (currently shift rate).
+- P2: real payment collection/payouts; HMRC RTI; Europe/London week boundaries for bulk rate; holiday pay accrual for PAYE.

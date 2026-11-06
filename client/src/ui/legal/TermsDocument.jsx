@@ -28,7 +28,7 @@ export default function TermsDocument({ compact = false }) {
   const [active, setActive] = useState(TERMS_SECTIONS[0][0]);
   const jump = id => { setActive(id); document.getElementById(`terms-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   useEffect(() => {
-    const obs = new IntersectionObserver(es => { const v = es.find(e => e.isIntersecting); if (v) setActive(v.target.id.replace('terms-', '')); }, { rootMargin: '0px 0px -70% 0px' });
+    const obs = new IntersectionObserver(es => { const v = es.find(e => e.isIntersecting); if (v) setActive(v.target.id.replace('terms-', '')); }, { rootMargin: '-90px 0px -60% 0px' });
     document.querySelectorAll('.terms-section').forEach(s => obs.observe(s));
     return () => obs.disconnect();
   }, []);

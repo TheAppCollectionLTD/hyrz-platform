@@ -42,3 +42,5 @@ html body #root .terms-doc .terms-head{display:block!important;background:transp
 html body #root .terms-doc .terms-section h3{color:#0F1B2D!important}
 html body #root .terms-doc .terms-points p{color:#24324a!important}
 html body #root .terms-doc .terms-summary p{color:#0F1B2D!important}
+html body #root .terms-page .terms-section{scroll-margin-top:88px}
+html body #root .terms-page .terms-contents{top:84px;max-height:calc(100vh - 104px)}
